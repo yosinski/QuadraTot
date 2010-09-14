@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{color}
+
+\graphicspath{{../figures/}}
+
+%\oddsidemargin 0.0in 
+%%this makes the odd side margin go to the default of 1inch
+%\textwidth 6.5in
+%%sets the textwidth to 6.5, which leaves 1 for the remaining right margin with 8 1/2X11inch paper 
+%\textheight 9.0in
+
+\newcommand{\code}[1]{\texttt{#1}}
+\def\naive{na\"{\i}ve}
+\def\Naive{Na\"{\i}ve}
+\def\naively{na\"{\i}vely}
+\def\Naively{Na\"{\i}vely}
+
+% codebox
+%\definecolor{codecolor}{rgb}{0.87,0.87,0.87}
+%\definecolor{codecolor}{rgb}{0.7,0.7,0.7}
+\definecolor{codecolor}{rgb}{0.9,0.9,0.9}
+\makeatletter\newenvironment{codeboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{codecolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\codebox}[1]{ \begin{codeboxx} \texttt{#1} \end{codeboxx} \newline}
+
+
+
+\title{QuadraTot -- Proposal}
+\author{Diana Hidalgo, Sarah Nguyen,  and Jason Yosinski \\
+\code{\{djh283,smn64,jy495\}@cornell.edu}}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{preProposal}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
