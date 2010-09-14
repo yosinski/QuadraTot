@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt,letterpaper]{article}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
@@ -6,9 +6,9 @@
 
 \graphicspath{{../figures/}}
 
-%\oddsidemargin 0.0in 
+\oddsidemargin 0.25in 
 %%this makes the odd side margin go to the default of 1inch
-%\textwidth 6.5in
+\textwidth 6.0in
 %%sets the textwidth to 6.5, which leaves 1 for the remaining right margin with 8 1/2X11inch paper 
 %\textheight 9.0in
 
@@ -28,9 +28,18 @@
 \makeatother
 \newcommand{\codebox}[1]{ \begin{codeboxx} \texttt{#1} \end{codeboxx} \newline}
 
+% edit boxes
+\definecolor{editcolor}{rgb}{1,0.87,0.87}
+\makeatletter\newenvironment{editboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{editcolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\editbox}[1]{ \begin{editboxx} \textbf{\textit{Edit:}} \\ #1 \end{editboxx} \newline}
+\newcommand{\edit}[1]{ \fcolorbox{black}{editcolor}{\textbf{\textit{Edit:}} #1}}
 
 
-\title{QuadraTot -- Proposal}
+
+\title{QuadraTot -- A modest proposal}
 \author{Diana Hidalgo, Sarah Nguyen,  and Jason Yosinski \\
 \code{\{djh283,smn64,jy495\}@cornell.edu}}
 
@@ -38,9 +47,9 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-\input{abstract}
-\end{abstract}
+%\begin{abstract}
+%\input{abstract}
+%\end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 

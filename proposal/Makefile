@@ -6,7 +6,7 @@ all: ${TARGETS}
 	ps2pdf $< $@
 
 %.ps : %.dvi
-	dvips -o $@ $<
+	dvips -t letter -o $@ $<
 
 %.dvi : %.tex
 	latex $*
