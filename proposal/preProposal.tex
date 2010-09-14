@@ -8,79 +8,114 @@ freedom starfish shaped robot from Hod Lipson's lab.
 
 \section{Problem statement}
 
-\edit{todo}
+There has been much interest in and research surrounding legged
+robots.  Such robots exhibit both challenges and opportunities not
+present in more traditional wheeled robots.  One of these challenges
+is getting the robot to move as quickly and efficiently as possible.
+Past research has shown that machine learning methods of optimizing a
+walking robot's gait can outperform even the best hand coded gaits
+(Chernova 2004).
 
-2.Problem statement and motivation. A statement of the problem, issue,
-or task that you’re interested in studying, and why it is interesting
-or important.
+To this end, we will use machine learning to design a gait for a
+quadraped robot, available from Hod Lipson's lab.  We anticipate using
+speed and efficiency as metrics for evaluation of the designed gait;
+these metrics are presented further in Section~\ref{sec:evaluation}.
+
+%2.Problem statement and motivation. A statement of the problem, issue,
+%or task that you’re interested in studying, and why it is interesting
+%or important.
 
 
 
 \section{I/O specification}
 
-\edit{todo}
 
-3.I/O Specification. A clear, concise description of what the final
-system will do in terms of I/O behavior: What will it take in, and
-what it will produce.
+Input:
 
+\begin{itemize}
+\item Motor encoder position (optional, likely)
+\item Motor force feedback (optional, likely)
+\item Robot position estimate via external pose estimation system (optional, less likely)
+\end{itemize}
 
+ 
+\noindent Output:
 
-\section{Background reading (optional)}
-
-\edit{todo}
-
-4.Background Reading (OPTIONAL in pre-proposal stage). A list of
-relevant readings that you’ll use to gain some background in your
-selected topic.
-
-
-
-\section{General approach (optional)}
-
-\edit{todo}
-
-5.General Approach (OPTIONAL in pre-proposal stage). A high-level
-description of the general approach you’ll use (e.g. heuristic search,
-learning, rules, belief networks). This section should have a
-subsection entitled “Where’s the AI” where you explicitly articulate
-the AI component of this project.
+\begin{itemize}
+\item Motor position commands over time
+\end{itemize}
 
 
+\section{Background reading}
 
-\section{System architecture and work plan (optional)}
-
-\edit{todo}
-
-6.System Architecture and work plan (OPTIONAL in pre-proposal
-stage). Explain the main components of the system, how they can be
-independently developed and independently tested, and who will do
-what.
+We have selected three papers to read for background information on
+walking robots. The papers are \emph{An Evolutionary Approach to Gait
+  Learning for Four-Legged Robots} by Sonia Chenova and Manuela
+Veloso, \emph{Policy Gradient Reinforcement Learning for Fast
+  Quadrepedal Locomotion} by Nate Kohl and Peter Stone, and
+\emph{Evolving Dynamic Gaits on a Physical Robot} by Viktor Zykov,
+Josh Bongard, and Hod Lipson. Hopefully these papers will give us
+insights on what kinds of algorithms and techniques to employ in our
+learning problem.
 
 
 
-\section{Data sources (optional)}
 
-\edit{todo}
+\section{General approach}
 
-7.Data sources (OPTIONAL in pre-proposal stage). If your project
-involves analyzing real data (e.g. stock market data, sport data, user
-behavior), identify potential sources for this data.
+\subsection{Where's the AI?}
+
+Our general approach is still under development.  We are currently
+evaluating the following AI methods for possible inclusion:
+
+\begin{itemize}
+\item Optimization (gradient descent, Levenberg-Marquardt, ...)
+\item Evolutionary algorithm / Genetic algorithm
+\item Reinforcement learning
+\item Supervised learning?
+\end{itemize}
+
+In addition to these more general methods, the following issues will
+also need to be investigated:
+
+\begin{itemize}
+\item Reduced dimensionality of parameter space (periodic, symmetric, ...)
+\item Parametrized gait vs. non-parametrized gait (?)
+\item Geometric constraints
+\end{itemize}
 
 
 
-\section{Evaluation plans (optional)}
+\section{System architecture and work plan}
 
-\edit{todo}
+We will be working with a robot that has an on-board computer running Linux. The lower level drivers are in C and we hope to implement the system in Python.
 
-8.Evaluation Plans (OPTIONAL in pre-proposal stage). An explicit,
-coherent plan for quantitatively and/or qualitatively evaluating the
-system. In particular, identify (a) metrics that will help you measure
-performance, e.g. time or space to solve a problem, quality of a
-solution, or competition or comparison against a standard approach (b)
-a simple “toy” problem that you can use for early testing of your
-system – something that should be trivial to solve, (b) a “hard” test
-case, that will serve as you ultimate test.
+Once we begin working with the robot and have an idea of the algorithm we will use, we will divide the work.
+
+
+
+% \section{Data sources (optional)}
+% 
+% \edit{todo}
+% 
+% 7.Data sources (OPTIONAL in pre-proposal stage). If your project
+% involves analyzing real data (e.g. stock market data, sport data, user
+% behavior), identify potential sources for this data.
+% 
+
+
+\section{Evaluation plans}
+\label{sec:evaluation}
+
+To evaluate our system, we will have three main metrics: speed, number
+of failures, and efficiency, which will be compared to its initial
+hard-coded walking, and compared to other quadraped robots in the lab:
+
+\begin{itemize}
+\item Speed taken to walk a certain distance
+\item Number of failures (falling down, getting stuck) over a certain number of attempts
+\item Efficiency and power consumption, estimated through a model of the motor
+\end{itemize}
 
 
 
