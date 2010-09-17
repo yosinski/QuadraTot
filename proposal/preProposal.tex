@@ -112,15 +112,25 @@ The first week we will work together on making the robot move. Until we get the 
 \section{Evaluation plans}
 \label{sec:evaluation}
 
-To evaluate our system, we will have three main metrics: speed, number
-of failures, and efficiency, which will be compared to its initial
-hard-coded walking, and compared to other quadraped robots in the lab:
+We will need to evaluate our system for two separate reasons.  First,
+our learning methods depend on knowing the current performance of the
+robot.  In order to optimize this performance, the learning algorithms
+themselves will need access to the metrics of interest.  Of course,
+the other reason for evaluation is to assess the performance of the
+system as a whole.
+
+For this latter purpose, we propose the use of three main metrics:
 
 \begin{itemize}
 \item Speed taken to walk a certain distance
 \item Number of failures (falling down, getting stuck) over a certain number of attempts
 \item Efficiency and power consumption, estimated through a model of the motor
 \end{itemize}
+
+\noindent We anticipate comparing our results along these dimensions
+to a hard-coded walking configuration, as well as possibly to other
+quadraped robots in the lab:
+
 
 
 
