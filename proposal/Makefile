@@ -10,6 +10,7 @@ all: ${TARGETS}
 
 %.dvi : %.tex
 	latex $*
+	latex $*
 
 clean:
 	rm -f *.aux *.log *~ *.dvi *.out *.bbl *.blg *.lot *.lof *.toc ${TARGETS}
