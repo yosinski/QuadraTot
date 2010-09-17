@@ -1,1 +1,1 @@
-Repository for our CS4701 project
+Oops! Repository for our CS 4700 project.
