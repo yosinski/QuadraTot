@@ -1,3 +1,3 @@
-Oops! Repository for our CS 4700 project.
+Repository for our CS 4700 project.
 
-Trac test.
+Trac test 2.
