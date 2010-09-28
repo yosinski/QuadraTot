@@ -66,7 +66,7 @@ def main():
 
         print 'At %3.3f, commanding:' % seconds,
 
-        for ii,actuator in enumerate(actuators[:8]):
+        for ii,actuator in enumerate(actuators):
             gg = goal[ii]
             gg = max(min(gg, servoMax), servoMin)
             actuator.goal_position = gg
