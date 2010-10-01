@@ -63,6 +63,12 @@ def doRun():
               (-2, 2),
               (False, True),
               (False, True)]
+
+    ranges = [(0, 400),
+              (.5, 8),
+              (-2, 2),
+              (-1, 1),
+              (-1, 1)]
     currentState = initialState(ranges)
 
     #runRobotWith(bestState)  # TODO: Run the robot and return
