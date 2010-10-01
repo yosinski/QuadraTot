@@ -2,9 +2,10 @@
 
 import os, dynamixel, time, random
 import datetime
+import pdb
 
 from Motion import positionIt
-
+from RobotParams import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, MIN_CENTER, MAX_CENTER
 
 
 def initialize():
@@ -39,12 +40,35 @@ def initialize():
     return net, actuators
 
 
+def cropPositions(pos):
+    '''Crops the given positions to their appropriate min/max values.
+    Requires a vector of length 9 to be sure the IDs are in the
+    assumed order.'''
+
+    if len(pos) != 9:
+        raise Exception('cropPositions expects a vector of length 9')
+
+    for ii in [0, 2, 4, 6]:
+        pos[ii]   = max(MIN_INNER, min(MAX_INNER, pos[ii]))
+        pos[ii+1] = max(MIN_OUTER, min(MAX_OUTER, pos[ii+1]))
+    pos[8] = max(MIN_CENTER, min(MAX_CENTER, pos[8]))
+
+
+def currentPositions(actuators):
+    ret = []
+    for ac in actuators:
+        ac.read_all()
+        ret.append(ac.cache[dynamixel.defs.REGISTER['CurrentPosition']])
+    return ret
+
+
+def printStatus(actuators):
+    pos = currentPositions(actuators)
+    print 'Positions:', ' '.join(['%d:%d' % (ii,pp) for ii,pp in enumerate(pos)])
+
+
 def main():
     net, actuators = initialize()
-
-    servoMin = 40
-    #servoMax = 950
-    servoMax = 800
 
     for actuator in actuators:
         actuator.moving_speed = 90
