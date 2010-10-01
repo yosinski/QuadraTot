@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 from math import sin, pi
 
 def sineModel(time, parameters, croppingFunction = None):
@@ -12,7 +14,9 @@ def sineModel(time, parameters, croppingFunction = None):
     centerConst = 512
     ret = [centerConst] * 9
     
-    offset = 512
+    #offset = 512
+    offsetInner = 800
+    offsetOuter = 40
     
     # Compute base sine wave
     base = amp * sin(2*pi*time/tau)
@@ -34,10 +38,26 @@ def sineModel(time, parameters, croppingFunction = None):
         for ii in idxLR:
             ret[ii] = -ret[ii]
 
-    for ii in idxInner + idxOuter:
-        ret[ii] += offset
+    for ii in idxInner:
+        ret[ii] += offsetInner
+    for ii in idxOuter:
+        ret[ii] += offsetOuter
         
     if croppingFunction:
-        ret = croppingFunction(ret)
+        croppingFunction(ret)
 
     return ret
+
+
+
+def main():
+    theta = [1.5, 5, 2, False, False]
+    for step in range(0,20):
+        tt = step / 4.
+        motors = sineModel(tt, theta)
+        print tt, motors
+
+
+
+if __name__ == '__main__':
+    main()

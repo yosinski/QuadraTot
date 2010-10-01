@@ -18,6 +18,14 @@ from numpy import interp
 
 
 
+def lInterp(time, theDomain, val1, val2):
+    ret = []
+    for ii in range(len(val1)):
+        ret.append(interp([time], theDomain, [val1[ii], val2[ii]])[0])
+    return ret
+
+
+
 def positionIt(time):
     # Make the outer arm go up and down, limited range until we figure
     # out range of robot. Starts out lying flat.
@@ -27,12 +35,14 @@ def positionIt(time):
         outer = float(interp([time], [0, 5], [512,  40])[0])
 
         position = [inner, outer, inner, outer, inner, outer, inner, outer, 512]
+        position = [inner, outer, 512, 512, inner, outer, 512, 512, 512]
 
     elif (time < 10):
         inner = float(interp([time-5], [0, 5], [800, 512])[0])
         outer = float(interp([time-5], [0, 5], [ 40, 150])[0])
 
         position = [inner, outer, inner, outer, inner, outer, inner, outer, 512]
+        position = [inner, outer, 512, 512, inner, outer, 512, 512, 512]
 
     else:
 
