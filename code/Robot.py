@@ -8,6 +8,27 @@ Much inspiration taken from http://code.google.com/p/pydynamixel/
 
 
 
+'''Min and max values for the QuadraTot robot, based on some tests.
+
+Note that these values will avoid collisions only for each servo
+individually.  More complex collisions are still possible given
+certain vectors of motor position.
+'''
+
+MIN_INNER = 150
+MAX_INNER = 770
+MIN_OUTER = 30
+MAX_OUTER = 940
+MIN_CENTER = 512 - 180
+MAX_CENTER = 512 + 180
+
+POS_FLAT      = [512] * 9
+POS_READY     = [800,  40] * 4 + [512]
+POS_HALFSTAND = [700, 100] * 4 + [512]
+POS_STAND     = [512, 150] * 4 + [512]
+
+
+
 class Robot():
     ''''''
 
@@ -25,7 +46,10 @@ class Robot():
         '''
 
         # The number of Dynamixels on our bus.
-        self.nServos = 9
+        self.nServos = nServos
+
+        if self.nServos != 9:
+            raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
 
         # Set your serial port accordingly.
         if os.name == "posix":
@@ -142,12 +166,7 @@ class Robot():
 
             #print 'At %3.3f, commanding:' % seconds,
 
-            for ii,actuator in enumerate(actuators):
-                gg = int(round(goal[ii],0))
-                #gg = max(min(gg, servoMax), servoMin)
-                actuator.goal_position = gg
-                #print gg,
-            net.synchronize()
+            self.commandPosition(........)
             #print
 
             #for actuator in actuators[:8]:
@@ -172,23 +191,37 @@ class Robot():
                        positions are cropped.  Default: False.
         '''
 
+        goalPosition = self.cropPosition(position, cropWarning)
+        
+        for ii,actuator in enumerate(self.actuators):
+            gg = int(round(goal[ii],0))
+            #gg = max(min(gg, servoMax), servoMin)
+            actuator.goal_position = gg
+            #print gg,
+        net.synchronize()
         
 
 
 
-    def cropPositions(pos):
+    def cropPosition(position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
+        
         Requires a vector of length 9 to be sure the IDs are in the
         assumed order.'''
 
-        if len(pos) != 9:
-            raise Exception('cropPositions expects a vector of length 9')
+        if len(pos) != self.nServos:
+            raise Exception('cropPositions expects a vector of length %d' % self.nServos)
 
+        ret = copy(position)
         for ii in [0, 2, 4, 6]:
-            pos[ii]   = max(MIN_INNER, min(MAX_INNER, pos[ii]))
-            pos[ii+1] = max(MIN_OUTER, min(MAX_OUTER, pos[ii+1]))
-        pos[8] = max(MIN_CENTER, min(MAX_CENTER, pos[8]))
+            ret[ii]   = max(MIN_INNER, min(MAX_INNER, ret[ii]))
+            ret[ii+1] = max(MIN_OUTER, min(MAX_OUTER, ret[ii+1]))
+        ret[8] = max(MIN_CENTER, min(MAX_CENTER, ret[8]))
 
+        if cropWarning and ret != position:
+            print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
+            
+        return ret
 
 
     def currentPositions(actuators):
