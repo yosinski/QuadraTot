@@ -3,6 +3,7 @@
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{color}
+\usepackage{ulem}
 
 \graphicspath{{../figures/}}
 
@@ -13,6 +14,8 @@
 %\textheight 9.0in
 
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\seclabel}[1]{\label{sec:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
 \def\naive{na\"{\i}ve}
 \def\Naive{Na\"{\i}ve}
 \def\naively{na\"{\i}vely}
@@ -39,13 +42,15 @@
 
 
 
-\title{QuadraTot -- A modest proposal}
+\title{QuadraTot \\
+{\normalsize \sc Code Review 1}}
 \author{Diana Hidalgo, Sarah Nguyen,  and Jason Yosinski \\
 \code{\{djh283,smn64,jy495\}@cornell.edu}}
 
 
 \begin{document}
 \maketitle
+\normalem
 
 %\begin{abstract}
 %\input{abstract}
