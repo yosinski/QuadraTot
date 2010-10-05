@@ -101,7 +101,7 @@ def doRun():
 
     for ii in range(10000):
 	if currentState not in statesSoFar:  # Make sure this state is new
-	    stateSoFar.add(currentState)
+	    stateSoFar.add(tuple(currentState))
             print
             print 'Iteration', ii, 'params', currentState
         
