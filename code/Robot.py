@@ -1,8 +1,11 @@
-import os, dynamixel, time, datetime
-from RobotParams import *
-from Motion import lInterp
+import os
+from datetime import datetime
 from time import sleep
 from types import FunctionType
+from copy import copy
+
+import dynamixel
+from Motion import lInterp
 
 '''
 Much inspiration taken from http://code.google.com/p/pydynamixel/
@@ -67,7 +70,9 @@ class Robot():
         # Default baud rate of the USB2Dynamixel device.
         self.baudRate = 1000000
 
-        serial = dynamixel.SerialStream(port=portName, baudrate=baudRate, timeout=1)
+        serial = dynamixel.SerialStream(port = portName,
+                                        baudrate = self.baudRate,
+                                        timeout = 1)
         self.net = dynamixel.DynamixelNetwork(serial)
 
         print "Scanning for Dynamixels...",
@@ -75,9 +80,9 @@ class Robot():
 
         self.actuators = list()
 
-        for dyn in net.get_dynamixels():
+        for dyn in self.net.get_dynamixels():
             print dyn.id,
-            self.actuators.append(net[dyn.id])
+            self.actuators.append(self.net[dyn.id])
         print "...Done"
 
         if len(self.actuators) != self.nServos and not silentNetFail:
@@ -92,7 +97,7 @@ class Robot():
             actuator.max_torque = 1000
 
         self.currentPos = None
-        self.resetTime()
+        self.resetClock()
         
     def run(self, motionFunction, runSeconds = 10, resetFirst = True,
             interpBegin = 0, interpEnd = 0):
@@ -143,16 +148,16 @@ class Robot():
 
         print 'Starting motion.'
 
-        self.resetTime()
+        self.resetClock()
         self.currentPos = self.readCurrentPosition()
 
         # Reset the robot position, if desired
         if resetFirst:
-            self.interpMove(self.currentPosition(), POS_FLAT, 3)
+            self.interpMove(self.readCurrentPosition(), POS_FLAT, 3)
             self.interpMove(POS_FLAT, POS_READY, 3)
             #self.interpMove(POS_READY, POS_HALFSTAND, 4)
             self.currentPos = POS_READY
-            self.resetTime()
+            self.resetClock()
 
         # Begin with a segment smoothly interpolated between the
         # current position and the motion model.
@@ -181,7 +186,7 @@ class Robot():
         while self.time < timeEnd:
             posS = start(seconds) if isinstance(start, FunctionType) else start
             posE =   end(seconds) if isinstance(end,   FunctionType) else end
-            goal = lIterp(self.time, [timeStart, timeEnd], start, end)
+            goal = lInterp(self.time, [timeStart, timeEnd], start, end)
 
             self.commandPosition(goal)
             sleep(self.sleep)
@@ -265,14 +270,14 @@ class Robot():
             actuator.goal_position = goalPosition[ii]
         self.net.synchronize()
 
-    def cropPosition(position, cropWarning = False):
+    def cropPosition(self, position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
         
         Requires a vector of length 9 to be sure the IDs are in the
         assumed order.'''
 
-        if len(pos) != self.nServos:
-            raise Exception('cropPositions expects a vector of length %d' % self.nServos)
+        if len(position) != self.nServos:
+            raise Exception('cropPosition expects a vector of length %d' % self.nServos)
 
         ret = copy(position)
         for ii in [0, 2, 4, 6]:
@@ -293,7 +298,7 @@ class Robot():
         return ret
 
     def printStatus(self):
-        pos = self.currentPositions()
+        pos = self.readCurrentPosition()
         print 'Positions:', ' '.join(['%d:%d' % (ii,pp) for ii,pp in enumerate(pos)])
 
 

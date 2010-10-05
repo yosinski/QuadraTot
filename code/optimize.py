@@ -99,15 +99,15 @@ def doRun():
     
     bestDistance = -1e100
 
+    stateSoFar = set()
     for ii in range(10000):
-	if currentState not in statesSoFar:  # Make sure this state is new
+	if tuple(currentState) not in statesSoFar:  # Make sure this state is new
 	    stateSoFar.add(tuple(currentState))
             print
             print 'Iteration', ii, 'params', currentState
         
             motionModel = lambda time: sineModel(time,
-                                                 parameters = currentState,
-                                                 croppingFunction = cropPositions)
+                                                 parameters = currentState)
 
             android.run(motionModel)
 
