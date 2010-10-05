@@ -17,7 +17,7 @@ walked.
 import math, pdb
 import random
 from copy import copy
-from Robot import runRobotWith, cropPositions
+from Robot import Robot
 from SineModel import sineModel
 
 def initialState(ranges):
@@ -120,11 +120,11 @@ def doRun():
             print "best so far", bestState, bestDistance  # Prints best state and distance so far
         
 	# Writes to log file that keeps track of tests so far
-	for a in currentState
+    for a in currentState:
         stats += a + " "
     logFile = open('log.txt', 'a')
-	logFile.write(stats + ", " + str(currentDistance) + "\n")
-	logFile.close()
+    logFile.write(stats + ", " + str(currentDistance) + "\n")
+    logFile.close()
 
     return bestState  # Return the best solution found (a list of params)
 
