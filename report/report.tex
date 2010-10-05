@@ -1,136 +1,176 @@
-\section{Team}
+\section{Executive Summary}
 
-The human members of our team are Diana Hidalgo, Sarah Nguyen, and
-Jason Yosinski.  The sole robotic member of our team is a 9 degree of
-freedom starfish shaped robot from Hod Lipson's lab.
-
-
-
-\section{Problem statement}
-
-There has been much interest in and research surrounding legged
-robots.  Such robots exhibit both challenges and opportunities not
-present in more traditional wheeled robots.  One of these challenges
-is getting the robot to move as quickly and efficiently as possible.
-Past research has shown that machine learning methods of optimizing a
-walking robot's gait can outperform even the best hand coded gaits
-(Chernova 2004).
-
-To this end, we will use machine learning to design a gait for a
-quadraped robot, available from Hod Lipson's lab.  We anticipate using
-speed and efficiency as metrics for evaluation of the designed gait;
-these metrics are presented further in Section~\ref{sec:evaluation}.
-The robot learning will be accomplished via one of several machine
-learning algorithms, discussed in Section~\ref{sec:approach}.
-
-%2.Problem statement and motivation. A statement of the problem, issue,
-%or task that you’re interested in studying, and why it is interesting
-%or important.
+We are using machine learning to design a gait for a quadruped
+robot. The robot has an on-board computer, drivers for the motors, and
+will have camera feedback. The code so far consists of the robot
+class, optimization class, parameterized model, sine model, and camera
+feedback.  Both the hardware and software are progressing on schedule.
+Some promising gaits have been generated, and we anticipate a final
+evaluation of the robot’s gait in November.
 
 
 
-\section{I/O specification}
+\section{Proposal Summary}
+% A short (one or two sentence) summary of the project
+% goal/topic. This is just to remind us what you’re working on.
 
-
-Input:
-
-\begin{itemize}
-\item Motor encoder position (optional, likely)
-\item Motor force feedback (optional, likely)
-\item Robot position estimate via external pose estimation system (optional, less likely)
-\end{itemize}
-
- 
-\noindent Output:
-
-\begin{itemize}
-\item Motor position commands over time
-\end{itemize}
-
-
-\section{Background reading}
-
-We have selected three papers to read for background information on
-walking robots. The papers are \emph{An Evolutionary Approach to Gait
-  Learning for Four-Legged Robots} by Sonia Chenova and Manuela
-Veloso, \emph{Policy Gradient Reinforcement Learning for Fast
-  Quadrepedal Locomotion} by Nate Kohl and Peter Stone, and
-\emph{Evolving Dynamic Gaits on a Physical Robot} by Viktor Zykov,
-Josh Bongard, and Hod Lipson. Hopefully these papers will give us
-insights on what kinds of algorithms and techniques to employ in our
-learning problem.
+We are using machine learning to design a gait for a quadraped robot
+from Hod Lipson’s lab. We anticipate using speed and number of
+failures as metrics for evaluation of the designed gait.
 
 
 
+\section{System Architecture Summary}
+% A summary of the main components of the system, and how they
+% interact with each other to achieve the goal. This is just to remind
+% us what you are planning to develop.
 
-\section{General approach}
-\label{sec:approach}
+The quadraped robot has an on-board computer running Linux. The lower
+level drivers are in C and we are implementing the system in
+Python. Feedback about distance travelled is currently input manually,
+but we eventually plan to provide this via an Optitrack positioning
+system.
 
-\subsection{Where's the AI?}
 
-Our general approach is still under development.  We are currently
-evaluating the following AI methods for possible inclusion:
+
+\section{Implementation Status}
+\seclabel{implement}
+% A list of the major components of the system as well as the current
+% status of each (e.g. designed, implemented, tested, finished, almost
+% finished with coding). For the pieces not yet finished, indicate
+% tentative completion dates. The schedule doesn’t have to be
+% incredibly detailed, but it should include entries for all
+% substantial modules/submodules of your system. Include also who in
+% the team is responsible for completing this module.
+
+
+
+\subsection*{\code{Robot} class}
 
 \begin{itemize}
-\item Optimization (gradient descent, Levenberg-Marquardt, ...)
-\item Evolutionary algorithm / Genetic algorithm
-\item Reinforcement learning
-\item Supervised learning?
-\end{itemize}
-
-In addition to these more general methods, the following issues will
-also need to be investigated:
-
-\begin{itemize}
-\item Reduced dimensionality of parameter space (periodic, symmetric, ...)
-\item Parametrized gait vs. non-parametrized gait (?)
-\item Geometric constraints
+\item \emph{Team member:} Jason.
+\item \emph{Current implementation:} Class wrapper for commanding
+  motion of the robot.  The \code{Robot} class takes care of the robot
+  initialization, communication with the servos, and timing of the
+  runs.  In addition, it prevents the servos from ever being commanded
+  to a point outside their normal range (0 - 1023) as well as beyond
+  points where limbs would collide with parts of the robot body.  The
+  main class function, \code{run}, accepts a motion model (any
+  function that takes a time argument and outputs a 9 dimensional
+  position) and will run the robot using this motion model, including,
+  if desired, smooth interpolation over time for the beginning and end
+  of the run.
+\item \emph{Future improvements:} None planned, though some will
+  probably arise.
+\item \emph{Status:} 90\% complete.
 \end{itemize}
 
 
 
-\section{System architecture and work plan}
-
-We will be working with a robot that has an on-board computer running
-either Windows or Linux. The lower level drivers are in C and we hope
-to implement the system in Python.
-
-The first week we will work together on making the robot move. Until we get the platrom ready to run our code, it will be difficult to separate the tasks. However, once we begin implementing our chosen algorithms, this division will become more clear.
-
-
-
-% \section{Data sources (optional)}
-% 
-% \edit{todo}
-% 
-% 7.Data sources (OPTIONAL in pre-proposal stage). If your project
-% involves analyzing real data (e.g. stock market data, sport data, user
-% behavior), identify potential sources for this data.
-% 
-
-
-\section{Evaluation plans}
-\label{sec:evaluation}
-
-We will need to evaluate our system for two separate reasons.  First,
-our learning methods depend on knowing the current performance of the
-robot.  In order to optimize this performance, the learning algorithms
-themselves will need access to the metrics of interest.  Of course,
-the other reason for evaluation is to assess the performance of the
-system as a whole.
-
-For this latter purpose, we propose the use of three main metrics:
+\subsection*{\code{Optimization} class}
 
 \begin{itemize}
-\item Speed taken to walk a certain distance
-\item Number of failures (falling down, getting stuck) over a certain number of attempts
-\item Efficiency and power consumption, estimated through a model of the motor
+\item \emph{Team member:} Sarah.
+\item \emph{Current implementation:} Creates a random neighbor by
+  randomly choosing one parameter to adjust, and changing either
+  completely randomly in neighbor(), or slightly in
+  slightNeighbor(). Then evaluates this neighbor by running the robot
+  with the newly chosen parameters. If this neighbor results in a
+  longer distance walked then the previous best neighbor, we save this
+  neighbor as the new best neighbor. We then repeat the whole process
+  using the best neighbor as a base.
+\item \emph{Future improvements:} Gradient descent.
+\item \emph{Status:} Initial algorithm coded. Improved algorithm
+  slightNeighbor() coded. Gradient descent algorithm to be completed
+  by Sarah.
 \end{itemize}
 
-\noindent We anticipate comparing our results along these dimensions
-to a hard-coded walking configuration, as well as possibly to other
-quadraped robots in the lab:
 
+
+\subsection*{\code{Parameterized Motion Model} abstract base class}
+
+\begin{itemize}
+\item \emph{Team member:} Jason.
+\item \emph{Current implementation:} Several functions exist, but none are within a class framework.
+\item \emph{Future improvements:} Make into class.
+\item \emph{Status:} 40\% complete.
+\end{itemize}
+
+
+
+\subsection*{\code{SineModel} classes}
+
+\begin{itemize}
+\item \emph{Team member:} Jason.
+\item \emph{Current implementation:} Commands motors to positions
+  based on a sine wave, creating a periodic pattern. Parameters are:
+  amplitude, wavelength, scale inner vs outer motors, multiply
+  left-right, multiply back-front, shift front-back, shift right-left.
+  Currently a function, not a class.
+\item \emph{Future improvements:} Make class, add time offset
+  parameters.  Continued tweaking of this class and other motion
+  models will be a main goal of the next month.
+\item \emph{Status:} 30\% complete.
+\end{itemize}
+
+
+
+\subsection*{Other derived motion model classes}
+
+\begin{itemize}
+\item \emph{Team member:} All.
+\item \emph{Current implementation:} Several versions of a SineModel
+  exist, each with different parameters, though solely as functions
+  (not as derived classes of \code{ParameterizedMotionModel}).
+\item \emph{Future improvements:} Implementing and tweaking current
+  and new motion model classes will be our primary effort over the
+  next month.
+\item \emph{Status:} 20\% complete.
+\end{itemize}
+
+
+
+\subsection*{\code{CameraFeedback} class and hardware}
+
+\begin{itemize}
+\item \emph{Team member:} Diana.
+\item \emph{Current implementation:} No software, still configuring
+  camera hardware.
+\item \emph{Future improvements:} Write python wrapper class, get
+  positional information from the Optitrack camera system to the program
+\item \emph{Status:} 20\% complete, goal to have cameras working by October 8.
+\end{itemize}
+
+
+
+\section{Evaluation status}
+% A list of the major steps in your planned evaluation of the system
+% and the status of each. For some projects it may be easier to merge
+% this list with the component/module status list above of your
+% system. Include also who in the team is responsible for completing
+% this module.
+
+After running our program and finding a good gait, we will then
+evaluate our system in two ways: the time taken to walk a certain
+distance and the number of failures (i.e. falling down, getting
+stuck). Both of these evaluation metrics depend on the result of
+running our program for many iterations. Neither have been
+completed. The evaluation for our particular project is an ongoing
+process, but we anticipate a final evaluation taking place
+early-to-mid November. The evaluation process will be completed by
+Jason, Sarah, and Diana.
+
+\section{Project schedule timeline}
+% Tell us if you are meeting your project timeline or you are
+% exceeding it or falling behind. If you are falling behind, explain
+% how you will catch up or adjust the goals.
+
+We are meeting our project timeline and are, in fact, slightly ahead
+of schedule. We have read the relevant papers, gotten lab access, and
+talked with the appropriate people to learn the background information
+necessary for working with the robot. We learned how to make the robot
+move and have implemented an initial parameter optimization algorithm,
+which has worked better than we anticipated.
 
 
 
@@ -139,22 +179,26 @@ quadraped robots in the lab:
 Below is a rough schedule of fixed external deadlines and anticipated
 team milestones.
 
+\definecolor{doneColor}{rgb}{0.0,0.7,0.0}
+\newcommand{\done}[1]{{\color{doneColor}\sout{#1}}}
+%\newcommand{\done}[1]{#1}
+
 \begin{center}
 \begin{tabular}{|l||p{2.5in}|p{1.5in}|}
 \hline
                         & {\bf Milestones} & {\bf Deadlines}
 \\ \hline
 
-Week 1 (9/13-9/19)    & Read papers, get lab access, talk to relevant other researchers & 9/17 Final proposals due
+Week 1 (9/13-9/19)    & \done{Read papers, get lab access, talk to relevant other researchers} & 9/17 Final proposals due
 \\ \hline
 
-Week 2 (9/20-9/26)    & Continue reading, get robot to move &
+Week 2 (9/20-9/26)    & \done{Continue reading, get robot to move} &
 \\ \hline
 
-Week 3 (9/27-10/03)   & Implement parametrized gait and determine proposed coding schedule for more advanced algorithms in time for Code Review \#1. &
+Week 3 (9/27-10/03)   & \done{Implement parametrized gait and determine proposed coding schedule for more advanced algorithms in time for Code Review \#1.} &
 \\ \hline
 
-Week 4 (10/04-10/10)  & Begin main algorithm dev/testing effort & 10/5 Code Review \#1
+Week 4 (10/04-10/10)  & \done{Begin main algorithm dev/testing effort} & 10/5 Code Review \#1
 \\ \hline
 
 Week 5 (10/11-10/17)  & Algorithm dev/testing &
@@ -166,7 +210,7 @@ Week 6 (10/18-10/24)  & Algorithm dev/testing &
 Week 7 (10/25-10/31)  & Algorithm dev/testing, quantify/solidify current results for Code Review \#2 &
 \\ \hline
 
-Week 8 (11/1-11/7)    & Finish collecting results, begin writing & 11/2 Code RReview \#2
+Week 8 (11/1-11/7)    & Finish collecting results, begin writing & 11/2 Code Review \#2
 \\ \hline
 
 Week 9 (11/8-11/14)   & Finish collecting results, writing &
@@ -182,3 +226,70 @@ Week 12 (11/29-11/30) & Final demo  & 11/30 Final presentation
 \\ \hline
 \end{tabular}
 \end{center}
+
+
+
+\section{Activity log (Optional)}
+
+% an informal log your efforts. If you’ve been keeping notes on your
+% progress, feel free to turn these in as well. These might include:
+% (1) notes on what aspect of the project you worked on and when, (2)
+% what was accomplished in each “session”, (3) design questions, (4)
+% implementation questions, (5) descriptions of experiments and
+% results, (6) problems that arose, (7) anything else that you think
+% is relevant to the project.
+
+\begin{itemize}
+\item \emph{9/13-9/19:} Set up. Set up trac, worked on pre-proposal
+  and presentation, got lab access, met with Jim Torresen, contacted
+  Juan Cristobal Zagal, read papers, got the robot to walk using
+  previously coded program. Questions -- How do we move the robot? How
+  do we command the motors?
+\item \emph{9/20-9/26:} Moving the robot. Installed Linux on the
+  robot, figured out how to command the motors, coded a program to
+  make the robot stand up, coded a simple motion pattern. Questions --
+  For initial program, what parameters and model should be used? How
+  do we limit the search space? What algorithm should we start with?
+  How will the robot get information about how far it moved?
+\item \emph{9/27-10/3:} Initial program. Chose several parameters and
+  created a simple parameterized sine model, implemented a random hill
+  climbing algorithm to optimize the parameters, ran some trial
+  iterations, began setting up the cameras for feedback. Questions --
+  Did the initial program work? What parameters are important? Are
+  additional parameters necessary? What algorithm should we implement
+  for the final program?
+\item \emph{10/4-10/5:} Plan for final implementation. Discussed
+  possible algorithms to use and new parameters to add. Worked on
+  report for code review \#1. Questions -- Advantages for gradient
+  descent? Should we start with a completely random parameter vector
+  or should we start with one that results in motion and let the
+  program optimize it?
+\end{itemize}
+
+
+
+\section{Proposal Modifications}
+% Let us know if you are deviating from your original proposal.
+
+We are not deviating from our original proposal.
+
+
+
+\section{Appendix}
+% Describe the code files you uploaded into CMS
+
+A brief description of the code uploaded to the CMS follows:
+
+\begin{itemize}
+\item \code{optimize.py}: Employs random hill-climbing to choose and
+  evaluate the parameters of the robots’ motion, either by changing
+  one parameter completely randomly, or changing one parameter
+  slightly. Evaluates each neighbor using manually input distance
+  walked.
+\item \code{Robot.py}: Implements the \code{Robot} class, described in
+  \secref{implement}.
+\item \code{SineModel.py}: Implements a sine based motion model,
+  described in \secref{implement}.
+\item \code{Motion.py}: Motion helper functions.
+\end{itemize}
+
