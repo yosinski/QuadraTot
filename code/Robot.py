@@ -2,6 +2,7 @@ import os, dynamixel, time, datetime
 from RobotParams import *
 from Motion import lInterp
 from time import sleep
+from types import FunctionType
 
 '''
 Much inspiration taken from http://code.google.com/p/pydynamixel/
@@ -83,8 +84,17 @@ class Robot():
             raise Exception('Expected to find %d servos on network, but only got %d (%s)'
                             % (self.nServos, len(self.actuators), repr(self.actuators)))
 
+        for actuator in self.actuators:
+            actuator.moving_speed = 90
+            actuator.synchronized = True
+            actuator.torque_enable = True
+            actuator.torque_limit = 1000
+            actuator.max_torque = 1000
 
-    def run(self, motionFunction, runSeconds = 10, resetFirst = True
+        self.currentPos = None
+        self.resetTime()
+        
+    def run(self, motionFunction, runSeconds = 10, resetFirst = True,
             interpBegin = 0, interpEnd = 0):
         '''Run the robot with a given motion generating function.
 
@@ -130,76 +140,105 @@ class Robot():
         #def run(self, motionFunction, runSeconds = 10, resetFirst = True
         #    interpBegin = 0, interpEnd = 0):
 
-        for actuator in self.actuators:
-            actuator.moving_speed = 90
-            actuator.synchronized = True
-            actuator.torque_enable = True
-            actuator.torque_limit = 1000
-            actuator.max_torque = 1000
 
         print 'Starting motion.'
 
-        currentPos = None
+        self.resetTime()
+        self.currentPos = self.readCurrentPosition()
 
+        # Reset the robot position, if desired
         if resetFirst:
-            currentPos = self.currentPostion()
-            time0 = datetime.datetime.now()
-            seconds = 0
-            
-            while seconds < 10:
-                timeDiff = datetime.datetime.now() - time0
-                seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+            self.interpMove(self.currentPosition(), POS_FLAT, 3)
+            self.interpMove(POS_FLAT, POS_READY, 3)
+            #self.interpMove(POS_READY, POS_HALFSTAND, 4)
+            self.currentPos = POS_READY
+            self.resetTime()
 
-                if seconds < 3:
-                    goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
-                elif seconds < 6:
-                    goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
-                elif seconds < 10:
-                    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
-                else:
-                    break
-
-                self.commandPosition(goal)
-                sleep(self.sleep)
-                
-            currentPos = POS_HALFSTAND
-
+        # Begin with a segment smoothly interpolated between the
+        # current position and the motion model.
         if interpBegin is not None:
-            if currentPos is None:
-                currentPos = self.currentPostion()
+            self.interpMove(self.currentPos, motionFunction, interpBegin)
+            self.currentPos = motionFunction(self.time)
 
-            time0 = datetime.datetime.now()
-            seconds = 0
-            
-            while seconds < interpBegin:
-                timeDiff = datetime.datetime.now() - time0
-                seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+        # Main motion segment
+        self.interpMove(motionFunction, motionFunction, runSeconds)
+        self.currentPos = motionFunction(self.time)
 
-                if seconds < 3:
-                    goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
-                elif seconds < 6:
-                    goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
-                elif seconds < 10:
-                    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
-                else:
-                    break
-            currentPos = POS_HALFSTAND
+        # End with a segment smoothly interpolated between the
+        # motion model and a ready position.
+        if interpEnd is not None:
+            self.interpMove(motionFunction, POS_READY, interpEnd)
+        
+    def interpMove(self, start, end, seconds):
+        '''Moves between start and end over seconds seconds.  stard
+        and end may be functions of the time.'''
 
-            
-            elif seconds < 6:
-                goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
-            #elif seconds < 10:
-            #    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
-            elif seconds < runSeconds + 6:
-                goal = paramFunction(seconds - 6)
-            else:
-                break
-
-            #print 'At %3.3f, commanding:' % seconds,
+        self.updateClock()
+        
+        timeStart = self.time
+        timeEnd   = self.time + seconds
+        
+        while self.time < timeEnd:
+            posS = start(seconds) if isinstance(start, FunctionType) else start
+            posE =   end(seconds) if isinstance(end,   FunctionType) else end
+            goal = lIterp(self.time, [timeStart, timeEnd], start, end)
 
             self.commandPosition(goal)
+            sleep(self.sleep)
+            self.updateClock()
 
-            time.sleep(.025)
+        
+#
+#        currentPos = None
+#
+#        if resetFirst:
+#            currentPos = self.currentPostion()
+#            time0 = datetime.datetime.now()
+#            seconds = 0
+#            
+#            while seconds < 10:
+#                timeDiff = datetime.datetime.now() - time0
+#                seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+#
+#                if seconds < 3:
+#                    goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
+#                elif seconds < 6:
+#                    goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
+#                elif seconds < 10:
+#                    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
+#                else:
+#                    break
+#
+#                self.commandPosition(goal)
+#                sleep(self.sleep)
+#                
+#            currentPos = POS_HALFSTAND
+#
+#        if interpBegin is not None:
+#            if currentPos is None:
+#                currentPos = self.currentPostion()
+#
+#            time0 = datetime.datetime.now()
+#            seconds = 0
+#            
+#            while seconds < interpBegin:
+#                timeDiff = datetime.datetime.now() - time0
+#                seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+#
+#                goal = lInterp(seconds, [0, interpBegin], currentPos, motionFunction(seconds))
+#
+#                self.commandPosition(goal)
+#                time.sleep(self.sleep)
+#
+    def resetClock(self):
+        '''Resets the robot time to zero'''
+        self.time0 = datetime.now()
+        self.time  = 0.0
+
+    def updateClock(self):
+        '''Updates the Robots clock to the current time'''
+        timeDiff  = datetime.now() - self.time0
+        self.time = timeDiff.seconds + timeDiff.microseconds/1e6
 
     def commandPosition(self, position, cropWarning = False):
         '''Command the given position
@@ -246,18 +285,15 @@ class Robot():
             
         return ret
 
-
-    def currentPositions(actuators):
+    def readCurrentPosition(self):
         ret = []
-        for ac in actuators:
+        for ac in self.actuators:
             ac.read_all()
             ret.append(ac.cache[dynamixel.defs.REGISTER['CurrentPosition']])
         return ret
 
-
-
-    def printStatus(actuators):
-        pos = currentPositions(actuators)
+    def printStatus(self):
+        pos = self.currentPositions()
         print 'Positions:', ' '.join(['%d:%d' % (ii,pp) for ii,pp in enumerate(pos)])
 
 
