@@ -9,7 +9,7 @@
 """
 Employs random hill-climbing to choose and evaluate the parameters of the robots'
 motion, either by changing one parameter completely randomly, or changing one
-parameter slightly. Evaluates each neighbor using user-inputted distance
+parameter slightly. Evaluates each neighbor using user-inputed distance
 walked.
 
 """
@@ -118,8 +118,13 @@ def doRun():
                 bestDistance = copy(currentDistance)
 
             print "best so far", bestState, bestDistance  # Prints best state and distance so far
-
-        currentState = neighbor(ranges, bestState)  # Pick some neighbor
+        
+	# Writes to log file that keeps track of tests so far
+	for a in currentState
+        stats += a + " "
+    logFile = open('log.txt', 'a')
+	logFile.write(stats + ", " + str(currentDistance) + "\n")
+	logFile.close()
 
     return bestState  # Return the best solution found (a list of params)
 
