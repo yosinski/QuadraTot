@@ -107,7 +107,7 @@ def doRun():
                                                  parameters = currentState,
                                                  croppingFunction = cropPositions)
 
-            runRobotWith(motionModel)
+            android.run(motionModel)
 
             currentDistance = float(raw_input("Enter distance walked by Android: "))
 
