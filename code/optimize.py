@@ -123,7 +123,7 @@ def doRun():
 	for a in currentState
         stats += a + " "
     logFile = open('log.txt', 'a')
-	logFile.write(stats + ", " + str(currentDistance))
+	logFile.write(stats + ", " + str(currentDistance) + "\n")
 	logFile.close()
 
     return bestState  # Return the best solution found (a list of params)
