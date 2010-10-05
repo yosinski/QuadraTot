@@ -1,6 +1,7 @@
 import os, dynamixel, time, datetime
 from RobotParams import *
 from Motion import lInterp
+from time import sleep
 
 '''
 Much inspiration taken from http://code.google.com/p/pydynamixel/
@@ -32,7 +33,7 @@ POS_STAND     = [512, 150] * 4 + [512]
 class Robot():
     ''''''
 
-    def __init__(self, silentNetFail = False, nServos = 9):
+    def __init__(self, silentNetFail = False, nServos = 9, commandRate = 40):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -43,10 +44,15 @@ class Robot():
 
         nServos -- How many servos are connected to the robot,
                    i.e. how many to expect to find on the network.
+
+        commandRate -- Rate at which the motors should be commanded,
+                   in Hertz.  Default: 40.
         '''
 
-        # The number of Dynamixels on our bus.
+        # The number of Dynamixels on the bus.
         self.nServos = nServos
+
+        self.sleep = 1. / float(commandRate)
 
         if self.nServos != 9:
             raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
@@ -133,28 +139,53 @@ class Robot():
 
         print 'Starting motion.'
 
-        time0 = datetime.datetime.now()
-        startingPos = None
+        currentPos = None
 
         if resetFirst:
-            while True:
-                if startingPos == None:
-                    startingPos = currentPositions(actuators)
+            currentPos = self.currentPostion()
+            time0 = datetime.datetime.now()
+            seconds = 0
+            
+            while seconds < 10:
                 timeDiff = datetime.datetime.now() - time0
                 seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
 
                 if seconds < 3:
                     goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
+                elif seconds < 6:
+                    goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
+                elif seconds < 10:
+                    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
+                else:
+                    break
+
+                self.commandPosition(goal)
+                sleep(self.sleep)
                 
+            currentPos = POS_HALFSTAND
 
-        while True:
-            if startingPos == None:
-                startingPos = currentPositions(actuators)
-            timeDiff = datetime.datetime.now() - time0
-            seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+        if interpBegin is not None:
+            if currentPos is None:
+                currentPos = self.currentPostion()
 
-            if seconds < 3:
-                goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
+            time0 = datetime.datetime.now()
+            seconds = 0
+            
+            while seconds < interpBegin:
+                timeDiff = datetime.datetime.now() - time0
+                seconds  = timeDiff.seconds + timeDiff.microseconds/1e6
+
+                if seconds < 3:
+                    goal = lInterp(seconds, [0, 3], startingPos, POS_FLAT)
+                elif seconds < 6:
+                    goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
+                elif seconds < 10:
+                    goal = lInterp(seconds, [6, 10], POS_READY, POS_HALFSTAND)
+                else:
+                    break
+            currentPos = POS_HALFSTAND
+
+            
             elif seconds < 6:
                 goal = lInterp(seconds, [3, 6], POS_FLAT, POS_READY)
             #elif seconds < 10:
@@ -166,14 +197,8 @@ class Robot():
 
             #print 'At %3.3f, commanding:' % seconds,
 
-            self.commandPosition(........)
-            #print
+            self.commandPosition(goal)
 
-            #for actuator in actuators[:8]:
-            #    actuator.read_all()
-            #    time.sleep(0.01)
-            #for actuator in actuators[:8]:
-            #    print actuator.cache[dynamixel.defs.REGISTER['Id']], actuator.cache[dynamixel.defs.REGISTER['CurrentPosition']]
             time.sleep(.025)
 
     def commandPosition(self, position, cropWarning = False):
@@ -191,17 +216,15 @@ class Robot():
                        positions are cropped.  Default: False.
         '''
 
-        goalPosition = self.cropPosition(position, cropWarning)
+        if len(position) != self.nServos:
+            raise Exception('Expected postion vector of length %d, got %s instead'
+                            % (self.nServos, repr(position)))
+        
+        goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
         
         for ii,actuator in enumerate(self.actuators):
-            gg = int(round(goal[ii],0))
-            #gg = max(min(gg, servoMax), servoMin)
-            actuator.goal_position = gg
-            #print gg,
-        net.synchronize()
-        
-
-
+            actuator.goal_position = goalPosition[ii]
+        self.net.synchronize()
 
     def cropPosition(position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
