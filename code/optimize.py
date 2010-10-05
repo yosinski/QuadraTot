@@ -7,8 +7,10 @@
 '''
 
 """
-Uses random movements and manual optimization to choose the parameters
-of the robots' motion.
+Employs random hill-climbing to choose and evaluate the parameters of the robots'
+motion, either by changing one parameter completely randomly, or changing one
+parameter slightly. Evaluates each neighbor using user-inputted distance
+walked.
 
 """
 
