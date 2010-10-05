@@ -37,7 +37,8 @@ POS_STAND     = [512, 150] * 4 + [512]
 class Robot():
     ''''''
 
-    def __init__(self, silentNetFail = False, nServos = 9, commandRate = 40):
+    def __init__(self, silentNetFail = False, nServos = 9, commandRate = 40,
+                 loud = False):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -57,6 +58,7 @@ class Robot():
         self.nServos = nServos
 
         self.sleep = 1. / float(commandRate)
+        self.loud  = loud
 
         if self.nServos != 9:
             raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
@@ -146,7 +148,8 @@ class Robot():
         #    interpBegin = 0, interpEnd = 0):
 
 
-        print 'Starting motion.'
+        if self.loud:
+            print 'Starting motion.'
 
         self.resetClock()
         self.currentPos = self.readCurrentPosition()
@@ -184,9 +187,9 @@ class Robot():
         timeEnd   = self.time + seconds
         
         while self.time < timeEnd:
-            posS = start(seconds) if isinstance(start, FunctionType) else start
-            posE =   end(seconds) if isinstance(end,   FunctionType) else end
-            goal = lInterp(self.time, [timeStart, timeEnd], start, end)
+            posS = start(self.time) if isinstance(start, FunctionType) else start
+            posE =   end(self.time) if isinstance(end,   FunctionType) else end
+            goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
 
             self.commandPosition(goal)
             sleep(self.sleep)
@@ -265,6 +268,10 @@ class Robot():
                             % (self.nServos, repr(position)))
         
         goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
+
+        if self.loud:
+            posstr = ', '.join(['%4d' % xx for xx in goalPosition])
+            print '%.2fs -> %s' % (self.time, posstr)
         
         for ii,actuator in enumerate(self.actuators):
             actuator.goal_position = goalPosition[ii]
