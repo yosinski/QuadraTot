@@ -10,8 +10,7 @@ def sineModel(time, parameters, croppingFunction = None):
 
     pFloat = [float(xx) for xx in parameters]
     #amp, tau, scaleInOut, flipFB, flipLR = pFloat
-    #amp, tau, scaleInOut, multFB, multLR = pFloat
-    amp, tau, scaleInOut, multFB, multLR, shiftFB, shiftLR = pFloat
+    amp, tau, scaleInOut, multFB, multLR = pFloat
 
     centerConst = 512
     ret = [centerConst] * 9
@@ -21,29 +20,15 @@ def sineModel(time, parameters, croppingFunction = None):
     offsetOuter = 40
     
     # Compute base sine wave
-    angle0    = 2*pi*time/tau
-    angle1    = 2*pi*time/tau
-    angle2    = 2*pi*time/tau
-    angle3    = 2*pi*time/tau
-
-    angle0    += 2*pi*shiftFB
-    angle1    += 2*pi*shiftFB
-
-    angle1    += 2*pi*shiftLR
-    angle2    += 2*pi*shiftLR
-    
-    tBase = time
-    tFB   = tBase + shiftFB
     base = amp * sin(2*pi*time/tau)
 
     idxInner = [0, 2, 4, 6]
     idxOuter = [1, 3, 5, 7]
-    idxFB    = [0, 1, 2, 3]
 
     idxLR    = [6, 7, 0, 1]
     idxFront = [0, 1, 2, 3]
     idxBack  = [4, 5, 6, 7]
-
+    
     idxLR    = [6, 7, 0, 1]
     idxLeft  = [6, 7, 0, 1]
     idxRight = [2, 3, 4, 5]
@@ -63,7 +48,7 @@ def sineModel(time, parameters, croppingFunction = None):
         ret[idxFront[ii]] = multFB * ret[idxBack[ii]]
     for ii in range(len(idxLeft)):
         ret[idxLeft[ii]] = multLR * ret[idxRight[ii]]
-
+                    
     for ii in idxInner:
         ret[ii] += offsetInner
     for ii in idxOuter:
