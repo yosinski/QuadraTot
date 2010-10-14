@@ -153,12 +153,9 @@ def doRun():
 
     return bestState  # Return the best solution found (a list of params)
 
-#def main():
- #   doRun()
+def main():
+   doRun()
 
-#if __name__ == '__main__':
- #   main()
+if __name__ == '__main__':
+   main()
 
-ranges = [(0, 1), (-10, 10), (-1, 1)]
-parameters = [.5, 0, -1]
-print gauss_neighbor(ranges, parameters)
