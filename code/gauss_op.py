@@ -1,16 +1,16 @@
 #! /usr/bin/env python
 
 '''
-
+gauss_op.py
 @date: 14 October 2010
 
 '''
 
 """
-Employs random hill-climb `to choose and evaluate the parameters of the robots'
-motion, either by changing one parameter completely randomly, or changing one
-parameter slightly. Evaluates each neighbor using user-inputed distance
-walked.
+Employs random hill-climbing with a Gaussian distribution to choose and 
+evaluate the parameters of the robots' motion, either by changing one 
+parameter completely randomly, or changing one parameter slightly. 
+Evaluates each neighbor using user-inputed distance walked.
 
 """
 
@@ -37,23 +37,26 @@ def initialState(ranges):
             parameters.append(random.uniform(rang[0], rang[1]))
     return parameters
 
-def neighbor(ranges, parameters):
+def gauss_neighbor(ranges, parameters):
     """
     Given a list of parameters, picks a random parameter to change, randomly
-    changes it, and returns a new list.
+    changes it based on a Gaussian distribution, and returns a new list.
 
     """
     ret = copy(parameters)
-    #print '  ** Neighbor old', ret
     index = random.randint(0, len(parameters) - 1)
 
-    #print ranges
     if isinstance(ranges[index][0], bool):
         ret[index] = (random.uniform(0,1) > .5)
     else:
-        ret[index] = random.uniform(ranges[index][0], ranges[index][1])
+        while True:
+            changeTo = random.gauss(ret[index], .10 * (ranges[index][1] - 
+                                                       ranges[index][0]))
+            # Check that randomly generated number is in range
+            if ranges[index][0] <= changeTo <= ranges[index][1]:
+                ret[index] = changeTo
+                break
 
-    #print '  ** Neighbor new', ret
     return ret
 
 def slightNeighbor(ranges, parameters):
@@ -150,8 +153,12 @@ def doRun():
 
     return bestState  # Return the best solution found (a list of params)
 
-def main():
-    doRun()
+#def main():
+ #   doRun()
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+ #   main()
+
+ranges = [(0, 1), (-10, 10), (-1, 1)]
+parameters = [.5, 0, -1]
+print gauss_neighbor(ranges, parameters)
