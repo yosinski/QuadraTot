@@ -8,9 +8,7 @@
 
 """
 Employs random hill-climbing to choose and evaluate the parameters of the robots'
-motion, either by changing one parameter completely randomly, or changing one
-parameter slightly. Evaluates each neighbor using user-inputed distance
-walked.
+motion. Evaluates each neighbor using user-inputed distance walked.
 
 """
 
@@ -34,6 +32,7 @@ def doRun():
               (-1, 1),
               (-1, 1)]
 
+    # Choose initialState, either from user-inputted parameters or randomly
     if len(sys.argv) > 1:
         currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
