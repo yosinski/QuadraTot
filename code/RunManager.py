@@ -43,3 +43,13 @@ class RunManager:
         logFile = open('log.txt', 'a')
         logFile.write(stats + ", " + str(currentDistance) + "\n")
         logFile.close()
+
+    @staticmethod
+    def calculateDistance(begin, end):
+        """
+        Calculates how far the robot walked given the beginning and ending
+        (x, y) coordinates.
+        """
+        beginX beginY = begin
+        endX endY = end
+        return math.sqrt(pow((endX - beginX), 2) + pow((endY - endX), 2))
