@@ -50,7 +50,7 @@ def doRun():
         print
         print 'Iteration %2d params' % ii, prettyVec(currentState)
 
-        beginDistance = WiiMote.get()
+        beginDistance = WiiTrackClient.getPosition()
 
         # Make sure this state is new, skip otherwise
         if tuple(currentState) in statesSoFar:
@@ -65,7 +65,7 @@ def doRun():
         android.run(motionModel, runSeconds = 10, resetFirst = False,
                     interpBegin = 3, interpEnd = 3)
 
-        endDistance = WiiMote.get()
+        endDistance = WiiTrackClient.getPosition()
         
         currentDistance = RunManager.calculateDistance(beginDistance, endDistance)
 

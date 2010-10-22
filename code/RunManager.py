@@ -50,6 +50,4 @@ class RunManager:
         Calculates how far the robot walked given the beginning and ending
         (x, y) coordinates.
         """
-        beginX beginY = begin
-        endX endY = end
-        return math.sqrt(pow((endX - beginX), 2) + pow((endY - endX), 2))
+        return math.sqrt(pow((end[0] - begin[0]), 2) + pow((end[1] - end[1]), 2))
