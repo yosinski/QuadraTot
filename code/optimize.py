@@ -12,6 +12,15 @@ motion. Evaluates each neighbor and state using WiiTrackClient.
 
 """
 
+import math, pdb, sys
+import random
+from datetime import datetime
+from copy import copy
+from Robot import Robot
+from SineModel import sineModel
+from RunManager import RunManager
+from Neighbor import Neighbor
+
 def gradient_search(currentState): 
     """
     N-dimensional policy gradient algorithm. During each iteration of the main
@@ -31,8 +40,8 @@ def gradient_search(currentState):
         
     # Evaluate each random policy.
     for neighbor in random_policies:
-        random_policies[neighbor].append(RunManager.run_robot(neighbor))
-        print '        Random policy %2d params' % random_policies.index(neighbor), RunManager.prettyVec(neighbor)
+        random_policies[neighbor].append(rm.run_robot(neighbor))
+        print '        Random policy %2d params' % random_policies.index(neighbor), rm.prettyVec(neighbor)
     
     # Average the scores for all random policies
     adjustment = []  # Adjustment vector
@@ -90,7 +99,7 @@ def gradient_search(currentState):
 def doRun():
     # Parameters are: amp, tau, scaleInOut, flipFB, flipLR
     
-    android = Robot(commandRate = 40, loud = False)
+    #android = Robot(commandRate = 40, loud = False)
     # TODO: motion = Motion()
     # TODO: Move ranges below 
     #ranges = [(0, 400),
@@ -105,46 +114,16 @@ def doRun():
               (-1, 1),
               (-1, 1)]
 
+    rm = RunManager()
+
     # Choose initialState, either from user-inputted parameters or randomly
     if len(sys.argv) > 1:
         currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        currentState = RunManager.initialState(ranges)
+        currentState = rm.initialState(ranges)
 
-    statesSoFar = set()  # Keeps track of the states tested so far
-    
-    bestDistance = -1e100
+    rm.do_many_runs(currentState, lambda state: Neighbor.uniform(ranges, state))
 
-    RunManager.log_start()
-
-    for ii in range(10000):
-        print
-        print 'Iteration %2d params' % ii, RunManager.prettyVec(currentState)
-
-        # Check if this state is new, and possibly skip it
-        if tuple(currentState) in statesSoFar:
-            print '*** Duplicate iteration!'
-            # Skip only if using random hill climbing. In other words,
-            # comment this line out if using gradient_search:
-            currentState = Neighbor.uniform(ranges, bestState)
-            continue
-
-        stateSoFar.add(tuple(currentState))
-        
-        currentDistance = RunManager.run_robot(currentState)
-
-        if currentDistance >= bestDistance:  # Is this a new best?
-            bestState = copy(currentState)  # Save new neighbor to best found
-            bestDistance = copy(currentDistance)
-
-        print '        best so far', prettyVec(bestState), bestDistance  # Prints best state and distance so far
-
-        write_log(currentState, currentDistance)
-
-        currentState = Neighbor.uniform(ranges, bestState)
-        # for gradient descent: currentState = gradient_search(currentState)
-
-    return bestState  # Return the best solution found (a list of params)
 
 def main():
     doRun()
