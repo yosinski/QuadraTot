@@ -24,6 +24,23 @@ class RunManager:
                 parameters.append(random.uniform(rang[0], rang[1]))
         return parameters
     
+    # TODO: Am I calling stuff in here correctly..?
+    @staticmethod
+    def run_robot(currentState):
+        """
+        Runs the robot with currentState's parameters and returns the
+        distance walked.
+        
+        """
+        motionModel = lambda time: sineModel(time,
+                                             parameters = currentState)
+
+        beginDistance = WiiTrackClient.getPosition()
+        android.run(motionModel, runSeconds = 10, resetFirst = False,
+                    interpBegin = 3, interpEnd = 3)
+        endDistance = WiiTrackClient.getPosition()
+        return calculate_distance(beginDistance, endDistance)
+    
     @staticmethod
     def prettyVec(vec):
         return ('[' +
@@ -45,7 +62,7 @@ class RunManager:
         logFile.close()
 
     @staticmethod
-    def calculateDistance(begin, end):
+    def calculate_distance(begin, end):
         """
         Calculates how far the robot walked given the beginning and ending
         (x, y) coordinates.
