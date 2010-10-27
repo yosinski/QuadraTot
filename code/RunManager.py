@@ -4,6 +4,7 @@ from datetime import datetime
 from copy import copy
 from Robot import Robot
 from SineModel import sineModel
+import WiiTrackClient
 
 class RunManager:
 
@@ -35,10 +36,10 @@ class RunManager:
         motionModel = lambda time: sineModel(time,
                                              parameters = currentState)
 
-        beginDistance = WiiTrackClient.getPosition()
+        beginDistance = WiiTrackClient.WiiTrackClient.getPosition()
         android.run(motionModel, runSeconds = 10, resetFirst = False,
                     interpBegin = 3, interpEnd = 3)
-        endDistance = WiiTrackClient.getPosition()
+        endDistance = WiiTrackClient.WiiTrackClient.getPosition()
         return calculate_distance(beginDistance, endDistance)
     
     @staticmethod
