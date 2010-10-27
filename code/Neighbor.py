@@ -51,7 +51,7 @@ class Neighbor:
             if random.randint(0, 1) == 0:  # decrease slightly
                 ret[index] = ret[index] - (.1 * (ranges[index][1] - ranges[index][0]))
             else:  # increase slightly
-                ret[index] = ret[index] - (.1 * (ranges[index][1] - ranges[index][0]))
+                ret[index] = ret[index] + (.1 * (ranges[index][1] - ranges[index][0]))
     
         print '  ** Neighbor new', ret
         return ret
