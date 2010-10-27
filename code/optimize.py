@@ -124,7 +124,8 @@ def doRun():
         # Check if this state is new, and possibly skip it
         if tuple(currentState) in statesSoFar:
             print '*** Duplicate iteration!'
-            # Skip only if using random hill climbing:
+            # Skip only if using random hill climbing. In other words,
+            # comment this line out if using gradient_search:
             currentState = Neighbor.uniform(ranges, bestState)
             continue
 
