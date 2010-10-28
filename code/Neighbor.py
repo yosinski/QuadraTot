@@ -90,18 +90,11 @@ class Neighbor:
     
         """
         ret = copy(parameters)
-        print '  ** Neighbor old', ret
-        print ranges
-        for index in parameters:
-            # If parameter is True/False, 50% chance of changing
-            if isinstance(ranges[index][0], bool):
-                ret[index] = (random.uniform(0,1) > .5)
-            else:
-                if random.randint(0, 1) == 0:  # decrease by epsilon*range
-                    ret[index] = ret[index] - (epsilon * (ranges[index][1] - \
+        for index in range(len(parameters)):
+            if random.randint(0, 1) == 0:  # decrease by epsilon*range
+                ret[index] = ret[index] - (epsilon * (ranges[index][1] - \
                                                           ranges[index][0]))
-                else:  # increase by epsilon*range
-                    ret[index] = ret[index] - (epsilon * (ranges[index][1] - \
+            else:  # increase by epsilon*range
+                ret[index] = ret[index] - (epsilon * (ranges[index][1] - \
                                                           ranges[index][0]))
-            print '  ** Neighbor new', ret
         return ret

@@ -42,16 +42,25 @@ class RunManager:
         wiiTrack = WiiTrackClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
         if beginPos is None:
-            return None
+            # Robot walked out of sensor view
+            self.manual_reset()
+            print 'Retrying last run'
+            return self.run_robot(currentState)
         
         self.robot.run(motionModel, runSeconds = 10, resetFirst = False,
                        interpBegin = 1, interpEnd = 1)
 
         endPos = wiiTrack.getPosition()
         if endPos is None:
-            return None
+            # Robot walked out of sensor view
+            self.manual_reset()
+            print 'Retrying last run'
+            return self.run_robot(currentState)
 
-        return self.calculate_distance(beginPos, endPos)
+        distance_walked = self.calculate_distance(beginPos, endPos)
+        print '        walked %.2f' % distance_walked
+    
+        return distance_walked
     
     def prettyVec(self, vec):
         return ('[' +
@@ -75,7 +84,7 @@ class RunManager:
         Calculates how far the robot walked given the beginning and ending
         (x, y) coordinates.
         """
-        return math.sqrt(pow((end[0] - begin[0]), 2) + pow((end[1] - end[1]), 2))
+        return math.sqrt(pow((end[0] - begin[0]), 2) + pow((end[1] - begin[1]), 2))
 
     def do_many_runs(self, initialState, neighborFunction, limit = None):
         if limit is None:
@@ -96,31 +105,24 @@ class RunManager:
                 print '*** Duplicate iteration!'
                 # Skip only if using random hill climbing. In other words,
                 # comment this line out if using gradient_search:
-                currentState = neighborFunction(bestState)
+#                currentState = neighborFunction(bestState)
                 continue
 
             currentDistance = self.run_robot(currentState)
 
-            if currentDistance is None:
-                # Robot walked out of sensor view
-                self.manual_reset()
-                print 'Retrying last run'
-                continue
-
             self.statesSoFar.add(tuple(currentState))
 
-            print '        walked', currentDistance
+            print '        walked %.2f' % currentDistance
 
             if currentDistance >= bestDistance:  # Is this a new best?
                 bestState = copy(currentState)  # Save new neighbor to best found
                 bestDistance = copy(currentDistance)
 
-            print '        best so far', self.prettyVec(bestState), bestDistance  # Prints best state and distance so far
+            print '        best so far', self.prettyVec(bestState), '%.2f' % bestDistance  # Prints best state and distance so far
 
             self.write_log(currentState, currentDistance)
 
             currentState = neighborFunction(bestState)
-            # for gradient descent: currentState = gradient_search(currentState)
 
     def manual_reset(self):
         print 'Robot has walked outisde sensor view.  Please place back in center and push enter to continue.'

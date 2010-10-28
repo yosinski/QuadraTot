@@ -21,7 +21,7 @@ from SineModel import sineModel
 from RunManager import RunManager
 from Neighbor import Neighbor
 
-def gradient_search(currentState): 
+def gradient_search(ranges, currentState): 
     """
     N-dimensional policy gradient algorithm. During each iteration of the main
     loop we sample t policies near currentState to estimate the gradient
@@ -37,10 +37,12 @@ def gradient_search(currentState):
     # Evaluate t=8 policies per iteration
     for i in range(8):
         random_policies.append(Neighbor.gradient(ranges, currentState, epsilon))
-        
+
+    rm = RunManager()    
+    
     # Evaluate each random policy.
     for neighbor in random_policies:
-        random_policies[neighbor].append(rm.run_robot(neighbor))
+        neighbor.append(rm.run_robot(neighbor))
         print '        Random policy %2d params' % random_policies.index(neighbor), rm.prettyVec(neighbor)
     
     # Average the scores for all random policies
@@ -94,7 +96,7 @@ def gradient_search(currentState):
         else:
             param = 0
     nextState = [currentState, adjustment]
-    currentState = [sum(value) for value in zip(*nextState)]        
+    return [sum(value) for value in zip(*nextState)]        
 
 def doRun():
     # Parameters are: amp, tau, scaleInOut, flipFB, flipLR
@@ -122,7 +124,7 @@ def doRun():
     else:
         currentState = rm.initialState(ranges)
 
-    rm.do_many_runs(currentState, lambda state: Neighbor.uniform(ranges, state))
+    rm.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
 
 
 def main():
