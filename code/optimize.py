@@ -124,9 +124,8 @@ def doRun():
     else:
         currentState = rm.initialState(ranges)
 
-    #rm.do_many_runs(currentState, lambda state: Neighbor.uniform(ranges, state))
-    rm.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
-
+    rm.do_many_runs(currentState, lambda state: Neighbor.gaussian(ranges, state))
+    #rm.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
 
 def main():
     doRun()

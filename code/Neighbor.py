@@ -59,25 +59,25 @@ class Neighbor:
     @staticmethod
     def gaussian(ranges, parameters):
         """
-        Gaussian change of one parameter:
-        Given a list of parameters, picks a random parameter to change, 
-        randomly changes it based on a Gaussian distribution, and returns
-        a new list.
+        Gaussian change of all parameter:
+        Given a list of parameters, randomly changes all parameters based on a
+        Gaussian distribution, and returns a new list.
     
         """
         ret = copy(parameters)
         index = random.randint(0, len(parameters) - 1)
     
-        if isinstance(ranges[index][0], bool):
-            ret[index] = (random.uniform(0,1) > .5)
-        else:
-            while True:
-                changeTo = random.gauss(ret[index], .10 * (ranges[index][1] - 
+        for index in range(len(parameters)):
+            if isinstance(ranges[index][0], bool):
+                ret[index] = (random.uniform(0,1) > .5)
+            else:
+                while True:
+                    changeTo = random.gauss(ret[index], .05 * (ranges[index][1] - 
                                                            ranges[index][0]))
-                # Check that randomly generated number is in range
-                if ranges[index][0] <= changeTo <= ranges[index][1]:
-                    ret[index] = changeTo
-                    break
+                    # Check that randomly generated number is in range
+                    if ranges[index][0] <= changeTo <= ranges[index][1]:
+                        ret[index] = changeTo
+                        break
     
         return ret
     
