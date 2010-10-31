@@ -69,7 +69,7 @@ def main():
     wc = WiiTrackClient('localhost', 8080)
     while True:
         print wc.getPosition()
-        #sleep(.25)
+        sleep(.1)
 
 
 
