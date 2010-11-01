@@ -17,7 +17,7 @@ import random
 from datetime import datetime
 from copy import copy
 from Robot import Robot
-from SineModel import sineModel
+from SineModel import SineModel5
 from RunManager import RunManager
 from Neighbor import Neighbor
 
@@ -99,33 +99,16 @@ def gradient_search(ranges, currentState):
     return [sum(value) for value in zip(*nextState)]
 
 def doRun():
-    # Parameters are: amp, tau, scaleInOut, flipFB, flipLR
-    
-    #android = Robot(commandRate = 40, loud = False)
-    # TODO: motion = Motion()
-    # TODO: Move ranges below 
-    #ranges = [(0, 400),
-    #          (.5, 8),
-    #          (-2, 2),
-    #          (False, True),
-    #          (False, True)]
-
-    ranges = [(0, 400),
-              (.5, 8),
-              (-2, 2),
-              (-1, 1),
-              (-1, 1)]
-
     runman = RunManager()
 
     # Choose initialState, either from user-inputted parameters or randomly
     if len(sys.argv) > 1:
         currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        currentState = runman.initialState(ranges)
+        currentState = runman.initialState(SineModel5.typicalRanges)
 
-    #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(ranges, state))
-    runman.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
+    runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
+    #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
 
 def main():
     doRun()
