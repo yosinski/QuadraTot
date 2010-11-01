@@ -8,11 +8,7 @@ Explores each parameter dimension separately.
 Starts with a random location, or the one specified on the command line, if applicable
 '''
 
-import math, pdb, sys
-import random
-from datetime import datetime
-from copy import copy
-from Robot import Robot
+import sys
 from SineModel import SineModel5
 from RunManager import RunManager
 from Neighbor import Neighbor
