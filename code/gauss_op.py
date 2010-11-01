@@ -116,7 +116,7 @@ def doRun():
     stateSoFar = set()
 
     logFile = open('log.txt', 'a')
-    logFile.write('\nOptimize started at %s\n' % datetime.now().ctime())
+    logFile.write('\nOptimize (gauss_op)  started at %s\n' % datetime.now().ctime())
     logFile.close()
     for ii in range(10000):
         print
