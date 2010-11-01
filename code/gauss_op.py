@@ -20,6 +20,7 @@ from datetime import datetime
 from copy import copy
 from Robot import Robot
 from SineModel import sineModel
+from wii.WiiTrackClient import WiiTrackClient
 
 def initialState(ranges):
     """ 
