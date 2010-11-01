@@ -38,12 +38,12 @@ def gradient_search(ranges, currentState):
     for i in range(8):
         random_policies.append(Neighbor.gradient(ranges, currentState, epsilon))
 
-    rm = RunManager()    
+    runman = RunManager()
     
     # Evaluate each random policy.
     for neighbor in random_policies:
-        neighbor.append(rm.run_robot(neighbor))
-        print '        Random policy %2d params' % random_policies.index(neighbor), rm.prettyVec(neighbor)
+        neighbor.append(runman.run_robot(neighbor))
+        print '        Random policy %2d params' % random_policies.index(neighbor), runman.prettyVec(neighbor)
     
     # Average the scores for all random policies
     adjustment = []  # Adjustment vector
@@ -96,7 +96,7 @@ def gradient_search(ranges, currentState):
         else:
             param = 0
     nextState = [currentState, adjustment]
-    return [sum(value) for value in zip(*nextState)]        
+    return [sum(value) for value in zip(*nextState)]
 
 def doRun():
     # Parameters are: amp, tau, scaleInOut, flipFB, flipLR
@@ -116,16 +116,16 @@ def doRun():
               (-1, 1),
               (-1, 1)]
 
-    rm = RunManager()
+    runman = RunManager()
 
     # Choose initialState, either from user-inputted parameters or randomly
     if len(sys.argv) > 1:
         currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        currentState = rm.initialState(ranges)
+        currentState = runman.initialState(ranges)
 
-    rm.do_many_runs(currentState, lambda state: Neighbor.gaussian(ranges, state))
-    #rm.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
+    #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(ranges, state))
+    runman.do_many_runs(currentState, lambda state: gradient_search(ranges, state))
 
 def main():
     doRun()
