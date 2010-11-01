@@ -3,7 +3,8 @@ import random
 from datetime import datetime
 from copy import copy
 from Robot import Robot
-from SineModel import sineModel
+from SineModel import SineModel5
+from Neighbor import Neighbor
 from wii.WiiTrackClient import WiiTrackClient
 
 class RunManager:
@@ -36,8 +37,9 @@ class RunManager:
         distance walked.
         
         """
-        motionModel = lambda time: sineModel(time,
-                                             parameters = currentState)
+        model = SineModel5()
+        motionModel = lambda time: model.model(time,
+                                               parameters = currentState)
 
         wiiTrack = WiiTrackClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
@@ -58,7 +60,7 @@ class RunManager:
             return self.run_robot(currentState)
 
         distance_walked = self.calculate_distance(beginPos, endPos)
-        print '        walked %.2f' % distance_walked
+        #print '        walked %.2f' % distance_walked
     
         return distance_walked
     
@@ -69,10 +71,17 @@ class RunManager:
         
     def log_start(self):
         logFile = open('log.txt', 'a')
-        logFile.write('\nOptimize started at %s\n' % datetime.now().ctime())
+        logFile.write('\nRunManager log started at %s\n' % datetime.now().ctime())
         logFile.close()
         
-    def write_log(self, currentState, currentDistance):
+    def log_write(self, string, newline=True):
+        logFile = open('log.txt', 'a')
+        if newline:
+            string += '\n'
+        logFile.write(string)
+        logFile.close()
+        
+    def log_results(self, currentState, currentDistance):
         """Writes to log file that keeps track of tests so far"""
         stats = ' '.join([repr(xx) for xx in currentState])
         logFile = open('log.txt', 'a')
@@ -120,9 +129,42 @@ class RunManager:
 
             print '        best so far', self.prettyVec(bestState), '%.2f' % bestDistance  # Prints best state and distance so far
 
-            self.write_log(currentState, currentDistance)
+            self.log_results(currentState, currentDistance)
 
             currentState = neighborFunction(bestState)
+
+    def explore_dimensions(self, initialState, ranges, pointsPerDim = 10, repetitions = 3):
+        '''For the given vector, vary each parameter separately.
+
+        Arguments:
+        initialState -- where to start
+        ranges -- parameter ranges
+        pointsPerDim -- number of points along each dimension
+        repetitions -- how many measurements to make of each position
+        '''
+
+        nDimensions = len(initialState)
+
+        self.log_start()
+        self.log_write('RunManager.explore_dimensions, centered at %s' % self.prettyVec(initialState))
+
+        for dimension in range(nDimensions):
+            self.log_write('RunManager.explore_dimensions: dimension %d' % dimension)
+
+            points = Neighbor.uniform_spread(ranges, initialState, dimension, number = pointsPerDim, includeOrig = True)
+
+            for ii,point in enumerate(points):
+
+                for tt in range(repetitions):
+                    print 'Iteration dimension %d, point %d, trial %d' % (dimension, ii, tt), self.prettyVec(point),
+                    sys.stdout.flush()
+                    self.log_write('%d, %d, %d, ' % (dimension, ii, tt), newline=False)
+                    
+                    dist = self.run_robot(point)
+
+                    print '%.2f' % dist
+                    self.log_results(point, dist)
+
 
     def manual_reset(self):
         print 'Robot has walked outisde sensor view.  Please place back in center and push enter to continue.'
