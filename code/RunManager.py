@@ -107,21 +107,23 @@ class RunManager:
 
         for ii in xrange(limit):
             print
-            print 'Iteration %2d params' % ii, self.prettyVec(currentState)
+            print 'Iteration %2d params' % ii, self.prettyVec(currentState),
+            sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it
             if tuple(currentState) in self.statesSoFar:
                 print '*** Duplicate iteration!'
                 # Skip only if using random hill climbing. In other words,
                 # comment this line out if using gradient_search:
-#                currentState = neighborFunction(bestState)
+                #currentState = neighborFunction(bestState)
                 continue
 
             currentDistance = self.run_robot(currentState)
 
             self.statesSoFar.add(tuple(currentState))
 
-            print '        walked %.2f' % currentDistance
+            #print '        walked %.2f' % currentDistance
+            print '%.2f' % currentDistance
 
             if currentDistance >= bestDistance:  # Is this a new best?
                 bestState = copy(currentState)  # Save new neighbor to best found
@@ -138,9 +140,9 @@ class RunManager:
 
         Arguments:
         initialState -- where to start
-        ranges -- parameter ranges
+        ranges       -- parameter ranges
         pointsPerDim -- number of points along each dimension
-        repetitions -- how many measurements to make of each position
+        repetitions  -- how many measurements to make of each position
         '''
 
         nDimensions = len(initialState)
