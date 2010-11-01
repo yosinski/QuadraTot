@@ -5,6 +5,7 @@ from copy import copy
 from Robot import Robot
 from SineModel import SineModel5
 from Neighbor import Neighbor
+from util import prettyVec
 from wii.WiiTrackClient import WiiTrackClient
 
 class RunManager:
@@ -63,12 +64,7 @@ class RunManager:
         #print '        walked %.2f' % distance_walked
     
         return distance_walked
-    
-    def prettyVec(self, vec):
-        return ('[' +
-                ' '.join(['%4f' % xx if isinstance(xx,float) else repr(xx) for xx in vec]) +
-                ']')
-        
+            
     def log_start(self):
         logFile = open('log.txt', 'a')
         logFile.write('\nRunManager log started at %s\n' % datetime.now().ctime())
@@ -95,45 +91,41 @@ class RunManager:
         """
         return math.sqrt(pow((end[0] - begin[0]), 2) + pow((end[1] - begin[1]), 2))
 
-    def do_many_runs(self, initialState, neighborFunction, limit = None):
+    def do_many_runs(self, strategy, ranges, limit = None):
         if limit is None:
             limit = 10000
-
-        bestDistance = -1e100
-
-        currentState = initialState
 
         self.log_start()
 
         for ii in xrange(limit):
+            currentState = strategy.getNext(ranges)
+            
             print
-            print 'Iteration %2d params' % ii, self.prettyVec(currentState),
+            print 'Iteration %2d params' % ii, prettyVec(currentState),
             sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it
-            if tuple(currentState) in self.statesSoFar:
-                print '*** Duplicate iteration!'
-                # Skip only if using random hill climbing. In other words,
-                # comment this line out if using gradient_search:
-                #currentState = neighborFunction(bestState)
-                continue
+            #if tuple(currentState) in self.statesSoFar:
+            #    print '*** Duplicate iteration!'
+            #    # Skip only if using random hill climbing. In other words,
+            #    # comment this line out if using gradient_search:
+            #    #currentState = neighborFunction(bestState)
+            #    continue
 
             currentDistance = self.run_robot(currentState)
 
-            self.statesSoFar.add(tuple(currentState))
+            #self.statesSoFar.add(tuple(currentState))
 
             #print '        walked %.2f' % currentDistance
             print '%.2f' % currentDistance
 
-            if currentDistance >= bestDistance:  # Is this a new best?
-                bestState = copy(currentState)  # Save new neighbor to best found
-                bestDistance = copy(currentDistance)
+            strategy.updateResults(currentDistance, ranges)
 
-            print '        best so far', self.prettyVec(bestState), '%.2f' % bestDistance  # Prints best state and distance so far
+            #print '        best so far', prettyVec(strategy.bestState), '%.2f' % strategy.bestDist  # Prints best state and distance so far
 
             self.log_results(currentState, currentDistance)
 
-            currentState = neighborFunction(bestState)
+
 
     def explore_dimensions(self, initialState, ranges, pointsPerDim = 10, repetitions = 3):
         '''For the given vector, vary each parameter separately.
@@ -148,7 +140,7 @@ class RunManager:
         nDimensions = len(initialState)
 
         self.log_start()
-        self.log_write('RunManager.explore_dimensions, centered at %s' % self.prettyVec(initialState))
+        self.log_write('RunManager.explore_dimensions, centered at %s' % prettyVec(initialState))
 
         for dimension in range(nDimensions):
             self.log_write('RunManager.explore_dimensions: dimension %d' % dimension)
@@ -158,7 +150,7 @@ class RunManager:
             for ii,point in enumerate(points):
 
                 for tt in range(repetitions):
-                    print 'Iteration dimension %d, point %d, trial %d' % (dimension, ii, tt), self.prettyVec(point),
+                    print 'Iteration dimension %d, point %d, trial %d' % (dimension, ii, tt), prettyVec(point),
                     sys.stdout.flush()
                     self.log_write('%d, %d, %d, ' % (dimension, ii, tt), newline=False)
                     
