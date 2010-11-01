@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 '''
 date: 20 October 2010
 
@@ -98,3 +100,44 @@ class Neighbor:
                 ret[index] = ret[index] - (epsilon * (ranges[index][1] - \
                                                           ranges[index][0]))
         return ret
+
+    @staticmethod
+    def uniform_spread(ranges, parameters, index, number = 10, includeOrig = False):
+        """
+        Returns a list of the specified number of neighbors, obtained
+        by linearly interpolating the parameter in position index
+        between the minimum and maximum values allowed by ranges.
+
+        Examples:
+
+        >>> Neighbor.uniform_spread([(0,10), (40,50)], [5, 45], 0, number=3)
+        [[0.0, 45], [5.0, 45], [10.0, 45]]
+        >>> Neighbor.uniform_spread([(0,10), (40,50)], [5, 45], 1, number=3)
+        [[5, 40.0], [5, 45.0], [5, 50.0]]
+        >>> Neighbor.uniform_spread([(0,10), (40,50)], [4, 45], 0, number=3, includeOrig=True)
+        [[0.0, 45], [4, 45], [5.0, 45], [10.0, 45]]
+        """
+
+        ret = []
+
+        includeFinished = False
+        for ii in range(number):
+            pp = copy(parameters)
+
+            pp[index] = ranges[index][0] + float(ii)/(number-1) * (ranges[index][1] - ranges[index][0])
+            if includeOrig and not includeFinished and pp[index] > parameters[index]:
+                # if we've passed the original point, include it here
+                ret.append(copy(parameters))
+                includeFinished = True
+                
+            ret.append(pp)
+
+
+        return ret
+
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+            
