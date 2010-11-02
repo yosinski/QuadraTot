@@ -189,11 +189,15 @@ class GradientSampleStrategy(Strategy):
         for index in range(len(parameters)):
             param = random.choice((0, 1, 2))
             if param == 0:  # decrease by epsilon*range
-                ret[index] -= (epsilon * (ranges[index][1] -
-                                          ranges[index][0]))
+                change = ret[index] - (epsilon * (ranges[index][1] - ranges[index][0]))
+                if change < ranges[index][0]:
+                    pass
+                ret[index] = change
             if param == 1:  # increase by epsilon*range
-                ret[index] += (epsilon * (ranges[index][1] -
-                                          ranges[index][0]))
+                change = ret[index] + (epsilon * (ranges[index][1] - ranges[index][0]))
+                if change > ranges[index][1]:
+                    pass
+                ret[index] = change
         #print 'returning', ret
         #print
         return ret

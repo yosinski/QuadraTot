@@ -23,7 +23,8 @@ certain vectors of motor position.
 MIN_INNER = 150
 MAX_INNER = 770
 MIN_OUTER = 30
-MAX_OUTER = 940
+#MAX_OUTER = 940
+MAX_OUTER = 800 # changing because Robot hits antenna
 MIN_CENTER = 512 - 180
 MAX_CENTER = 512 + 180
 
