@@ -1,5 +1,5 @@
 \section{Executive Summary}
-
+% A few sentences summarizing each of the items below
 We are using machine learning to design a gait for a quadruped
 robot. The robot has an on-board computer, drivers for the motors, and
 will have camera feedback. The code so far consists of the robot
@@ -15,9 +15,8 @@ evaluation of the robot’s gait in November.
 % goal/topic. This is just to remind us what you’re working on.
 
 We are using machine learning to design a gait for a quadraped robot
-from Hod Lipson’s lab. We anticipate using speed and number of
-failures as metrics for evaluation of the designed gait.
-
+from Hod Lipson’s lab. The metric for evaluation of the designed gait
+is speed.
 
 
 \section{System Architecture Summary}
@@ -27,10 +26,7 @@ failures as metrics for evaluation of the designed gait.
 
 The quadraped robot has an on-board computer running Linux. The lower
 level drivers are in C and we are implementing the system in
-Python. Feedback about distance travelled is currently input manually,
-but we eventually plan to provide this via an Optitrack positioning
-system.
-
+Python. Feedback about distance travelled is provided via a Wii remote. 
 
 
 \section{Implementation Status}
@@ -42,7 +38,6 @@ system.
 % incredibly detailed, but it should include entries for all
 % substantial modules/submodules of your system. Include also who in
 % the team is responsible for completing this module.
-
 
 
 \subsection*{\code{Robot} class}
@@ -67,22 +62,32 @@ system.
 
 
 
-\subsection*{\code{Optimization} class}
+\subsection*{\code{Strategy} and \code{RunManager} class}
 
 \begin{itemize}
-\item \emph{Team member:} Sarah.
-\item \emph{Current implementation:} Creates a random neighbor by
+\item \emph{Team member:} Jason and Sarah.
+\item \emph{Current implementation:} The user has a choice between three
+  different learning strategies: uniform random hill climbing, gaussian random
+  hill climbing, and N-dimensional policy gradient algorithm descent.
+  \begin{itemize} 
+  \item \emph{Uniform random hill climbing:} Creates a random neighbor by
   randomly choosing one parameter to adjust, and changing either
-  completely randomly in neighbor(), or slightly in
-  slightNeighbor(). Then evaluates this neighbor by running the robot
+  completely randomly in UniformStrategy(), or slightly in
+  UniformSlightStrategy(). Then evaluates this neighbor by running the robot
   with the newly chosen parameters. If this neighbor results in a
   longer distance walked then the previous best neighbor, we save this
   neighbor as the new best neighbor. We then repeat the whole process
   using the best neighbor as a base.
-\item \emph{Future improvements:} Gradient descent.
-\item \emph{Status:} Initial algorithm coded. Improved algorithm
-  slightNeighbor() coded. Gradient descent algorithm to be completed
-  by Sarah.
+  \item \emph{Gaussian random hill climbing} Creates a random neighbor byi
+  changing each parameter randomly based on a normal distribution. Then
+  evaluates this neighbor similarly to uniform random hill climbing.
+  \item \emph{N-dimensional policy gradient descent} Estimates the policy
+  gradient by evaluating \emph{t} randomly generated policies
+  near an initial parameter vector. Then computes the average score 
+  \end{itemize}
+\item \emph{Future improvements:} Machine learning of objective function.
+\item \emph{Status:} Described algorithms coded. Machine learning of objective
+  function to be coded by Jason.
 \end{itemize}
 
 
@@ -130,15 +135,13 @@ system.
 
 
 
-\subsection*{\code{CameraFeedback} class and hardware}
+\subsection*{\code{WiiTrackClient} and \code{WiiTrackServer} classes
+ and hardware}
 
 \begin{itemize}
-\item \emph{Team member:} Diana.
-\item \emph{Current implementation:} No software, still configuring
-  camera hardware.
-\item \emph{Future improvements:} Write python wrapper class, get
-  positional information from the Optitrack camera system to the program
-\item \emph{Status:} 20\% complete, goal to have cameras working by October 8.
+\item \emph{Team member:} Jason and Diana.
+\item \emph{Current implementation:} A Wii remote tracks the location of the robot through an infrared LED mounted on top of the robot. We used CWiid library which is able to interface with the remote via bluetooth to determine the location of the infrared LED. This information is accessed through some functions we wrote and passed to the program. The program gets the robot's position at the beginning of each run and then again at the end. The program then calculates the net change in position and uses that as the distance walked.
+\item \emph{Status:} Complete.
 \end{itemize}
 
 
@@ -150,29 +153,35 @@ system.
 % system. Include also who in the team is responsible for completing
 % this module.
 
-After running our program and finding a good gait, we will then
-evaluate our system in two ways: the time taken to walk a certain
-distance and the number of failures (i.e. falling down, getting
-stuck). Both of these evaluation metrics depend on the result of
-running our program for many iterations. Neither have been
-completed. The evaluation for our particular project is an ongoing
+\begin{itemize}
+\item After running our program and finding a good gait, we will then
+evaluate our system by the distance walked in a certain amount
+of time. This evaluation metric depend on the result of
+running our program for many iterations. We have done 50 runs of 
+3 different inital parameter vectors for random hill climbing, 
+gaussian random hill climbing, and policy gradient descent.
+The evaluation for our particular project is an ongoing
 process, but we anticipate a final evaluation taking place
 early-to-mid November. The evaluation process will be completed by
 Jason, Sarah, and Diana.
+
+\item We also coded \code{explore\_dimensions} to collect data for dimension
+varying plots. We intend to do further explore this by running
+\code{explore\_dimension} around a parameter that produces a medium-good gait.
+\end{itemize}
+
+
 
 \section{Project schedule timeline}
 % Tell us if you are meeting your project timeline or you are
 % exceeding it or falling behind. If you are falling behind, explain
 % how you will catch up or adjust the goals.
 
-We are meeting our project timeline and are, in fact, slightly ahead
-of schedule. We have read the relevant papers, gotten lab access, and
-talked with the appropriate people to learn the background information
-necessary for working with the robot. We learned how to make the robot
-move and have implemented an initial parameter optimization algorithm,
-which has worked better than we anticipated.
-
-
+We are meeting our project timeline. We have developed two new algorithms,
+gaussian hill climbing and policy gradient descent and tested all three of
+our major algorithms on the robot. We have also quantified our current results. 
+In the next month we hope to develop one more learning strategy, machine
+learning of an objective function.
 
 \section{Schedule}
 
@@ -201,19 +210,19 @@ Week 3 (9/27-10/03)   & \done{Implement parametrized gait and determine proposed
 Week 4 (10/04-10/10)  & \done{Begin main algorithm dev/testing effort} & 10/5 Code Review \#1
 \\ \hline
 
-Week 5 (10/11-10/17)  & Algorithm dev/testing &
+Week 5 (10/11-10/17)  & \done{Algorithm dev/testing} &
 \\ \hline
 
-Week 6 (10/18-10/24)  & Algorithm dev/testing &
+Week 6 (10/18-10/24)  & \done{Algorithm dev/testing} &
 \\ \hline
 
-Week 7 (10/25-10/31)  & Algorithm dev/testing, quantify/solidify current results for Code Review \#2 &
+Week 7 (10/25-10/31)  & \done{Algorithm dev/testing, quantify/solidify current results for Code Review \#2} &
 \\ \hline
 
-Week 8 (11/1-11/7)    & Finish collecting results, begin writing & 11/2 Code Review \#2
+Week 8 (11/1-11/7)    & \done{Finish collecting results, begin writing} & 11/2 Code Review \#2
 \\ \hline
 
-Week 9 (11/8-11/14)   & Finish collecting results, writing &
+Week 9 (11/8-11/14)   & Algorithm dev/testing &
 \\ \hline
 
 Week 10 (11/15-11/21) & Finish collecting results, writing, get final demo ready &
@@ -258,12 +267,16 @@ Week 12 (11/29-11/30) & Final demo  & 11/30 Final presentation
   Did the initial program work? What parameters are important? Are
   additional parameters necessary? What algorithm should we implement
   for the final program?
-\item \emph{10/4-10/5:} Plan for final implementation. Discussed
+\item \emph{10/4-10/10:} Plan for final implementation. Discussed
   possible algorithms to use and new parameters to add. Worked on
-  report for code review \#1. Questions -- Advantages for gradient
+  report for code review. Discussed feedback from code review.  Questions -- Advantages for gradient
   descent? Should we start with a completely random parameter vector
   or should we start with one that results in motion and let the
-  program optimize it?
+  program optimize it? How does the camera system work?
+\item \emph{10/11-10/17:} Discussed how we were going to proceed with the project and set up a more detailed schedule. Got the cameras working and calibrated them. Researched the 3 available streaming protocols. Questions -- Which streaming protocol would work best? Which improvements should we start with?
+\item \emph{10/18-10/24:} Created a variation on the random hill climbing algorithm to choose the next neighbor based on a Gaussian distribution. Tried to work with two of the streaming protocols for the camera system, but were unsuccessful. Decided to use a Wii remote for positional information instead. Wrote the integration code for the Wii remote. Refactored our code to separate the different algorithms. Began planning the algorithm for a modified gradient descent.
+Questions -- What values should we use in the gradient descent algorithm? How much should the each parameter be changed? How many neighbors should be sampled before choosing the next state? How can we compare the results of our different algorithms? How repeatable is the distance traveled for a given parameter vector?
+\item \emph{10/25-11/2}: Created a modified gradient descent algorithm. Ran 150 trials of the three algorithms. Each algorithm started with a specific parameter vector and ran for 50 iterations. Created and ran a program to get a feel for the overall look of the search space. Ran some trials to see how reproducible the distance traveled was. Prepared for code review 2. Questions -- What does the search space look like? Are there a lot of spikes, or is it fairly smooth? Based on the results of the algorithms, what conclusions can we draw?
 \end{itemize}
 
 
@@ -281,15 +294,19 @@ We are not deviating from our original proposal.
 A brief description of the code uploaded to the CMS follows:
 
 \begin{itemize}
-\item \code{optimize.py}: Employs random hill-climbing to choose and
-  evaluate the parameters of the robots’ motion, either by changing
-  one parameter completely randomly, or changing one parameter
-  slightly. Evaluates each neighbor using manually input distance
-  walked.
+\item \code{optimize.py}: Determines a strategy to try and runs the robot
+  with that strategy.
+\item \code{RunManager.py}: Deals with all the details of running the robot,
+  including choosing an initial parameter, running the robot multiple times, 
+  tracking distance walked, and writing to the log file. Also includes the
+  \code{explore\_dimensions} method.
+\item \code{Strategy.py}: Contains all the different possible strategies, which
+  will be passed as objects in \code{optimize.py}. 
 \item \code{Robot.py}: Implements the \code{Robot} class, described in
   \secref{implement}.
 \item \code{SineModel.py}: Implements a sine based motion model,
   described in \secref{implement}.
 \item \code{Motion.py}: Motion helper functions.
+\item \code{WiiTrackServer.py}: Broadcasts the position of the infrared LED>
+\item \code{WiiTrackClient.py}: Connects to the WiiTrackServer to get the current position information.
 \end{itemize}
-
