@@ -66,7 +66,7 @@ Python. Feedback about distance travelled is provided via a Wii remote.
 
 \begin{itemize}
 \item \emph{Team member:} Jason and Sarah.
-\item \emph{Current implementation:} The user has a choice between four
+\item \emph{Current implementation:} The user has a choice between three
   different learning strategies: uniform random hill climbing, gaussian random
   hill climbing, and N-dimensional policy gradient algorithm descent.
   \begin{itemize} 
@@ -140,10 +140,7 @@ Python. Feedback about distance travelled is provided via a Wii remote.
 
 \begin{itemize}
 \item \emph{Team member:} Jason and Diana.
-\item \emph{Current implementation:} A wii remote keeps track of the
-position of the robot by tracking an infrared light on the robot. 
-There is a motion loop that uses own position...(Jason and Diana, write
-more about this.
+\item \emph{Current implementation:} A Wii remote tracks the location of the robot through an infrared LED mounted on top of the robot. We used CWiid library which is able to interface with the remote via bluetooth to determine the location of the infrared LED. This information is accessed through some functions we wrote and passed to the program. The program gets the robot's position at the beginning of each run and then again at the end. The program then calculates the net change in position and uses that as the distance walked.
 \item \emph{Status:} Complete.
 \end{itemize}
 
@@ -270,12 +267,16 @@ Week 12 (11/29-11/30) & Final demo  & 11/30 Final presentation
   Did the initial program work? What parameters are important? Are
   additional parameters necessary? What algorithm should we implement
   for the final program?
-\item \emph{10/4-10/5:} Plan for final implementation. Discussed
+\item \emph{10/4-10/10:} Plan for final implementation. Discussed
   possible algorithms to use and new parameters to add. Worked on
-  report for code review \#1. Questions -- Advantages for gradient
+  report for code review. Discussed feedback from code review.  Questions -- Advantages for gradient
   descent? Should we start with a completely random parameter vector
   or should we start with one that results in motion and let the
-  program optimize it?
+  program optimize it? How does the camera system work?
+\item \emph{10/11-10/17:} Discussed how we were going to proceed with the project and set up a more detailed schedule. Got the cameras working and calibrated them. Researched the 3 available streaming protocols. Questions -- Which streaming protocol would work best? Which improvements should we start with?
+\item \emph{10/18-10/24:} Created a variation on the random hill climbing algorithm to choose the next neighbor based on a Gaussian distribution. Tried to work with two of the streaming protocols for the camera system, but were unsuccessful. Decided to use a Wii remote for positional information instead. Wrote the integration code for the Wii remote. Refactored our code to separate the different algorithms. Began planning the algorithm for a modified gradient descent.
+Questions -- What values should we use in the gradient descent algorithm? How much should the each parameter be changed? How many neighbors should be sampled before choosing the next state? How can we compare the results of our different algorithms? How repeatable is the distance traveled for a given parameter vector?
+\item \emph{10/25-11/2}: Created a modified gradient descent algorithm. Ran 150 trials of the three algorithms. Each algorithm started with a specific parameter vector and ran for 50 iterations. Created and ran a program to get a feel for the overall look of the search space. Ran some trials to see how reproducible the distance traveled was. Prepared for code review 2. Questions -- What does the search space look like? Are there a lot of spikes, or is it fairly smooth? Based on the results of the algorithms, what conclusions can we draw?
 \end{itemize}
 
 
@@ -306,5 +307,6 @@ A brief description of the code uploaded to the CMS follows:
 \item \code{SineModel.py}: Implements a sine based motion model,
   described in \secref{implement}.
 \item \code{Motion.py}: Motion helper functions.
-\item \code{WiiTrackServer.py, WiiTrackClient.py}: ? Jason, write this.
+\item \code{WiiTrackServer.py}: Broadcasts the position of the infrared LED>
+\item \code{WiiTrackClient.py}: Connects to the WiiTrackServer to get the current position information.
 \end{itemize}
