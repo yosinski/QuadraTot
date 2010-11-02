@@ -7,7 +7,7 @@ date: 20 October 2010
 
 '''
 """
-2) neighbor selection (uniform change of one parameter, gaussian
+Neighbor selection (uniform change of one parameter, gaussian
 change of one parameter, gaussian change of multiple parameters, ...)
 
 """
@@ -190,14 +190,16 @@ class GradientSampleStrategy(Strategy):
             param = random.choice((0, 1, 2))
             if param == 0:  # decrease by epsilon*range
                 change = ret[index] - (epsilon * (ranges[index][1] - ranges[index][0]))
-                if change < ranges[index][0]:
-                    pass
-                ret[index] = change
+                if change < ranges[index][0]:  # Check that we are within range.
+                    ret[index] = ranges[index][0]
+                else:
+                    ret[index] = change
             if param == 1:  # increase by epsilon*range
                 change = ret[index] + (epsilon * (ranges[index][1] - ranges[index][0]))
                 if change > ranges[index][1]:
-                    pass
-                ret[index] = change
+                    ret[index] = ranges[index][1]
+                else:
+                    ret[index] = change
         #print 'returning', ret
         #print
         return ret
@@ -244,21 +246,21 @@ class GradientSampleStrategy(Strategy):
             else:
                 adjustment.append(avg_epos - avg_eneg)
 
-        # Calculate adjustment vector for each dimension, multiplying with a
-        # scalar step-size eta, so that our adjustment will remain a fixed
-        # size each iteration
-        eta = .1
-        for param in adjustment:
-            if param < 0:
-                param = - (eta * (ranges[n][1] - ranges[n][0]))
-            if param > 0:
-                param = eta * (ranges[n][1] - ranges[n][0])
-            else:
-                param = 0
+		# Calculate adjustment vector for each dimension, multiplying with a
+		# scalar step-size eta, so that our adjustment will remain a fixed
+		# size each iteration
+		eta = .1
+		total = 0
+		for adj in adjustment:
+		    total += adj ** 2
+		magnitude = math.sqrt(total)
+		
+		for index in range(len(adjustment)):
+			adjustment[index] = (adjustment[index] / magnitude) * eta
+			adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+
         nextState = [center, adjustment]
         return [sum(value) for value in zip(*nextState)]
-
-
 
 if __name__ == "__main__":
     import doctest
