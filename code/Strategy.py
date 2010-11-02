@@ -262,6 +262,36 @@ class GradientSampleStrategy(Strategy):
         nextState = [center, adjustment]
         return [sum(value) for value in zip(*nextState)]
 
+
+
+class LearningStrategy(Strategy):
+    '''
+    A strategy that uses supervised learning to guess which parameter vector woudl be good to try next.
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super(LearningStrategy, self).__init__(*args, **kwargs)
+        self.X = []
+        self.y = []
+
+    def getNext(self, ranges):
+        '''Learn model on X and y...'''
+
+        # 1. Learn
+        # 2. Try some nearby values
+        # 3. Pick best one
+
+
+    def updateResults(self, dist, ranges):
+        '''This must be called for the last point that was handed out!'''
+
+        # about the same...
+        self.triedSoFar.append(self.stillToTry.pop(0))
+        self.triedSoFar[-1].append(dist)
+        print '        Got update, policy is now', self.triedSoFar[-1]
+
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
