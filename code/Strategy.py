@@ -25,7 +25,7 @@ class Strategy(object):
     def getNext(self, ranges):
         raise Exception('Need to implement this')
 
-    def updateResults(self, dist):
+    def updateResults(self, dist, ranges):
         '''This must be called for the last point that was handed out!'''
         raise Exception('Need to implement this')
 
@@ -40,12 +40,35 @@ class OneStepStrategy(Strategy):
         self.bestDist  = None
         self.bestState = self.current
         
-    def updateResults(self, dist):
+    def updateResults(self, dist, ranges):
         if self.bestDist is None or dist > self.bestDist:
             self.bestDist = dist
             self.bestState = self.current
 
         print '        best so far', prettyVec(self.bestState), '%.2f' % self.bestDist  # Prints best state and distance so far
+
+
+class RandomStrategy(OneStepStrategy):
+    """
+    Random change of all parameters: Given a list of parameters, randomly
+    changes all of them, and returns a new list.
+    
+    """
+
+    def getNext(self, ranges):
+        ret = copy(self.bestState)
+
+        if self.bestDist is not None:
+            for index in range(0, len(ret)):
+                #print ranges
+                if isinstance(ranges[index][0], bool):
+                    ret[index] = (random.uniform(0,1) > .5)
+                else:
+                    ret[index] = random.uniform(ranges[index][0], \
+				                ranges[index][1])
+
+        #print '  ** Neighbor new', ret
+        return ret
 
 class UniformStrategy(OneStepStrategy):
     """
