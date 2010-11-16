@@ -15,6 +15,7 @@ change of one parameter, gaussian change of multiple parameters, ...)
 import math, pdb, sys
 import random
 from copy import copy
+from util import prettyVec
 
 class Strategy(object):
     '''Base class for strategies.'''
@@ -130,7 +131,7 @@ class GaussianStrategy(OneStepStrategy):
 
     def getNext(self, ranges):
         ret = copy(self.bestState)
-        index = random.randint(0, len(ranges) - 1)
+        index = random.randint(0, (len(ranges) - 1))
     
         for index in range(len(ranges)):
             if isinstance(ranges[index][0], bool):
