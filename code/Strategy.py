@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-#! /usr/bin/env python
-
 '''
 date: 20 October 2010
 
@@ -13,6 +11,8 @@ change of one parameter, gaussian change of multiple parameters, ...)
 """
 
 import math, pdb, sys
+from numpy import *
+from numpy.linalg import *
 import random
 from copy import copy
 from util import prettyVec
@@ -290,7 +290,7 @@ class GradientSampleStrategy(Strategy):
 
 class LearningStrategy(Strategy):
     '''
-    A strategy that uses supervised learning to guess which parameter vector woudl be good to try next.
+    A strategy that uses supervised learning to guess which parameter vector would be good to try next.
     '''
 
     def __init__(self, *args, **kwargs):
@@ -314,26 +314,68 @@ class LearningStrategy(Strategy):
         self.triedSoFar[-1].append(dist)
         print '        Got update, policy is now', self.triedSoFar[-1]
 
+class LinearRegressionStrategy(LearningStrategy):
+    '''
+    A strategy that uses supervised learning (linear regression) to guess which
+    parameter vector would be good to try next.
+    '''
 
+    def __init__(self, *args, **kwargs):
+        super(LearningStrategy, self).__init__(*args, **kwargs)
+        self.X = []
+        self.y = []
+
+    def getNext(self, ranges):
+        '''Learn model on X and y...'''
+
+        # 1. Learn
+        # 2. Try some nearby values
+        # 3. Pick best one
+
+
+    def updateResults(self, dist, ranges):
+        '''This must be called for the last point that was handed out!'''
+
+        # about the same...
+        self.triedSoFar.append(self.stillToTry.pop(0))
+        self.triedSoFar[-1].append(dist)
+        print '        Got update, policy is now', self.triedSoFar[-1]
+
+    def predict_distance_walked(self, weights, inputs):
+        '''
+        Given a weight vector and an input vector, predicts the distance
+        walked by the robot.        
+        '''
+        return sum([weights[i]*inputs[i] for i in range(len(weights))])
+
+    def calculate_weights(self, training_params, distances_walked):
+        '''
+        Given matching vectors of training parameter vectors and the distances
+        walked by each training param, of length, calculates an initial 
+        guess for the weights using least-squares
+        '''
+        x = linalg.lstsq(training_params, distances_walked)
+        return x
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
             
 
-    # [JBY] This can be put in a unit test instead
-    # Testing Neighbor.gradient function...
-    ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # # [JBY] This can be put in a unit test instead
+    # # Testing Neighbor.gradient function...
+    # ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # 
+    # parameters = []  # List of the chosen values for the parameters
+    # for rang in ranges:
+    #     # Chooses random values for each parameter (initial state)
+    #     if isinstance(rang[0], bool):  # If range is (true, false),
+    #         # choose true or false
+    #         parameters.append(random.uniform(0,1) > .5)
+    #     else:
+    #         parameters.append(random.uniform(rang[0], rang[1]))
+    # print parameters
+    # print Neighbor.gradient(ranges, parameters, .05)
+    # print Neighbor.gaussian(ranges, parameters)
 
-    parameters = []  # List of the chosen values for the parameters
-    for rang in ranges:
-        # Chooses random values for each parameter (initial state)
-        if isinstance(rang[0], bool):  # If range is (true, false),
-            # choose true or false
-            parameters.append(random.uniform(0,1) > .5)
-        else:
-            parameters.append(random.uniform(rang[0], rang[1]))
-    print parameters
-    print Neighbor.gradient(ranges, parameters, .05)
-    print Neighbor.gaussian(ranges, parameters)
-
+    
