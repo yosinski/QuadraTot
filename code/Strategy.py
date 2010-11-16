@@ -361,19 +361,20 @@ if __name__ == "__main__":
     doctest.testmod()
             
 
-    # [JBY] This can be put in a unit test instead
-    # Testing Neighbor.gradient function...
-    ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # # [JBY] This can be put in a unit test instead
+    # # Testing Neighbor.gradient function...
+    # ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # 
+    # parameters = []  # List of the chosen values for the parameters
+    # for rang in ranges:
+    #     # Chooses random values for each parameter (initial state)
+    #     if isinstance(rang[0], bool):  # If range is (true, false),
+    #         # choose true or false
+    #         parameters.append(random.uniform(0,1) > .5)
+    #     else:
+    #         parameters.append(random.uniform(rang[0], rang[1]))
+    # print parameters
+    # print Neighbor.gradient(ranges, parameters, .05)
+    # print Neighbor.gaussian(ranges, parameters)
 
-    parameters = []  # List of the chosen values for the parameters
-    for rang in ranges:
-        # Chooses random values for each parameter (initial state)
-        if isinstance(rang[0], bool):  # If range is (true, false),
-            # choose true or false
-            parameters.append(random.uniform(0,1) > .5)
-        else:
-            parameters.append(random.uniform(rang[0], rang[1]))
-    print parameters
-    print Neighbor.gradient(ranges, parameters, .05)
-    print Neighbor.gaussian(ranges, parameters)
-
+    
