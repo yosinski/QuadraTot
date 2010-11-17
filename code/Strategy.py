@@ -22,7 +22,9 @@ class Strategy(object):
 
     def __init__(self, initialPoint):
         self.current = initialPoint
-
+        self.iterations = 0
+        self.bestIter   = None
+        
     def getNext(self, ranges):
         raise Exception('Need to implement this')
 
@@ -42,11 +44,13 @@ class OneStepStrategy(Strategy):
         self.bestState = self.current
         
     def updateResults(self, dist, ranges):
+        self.iterations += 1
         if self.bestDist is None or dist > self.bestDist:
             self.bestDist = dist
             self.bestState = self.current
+            self.bestIter  = self.iterations
 
-        print '        best so far', prettyVec(self.bestState), '%.2f' % self.bestDist  # Prints best state and distance so far
+        print '    best (iter %3d)' % self.bestIter, prettyVec(self.bestState), '%.2f' % self.bestDist  # Prints best state and distance so far
 
 
 class RandomStrategy(OneStepStrategy):
