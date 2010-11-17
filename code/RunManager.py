@@ -113,6 +113,7 @@ class RunManager:
             #    continue
 
             currentDistance = self.run_robot(currentState)
+            #currentDistance = input('Distance walked? ')
 
             #self.statesSoFar.add(tuple(currentState))
 

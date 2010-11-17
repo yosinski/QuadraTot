@@ -320,13 +320,14 @@ class LearningStrategy(Strategy):
 class LinearRegressionStrategy(LearningStrategy):
     '''
     A strategy that uses supervised learning (linear regression) to guess which
-    parameter vector would be good to try next.
+    parameter vector would be good to try next.`Tests 5 (or however many
+    parameters there are) random vectors first.
     '''
 
     def getNext(self, ranges):
         '''Learn model on X and Y...'''
         # If we still need to test initial 5 random params:
-        if len(self.X) < 5:
+        if len(self.X) < len(ranges):
             ret = copy(self.current)
 
             # Generate random param.
@@ -338,16 +339,23 @@ class LinearRegressionStrategy(LearningStrategy):
                         ret[index] = random.uniform(ranges[index][0], \
 				                    ranges[index][1])
 
-            X.append(ret)
+            self.X.append(ret)
             return ret
 
-        # If we have enough params to calculate weights:
-        calculate_weights(self.X, self.Y)
+        # Set the current vector (vector we are adjusting from) to
+        # one of the vectors with the furthest distance so far, if
+        # this is the first time calculating weights:
+        if len(self.theta) == 0:
+           self.current = self.X[self.y.index(max(self.y))] 
         
+        # If we have enough params to calculate weights:
+        self.calculate_weights(self.X, self.y)
+        print '        Weights are now ', self.theta     
+
         # Calculate the magnitude of the weights vector
         total = 0
 	for weight in self.theta:
-	    total += self.theta ** 2
+	    total += weight ** 2
         magnitude = math.sqrt(total)
         
         # adjustment vector = normalization of weights * eta
@@ -376,14 +384,15 @@ class LinearRegressionStrategy(LearningStrategy):
         walked by each training param, of length, calculates a 
         guess for the weights using least-squares
         '''
-        self.theta = linalg.lstsq(training_params, distances_walked)
+        self.theta = linalg.lstsq(training_params, distances_walked)[0]
 
     def updateResults(self, dist, ranges):
         '''This must be called for the last point that was handed out!'''
 
-        self.Y.append(dist)
-        self.bestIter = 1 
-        print '        Got update, ' self.X[-1], ' walked ', self.Y[-1]
+        self.y.append(dist)
+        self.bestIter = 1
+        self.current = self.X[-1] 
+        print '        Got update, ', self.X[-1], ' walked ', self.y[-1]
 
 if __name__ == "__main__":
     import doctest
