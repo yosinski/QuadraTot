@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 '''
-date: 20 October 2010
+date: 17 November 2010
 
 '''
 """
@@ -73,7 +73,6 @@ class RandomStrategy(OneStepStrategy):
 
         #print '  ** Neighbor new', ret
         return ret
-
 class UniformStrategy(OneStepStrategy):
     """
     Uniform change of one parameter: Given a list of parameters, picks
@@ -300,6 +299,7 @@ class LearningStrategy(Strategy):
         super(LearningStrategy, self).__init__(*args, **kwargs)
         self.X = []
         self.y = []
+        self.theta = []
 
     def getNext(self, ranges):
         '''Learn model on X and y...'''
@@ -324,29 +324,66 @@ class LinearRegressionStrategy(LearningStrategy):
     '''
 
     def getNext(self, ranges):
-        '''Learn model on X and y...'''
+        '''Learn model on X and Y...'''
+        # If we still need to test initial 5 random params:
+        if len(self.X) < 5:
+            ret = copy(self.current)
 
+            # Generate random param.
+            if self.bestIter is not None:
+                for index in range(0, len(ret)):
+                    if isinstance(ranges[index][0], bool):
+                        ret[index] = (random.uniform(0,1) > .5)
+                    else:
+                        ret[index] = random.uniform(ranges[index][0], \
+				                    ranges[index][1])
+
+            X.append(ret)
+            return ret
+
+        # If we have enough params to calculate weights:
+        calculate_weights(self.X, self.Y)
         
+        # Calculate the magnitude of the weights vector
+        total = 0
+	for weight in self.theta:
+	    total += self.theta ** 2
+        magnitude = math.sqrt(total)
+        
+        # adjustment vector = normalization of weights * eta
+        eta = .1 # size of each iteration
+        adjustment = self.theta
+	for index in range(len(adjustment)):
+   	    adjustment[index] = (adjustment[index] / magnitude) * eta
+	    adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+ 
+        # policy = policy + adjustment
+        nextState = [self.current, adjustment]
+        self.current = [sum(value) for value in zip(*nextState)]
+        self.X.append(self.current)
+        return self.current
 
-        # 1. Learn
-        # 2. Try some nearby values
-        # 3. Pick best one
-
-    def predict_distance_walked(self, weights, inputs):
+    def predict_distance_walked(self, inputs):
         '''
         Given a weight vector and an input vector, predicts the distance
         walked by the robot.        
         '''
-        return sum([weights[i]*inputs[i] for i in range(len(weights))])
+        return sum([self.theta[i]*inputs[i] for i in range(len(self.theta))])
 
     def calculate_weights(self, training_params, distances_walked):
         '''
         Given matching vectors of training parameter vectors and the distances
-        walked by each training param, of length, calculates an initial 
+        walked by each training param, of length, calculates a 
         guess for the weights using least-squares
         '''
-        x = linalg.lstsq(training_params, distances_walked)
-        return x
+        self.theta = linalg.lstsq(training_params, distances_walked)
+
+    def updateResults(self, dist, ranges):
+        '''This must be called for the last point that was handed out!'''
+
+        self.Y.append(dist)
+        self.bestIter = 1 
+        print '        Got update, ' self.X[-1], ' walked ', self.Y[-1]
 
 if __name__ == "__main__":
     import doctest
