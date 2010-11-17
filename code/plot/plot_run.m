@@ -9,6 +9,9 @@ function plot_run(filename)
   plot(best(:,1), 'r');
   idx = find(fitness == best);
   plot(idx, best(idx), 'ro', 'MarkerSize', 5);
+  for ii = 1:length(idx)
+    disp(sprintf('ii = %3d, fitness = %g', idx(ii), best(idx(ii))));
+  end
   title(filename, 'Interpreter', 'none');
   legend(filename);
 
