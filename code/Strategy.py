@@ -14,13 +14,16 @@ from numpy import *
 from numpy.linalg import *
 import random
 from copy import copy
+from util import prettyVec
 
 class Strategy(object):
     '''Base class for strategies.'''
 
     def __init__(self, initialPoint):
         self.current = initialPoint
-
+        self.iterations = 0
+        self.bestIter   = None
+        
     def getNext(self, ranges):
         raise Exception('Need to implement this')
 
@@ -40,11 +43,13 @@ class OneStepStrategy(Strategy):
         self.bestState = self.current
         
     def updateResults(self, dist, ranges):
+        self.iterations += 1
         if self.bestDist is None or dist > self.bestDist:
             self.bestDist = dist
             self.bestState = self.current
+            self.bestIter  = self.iterations
 
-        print '        best so far', prettyVec(self.bestState), '%.2f' % self.bestDist  # Prints best state and distance so far
+        print '    best (iter %3d)' % self.bestIter, prettyVec(self.bestState), '%.2f' % self.bestDist  # Prints best state and distance so far
 
 
 class RandomStrategy(OneStepStrategy):
@@ -129,7 +134,7 @@ class GaussianStrategy(OneStepStrategy):
 
     def getNext(self, ranges):
         ret = copy(self.bestState)
-        index = random.randint(0, len(ranges) - 1)
+        index = random.randint(0, (len(ranges) - 1))
     
         for index in range(len(ranges)):
             if isinstance(ranges[index][0], bool):
@@ -348,19 +353,20 @@ if __name__ == "__main__":
     doctest.testmod()
             
 
-    # [JBY] This can be put in a unit test instead
-    # Testing Neighbor.gradient function...
-    ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # # [JBY] This can be put in a unit test instead
+    # # Testing Neighbor.gradient function...
+    # ranges = [(0, 400), (.5, 8), (-2, 2), (-1, 1), (-1, 1)]
+    # 
+    # parameters = []  # List of the chosen values for the parameters
+    # for rang in ranges:
+    #     # Chooses random values for each parameter (initial state)
+    #     if isinstance(rang[0], bool):  # If range is (true, false),
+    #         # choose true or false
+    #         parameters.append(random.uniform(0,1) > .5)
+    #     else:
+    #         parameters.append(random.uniform(rang[0], rang[1]))
+    # print parameters
+    # print Neighbor.gradient(ranges, parameters, .05)
+    # print Neighbor.gaussian(ranges, parameters)
 
-    parameters = []  # List of the chosen values for the parameters
-    for rang in ranges:
-        # Chooses random values for each parameter (initial state)
-        if isinstance(rang[0], bool):  # If range is (true, false),
-            # choose true or false
-            parameters.append(random.uniform(0,1) > .5)
-        else:
-            parameters.append(random.uniform(rang[0], rang[1]))
-    print parameters
-    print Neighbor.gradient(ranges, parameters, .05)
-    print Neighbor.gaussian(ranges, parameters)
-
+    
