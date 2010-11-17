@@ -316,36 +316,36 @@ class SimplexStrategy(Strategy):
         self.reflectDist = 0
         
     def getNext(self, ranges):
-        if self.transformation = 0 and len(self.toTry) = 0:
-            createSimplex(self, ranges)
-        elif self.transformation = 1:
-            reflect(self, ranges)
-        elif self.transformation = 2:
-            expand(self, ranges)
-        elif self.transformation = 3:
-            contractOut(self, ranges)
-        elif self.transformation = 4:
-            contractIn(self, ranges)
-        elif self.transformation = 5:
-            shrink(self, ranges)
+        if self.transformation == 0 and len(self.toTry) == 0:
+            self.createSimplex(ranges)
+        elif self.transformation == 1:
+            self.reflect(ranges)
+        elif self.transformation == 2:
+            self.expand(ranges)
+        elif self.transformation == 3:
+            self.contractOut(ranges)
+        elif self.transformation == 4:
+            self.contractIn(ranges)
+        elif self.transformation == 5:
+            self.shrink(ranges)
         return self.toTry[0]
     
     def updateResults(self, dist, ranges):
-        if self.transformation = 0: #initializing new vertices
+        if self.transformation == 0: #initializing new vertices
             self.vertices.append((self.toTry.pop(0), dist))
-            if len(self.toTry) = 0:
+            if len(self.toTry) == 0:
                 self.transformation = 1
-        elif self.transformation = 1: #reflection
-            updateReflect(self, dist, ranges)
-        elif self.transformation = 2: #expansion
-            updateExpansion(self, dist, ranges)
-        elif self.transformation = 3: #contract out
-            updateContractOut(self, dist, ranges)
-        elif self.transformation = 4: #contract in
-            updateContractIn(self, dist, ranges)
-        elif self.transformation = 5: #shrink
+        elif self.transformation == 1: #reflection
+            self.updateReflect(dist, ranges)
+        elif self.transformation == 2: #expansion
+            self.updateExpansion(dist, ranges)
+        elif self.transformation == 3: #contract out
+            self.updateContractOut(dist, ranges)
+        elif self.transformation == 4: #contract in
+            self.updateContractIn(dist, ranges)
+        elif self.transformation == 5: #shrink
             self.vertices.append((self.toTry.pop(0), dist))
-            if len(self.toTry) = 0:
+            if len(self.toTry) == 0:
                 self.transformation = 1
     
     def createSimplex(self, ranges):
@@ -372,7 +372,7 @@ class SimplexStrategy(Strategy):
     def reflect(self, ranges):
         ''' reflects the worst point over the centroid '''
         self.vertices = sorted(self.vertices, key=lambda dist: dist[1])
-        centroid = getCentroid(self, ranges)
+        centroid = self.getCentroid(ranges)
         worst = self.vertex[0][0]
         point = centroid
         for x in range(self.numParam):
@@ -386,7 +386,7 @@ class SimplexStrategy(Strategy):
 
     def expand(self, ranges):
         ''' expands the simplex in the direction of the reflected point '''
-        centroid = getCentroid(self, ranges)
+        centroid = self.getCentroid(ranges)
         point = centroid
         rpoint = self.toTry[0]
         for x in range(self.numParam):
@@ -400,7 +400,7 @@ class SimplexStrategy(Strategy):
 
     def contractOut(self, ranges):
         ''' contracts the simplex away from the reflected point '''
-        centroid = getCentroid(self, ranges)
+        centroid = self.getCentroid(ranges)
         point = centroid
         rpoint = self.toTry[0]
         for x in range(self.numParam):
@@ -414,7 +414,7 @@ class SimplexStrategy(Strategy):
     
     def contractIn(self, ranges):
         ''' contracts the simplex away from the reflected point '''
-        centroid = getCentroid(self, ranges)
+        centroid = self.getCentroid(ranges)
         point = centroid
         worst = self.vertices[0]
         rpoint = self.toTry[0]
@@ -467,14 +467,14 @@ class SimplexStrategy(Strategy):
     def updateExpansion(self, dist, ranges):
         ''' saves either the reflected point or the expansion point '''
         if dist > self.reflectDist:
-            updatePoint(self, 0, dist) #choose expansion point
+            self.updatePoint(0, dist) #choose expansion point
         else:
-            updatePoint(self, 1, self.reflectDist) #choose reflection point
+            self. updatePoint(1, self.reflectDist) #choose reflection point
     
     def updateContractOut(self, dist, ranges):
         ''' either saves the contracted point or decides to shrink the simplex '''
         if dist >= self.reflectDist:
-            updatePoint(0)
+            self.updatePoint(0, dist)
         else:
             self.toTry = []
             self.transformation = 5
@@ -482,7 +482,7 @@ class SimplexStrategy(Strategy):
     def updateContractIn(self, dist, ranges):
         ''' either saves the contracted point or decides to shrink the simplex '''
         if dist > self.vertices[0][0]:
-            updatePoint(0)
+            self.updatePoint(0, dist)
         else:
             self.toTry = []
             self.transformation = 5
