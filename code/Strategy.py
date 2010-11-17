@@ -352,13 +352,14 @@ class SimplexStrategy(Strategy):
         ''' picks the other vertices by changing one parameter at a time in the
             initial vector by .1 of the range '''
         self.toTry.append(self.current)
-        for vert in range(self.numVertices - 1):
+        for param in range(self.numParam):
             next = self.current
-            if (next[vert] + (.1 * ranges[vert][1])) < ranges[vert][1]:
-                next[vert] += .1 * ranges[vert][1]
+            if (next[param] + (.1 * (ranges[param][1] - ranges[param][0]))) < ranges[param][1]:
+                next[param] += .1 * (ranges[param][1] - ranges[param][0])
+                self.toTry.append(next)
             else:
-                next[vert] -= .1 * ranges[vert][1]
-            self.toTry.append(next)
+                next[param] -= .1 * (ranges[param][1] - ranges[param][0])
+                self.toTry.append(next)
     
             
     def getCentroid(self, ranges):
@@ -373,7 +374,7 @@ class SimplexStrategy(Strategy):
         ''' reflects the worst point over the centroid '''
         self.vertices = sorted(self.vertices, key=lambda dist: dist[1])
         centroid = self.getCentroid(ranges)
-        worst = self.vertex[0][0]
+        worst = self.vertices[0][0]
         point = centroid
         for x in range(self.numParam):
             r = centroid[x] - worst[x]
@@ -433,7 +434,7 @@ class SimplexStrategy(Strategy):
         for vert in ranges(self.numVertices - 1):
             next = []
             for param in ranges(self.numParam):
-                dif = (best[param] - self.vertices[0][0][param]) * .1
+                dif = (best[param] - self.vertices[0][0][param]) * (ranges[param][1] - ranges[param][0])
                 next[param] = self.vertices[0][0][param] + dif
                 if point[x] < ranges[x][0]:
                     point[x] = ranges[x][0]
