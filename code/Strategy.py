@@ -290,6 +290,204 @@ class GradientSampleStrategy(Strategy):
 
 
 
+class SimplexStrategy(Strategy):
+    """
+    Nelder-Mead Simplex Method. During each iteration of the main loop, the
+    vertex of the simplex with the slowest walk is reflected over the centroid
+    of the remaining points. Depending on the speed of the walk at this new
+    point, the point will be either accepted, expanded, or contracted. The
+    resulting point of this will determine whether the entire simplex will
+    shrink or not.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        super(SimplexStrategy, self).__init__(*args, **kwargs)
+        self.alpha = 1 # reflection coefficient
+        self.beta = .5 # contraction coefficient
+        self.gamma = 2 # expansion coefficient
+        self.delta = .5 # shrink coefficient
+        self.numVertices = 6 # number of vertices
+        self.numParam = 5 # number of parameters
+
+        self.vertices = [] # (vertices, distance) list
+        self.toTry = []
+        self.transformation = 0 # 0-initialize, 1-reflect, 2-expand,
+                                # 3-contract out, 4-contract in, 5-shrink
+        self.reflectDist = 0
+        
+    def getNext(self, ranges):
+        if self.transformation = 0 and len(self.toTry) = 0:
+            createSimplex(self, ranges)
+        elif self.transformation = 1:
+            reflect(self, ranges)
+        elif self.transformation = 2:
+            expand(self, ranges)
+        elif self.transformation = 3:
+            contractOut(self, ranges)
+        elif self.transformation = 4:
+            contractIn(self, ranges)
+        elif self.transformation = 5:
+            shrink(self, ranges)
+        return self.toTry[0]
+    
+    def updateResults(self, dist, ranges):
+        if self.transformation = 0: #initializing new vertices
+            self.vertices.append((self.toTry.pop(0), dist))
+            if len(self.toTry) = 0:
+                self.transformation = 1
+        elif self.transformation = 1: #reflection
+            updateReflect(self, dist, ranges)
+        elif self.transformation = 2: #expansion
+            updateExpansion(self, dist, ranges)
+        elif self.transformation = 3: #contract out
+            updateContractOut(self, dist, ranges)
+        elif self.transformation = 4: #contract in
+            updateContractIn(self, dist, ranges)
+        elif self.transformation = 5: #shrink
+            self.vertices.append((self.toTry.pop(0), dist))
+            if len(self.toTry) = 0:
+                self.transformation = 1
+    
+    def createSimplex(self, ranges):
+        ''' picks the other vertices by changing one parameter at a time in the
+            initial vector by .1 of the range '''
+        self.toTry.append(self.current)
+        for vert in range(self.numVertices - 1):
+            next = self.current
+            if (next[vert] + (.1 * ranges[vert][1])) < ranges[vert][1]:
+                next[vert] += .1 * ranges[vert][1]
+            else:
+                next[vert] -= .1 * ranges[vert][1]
+            self.toTry.append(next)
+    
+            
+    def getCentroid(self, ranges):
+        ''' calculates the centroid of all the vertices '''
+        centroid = [0, 0, 0, 0, 0]
+        for vert in range(self.numVertices):
+            for par in range(self.numParam):
+                centroid[par] += (self.vertices[vert][0][par] / self.numVertices)
+        return centroid
+
+    def reflect(self, ranges):
+        ''' reflects the worst point over the centroid '''
+        self.vertices = sorted(self.vertices, key=lambda dist: dist[1])
+        centroid = getCentroid(self, ranges)
+        worst = self.vertex[0][0]
+        point = centroid
+        for x in range(self.numParam):
+            r = centroid[x] - worst[x]
+            point[x] += self.alpha * r
+            if point[x] < ranges[x][0]:
+                point[x] = ranges[x][0]
+            elif point[x] > ranges[x][1]:
+                point[x] = ranges[x][1]
+        self.toTry.append(point)
+
+    def expand(self, ranges):
+        ''' expands the simplex in the direction of the reflected point '''
+        centroid = getCentroid(self, ranges)
+        point = centroid
+        rpoint = self.toTry[0]
+        for x in range(self.numParam):
+            e = rpoint[x] - centroid[x]
+            point += self.gamma * e
+            if point[x] < ranges[x][0]:
+                point[x] = ranges[x][0]
+            elif point[x] > ranges[x][1]:
+                point[x] = ranges[x][1]
+        self.toTry.insert(0, point)
+
+    def contractOut(self, ranges):
+        ''' contracts the simplex away from the reflected point '''
+        centroid = getCentroid(self, ranges)
+        point = centroid
+        rpoint = self.toTry[0]
+        for x in range(self.numParam):
+            c = rpoint[x] - centroid[x]
+            point += self.beta * e
+            if point[x] < ranges[x][0]:
+                point[x] = ranges[x][0]
+            elif point[x] > ranges[x][1]:
+                point[x] = ranges[x][1]
+        self.toTry.insert(0, point)
+    
+    def contractIn(self, ranges):
+        ''' contracts the simplex away from the reflected point '''
+        centroid = getCentroid(self, ranges)
+        point = centroid
+        worst = self.vertices[0]
+        rpoint = self.toTry[0]
+        for x in range(self.numParam):
+            c = worst[x] - centroid[x]
+            point += self.beta * e
+            if point[x] < ranges[x][0]:
+                point[x] = ranges[x][0]
+            elif point[x] > ranges[x][1]:
+                point[x] = ranges[x][1]
+        self.toTry.inset(0, point)
+
+    def shrink(self, ranges):
+        ''' shrinks the size of the simplex around the best vertex '''
+        best = self.vertices[self.numVertices - 1]
+        for vert in ranges(self.numVertices - 1):
+            next = []
+            for param in ranges(self.numParam):
+                dif = (best[param] - self.vertices[0][0][param]) * .1
+                next[param] = self.vertices[0][0][param] + dif
+                if point[x] < ranges[x][0]:
+                    point[x] = ranges[x][0]
+                elif point[x] > ranges[x][1]:
+                    point[x] = ranges[x][1]
+            self.toTry.append(next)
+            self.vertices.pop(0)
+    
+    def updatePoint(self, point, dist):
+        ''' sets the paramater vector at index point in toTry as a new vertex with 
+            distance dist '''
+        self.vertices.pop(0)
+        self.vertices.append((self.toTry.pop(point), dist)) #expansion point
+        self.toTry.pop(0)
+        self.transformation = 1
+
+    def updateReflect(self, dist, ranges):
+        ''' decides what, if any, transformation should be done based on the
+            distance traveled of the reflected point '''
+        self.reflectDist = dist
+        if dist < self.vertices[self.numVertices - 1][0] and dist > self.vertices[1][0]:
+            self.vertices.pop(0)
+            self.vertices.append((self.toTry.pop(0), dist))
+        elif dist > self.vertices[self.numVertices - 1][0]:
+            self.transformation = 2
+        elif dist < self.vertices[1][0] and dist > self.vertices[0][0]:
+            self.transformation = 3
+        elif dist < self.vertices[0][0]:
+            self.transformation = 4
+    
+    def updateExpansion(self, dist, ranges):
+        ''' saves either the reflected point or the expansion point '''
+        if dist > self.reflectDist:
+            updatePoint(self, 0, dist) #choose expansion point
+        else:
+            updatePoint(self, 1, self.reflectDist) #choose reflection point
+    
+    def updateContractOut(self, dist, ranges):
+        ''' either saves the contracted point or decides to shrink the simplex '''
+        if dist >= self.reflectDist:
+            updatePoint(0)
+        else:
+            self.toTry = []
+            self.transformation = 5
+    
+    def updateContractIn(self, dist, ranges):
+        ''' either saves the contracted point or decides to shrink the simplex '''
+        if dist > self.vertices[0][0]:
+            updatePoint(0)
+        else:
+            self.toTry = []
+            self.transformation = 5
+    
+
 class LearningStrategy(Strategy):
     '''
     A strategy that uses supervised learning to guess which parameter vector would be good to try next.
