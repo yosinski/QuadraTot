@@ -313,26 +313,38 @@ class SimplexStrategy(Strategy):
         self.toTry = []
         self.transformation = 0 # 0-initialize, 1-reflect, 2-expand,
                                 # 3-contract out, 4-contract in, 5-shrink
+        self.bestDist = 0
         self.reflectDist = 0
         
     def getNext(self, ranges):
         if self.transformation == 0 and len(self.toTry) == 0:
+            print ' create simplex'
             self.createSimplex(ranges)
         elif self.transformation == 1:
+            print ' reflecting'
             self.reflect(ranges)
         elif self.transformation == 2:
+            print ' expanding'
             self.expand(ranges)
         elif self.transformation == 3:
+            print ' contract out'
             self.contractOut(ranges)
         elif self.transformation == 4:
+            print ' contract in'
             self.contractIn(ranges)
         elif self.transformation == 5:
+            print ' shrink'
             self.shrink(ranges)
+            self.transformation = 0
         return self.toTry[0]
     
     def updateResults(self, dist, ranges):
+        if dist > self.bestDist:
+            self.bestDist = dist
+        print '               best distance: ', '%.2f'% self.bestDist
         if self.transformation == 0: #initializing new vertices
             self.vertices.append((self.toTry.pop(0), dist))
+            print ' vertices added: ', len(self.vertices)
             if len(self.toTry) == 0:
                 self.transformation = 1
         elif self.transformation == 1: #reflection
@@ -343,26 +355,26 @@ class SimplexStrategy(Strategy):
             self.updateContractOut(dist, ranges)
         elif self.transformation == 4: #contract in
             self.updateContractIn(dist, ranges)
-        elif self.transformation == 5: #shrink
-            self.vertices.append((self.toTry.pop(0), dist))
-            if len(self.toTry) == 0:
-                self.transformation = 1
+#        elif self.transformation == 5: #shrink
+#            self.vertices.append((self.toTry.pop(0), dist))
+#            if len(self.toTry) == 0:
+#                self.transformation = 1
     
     def createSimplex(self, ranges):
         ''' picks the other vertices by changing one parameter at a time in the
             initial vector by .1 of the range '''
         self.toTry.append(self.current)
         for param in range(self.numParam):
-            next = []
+            nextV = []
             for p in range(self.numParam):
-                next.append(self.current[p])
+                nextV.append(self.current[p])
             rang = ranges[param][1] - ranges[param][0]
-            if (next[param] + (.1 * rang)) < ranges[param][1]:
-                next[param] += .1 * rang
-                self.toTry.append(next)
+            if (nextV[param] + (.1 * rang)) < ranges[param][1]:
+                nextV[param] += .1 * rang
+                self.toTry.append(nextV)
             else:
-                next[param] -= .1 * rang
-                self.toTry.append(next)
+                nextV[param] -= .1 * rang
+                self.toTry.append(nextV)
     
             
     def getCentroid(self, ranges):
@@ -401,7 +413,7 @@ class SimplexStrategy(Strategy):
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             e = rpoint[x] - centroid[x]
-            point += self.gamma * e
+            point[x] += self.gamma * e
             if point[x] < ranges[x][0]:
                 point[x] = ranges[x][0]
             elif point[x] > ranges[x][1]:
@@ -417,7 +429,7 @@ class SimplexStrategy(Strategy):
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             c = rpoint[x] - centroid[x]
-            point += self.beta * c
+            point[x] += self.beta * c
             if point[x] < ranges[x][0]:
                 point[x] = ranges[x][0]
             elif point[x] > ranges[x][1]:
@@ -430,31 +442,33 @@ class SimplexStrategy(Strategy):
         point = []
         for p in range(self.numParam):
             point.append(centroid[p])
-        worst = self.vertices[0]
+        worst = self.vertices[0][0]
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             c = worst[x] - centroid[x]
-            point += self.beta * c
+            point[x] += self.beta * c
             if point[x] < ranges[x][0]:
                 point[x] = ranges[x][0]
             elif point[x] > ranges[x][1]:
                 point[x] = ranges[x][1]
-        self.toTry.inset(0, point)
+        self.toTry.insert(0, point)
 
     def shrink(self, ranges):
         ''' shrinks the size of the simplex around the best vertex '''
-        best = self.vertices[self.numVertices - 1]
-        for vert in ranges(self.numVertices - 1):
-            next = []
-            for param in ranges(self.numParam):
+        best = self.vertices[self.numVertices - 1][0]
+        for vert in range(self.numVertices - 1):
+            nextV = []
+            for p in range(self.numParam):
+                nextV.append(0)
+            for param in range(self.numParam):
                 rang = ranges[param][1] - ranges[param][0]
                 dif = (best[param] - self.vertices[0][0][param]) * rang
-                next[param] = self.vertices[0][0][param] + dif
-                if point[x] < ranges[x][0]:
-                    point[x] = ranges[x][0]
-                elif point[x] > ranges[x][1]:
-                    point[x] = ranges[x][1]
-            self.toTry.append(next)
+                nextV[param] = self.vertices[0][0][param] + dif
+                if nextV[param] < ranges[param][0]:
+                    nextV[param] = ranges[param][0]
+                elif nextV[param] > ranges[param][1]:
+                    nextV[param] = ranges[param][1]
+            self.toTry.append(nextV)
             self.vertices.pop(0)
     
     def updatePoint(self, point, dist):
