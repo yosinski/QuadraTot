@@ -353,18 +353,23 @@ class SimplexStrategy(Strategy):
             initial vector by .1 of the range '''
         self.toTry.append(self.current)
         for param in range(self.numParam):
-            next = self.current
-            if (next[param] + (.1 * (ranges[param][1] - ranges[param][0]))) < ranges[param][1]:
-                next[param] += .1 * (ranges[param][1] - ranges[param][0])
+            next = []
+            for p in range(self.numParam):
+                next.append(self.current[p])
+            rang = ranges[param][1] - ranges[param][0]
+            if (next[param] + (.1 * rang)) < ranges[param][1]:
+                next[param] += .1 * rang
                 self.toTry.append(next)
             else:
-                next[param] -= .1 * (ranges[param][1] - ranges[param][0])
+                next[param] -= .1 * rang
                 self.toTry.append(next)
     
             
     def getCentroid(self, ranges):
         ''' calculates the centroid of all the vertices '''
-        centroid = [0, 0, 0, 0, 0]
+        centroid = []
+        for n in range(self.numParam):
+            centroid.append(0)
         for vert in range(self.numVertices):
             for par in range(self.numParam):
                 centroid[par] += (self.vertices[vert][0][par] / self.numVertices)
@@ -375,7 +380,9 @@ class SimplexStrategy(Strategy):
         self.vertices = sorted(self.vertices, key=lambda dist: dist[1])
         centroid = self.getCentroid(ranges)
         worst = self.vertices[0][0]
-        point = centroid
+        point = []
+        for p in range(self.numParam):
+            point.append(centroid[p])
         for x in range(self.numParam):
             r = centroid[x] - worst[x]
             point[x] += self.alpha * r
@@ -388,7 +395,9 @@ class SimplexStrategy(Strategy):
     def expand(self, ranges):
         ''' expands the simplex in the direction of the reflected point '''
         centroid = self.getCentroid(ranges)
-        point = centroid
+        point = []
+        for p in range(self.numParam):
+            point.append(centroid[p])
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             e = rpoint[x] - centroid[x]
@@ -402,11 +411,13 @@ class SimplexStrategy(Strategy):
     def contractOut(self, ranges):
         ''' contracts the simplex away from the reflected point '''
         centroid = self.getCentroid(ranges)
-        point = centroid
+        point = []
+        for p in range(self.numParam):
+            point.append(centroid[p])
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             c = rpoint[x] - centroid[x]
-            point += self.beta * e
+            point += self.beta * c
             if point[x] < ranges[x][0]:
                 point[x] = ranges[x][0]
             elif point[x] > ranges[x][1]:
@@ -416,12 +427,14 @@ class SimplexStrategy(Strategy):
     def contractIn(self, ranges):
         ''' contracts the simplex away from the reflected point '''
         centroid = self.getCentroid(ranges)
-        point = centroid
+        point = []
+        for p in range(self.numParam):
+            point.append(centroid[p])
         worst = self.vertices[0]
         rpoint = self.toTry[0]
         for x in range(self.numParam):
             c = worst[x] - centroid[x]
-            point += self.beta * e
+            point += self.beta * c
             if point[x] < ranges[x][0]:
                 point[x] = ranges[x][0]
             elif point[x] > ranges[x][1]:
@@ -434,7 +447,8 @@ class SimplexStrategy(Strategy):
         for vert in ranges(self.numVertices - 1):
             next = []
             for param in ranges(self.numParam):
-                dif = (best[param] - self.vertices[0][0][param]) * (ranges[param][1] - ranges[param][0])
+                rang = ranges[param][1] - ranges[param][0]
+                dif = (best[param] - self.vertices[0][0][param]) * rang
                 next[param] = self.vertices[0][0][param] + dif
                 if point[x] < ranges[x][0]:
                     point[x] = ranges[x][0]
