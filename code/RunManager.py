@@ -15,22 +15,6 @@ class RunManager:
         self.robot = Robot(commandRate = 40, loud = False)
         self.statesSoFar = set()  # Keeps track of the states tested so far
         
-    def initialState(self, ranges):
-        """ 
-        Given the ranges of the different parameters, chooses random values for
-        each parameter. The ranges of parameters are in a list of tuples.
-    
-        """
-        parameters = []  # List of the chosen values for the parameters
-        for rang in ranges:
-            # Chooses random values for each parameter (initial state)
-            if isinstance(rang[0], bool):  # If range is (true, false),
-                           # choose true or false
-                parameters.append(random.uniform(0,1) > .5)
-            else:
-                parameters.append(random.uniform(rang[0], rang[1]))
-        return parameters
-    
     # TODO: Am I calling stuff in here correctly..?
     def run_robot(self, currentState):
         """

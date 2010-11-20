@@ -16,6 +16,7 @@ import sys
 from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
+from util import randUniformPoint
 
 
 
@@ -35,15 +36,18 @@ def doRun():
             # normal
             currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        currentState = runman.initialState(SineModel5.typicalRanges)
+        currentState = randUniformPoint(SineModel5.typicalRanges)
 
 
+<<<<<<< HEAD
     #strategy = UniformStrategy(currentState)
     #strategy = GaussianStrategy(currentState)
     strategy = GradientSampleStrategy(currentState)
     #strategy = LinearRegressionStrategy(currentState)
     #strategy = SimplexStrategy(currentState)
     #strategy = RandomStrategy(currentState)
+=======
+>>>>>>> 865fb610a856ff207bd16c2f69ac32522db83bed
 
     try:
         strategy

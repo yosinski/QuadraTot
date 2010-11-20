@@ -12,6 +12,7 @@ import sys
 from SineModel import SineModel5
 from RunManager import RunManager
 from Neighbor import Neighbor
+from util import randUniformPoint
 
 
 
@@ -22,7 +23,7 @@ def main():
     if len(sys.argv) > 1:
         initialState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        initialState = runman.initialState(SineModel5.typicalRanges)
+        initialState = randUniformPoint(SineModel5.typicalRanges)
 
     runman.explore_dimensions(initialState, SineModel5.typicalRanges, pointsPerDim = 9, repetitions = 2)
 

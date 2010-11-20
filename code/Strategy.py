@@ -19,15 +19,16 @@ from util import prettyVec
 class Strategy(object):
     '''Base class for strategies.'''
 
-    def __init__(self, initialPoint):
+    def __init__(self, initialPoint, ranges):
         self.current = initialPoint
         self.iterations = 0
         self.bestIter   = None
+        self.ranges     = ranges
         
-    def getNext(self, ranges):
+    def getNext(self):
         raise Exception('Need to implement this')
 
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         '''This must be called for the last point that was handed out!'''
         raise Exception('Need to implement this')
 
@@ -42,7 +43,7 @@ class OneStepStrategy(Strategy):
         self.bestDist  = None
         self.bestState = self.current
         
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         self.iterations += 1
         if self.bestDist is None or dist > self.bestDist:
             self.bestDist = dist
@@ -59,17 +60,17 @@ class RandomStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self, ranges):
+    def getNext(self):
         ret = copy(self.bestState)
 
         if self.bestDist is not None:
             for index in range(0, len(ret)):
-                #print ranges
-                if isinstance(ranges[index][0], bool):
+                #print self.ranges
+                if isinstance(self.ranges[index][0], bool):
                     ret[index] = (random.uniform(0,1) > .5)
                 else:
-                    ret[index] = random.uniform(ranges[index][0], \
-				                ranges[index][1])
+                    ret[index] = random.uniform(self.ranges[index][0], \
+				                self.ranges[index][1])
 
         #print '  ** Neighbor new', ret
         return ret
@@ -81,17 +82,17 @@ class UniformStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self, ranges):
+    def getNext(self):
         ret = copy(self.bestState)
 
         if self.bestDist is not None:
-            index = random.randint(0, len(ranges) - 1)
+            index = random.randint(0, len(self.ranges) - 1)
 
-            #print ranges
-            if isinstance(ranges[index][0], bool):
+            #print self.ranges
+            if isinstance(self.ranges[index][0], bool):
                 ret[index] = (random.uniform(0,1) > .5)
             else:
-                ret[index] = random.uniform(ranges[index][0], ranges[index][1])
+                ret[index] = random.uniform(self.ranges[index][0], self.ranges[index][1])
 
         #print '  ** Neighbor new', ret
         return ret
@@ -105,18 +106,18 @@ class UniformSlightStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self, ranges):
+    def getNext(self):
         ret = copy(self.bestState)
         print '  ** Neighbor old', ret
         index = random.randint(0, len(parameters) - 1)
-        print ranges
-        if isinstance(ranges[index][0], bool):
+        print self.ranges
+        if isinstance(self.ranges[index][0], bool):
             ret[index] = (random.uniform(0,1) > .5)
         else:
             if random.randint(0, 1) == 0:  # decrease slightly
-                ret[index] = ret[index] - (.1 * (ranges[index][1] - ranges[index][0]))
+                ret[index] = ret[index] - (.1 * (self.ranges[index][1] - self.ranges[index][0]))
             else:  # increase slightly
-                ret[index] = ret[index] + (.1 * (ranges[index][1] - ranges[index][0]))
+                ret[index] = ret[index] + (.1 * (self.ranges[index][1] - self.ranges[index][0]))
     
         print '  ** Neighbor new', ret
         return ret
@@ -131,19 +132,19 @@ class GaussianStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self, ranges):
+    def getNext(self):
         ret = copy(self.bestState)
-        index = random.randint(0, (len(ranges) - 1))
+        index = random.randint(0, (len(self.ranges) - 1))
     
-        for index in range(len(ranges)):
-            if isinstance(ranges[index][0], bool):
+        for index in range(len(self.ranges)):
+            if isinstance(self.ranges[index][0], bool):
                 ret[index] = (random.uniform(0,1) > .5)
             else:
                 while True:
-                    changeTo = random.gauss(ret[index], .05 * (ranges[index][1] - 
-                                                           ranges[index][0]))
+                    changeTo = random.gauss(ret[index], .05 * (self.ranges[index][1] - 
+                                                           self.ranges[index][0]))
                     # Check that randomly generated number is in range
-                    if ranges[index][0] <= changeTo <= ranges[index][1]:
+                    if self.ranges[index][0] <= changeTo <= self.ranges[index][1]:
                         ret[index] = changeTo
                         break
     
@@ -172,24 +173,24 @@ class GradientSampleStrategy(Strategy):
         self.triedSoFar = []
         self.stillToTry = []
 
-    def getNext(self, ranges):
+    def getNext(self):
         if len(self.stillToTry) == 0:
-            self.populateStillToTry(ranges)
+            self.populateStillToTry()
 
         return self.stillToTry[0]
 
-    def populateStillToTry(self, ranges):
+    def populateStillToTry(self):
         self.stillToTry.append(self.current)
 
         # Evaluate t=8 policies per iteration
         print 'Base  point is', self.current
         for i in range(self.numNeighbors):
-            point = self.getEpsilonNeighbor(ranges, self.current, self.epsilon)
+            point = self.getEpsilonNeighbor(self.ranges, self.current, self.epsilon)
             print 'Nearby point is', point
             self.stillToTry.append(point)
         
 
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         '''This must be called for the last point that was handed out!'''
 
         self.triedSoFar.append(self.stillToTry.pop(0))
@@ -198,12 +199,12 @@ class GradientSampleStrategy(Strategy):
 
         # If this was the last one, compute a new current location
         if len(self.stillToTry) == 0:
-            self.current = self.computeNextMove(self.current, ranges, self.triedSoFar)
+            self.current = self.computeNextMove(self.current, self.ranges, self.triedSoFar)
             self.triedSoFar = []
             self.stillToTry = []
 
 
-    def getEpsilonNeighbor(self, ranges, parameters, epsilon):
+    def getEpsilonNeighbor(self, parameters, epsilon):
         """
         Given a list of parameters, returns a randomly generated policy nearby
         such that each parameter is changed randomly by +epsilon * range, 0, 
@@ -215,27 +216,27 @@ class GradientSampleStrategy(Strategy):
         for index in range(len(ret)):
             param = random.choice((0, 1, 2))
             if param == 0:  # decrease by epsilon*range
-                change = ret[index] - (epsilon * (ranges[index][1] - ranges[index][0]))
-                if change < ranges[index][0]:  # Check that we are within range.
-                    ret[index] = ranges[index][0]
+                change = ret[index] - (epsilon * (self.ranges[index][1] - self.ranges[index][0]))
+                if change < self.ranges[index][0]:  # Check that we are within range.
+                    ret[index] = self.ranges[index][0]
                 else:
                     ret[index] = change
             if param == 1:  # increase by epsilon*range
-                change = ret[index] + (epsilon * (ranges[index][1] - ranges[index][0]))
-                if change > ranges[index][1]:
-                    ret[index] = ranges[index][1]
+                change = ret[index] + (epsilon * (self.ranges[index][1] - self.ranges[index][0]))
+                if change > self.ranges[index][1]:
+                    ret[index] = self.ranges[index][1]
                 else:
                     ret[index] = change
         #print 'returning', ret
         #print
         return ret
 
-    def computeNextMove(self, center, ranges, samples):
+    def computeNextMove(self, center, samples):
         '''Returns the center of the next distribution.'''
 
         # Average the scores for all random policies
         adjustment = []  # Adjustment vector
-        for n in range(len(ranges)):
+        for n in range(len(self.ranges)):
              # Keep track of number of policies with pos/neg/0 perturbation
              # in dimension n
             num_epos = num_eneg = num_zero = 0
@@ -283,12 +284,12 @@ class GradientSampleStrategy(Strategy):
 		
 		for index in range(len(adjustment)):
 		    adjustment[index] = (adjustment[index] / magnitude) * eta
-		    adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+		    adjustment[index] = adjustment[index] * (self.ranges[index][1] - self.ranges[index][0])
                     change = center[index] + adjustment[index]
-                    if change < ranges[index][0]:  # Check that we are within range.
-                        adjustment[index] = ranges[index][0] - center[index]
-                    if change > ranges[index][1]:
-                        adjustment[index] = ranges[index][1] - center[index]
+                    if change < self.ranges[index][0]:  # Check that we are within range.
+                        adjustment[index] = self.ranges[index][0] - center[index]
+                    if change > self.ranges[index][1]:
+                        adjustment[index] = self.ranges[index][1] - center[index]
 
         nextState = [center, adjustment]
         nextState = [sum(value) for value in zip(*nextState)]
@@ -320,33 +321,33 @@ class SimplexStrategy(Strategy):
         self.bestDist = 0
         self.reflectDist = 0
         
-    def getNext(self, ranges):
+    def getNext(self):
         if self.transformation == 0 and len(self.toTry) == 0:
             print ' create simplex'
-            self.createSimplex(ranges)
+            self.createSimplex(self.ranges)
         elif self.transformation == 1:
             name = 'simplex_%s.pkl' %''.join(random.choice(string.ascii_letters) for ii in xrange(10))
             print ' saving %s and reflecting' % name
             f = open(name, 'w')
             pickle.dump(self, f)
             f.close()
-            self.reflect(ranges)
+            self.reflect(self.ranges)
         elif self.transformation == 2:
             print ' expanding'
-            self.expand(ranges)
+            self.expand(self.ranges)
         elif self.transformation == 3:
             print ' contract out'
-            self.contractOut(ranges)
+            self.contractOut(self.ranges)
         elif self.transformation == 4:
             print ' contract in'
-            self.contractIn(ranges)
+            self.contractIn(self.ranges)
         elif self.transformation == 5:
             print ' shrink'
-            self.shrink(ranges)
+            self.shrink(self.ranges)
             self.transformation = 0
         return self.toTry[0]
     
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         if dist > self.bestDist:
             self.bestDist = dist
         print '               best distance: ', '%.2f'% self.bestDist
@@ -356,13 +357,13 @@ class SimplexStrategy(Strategy):
             if len(self.toTry) == 0:
                 self.transformation = 1
         elif self.transformation == 1: #reflection
-            self.updateReflect(dist, ranges)
+            self.updateReflect(dist, self.ranges)
         elif self.transformation == 2: #expansion
-            self.updateExpansion(dist, ranges)
+            self.updateExpansion(dist, self.ranges)
         elif self.transformation == 3: #contract out
-            self.updateContractOut(dist, ranges)
+            self.updateContractOut(dist, self.ranges)
         elif self.transformation == 4: #contract in
-            self.updateContractIn(dist, ranges)
+            self.updateContractIn(dist, self.ranges)
 #        elif self.transformation == 5: #shrink
 #            self.vertices.append((self.toTry.pop(0), dist))
 #            if len(self.toTry) == 0:
@@ -536,7 +537,7 @@ class LearningStrategy(Strategy):
         self.y = []
         self.theta = []
 
-    def getNext(self, ranges):
+    def getNext(self):
         '''Learn model on X and y...'''
 
         # 1. Learn
@@ -544,7 +545,7 @@ class LearningStrategy(Strategy):
         # 3. Pick best one
 
 
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         '''This must be called for the last point that was handed out!'''
 
         # about the same...
@@ -559,20 +560,20 @@ class LinearRegressionStrategy(LearningStrategy):
     parameters there are) random vectors first.
     '''
 
-    def getNext(self, ranges):
+    def getNext(self):
         '''Learn model on X and Y...'''
         # If we still need to test initial 5 random params:
-        if len(self.X) < len(ranges):
+        if len(self.X) < len(self.ranges):
             ret = copy(self.current)
 
             # Generate random param.
             if self.bestIter is not None:
                 for index in range(0, len(ret)):
-                    if isinstance(ranges[index][0], bool):
+                    if isinstance(self.ranges[index][0], bool):
                         ret[index] = (random.uniform(0,1) > .5)
                     else:
-                        ret[index] = random.uniform(ranges[index][0], \
-				                    ranges[index][1])
+                        ret[index] = random.uniform(self.ranges[index][0], \
+				                    self.ranges[index][1])
 
             self.X.append(ret)
             return ret
@@ -598,12 +599,12 @@ class LinearRegressionStrategy(LearningStrategy):
         adjustment = self.theta
 	for index in range(len(adjustment)):
    	    adjustment[index] = (adjustment[index] / magnitude) * eta
-	    adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+	    adjustment[index] = adjustment[index] * (self.ranges[index][1] - self.ranges[index][0])
             change = self.current[index] + adjustment[index]
-            if change < ranges[index][0]:  # Check that we are within range.
-                adjustment[index] = ranges[index][0] - self.current[index]
-            if change > ranges[index][1]:
-                adjustment[index] = ranges[index][1] - self.current[index]
+            if change < self.ranges[index][0]:  # Check that we are within range.
+                adjustment[index] = self.ranges[index][0] - self.current[index]
+            if change > self.ranges[index][1]:
+                adjustment[index] = self.ranges[index][1] - self.current[index]
       
         # policy = policy + adjustment
         nextState = [self.current, adjustment]
@@ -626,7 +627,7 @@ class LinearRegressionStrategy(LearningStrategy):
         '''
         self.theta = linalg.lstsq(training_params, distances_walked)[0]
 
-    def updateResults(self, dist, ranges):
+    def updateResults(self, dist):
         '''This must be called for the last point that was handed out!'''
 
         self.y.append(dist)
