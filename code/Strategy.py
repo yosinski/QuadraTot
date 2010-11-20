@@ -282,13 +282,16 @@ class GradientSampleStrategy(Strategy):
 		magnitude = math.sqrt(total)
 		
 		for index in range(len(adjustment)):
-			adjustment[index] = (adjustment[index] / magnitude) * eta
-			adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+		    adjustment[index] = (adjustment[index] / magnitude) * eta
+		    adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
+                    change = center[index] + adjustment[index]
+                    if change < ranges[index][0]:  # Check that we are within range.
+                        adjustment[index] = ranges[index][0] - center[index]
+                    if change > ranges[index][1]:
+                        adjustment[index] = ranges[index][1] - center[index]
 
         nextState = [center, adjustment]
-        return [sum(value) for value in zip(*nextState)]
-
-
+        nextState = [sum(value) for value in zip(*nextState)]
 
 class SimplexStrategy(Strategy):
     """
@@ -591,7 +594,12 @@ class LinearRegressionStrategy(LearningStrategy):
 	for index in range(len(adjustment)):
    	    adjustment[index] = (adjustment[index] / magnitude) * eta
 	    adjustment[index] = adjustment[index] * (ranges[index][1] - ranges[index][0])
- 
+            change = self.current[index] + adjustment[index]
+            if change < ranges[index][0]:  # Check that we are within range.
+                adjustment[index] = ranges[index][0] - self.current[index]
+            if change > ranges[index][1]:
+                adjustment[index] = ranges[index][1] - self.current[index]
+      
         # policy = policy + adjustment
         nextState = [self.current, adjustment]
         self.current = [sum(value) for value in zip(*nextState)]
