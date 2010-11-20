@@ -321,7 +321,11 @@ class SimplexStrategy(Strategy):
             print ' create simplex'
             self.createSimplex(ranges)
         elif self.transformation == 1:
-            print ' reflecting'
+            name = 'simplex_%s.pkl' %''.join(random.choice(string.ascii_letters) for ii in xrange(10))
+            print ' saving %s and reflecting' % name
+            f = open(name, 'w')
+            pickle.dump(self, f)
+            f.close()
             self.reflect(ranges)
         elif self.transformation == 2:
             print ' expanding'
