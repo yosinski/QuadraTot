@@ -106,7 +106,7 @@ class UniformSlightStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self, self.ranges):
+    def getNext(self):
         ret = copy(self.bestState)
         print '  ** Neighbor old', ret
         index = random.randint(0, len(parameters) - 1)
