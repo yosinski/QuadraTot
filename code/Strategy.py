@@ -212,7 +212,7 @@ class GradientSampleStrategy(Strategy):
         """
         ret = copy(parameters)
         #print 'ret was', ret
-        for index in range(len(parameters)):
+        for index in range(len(ret)):
             param = random.choice((0, 1, 2))
             if param == 0:  # decrease by epsilon*range
                 change = ret[index] - (epsilon * (ranges[index][1] - ranges[index][0]))
@@ -292,6 +292,7 @@ class GradientSampleStrategy(Strategy):
 
         nextState = [center, adjustment]
         nextState = [sum(value) for value in zip(*nextState)]
+        return nextState
 
 class SimplexStrategy(Strategy):
     """

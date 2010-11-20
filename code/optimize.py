@@ -38,25 +38,23 @@ def doRun():
         currentState = runman.initialState(SineModel5.typicalRanges)
 
 
-<<<<<<< HEAD
     #strategy = UniformStrategy(currentState)
     #strategy = GaussianStrategy(currentState)
-    #strategy = GradientSampleStrategy(currentState)
-    strategy = LinearRegressionStrategy(currentState)
+    strategy = GradientSampleStrategy(currentState)
+    #strategy = LinearRegressionStrategy(currentState)
     #strategy = SimplexStrategy(currentState)
-=======
->>>>>>> cfc560e00df5cae9ddf4134132fba5e2f147a62e
-
+    #strategy = RandomStrategy(currentState)
 
     try:
         strategy
     except:
         #strategy = UniformStrategy(currentState)
         #strategy = GaussianStrategy(currentState)
-        #strategy = GradientSampleStrategy(currentState)
+        strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
-        strategy = SimplexStrategy(currentState)
-    
+        #strategy = SimplexStrategy(currentState)
+        #strategy = RandomStrategy(currentState)    
+
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
     runman.do_many_runs(strategy, SineModel5.typicalRanges)
