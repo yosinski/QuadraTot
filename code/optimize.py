@@ -32,8 +32,8 @@ def doRun():
     #strategy = UniformStrategy(currentState)
     #strategy = GaussianStrategy(currentState)
     #strategy = GradientSampleStrategy(currentState)
-    #strategy = LinearRegressionStrategy(currentState)
-    strategy = SimplexStrategy(currentState)
+    strategy = LinearRegressionStrategy(currentState)
+    #strategy = SimplexStrategy(currentState)
 
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
