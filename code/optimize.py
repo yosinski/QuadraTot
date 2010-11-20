@@ -16,7 +16,7 @@ import sys
 from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
-from MotionModel import randUniformState
+from util import randUniformPoint
 
 
 
@@ -36,7 +36,7 @@ def doRun():
             # normal
             currentState = [eval(xx) for xx in sys.argv[1].split()]
     else:
-        currentState = randUniformState(SineModel5.typicalRanges)
+        currentState = randUniformPoint(SineModel5.typicalRanges)
 
 
 

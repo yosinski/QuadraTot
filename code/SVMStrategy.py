@@ -6,11 +6,131 @@
 #import random
 #from copy import copy
 
-from numpy import random, ones, sin
-from Strategy import Strategy
+from numpy import array, random, ones, sin, vstack
+from sg import sg           # Import shogun
+
+from Strategy import Strategy, OneStepStrategy
+from util import randUniformPoint
+from SineModel import SineModel5
 
 
 
+#    '''
+#    A strategy that uses the Support Vector Machine regression to
+#    guess which parameter vector would be good to try next.  Requires
+#    the installation of "pysvmlight", an interface to SVM Light by
+#    Thorsten Joachims (http://svmlight.joachims.org/).  pysvmlight is
+#    available here:
+#
+#    http://bitbucket.org/wcauchois/pysvmlight
+#    '''
+
+
+class SVMLearningStrategy(OneStepStrategy):
+    '''
+    A strategy that uses the Support Vector Machine regression to
+    guess which parameter vector would be good to try next.  Requires
+    the installation of shogun-python, a python machine learning
+    library offering, among other things, access to libsvr.
+
+    http://www.shogun-toolbox.org/
+
+    http://www.csie.ntu.edu.tw/~cjlin/libsvm/    
+    '''
+
+    def __init__(self, *args, **kwargs):
+        if not 'ranges' in kwargs:
+            raise Exception('SVMLearningStrategy must be called with "ranges" keyword argument.')
+        self.ranges = kwargs.pop('ranges')
+
+        # call this only after popping 'ranges' arg
+        super(SVMLearningStrategy, self).__init__(*args, **kwargs)
+
+        #self.X = []
+        #self.y = []
+
+        # self.current is defined in Strategy constructor
+
+        # 1. Populate toTry with some points
+        self.toTry = array(self.current)
+        N_init_neighborhood = 7
+        for ii in range(N_init_neighborhood):
+            row = randUniformPoint(self.ranges)
+            self.toTry = vstack((self.toTry, row))
+        
+        self.X = None
+        self.y = None
+
+    def getNext(self, ranges):
+        '''Learn model on X and y...'''
+
+        if self.toTry.shape[0] == 0:
+            # We're out of things to try.  Make more.
+            
+            # 1. Learn
+            self.learnModel()
+
+            # 2. Try some nearby values
+            for ii in xrange(10):
+                if ii == 0:
+                    nearbyPoints = array()
+                else:
+                    row = 
+                    nearbyPoints = vstack((nearbyPoints, row))
+
+            # 3. Pick best one
+
+
+        return self.toTry[0,:]
+
+    def updateResults(self, dist, ranges):
+        '''This must be called for the last point that was handed out!'''
+
+        # MAKE SURE TO CALL super().updateResults!
+
+        # about the same...
+        self.triedSoFar.append(self.stillToTry.pop(0))
+        self.triedSoFar[-1].append(dist)
+        print '        Got update, policy is now', self.triedSoFar[-1]
+
+
+    def train(self):
+        '''Learns.'''
+
+        # Constants pulled from <shogun>/examples/documented/python/regression_libsvr.py
+        size_cache=10
+        width=2.1
+        C=1.2
+        epsilon=1e-5
+        tube_epsilon=1e-2
+
+        train_X = array(self.X)
+        train_y = array(self.y)
+        
+        sg('set_features', 'TRAIN', train_X)
+        sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, width)
+
+        sg('set_labels', 'TRAIN', train_y)
+        sg('new_regression', 'LIBSVR')
+        sg('svr_tube_epsilon', tube_epsilon)
+        sg('c', C)
+        sg('train_regression')
+
+    def predict(self, testPoints):
+        '''Predicts performance using previously learned model.
+        self.train() must be called before this!'''
+
+        sg('set_features', 'TEST', test_Points)
+        predictions = sg('classify')
+
+        return predictions
+
+
+
+#
+# [JBY] The following is just code for testing the SVM/SVR learning
+# capabilities.
+#
 
 def dummyObjective(X):
     '''A Dummy objective that can be used to test learning strategies.
@@ -51,41 +171,26 @@ def syntheticData(points = 10, dim = 3, fn = dummyObjective):
 
 
 
-class SVMLearningStrategy(Strategy):
-    '''
-    A strategy that uses the Support Vector Machine regression to
-    guess which parameter vector would be good to try next.  Requires
-    the installation of "pysvmlight", an interface to SVM Light by
-    Thorsten Joachims (http://svmlight.joachims.org/).  pysvmlight is
-    available here:
+def syntheticData2(points = 10, dim = 3, fn = dummyObjective):
+    '''Generate the requested number of data points from a function.
 
-    http://bitbucket.org/wcauchois/pysvmlight
+    Returns of the form:
+      X, y   both numpy arrays
     '''
 
-    def __init__(self, *args, **kwargs):
-        super(LearningStrategy, self).__init__(*args, **kwargs)
-        self.X = []
-        self.y = []
+    ret = []
 
-    def getNext(self, ranges):
-        '''Learn model on X and y...'''
+    X = []
+    y = []
+    for ii in range(points):
+        X.append(random.randn(dim))
+        y.append(fn(X[-1]))
 
-        # 1. Learn
-        # 2. Try some nearby values
-        # 3. Pick best one
-
-
-    def updateResults(self, dist, ranges):
-        '''This must be called for the last point that was handed out!'''
-
-        # about the same...
-        self.triedSoFar.append(self.stillToTry.pop(0))
-        self.triedSoFar[-1].append(dist)
-        print '        Got update, policy is now', self.triedSoFar[-1]
+    return array(X), array(y)
 
 
 
-def main():
+def main_svmlight():
     # copied:
     import svmlight
     import pdb
@@ -119,6 +224,47 @@ def main():
     
     for p,example in zip(predictions, test_data):
         print 'pred %.8f, actual %.8f' % (p, example[0])
+
+
+
+def main_libsvr():
+    import pdb
+    train_X, train_y = syntheticData2(30, 1)
+    test_X,  test_y  = syntheticData2(20, 1)
+
+    train_X = train_X.T
+    test_X  = test_X.T
+
+    print 'Trying LibSVR'
+
+    size_cache=10
+    width=2.1
+    C=1.2
+    epsilon=1e-5
+    tube_epsilon=1e-2
+
+    from sg import sg
+    sg('set_features', 'TRAIN', train_X)
+    sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, width)
+
+    sg('set_labels', 'TRAIN', train_y)
+    sg('new_regression', 'LIBSVR')
+    sg('svr_tube_epsilon', tube_epsilon)
+    sg('c', C)
+    sg('train_regression')
+
+    sg('set_features', 'TEST', test_X)
+    predictions = sg('classify')
+
+    
+    for pred,act in zip(predictions, test_y):
+        print 'pred %.8f, actual %.8f' % (pred, act)
+
+
+
+def main():
+    initialPoint = randUniformPoint(SineModel5.typicalRanges)
+    strategy = SVMLearningStrategy(initialPoint, ranges = SineModel5.typicalRanges)
 
 
 
