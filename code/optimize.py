@@ -16,6 +16,7 @@ import sys
 from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
+from SVMStrategy import SVMLearningStrategy
 from util import randUniformPoint
 
 
@@ -25,11 +26,12 @@ def doRun():
 
     # Choose initialState, either from user-inputted parameters or randomly
     if len(sys.argv) > 1:
-        if len(sys.argv) > 2 and sys.argv[1] == '-s':
+        if (len(sys.argv) > 2 and
+            sys.argv[1] == '-simplex' or sys.argv[1] == '-svm'):
             # Simplex filename
             import pickle
-            simplexFilename = sys.argv[2]
-            ff = open(simplexFilename, 'r')
+            filename = sys.argv[2]
+            ff = open(filename, 'r')
             strategy = pickle.load(ff)
             ff.close()
         else:
@@ -44,14 +46,17 @@ def doRun():
     except:
         #strategy = UniformStrategy(currentState)
         #strategy = GaussianStrategy(currentState)
-        strategy = GradientSampleStrategy(currentState)
+        #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
         #strategy = SimplexStrategy(currentState)
-        #strategy = RandomStrategy(currentState)    
+        #strategy = RandomStrategy(currentState)
+        strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
 
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
     runman.do_many_runs(strategy, SineModel5.typicalRanges)
+
+
 
 def main():
     doRun()

@@ -32,6 +32,10 @@ class Strategy(object):
         '''This must be called for the last point that was handed out!'''
         raise Exception('Need to implement this')
 
+    def logHeader(self):
+        '''Override this and make it return a string to be logged'''
+        return None
+
 
 class OneStepStrategy(Strategy):
     """

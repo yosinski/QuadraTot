@@ -20,6 +20,8 @@ from SineModel import SineModel5
 
 
 
+#    NOT USING THIS ANY MORE
+#
 #    '''
 #    A strategy that uses the Support Vector Machine regression to
 #    guess which parameter vector would be good to try next.  Requires
@@ -77,6 +79,13 @@ class SVMLearningStrategy(OneStepStrategy):
         # How much random noise to add to the next trial (might
         # prevent model collapse)
         self.bumpBy = .01
+
+        # If the best predicted distance is below this, the bump by
+        # self.lowDistBump instead of self.bumpBy
+        self.lowDistThresh = 5.0
+        
+        # How much random noise to add to the next trial if we're getting nowhere
+        self.lowDistBump = .1
 
         # Only use the last trainOnLast runs for training, instead of
         # training on all data.
@@ -148,12 +157,19 @@ class SVMLearningStrategy(OneStepStrategy):
                                          self.bestDist)
             print '     most promising', prettyVec(self.toTry[0,:]), 'pred: %.2f' % predictions[iiMax]
             
-            # 4. (optional) Add a little noise
+            # 4. (optional) Add a little noise (or a lot of noise)
+            if predictions[iiMax] < self.lowDistThresh:
+                extraStr = '+'
+                bumpBy = self.lowDistBump
+            else:
+                extraStr = ' '
+                bumpBy = self.bumpBy
             bump = randGaussianPoint(zeros(self.toTry.shape[1]),
-                                     self.ranges, self.bumpBy, crop=False)
+                                     self.ranges, bumpBy, crop=False)
             self.toTry += bump
 
-            print '    noisy promising', prettyVec(self.toTry[0,:]), 'pred: %.2f' % self.predict(self.toTry[0,:])
+            print '   %snoisy promising' % extraStr, prettyVec(self.toTry[0,:]),
+            print 'pred: %.2f' % self.predict(self.toTry[0,:])
 
         self.current = self.toTry[0,:]
         return self.current
@@ -238,6 +254,10 @@ class SVMLearningStrategy(OneStepStrategy):
                 # if last one wasn't a power of two
                 filenameLast = 'svmstate_%s_%03d.pkl' % (self.randStr, lastIt)
                 os.remove(filenameLast)
+
+    def logHeader(self):
+        filename = 'svmstate_%s_000.pkl' % (self.randStr)
+        return '# SVMLearningStrategy saving itself as files like %s\n' % filename
 
 
 

@@ -49,9 +49,11 @@ class RunManager:
     
         return distance_walked
             
-    def log_start(self):
+    def log_start(self, extra=None):
         logFile = open('log.txt', 'a')
-        logFile.write('\nRunManager log started at %s\n' % datetime.now().ctime())
+        logFile.write('\n# RunManager log started at %s\n' % datetime.now().ctime())
+        if extra is not None:
+            logFile.write(extra)
         logFile.close()
         
     def log_write(self, string, newline=True):
@@ -79,13 +81,13 @@ class RunManager:
         if limit is None:
             limit = 10000
 
-        self.log_start()
+        self.log_start(strategy.logHeader())
 
         for ii in xrange(limit):
-            currentState = strategy.getNext(ranges)
+            currentState = strategy.getNext()
             
             print
-            print 'Iteration %2d params' % ii, prettyVec(currentState),
+            print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
             sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it
@@ -104,7 +106,7 @@ class RunManager:
             #print '        walked %.2f' % currentDistance
             print '%.2f' % currentDistance
 
-            strategy.updateResults(currentDistance, ranges)
+            strategy.updateResults(currentDistance)
 
             #print '        best so far', prettyVec(strategy.bestState), '%.2f' % strategy.bestDist  # Prints best state and distance so far
 
