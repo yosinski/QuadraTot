@@ -39,16 +39,6 @@ def doRun():
         currentState = randUniformPoint(SineModel5.typicalRanges)
 
 
-<<<<<<< HEAD
-    #strategy = UniformStrategy(currentState)
-    #strategy = GaussianStrategy(currentState)
-    strategy = GradientSampleStrategy(currentState)
-    #strategy = LinearRegressionStrategy(currentState)
-    #strategy = SimplexStrategy(currentState)
-    #strategy = RandomStrategy(currentState)
-=======
->>>>>>> 865fb610a856ff207bd16c2f69ac32522db83bed
-
     try:
         strategy
     except:
