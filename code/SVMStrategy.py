@@ -6,11 +6,13 @@
 #import random
 #from copy import copy
 
-from numpy import array, random, ones, sin, vstack
+
+from numpy import array, random, ones, zeros, sin, vstack, hstack, argmax, diag, linalg, dot, exp
 from sg import sg           # Import shogun
+import pdb
 
 from Strategy import Strategy, OneStepStrategy
-from util import randUniformPoint
+from util import *
 from SineModel import SineModel5
 
 
@@ -39,13 +41,15 @@ class SVMLearningStrategy(OneStepStrategy):
     '''
 
     def __init__(self, *args, **kwargs):
-        if not 'ranges' in kwargs:
-            raise Exception('SVMLearningStrategy must be called with "ranges" keyword argument.')
-        self.ranges = kwargs.pop('ranges')
+        #if not 'ranges' in kwargs:
+        #    raise Exception('SVMLearningStrategy must be called with "ranges" keyword argument.')
+        #self.ranges = kwargs.pop('ranges')
 
         # call this only after popping 'ranges' arg
         super(SVMLearningStrategy, self).__init__(*args, **kwargs)
 
+        N_init_neighborhood = 7
+        self.exploreScale = .05
         #self.X = []
         #self.y = []
 
@@ -53,49 +57,77 @@ class SVMLearningStrategy(OneStepStrategy):
 
         # 1. Populate toTry with some points
         self.toTry = array(self.current)
-        N_init_neighborhood = 7
         for ii in range(N_init_neighborhood):
-            row = randUniformPoint(self.ranges)
+            #row = randUniformPoint(self.ranges)
+            row = randGaussianPoint(self.current, self.ranges, .1)
             self.toTry = vstack((self.toTry, row))
         
         self.X = None
         self.y = None
 
-    def getNext(self, ranges):
+    def getNext(self):
         '''Learn model on X and y...'''
 
         if self.toTry.shape[0] == 0:
             # We're out of things to try.  Make more.
             
             # 1. Learn
-            self.learnModel()
+            self.train()
 
             # 2. Try some nearby values
-            for ii in xrange(10):
+            for ii in xrange(200):
+                row = array(randGaussianPoint(self.bestState, self.ranges, self.exploreScale))
                 if ii == 0:
-                    nearbyPoints = array()
+                    nearbyPoints = row
                 else:
-                    row = 
                     nearbyPoints = vstack((nearbyPoints, row))
-
+            predictions = self.predict(nearbyPoints)
+            #print 'nearbyPoints', nearbyPoints
+            #print 'predicitons', predictions
+            
+            
             # 3. Pick best one
+            iiMax = argmax(predictions)
+            self.toTry = array([nearbyPoints[iiMax, :]])
+
+            # 4. (optional) Add a little noise
+            self.toTry += randGaussianPoint(zeros(self.toTry.shape[1]),
+                                            self.ranges,
+                                            .05)
+
+            # UBER HACK!!!!!!!!!!!!!!!!!!
+            #self.toTry = array([randUniformPoint(self.ranges)])
+
+            # Prints the most promising vector found and its predicted value
+            print '     most promising', prettyVec(self.toTry[0,:]), 'pred: %.2f' % predictions[iiMax]
+            
+        self.current = self.toTry[0,:]
+        return self.current
 
 
-        return self.toTry[0,:]
+    def updateResults(self, dist):
+        '''This must be called for the last point that was handed out!
 
-    def updateResults(self, dist, ranges):
-        '''This must be called for the last point that was handed out!'''
+        Once called, we remove the first point from self.toTry and add
+        it to self.X and add the distance to self.y
+        '''
 
         # MAKE SURE TO CALL super().updateResults!
+        super(SVMLearningStrategy, self).updateResults(dist)
 
-        # about the same...
-        self.triedSoFar.append(self.stillToTry.pop(0))
-        self.triedSoFar[-1].append(dist)
-        print '        Got update, policy is now', self.triedSoFar[-1]
+        dist = float(dist)
+        justTried = self.toTry[0,:]
+        self.toTry = self.toTry[1:,:]
+        if self.X == None:
+            self.X = justTried
+            self.y = array(dist)
+        else:
+            self.X = vstack((self.X, justTried))
+            self.y = hstack((self.y, array(dist)))
 
 
     def train(self):
-        '''Learns.'''
+        '''Learn a model from self.X and self.y'''
 
         # Constants pulled from <shogun>/examples/documented/python/regression_libsvr.py
         size_cache=10
@@ -104,8 +136,11 @@ class SVMLearningStrategy(OneStepStrategy):
         epsilon=1e-5
         tube_epsilon=1e-2
 
-        train_X = array(self.X)
-        train_y = array(self.y)
+        # map each dimension of self.X to [0,1]
+        unif = phys2unif(self.X, self.ranges)
+        
+        train_X = unif.T
+        train_y = self.y
         
         sg('set_features', 'TRAIN', train_X)
         sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, width)
@@ -116,14 +151,21 @@ class SVMLearningStrategy(OneStepStrategy):
         sg('c', C)
         sg('train_regression')
 
+
     def predict(self, testPoints):
         '''Predicts performance using previously learned model.
         self.train() must be called before this!'''
 
-        sg('set_features', 'TEST', test_Points)
+        sg('set_features', 'TEST', phys2unif(testPoints,self.ranges).T)
         predictions = sg('classify')
 
         return predictions
+
+
+    def plot(self):
+        from matplotlib.pyplot import plot, show
+        plot(self.y)
+        show()
 
 
 
@@ -146,6 +188,19 @@ def dummyObjective(X):
     ret += sum(sin(X/20))
 
     return ret
+
+
+
+def dummyObjectiveGauss(X, center, ranges):
+    '''A Dummy objective that can be used to test learning strategies.
+
+    fitness is 100 * GaussianPdf(mean, cov)
+    '''
+
+    covar = diag([((x[1]-x[0])*.2) ** 2 for x in ranges])
+    
+    cinv = linalg.inv(covar)
+    return 100. * exp(-dot(dot((X-center), cinv), (X-center)))
 
 
 
@@ -265,6 +320,22 @@ def main_libsvr():
 def main():
     initialPoint = randUniformPoint(SineModel5.typicalRanges)
     strategy = SVMLearningStrategy(initialPoint, ranges = SineModel5.typicalRanges)
+
+    random.seed(3)
+
+    center = array([100, 2, 0, 0, 0])
+    obj = lambda x: dummyObjectiveGauss(x, center, SineModel5.typicalRanges)
+    
+    for ii in range(50):
+        print
+        print
+        current = strategy.getNext()
+        print '       trying', prettyVec(current),
+        simDist = obj(current)
+        print simDist
+        strategy.updateResults(simDist)
+
+    strategy.plot()
 
 
 
