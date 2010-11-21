@@ -9,7 +9,7 @@ Neighbor selection (uniform change of one parameter, gaussian
 change of one parameter, gaussian change of multiple parameters, ...) 
 """
 
-import math, pdb, sys
+import math, pdb, sys, string, pickle
 from numpy import *
 from numpy.linalg import *
 import random
@@ -357,7 +357,6 @@ class SimplexStrategy(Strategy):
         print '               best distance: ', '%.2f'% self.bestDist
         if self.transformation == 0: #initializing new vertices
             self.vertices.append((self.toTry.pop(0), dist))
-            print ' vertices added: ', len(self.vertices)
             if len(self.toTry) == 0:
                 self.transformation = 1
         elif self.transformation == 1: #reflection

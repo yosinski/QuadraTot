@@ -12,7 +12,7 @@ motion. Evaluates each neighbor and state using WiiTrackClient.
 
 """
 
-import sys
+import sys, pickle
 from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
@@ -45,12 +45,12 @@ def doRun():
         strategy
     except:
         #strategy = UniformStrategy(currentState)
-        #strategy = GaussianStrategy(currentState)
+        #strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
-        #strategy = SimplexStrategy(currentState)
+        strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
         #strategy = RandomStrategy(currentState)
-        strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
+        #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
 
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
