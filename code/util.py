@@ -3,7 +3,7 @@
 '''Just a few utility functions'''
 
 from copy import copy
-from numpy import array
+from numpy import array, random, diag
 
 
 
@@ -21,7 +21,6 @@ def randUniformPoint(ranges):
 
     '''
 
-    import random
     parameters = []  # List of the chosen values for the parameters
     for rang in ranges:
         # Chooses random values for each parameter (initial state)
@@ -34,7 +33,7 @@ def randUniformPoint(ranges):
 
 
 
-def randGaussianPoint(center, ranges, stddev = .1):
+def randGaussianPoint(center, ranges, stddev = .1, crop=True):
     '''
     Return a random sampling of a Gaussian distribution specified by
     the given'center', 'ranges', and desired 'stddev' along each
@@ -43,14 +42,13 @@ def randGaussianPoint(center, ranges, stddev = .1):
     The ranges of parameters are in a list of tuples.
     '''
 
-    from numpy import random, diag
-
     covar = diag([((x[1]-x[0]) * stddev) ** 2 for x in ranges])
     ret = random.multivariate_normal(center, covar)
 
     # crop to min/max values
-    for ii in range(len(ret)):
-        ret[ii] = max(ranges[ii][0], min(ranges[ii][1], ret[ii]))
+    if crop:
+        for ii in range(len(ret)):
+            ret[ii] = max(ranges[ii][0], min(ranges[ii][1], ret[ii]))
 
     return ret
 

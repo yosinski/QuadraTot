@@ -7,8 +7,11 @@
 #from copy import copy
 
 
+from random import choice
 from numpy import array, random, ones, zeros, sin, vstack, hstack, argmax, diag, linalg, dot, exp
 from sg import sg           # Import shogun
+import string, os
+import pickle
 import pdb
 
 from Strategy import Strategy, OneStepStrategy
@@ -41,32 +44,78 @@ class SVMLearningStrategy(OneStepStrategy):
     '''
 
     def __init__(self, *args, **kwargs):
-        #if not 'ranges' in kwargs:
-        #    raise Exception('SVMLearningStrategy must be called with "ranges" keyword argument.')
-        #self.ranges = kwargs.pop('ranges')
-
         # call this only after popping 'ranges' arg
         super(SVMLearningStrategy, self).__init__(*args, **kwargs)
 
+        self.pickle = True
+        if 'pickle' in kwargs:
+            self.pickle = kwargs['pickle']
+        if self.pickle:
+            self.randStr = ''.join(choice(string.ascii_letters) for ii in range(6))
+            filename = 'svmstate_%s_000.pkl' % (self.randStr)
+            print 'SVMLearningStrategy saving itself as files like', filename
+
+
+        ########################
+        # Strategy parameters
+        ########################
+
+        # Number of points to add to the initial point to try before learning
         N_init_neighborhood = 7
-        self.exploreScale = .05
-        #self.X = []
-        #self.y = []
+
+        # Initial noise to add to the inital point to generate the
+        # N_init_neighborhood points
+        initialNoise = .1
+
+        # How close to search around the best point, in terms of a
+        # fraction of the range in each dimension
+        self.exploreScale = .01
+
+        # How many nearby points to check        
+        self.numNearby = 100
+
+        # How much random noise to add to the next trial (might
+        # prevent model collapse)
+        self.bumpBy = .01
+
+        # Only use the last trainOnLast runs for training, instead of
+        # training on all data.
+        self.trainOnLast = 10
+
+
+        ########################
+        # SVR parameters
+        ########################
+
+        #self.width = 2.1
+        self.width = .1
+        #self.width = .03
+
+        #self.C=1.2
+        self.C=.5
+        #self.C=.04
+
+        # SVR termination criteria
+        self.tube_epsilon=1e-3
+
 
         # self.current is defined in Strategy constructor
-
-        # 1. Populate toTry with some points
+        # Populate toTry with some points
         self.toTry = array(self.current)
         for ii in range(N_init_neighborhood):
             #row = randUniformPoint(self.ranges)
-            row = randGaussianPoint(self.current, self.ranges, .1)
+            row = randGaussianPoint(self.current, self.ranges, initialNoise)
             self.toTry = vstack((self.toTry, row))
         
         self.X = None
         self.y = None
 
+
     def getNext(self):
-        '''Learn model on X and y...'''
+        '''Get the next point to try.  The first few times this will
+        return a random point near the initialPoint, and after that it
+        will return the best predicted point by the learning model,
+        perhaps with some added noise.'''
 
         if self.toTry.shape[0] == 0:
             # We're out of things to try.  Make more.
@@ -75,7 +124,7 @@ class SVMLearningStrategy(OneStepStrategy):
             self.train()
 
             # 2. Try some nearby values
-            for ii in xrange(200):
+            for ii in xrange(self.numNearby):
                 row = array(randGaussianPoint(self.bestState, self.ranges, self.exploreScale))
                 if ii == 0:
                     nearbyPoints = row
@@ -90,17 +139,22 @@ class SVMLearningStrategy(OneStepStrategy):
             iiMax = argmax(predictions)
             self.toTry = array([nearbyPoints[iiMax, :]])
 
-            # 4. (optional) Add a little noise
-            self.toTry += randGaussianPoint(zeros(self.toTry.shape[1]),
-                                            self.ranges,
-                                            .05)
-
-            # UBER HACK!!!!!!!!!!!!!!!!!!
+            # Testing hack... this should be disabled
             #self.toTry = array([randUniformPoint(self.ranges)])
 
             # Prints the most promising vector found and its predicted value
+            print '     value for best', prettyVec(self.bestState),
+            print 'p: %.2f, a: %.2f' % (self.predict(self.bestState),
+                                         self.bestDist)
             print '     most promising', prettyVec(self.toTry[0,:]), 'pred: %.2f' % predictions[iiMax]
             
+            # 4. (optional) Add a little noise
+            bump = randGaussianPoint(zeros(self.toTry.shape[1]),
+                                     self.ranges, self.bumpBy, crop=False)
+            self.toTry += bump
+
+            print '    noisy promising', prettyVec(self.toTry[0,:]), 'pred: %.2f' % self.predict(self.toTry[0,:])
+
         self.current = self.toTry[0,:]
         return self.current
 
@@ -125,36 +179,42 @@ class SVMLearningStrategy(OneStepStrategy):
             self.X = vstack((self.X, justTried))
             self.y = hstack((self.y, array(dist)))
 
+        if self.pickle:
+            self.saveAndCleanup()
+            
+
 
     def train(self):
         '''Learn a model from self.X and self.y'''
 
         # Constants pulled from <shogun>/examples/documented/python/regression_libsvr.py
         size_cache=10
-        width=2.1
-        C=1.2
-        epsilon=1e-5
-        tube_epsilon=1e-2
 
         # map each dimension of self.X to [0,1]
         unif = phys2unif(self.X, self.ranges)
-        
+
         train_X = unif.T
         train_y = self.y
+
+        train_X = train_X[:,-self.trainOnLast:]
+        train_y = train_y[-self.trainOnLast:]
         
         sg('set_features', 'TRAIN', train_X)
-        sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, width)
+        sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, self.width)
 
         sg('set_labels', 'TRAIN', train_y)
         sg('new_regression', 'LIBSVR')
-        sg('svr_tube_epsilon', tube_epsilon)
-        sg('c', C)
+        sg('svr_tube_epsilon', self.tube_epsilon)
+        sg('c', self.C)
         sg('train_regression')
 
 
     def predict(self, testPoints):
         '''Predicts performance using previously learned model.
         self.train() must be called before this!'''
+
+        if len(testPoints.shape) < 2:
+            testPoints = array([testPoints])
 
         sg('set_features', 'TEST', phys2unif(testPoints,self.ranges).T)
         predictions = sg('classify')
@@ -166,6 +226,18 @@ class SVMLearningStrategy(OneStepStrategy):
         from matplotlib.pyplot import plot, show
         plot(self.y)
         show()
+
+    def saveAndCleanup(self):
+        filename = 'svmstate_%s_%03d.pkl' % (self.randStr, self.iterations)
+        ff = open(filename, 'w')
+        pickle.dump(self, ff)
+        ff.close()
+        if self.iterations > 1:
+            lastIt = self.iterations-1
+            if (lastIt & (lastIt - 1)) != 0:
+                # if last one wasn't a power of two
+                filenameLast = 'svmstate_%s_%03d.pkl' % (self.randStr, lastIt)
+                os.remove(filenameLast)
 
 
 
@@ -318,19 +390,19 @@ def main_libsvr():
 
 
 def main():
+    random.seed(11)
+
     initialPoint = randUniformPoint(SineModel5.typicalRanges)
     strategy = SVMLearningStrategy(initialPoint, ranges = SineModel5.typicalRanges)
-
-    random.seed(3)
 
     center = array([100, 2, 0, 0, 0])
     obj = lambda x: dummyObjectiveGauss(x, center, SineModel5.typicalRanges)
     
-    for ii in range(50):
+    for ii in range(25):
         print
         print
         current = strategy.getNext()
-        print '       trying', prettyVec(current),
+        print '   %3d trying' % ii, prettyVec(current),
         simDist = obj(current)
         print simDist
         strategy.updateResults(simDist)
