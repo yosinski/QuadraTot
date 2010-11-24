@@ -89,20 +89,22 @@ class SVMLearningStrategy(OneStepStrategy):
 
         # Only use the last trainOnLast runs for training, instead of
         # training on all data.
-        self.trainOnLast = 10
+        self.trainOnLast = 1000
 
 
         ########################
         # SVR parameters
         ########################
 
-        #self.width = 2.1
-        self.width = .1
+        self.width = 2.1
+        #self.width = .1
         #self.width = .03
 
         #self.C=1.2
-        self.C=.5
+        #self.C=.5         # tried this a few times, repetitive runs
         #self.C=.04
+        self.C=500.       # barely gets training on 8 perfect
+        self.C=1000.      # maybe try this?
 
         # SVR termination criteria
         self.tube_epsilon=1e-3
@@ -418,7 +420,7 @@ def main():
     center = array([100, 2, 0, 0, 0])
     obj = lambda x: dummyObjectiveGauss(x, center, SineModel5.typicalRanges)
     
-    for ii in range(25):
+    for ii in range(120):
         print
         print
         current = strategy.getNext()
