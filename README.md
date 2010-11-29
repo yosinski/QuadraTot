@@ -2,7 +2,7 @@ QuadraTot
 ===============
 
 QuadraTot is a project for Cornell's Artificial Intelligence class,
-([CS 4700](http://www.cs.cornell.edu/courses/cs4700/2010fa/)), by
+[CS 4700](http://www.cs.cornell.edu/courses/cs4700/2010fa/), by
 Diana Hidalgo, Sarah Nguyen, and [Jason
 Yosinski](http://yosinski.com/).
 
