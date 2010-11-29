@@ -89,7 +89,7 @@ class SVMLearningStrategy(OneStepStrategy):
 
         # Only use the last trainOnLast runs for training, instead of
         # training on all data.
-        self.trainOnLast = 1000
+        self.trainOnLast = 6
 
 
         ########################
@@ -218,7 +218,8 @@ class SVMLearningStrategy(OneStepStrategy):
         train_y = train_y[-self.trainOnLast:]
         
         sg('set_features', 'TRAIN', train_X)
-        sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, self.width)
+        #sg('set_kernel', 'GAUSSIAN', 'REAL', size_cache, self.width)
+        sg('set_kernel', 'LINEAR', 'REAL', size_cache)
 
         sg('set_labels', 'TRAIN', train_y)
         sg('new_regression', 'LIBSVR')
