@@ -27,6 +27,7 @@ MIN_OUTER = 30
 MAX_OUTER = 800 # changing because Robot hits antenna
 MIN_CENTER = 512 - 180
 MAX_CENTER = 512 + 180
+NORM_CENTER = 512
 
 POS_FLAT      = [512] * 9
 POS_READY     = [800,  40] * 4 + [512]
@@ -93,12 +94,18 @@ class Robot():
                             % (self.nServos, len(self.actuators), repr(self.actuators)))
 
         for actuator in self.actuators:
+            #actuator.moving_speed = 90
+            #actuator.synchronized = True
+            #actuator.torque_enable = True
+            #actuator.torque_limit = 1000
+            #actuator.max_torque = 1000
+
             actuator.moving_speed = 90
             actuator.synchronized = True
             actuator.torque_enable = True
-            actuator.torque_limit = 1000
+            actuator.torque_limit = 500
             actuator.max_torque = 1000
-
+            
         self.currentPos = None
         self.resetClock()
         

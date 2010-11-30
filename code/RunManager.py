@@ -17,14 +17,20 @@ class RunManager:
         
     # TODO: Am I calling stuff in here correctly..?
     def run_robot(self, currentState):
-        """
-        Runs the robot with currentState's parameters and returns the
-        distance walked.
-        
-        """
-        model = SineModel5()
-        motionModel = lambda time: model.model(time,
-                                               parameters = currentState)
+        '''
+        Runs the robot with currentState parameters and returns the
+        distance walked.  If currentState is a function, calls that
+        function instead of passing to a motion model.
+        '''
+
+        if hasattr(currentState, '__call__'):
+            # is a function
+            motionModel = currentState
+        else:
+            # is a parameter vector
+            model = SineModel5()
+            motionModel = lambda time: model.model(time,
+                                                   parameters = currentState)
 
         wiiTrack = WiiTrackClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
@@ -65,7 +71,10 @@ class RunManager:
         
     def log_results(self, currentState, currentDistance):
         """Writes to log file that keeps track of tests so far"""
-        stats = ' '.join([repr(xx) for xx in currentState])
+        if hasattr(currentState, '__call__'):
+            stats = 'function call run'
+        else:
+            stats = ' '.join([repr(xx) for xx in currentState])
         logFile = open('log.txt', 'a')
         logFile.write(stats + ", " + str(currentDistance) + "\n")
         logFile.close()
@@ -87,7 +96,10 @@ class RunManager:
             currentState = strategy.getNext()
             
             print
-            print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
+            if hasattr(currentState, '__call__'):
+                print 'Iteration %2d' % (ii+1),
+            else:
+                print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
             sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it
