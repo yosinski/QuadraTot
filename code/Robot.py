@@ -94,12 +94,18 @@ class Robot():
                             % (self.nServos, len(self.actuators), repr(self.actuators)))
 
         for actuator in self.actuators:
+            #actuator.moving_speed = 90
+            #actuator.synchronized = True
+            #actuator.torque_enable = True
+            #actuator.torque_limit = 1000
+            #actuator.max_torque = 1000
+
             actuator.moving_speed = 90
             actuator.synchronized = True
             actuator.torque_enable = True
-            actuator.torque_limit = 1000
+            actuator.torque_limit = 500
             actuator.max_torque = 1000
-
+            
         self.currentPos = None
         self.resetClock()
         

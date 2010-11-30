@@ -3581,3 +3581,174 @@ function call run, 0.0
 function call run, 4.472135955
 function call run, 3.16227766017
 function call run, 20.5182845287
+
+# RunManager log started at Tue Nov 30 01:32:33 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:34:05 2010
+# NEATStrategy starting
+function call run, 34.0587727319
+function call run, 23.769728648
+function call run, 5.0
+function call run, 13.152946438
+function call run, 10.0498756211
+function call run, 0.0
+function call run, 1.0
+function call run, 8.0622577483
+function call run, 6.32455532034
+function call run, 4.472135955
+
+# RunManager log started at Tue Nov 30 01:37:41 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:38:09 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:38:27 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:38:45 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:38:52 2010
+# NEATStrategy starting
+function call run, 1.0
+
+# RunManager log started at Tue Nov 30 01:39:06 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:39:22 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 01:39:33 2010
+# NEATStrategy starting
+function call run, 2.2360679775
+function call run, 6.40312423743
+function call run, 8.24621125124
+function call run, 29.4108823397
+function call run, 16.1245154966
+function call run, 1.0
+function call run, 0.0
+function call run, 3.60555127546
+function call run, 3.16227766017
+
+# RunManager log started at Tue Nov 30 01:47:45 2010
+# NEATStrategy starting
+function call run, 1.0
+function call run, 1.0
+function call run, 1.41421356237
+function call run, 4.472135955
+function call run, 2.0
+function call run, 0.0
+function call run, 0.0
+
+# RunManager log started at Tue Nov 30 01:51:33 2010
+# NEATStrategy starting
+function call run, 2.0
+function call run, 1.41421356237
+function call run, 3.16227766017
+function call run, 8.0622577483
+function call run, 6.32455532034
+function call run, 0.0
+function call run, 3.16227766017
+function call run, 20.0
+function call run, 9.21954445729
+function call run, 5.09901951359
+
+# RunManager log started at Tue Nov 30 01:59:44 2010
+# NEATStrategy starting
+
+# RunManager log started at Tue Nov 30 02:00:06 2010
+# NEATStrategy starting
+function call run, 2.2360679775
+function call run, 2.2360679775
+function call run, 3.0
+function call run, 18.3847763109
+function call run, 16.0312195419
+function call run, 1.0
+function call run, 1.0
+function call run, 20.6155281281
+function call run, 5.09901951359
+function call run, 3.60555127546
+function call run, 6.32455532034
+function call run, 9.43398113206
+function call run, 119.268604419
+function call run, 75.6439025963
+function call run, 1.0
+function call run, 1.41421356237
+function call run, 8.60232526704
+function call run, 2.0
+
+# RunManager log started at Tue Nov 30 02:05:32 2010
+# NEATStrategy starting
+function call run, 1.0
+function call run, 6.7082039325
+function call run, 6.0
+function call run, 37.0540146273
+function call run, 33.6154726279
+function call run, 3.16227766017
+function call run, 2.0
+function call run, 14.5602197786
+function call run, 15.1327459504
+function call run, 6.0827625303
+function call run, 54.3415126768
+function call run, 22.4722050542
+function call run, 30.0166620396
+function call run, 49.040799341
+function call run, 0.0
+function call run, 1.0
+function call run, 5.38516480713
+function call run, 2.2360679775
+
+# RunManager log started at Tue Nov 30 02:11:47 2010
+# NEATStrategy starting
+function call run, 14.2126704036
+function call run, 16.4924225025
+function call run, 7.07106781187
+function call run, 15.0
+function call run, 19.4164878389
+function call run, 1.41421356237
+function call run, 8.0622577483
+function call run, 15.2643375225
+function call run, 4.12310562562
+
+# RunManager log started at Tue Nov 30 02:14:59 2010
+# NEATStrategy starting
+function call run, 7.21110255093
+function call run, 2.2360679775
+function call run, 4.472135955
+function call run, 3.0
+function call run, 5.0
+function call run, 4.472135955
+function call run, 0.0
+function call run, 5.0
+
+# RunManager log started at Tue Nov 30 02:17:05 2010
+# NEATStrategy starting
+function call run, 3.0
+function call run, 1.41421356237
+function call run, 4.472135955
+function call run, 1.0
+function call run, 25.9615099715
+function call run, 0.0
+function call run, 0.0
+
+# RunManager log started at Tue Nov 30 02:22:44 2010
+# NEATStrategy starting
+function call run, 10.0
+function call run, 6.32455532034
+function call run, 5.0
+function call run, 5.0
+function call run, 21.0237960416
+function call run, 3.60555127546
+function call run, 7.21110255093
+function call run, 12.8062484749
+function call run, 29.0
+function call run, 3.0
+function call run, 5.09901951359
+function call run, 4.472135955
+function call run, 4.0
+function call run, 37.1214223865
+function call run, 2.2360679775
+function call run, 0.0
+function call run, 0.0

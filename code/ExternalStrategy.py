@@ -19,7 +19,7 @@ class NEATStrategy(OneStepStrategy):
     '''
 
     def __init__(self, *args, **kwargs):
-        super(NEATStrategy, self).__init__(*args, **kwargs)
+        super(NEATStrategy, self).__init__([], [])
 
         self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/Hypercube_NEAT'
         #self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/spiderJointAngles.txt'
@@ -30,17 +30,20 @@ class NEATStrategy(OneStepStrategy):
         #                      '-O', 'delme', '-R', '102', '-I', self.datFile),
         #                     stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE)
         #os.system('%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
-        neatFile = kwargs.get('neatFile', None)
-        if neatFile is None:
+        self.neatFile = kwargs.get('neatFile', None)
+        if self.neatFile is None:
             self.proc = Process((self.executable,
                                  '-O', 'delme', '-R', '102', '-I',
                                  self.datFile))
         else:
+            print 'Loading neatfile', self.neatFile
             self.proc = Process((self.executable,
                                  '-O', 'delme', '-R', '102', '-I',
-                                 self.datFile, '-X', neatFile, '-XG', '1'))
+                                 self.datFile, '-X', self.neatFile, '-XG', '1'))
             
         #'%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
+
+        self.nRuns = 0
 
 
     def __del__(self):
@@ -63,16 +66,30 @@ class NEATStrategy(OneStepStrategy):
         #print 'STDERR:'
         #print stderr
 
+        if self.nRuns == 9:
+            print 'Restarting process, push enter when ready...'
+            raw_input()
+            #sleep(10)
+            print 'Loading neatfile', self.neatFile
+            self.proc = Process((self.executable,
+                                 '-O', 'delme', '-R', '102', '-I',
+                                 self.datFile, '-X', self.neatFile, '-XG', '1'))
+            self.nRuns = 0
+
+        print 'On iteration', self.nRuns+1
+
         while True:
 
             out = self.proc.read()
             if out != '':
-                print 'Got stdout:'
-                print out
+                #print 'Got stdout:'
+                #print out
+                pass
             out = self.proc.readerr()
             if out != '':
-                print 'Got stderr:'
-                print out
+                #print 'Got stderr:'
+                #print out
+                pass
 
             try:
                 ff = open(self.motionFile, 'r')
@@ -89,6 +106,8 @@ class NEATStrategy(OneStepStrategy):
                 sleep(.2)
                 continue
             break
+
+        self.nRuns += 1
 
         for ii,line in enumerate(lines):
             #print 'line', ii, 'is', line
@@ -150,12 +169,14 @@ class NEATStrategy(OneStepStrategy):
 
         out = self.proc.read()
         if out != '':
-            print 'Got stdout:'
-            print out
+            #print 'Got stdout:'
+            #print out
+            pass
         out = self.proc.readerr()
         if out != '':
-            print 'Got stderr:'
-            print out
+            #print 'Got stderr:'
+            #print out
+            pass
 
     def logHeader(self):
         return '# NEATStrategy starting\n'

@@ -39,6 +39,7 @@ def doRun():
         elif (len(sys.argv) > 2 and
             sys.argv[1] == '-neat'):
             neatFile = sys.argv[2]
+            currentState = None
         else:
             # normal
             currentState = [eval(xx) for xx in sys.argv[1].split()]
