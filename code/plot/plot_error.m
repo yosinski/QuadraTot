@@ -18,6 +18,8 @@ figure(1); clf; hold on;
 ax = zeros(4, 1);
 ax(1) = 0; ax(2) = 80; ax(3) = 0; ax(4) = 20;
 axis(ax);
+xlabel("Iteration");
+ylabel("Body lengths/minute");
 
 leg = cell(1, 6);
 
@@ -64,7 +66,7 @@ end
 
 legend(leg);
 
-title('standard_error_plot', 'Interpreter', 'none');
+title('Mean and Standard Error', 'Interpreter', 'none');
 
 % Save
 print('-dpng', strcat('error_plot', '.png'));
