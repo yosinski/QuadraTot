@@ -17,6 +17,7 @@ from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
 from SVMStrategy import SVMLearningStrategy
+from ExternalStrategy import NEATStrategy
 from util import randUniformPoint
 
 
