@@ -3,7 +3,15 @@
 '''Just a few utility functions'''
 
 from copy import copy
-from numpy import array, random, diag
+from numpy import array, random, diag, interp
+
+
+
+def matInterp(x, xp, fp):
+    '''Like numpy.interp, but works with an array for fp.
+    Interpolates whole rows of fp.'''
+    vec = [interp(x, xp, fp[jj]) for jj in range(fp.shape[1])]
+    return array(vec)
 
 
 

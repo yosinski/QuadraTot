@@ -48,9 +48,10 @@ def doRun():
         #strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
-        strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
+        #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
         #strategy = RandomStrategy(currentState)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
+        strategy = NEATStrategy(currentState, SineModel5.typicalRanges)   # these args aren't used
 
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
