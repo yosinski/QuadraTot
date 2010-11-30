@@ -17,14 +17,20 @@ class RunManager:
         
     # TODO: Am I calling stuff in here correctly..?
     def run_robot(self, currentState):
-        """
-        Runs the robot with currentState's parameters and returns the
-        distance walked.
-        
-        """
-        model = SineModel5()
-        motionModel = lambda time: model.model(time,
-                                               parameters = currentState)
+        '''
+        Runs the robot with currentState parameters and returns the
+        distance walked.  If currentState is a function, calls that
+        function instead of passing to a motion model.
+        '''
+
+        if hasattr(currentState, '__call__'):
+            # is a function
+            motionModel = currentState
+        else:
+            # is a parameter vector
+            model = SineModel5()
+            motionModel = lambda time: model.model(time,
+                                                   parameters = currentState)
 
         wiiTrack = WiiTrackClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
