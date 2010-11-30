@@ -12,8 +12,10 @@ function plot_run(filename)
   for ii = 1:length(idx)
     disp(sprintf('ii = %3d, fitness = %g', idx(ii), best(idx(ii))));
   end
+  set (findobj (gca, "-property", "keylabel"), "interpreter", "none");
+  leg = strrep (filename, "_", "\\_");
   title(filename, 'Interpreter', 'none');
-  legend(filename);
+  legend(leg);
 
   % Save
   print('-dpng', strcat(filename, '.png'));
