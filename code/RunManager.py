@@ -71,7 +71,10 @@ class RunManager:
         
     def log_results(self, currentState, currentDistance):
         """Writes to log file that keeps track of tests so far"""
-        stats = ' '.join([repr(xx) for xx in currentState])
+        if hasattr(currentState, '__call__'):
+            stats = 'function call run'
+        else:
+            stats = ' '.join([repr(xx) for xx in currentState])
         logFile = open('log.txt', 'a')
         logFile.write(stats + ", " + str(currentDistance) + "\n")
         logFile.close()
@@ -93,7 +96,10 @@ class RunManager:
             currentState = strategy.getNext()
             
             print
-            print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
+            if hasattr(currentState, '__call__'):
+                print 'Iteration %2d' % (ii+1),
+            else:
+                print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
             sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it

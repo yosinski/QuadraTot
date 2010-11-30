@@ -26,6 +26,7 @@ def doRun():
     runman = RunManager()
 
     # Choose initialState, either from user-inputted parameters or randomly
+    neatFile = None
     if len(sys.argv) > 1:
         if (len(sys.argv) > 2 and
             sys.argv[1] == '-simplex' or sys.argv[1] == '-svm'):
@@ -35,6 +36,9 @@ def doRun():
             ff = open(filename, 'r')
             strategy = pickle.load(ff)
             ff.close()
+        elif (len(sys.argv) > 2 and
+            sys.argv[1] == '-neat'):
+            neatFile = sys.argv[2]
         else:
             # normal
             currentState = [eval(xx) for xx in sys.argv[1].split()]
@@ -45,14 +49,14 @@ def doRun():
     try:
         strategy
     except:
-        #strategy = UniformStrategy(currentState)
+        #strategy = UniformStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
         #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
         #strategy = RandomStrategy(currentState)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
-        strategy = NEATStrategy(currentState, SineModel5.typicalRanges)   # these args aren't used
+        strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
 
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
