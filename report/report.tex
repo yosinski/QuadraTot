@@ -1,3 +1,19 @@
+\section{Abstract}
+% A brief summary of the report. This is not an introduction -
+% it should be complete. Include 1-2 sentences for each of the items
+% below, up to and including conclusions.
+This paper presents several approaches to optimizing a quadrupedal
+trot gait for forward speed. Given a parameterized walk designed for
+a quadruped robot designed and printed in Hod Lipson's lab, 
+we implement, test, and compare different learning strategies, 
+including uniform and Gaussian random hill climbing, a form of policy 
+gradient reinforcement learning\cite{1}, Simplex (Nelder-Mead), 
+linear regression, SVM regression, and an evolutionary neural 
+network (HyperNEAT)\cite{2}. Because the fastest learned walk was not
+significantly faster than the fastest randomly generated walk, we
+conjecture that the motion representation for the robot is more
+integral to forward speed than the learning algorithm.
+
 \section{Executive Summary}
 % A few sentences summarizing each of the items below
 We are using machine learning to design a gait for a quadruped
@@ -7,8 +23,6 @@ class, optimization class, parameterized model, sine model, and camera
 feedback.  Both the hardware and software are progressing on schedule.
 Some promising gaits have been generated, and we anticipate a final
 evaluation of the robot’s gait in November.
-
-
 
 \section{Proposal Summary}
 % A short (one or two sentence) summary of the project
