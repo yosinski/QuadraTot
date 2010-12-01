@@ -26,7 +26,6 @@ function plot_explore(file)
   end
 
   for ii = 1:dimensions
-    figure(ii); clf;
     pIdx = ((ii-1)*(pointsPer*duplications)+1) : ((ii)*(pointsPer*duplications));
     thisParams  = params(pIdx,:);
     thisFitness = fitness(pIdx,:);
@@ -36,7 +35,11 @@ function plot_explore(file)
     %std(fits, 0, 2)
 
     % HACK: only works for 2 dups
+    figure(ii); clf; hold on;
     errorbar(thisParams(1:2:end,ii), mean(fits, 2), std(fits, 0, 2), ">");
+    
+    centerIdx = find(all((thisParams == repmat(centerPoint, 20, 1))'));
+    plot(centerPoint(ii), mean(thisFitness(centerIdx)), 'ro', 'markersize', 10, 'linewidth', 2);
     title(sprintf('varying param %d', ii));
 
     %forplot = []
