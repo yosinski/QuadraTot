@@ -127,146 +127,82 @@ Python. Feedback about distance travelled is provided via a Wii remote.
 
 \end{itemize}
 
-\section{Evaluation status}
-% A list of the major steps in your planned evaluation of the system
-% and the status of each. For some projects it may be easier to merge
-% this list with the component/module status list above of your
-% system. Include also who in the team is responsible for completing
-% this module.
+\section{Experimental (or Theoretical) Evaluation}
 
+\subsection{Methodology}
+% What are the criteria you are using to evaluate your method? What
+% specific hypotheses does your experiment test? Describe the 
+% experimental methodology that you used. What are the dependent and 
+% independent variables? For projects in machine learning, what is 
+% the training/test data that was used, and why is it realistic or
+% interesting? Exactly what performance data did you collect and how 
+% are you presenting and analyzing it? Comparisons to competing methods 
+% that address the same problem or to variations of your own algorithm 
+% are particularly useful.
 \begin{itemize}
-\item After running our program and finding a good gait, we will then
-evaluate our system by the distance walked in a certain amount
-of time. This evaluation metric depend on the result of
-running our program for many iterations. We have done 50 runs of 
+\item Each algorithm was run on 3 different initial parameter vectors on the
+physical robot. We stop each run after plateauing results (no improvement 
+for half the policies seen so far). We evaluate each method based on the
+amount of improvement seen from the initial parameter vectors, and on the
+fastest speeds achieved during runs.
+\end{itemize}
+
+\subsection{Results}
+% Present the quantitative results of your experiments. Graphical data
+% presentation such as graphs and histograms are frequently better 
+% than tables. Explain what are the basic differences revealed in the 
+% data. If your method is stochastic or you analyze multiple datasets, 
+% calculate mean and standard error for every quantitative
+% performance result you show based on multiple runs.
+\begin{itemize}
+\item We have done runs of 
 3 different inital parameter vectors for random hill climbing, 
-gaussian random hill climbing, and policy gradient descent.
-The evaluation for our particular project is an ongoing
-process, but we anticipate a final evaluation taking place
-early-to-mid November. The evaluation process will be completed by
-Jason, Sarah, and Diana.
+gaussian random hill climbing, policy gradient descent, random,
+simplex, and linear regression. We developed several
+gaits that were about 4 times faster than the original hand-coded gait. 
 
 \item We also coded \code{explore\_dimensions} to collect data for dimension
 varying plots. We intend to do further explore this by running
 \code{explore\_dimension} around a parameter that produces a medium-good gait.
 \end{itemize}
 
+\subsection{Discussion}
+% Is your hypothesis supported? What conclusions do the results support
+% about the strengths and weaknesses of your method compared to other 
+% methods? How can the results be explained in terms of the underlying 
+% properties of the algorithm and/or the data.
 
-
-\section{Project schedule timeline}
-% Tell us if you are meeting your project timeline or you are
-% exceeding it or falling behind. If you are falling behind, explain
-% how you will catch up or adjust the goals.
-
-We are meeting our project timeline. We have developed two new algorithms,
-gaussian hill climbing and policy gradient descent and tested all three of
-our major algorithms on the robot. We have also quantified our current results. 
-In the next month we hope to develop one more learning strategy, machine
-learning of an objective function.
-
-\section{Schedule}
-
-Below is a rough schedule of fixed external deadlines and anticipated
-team milestones.
-
-\definecolor{doneColor}{rgb}{0.0,0.7,0.0}
-\newcommand{\done}[1]{{\color{doneColor}\sout{#1}}}
-%\newcommand{\done}[1]{#1}
-
-\begin{center}
-\begin{tabular}{|l||p{2.5in}|p{1.5in}|}
-\hline
-                        & {\bf Milestones} & {\bf Deadlines}
-\\ \hline
-
-Week 1 (9/13-9/19)    & \done{Read papers, get lab access, talk to relevant other researchers} & 9/17 Final proposals due
-\\ \hline
-
-Week 2 (9/20-9/26)    & \done{Continue reading, get robot to move} &
-\\ \hline
-
-Week 3 (9/27-10/03)   & \done{Implement parametrized gait and determine proposed coding schedule for more advanced algorithms in time for Code Review \#1.} &
-\\ \hline
-
-Week 4 (10/04-10/10)  & \done{Begin main algorithm dev/testing effort} & 10/5 Code Review \#1
-\\ \hline
-
-Week 5 (10/11-10/17)  & \done{Algorithm dev/testing} &
-\\ \hline
-
-Week 6 (10/18-10/24)  & \done{Algorithm dev/testing} &
-\\ \hline
-
-Week 7 (10/25-10/31)  & \done{Algorithm dev/testing, quantify/solidify current results for Code Review \#2} &
-\\ \hline
-
-Week 8 (11/1-11/7)    & \done{Finish collecting results, begin writing} & 11/2 Code Review \#2
-\\ \hline
-
-Week 9 (11/8-11/14)   & Algorithm dev/testing &
-\\ \hline
-
-Week 10 (11/15-11/21) & Finish collecting results, writing, get final demo ready &
-\\ \hline
-
-Week 11 (11/22-11/28) & Finish collecting results, writing, get final demo ready  &
-\\ \hline
-
-Week 12 (11/29-11/30) & Final demo  & 11/30 Final presentation
-\\ \hline
-\end{tabular}
-\end{center}
-
-
-
-\section{Activity log (Optional)}
-
-% an informal log your efforts. If you’ve been keeping notes on your
-% progress, feel free to turn these in as well. These might include:
-% (1) notes on what aspect of the project you worked on and when, (2)
-% what was accomplished in each “session”, (3) design questions, (4)
-% implementation questions, (5) descriptions of experiments and
-% results, (6) problems that arose, (7) anything else that you think
-% is relevant to the project.
-
+\section{Future work}
+% What are the major shortcomings of your current method? For each 
+% shortcoming, propose additions or enhancements that would help overcome it.
 \begin{itemize}
-\item \emph{9/13-9/19:} Set up. Set up trac, worked on pre-proposal
-  and presentation, got lab access, met with Jim Torresen, contacted
-  Juan Cristobal Zagal, read papers, got the robot to walk using
-  previously coded program. Questions -- How do we move the robot? How
-  do we command the motors?
-\item \emph{9/20-9/26:} Moving the robot. Installed Linux on the
-  robot, figured out how to command the motors, coded a program to
-  make the robot stand up, coded a simple motion pattern. Questions --
-  For initial program, what parameters and model should be used? How
-  do we limit the search space? What algorithm should we start with?
-  How will the robot get information about how far it moved?
-\item \emph{9/27-10/3:} Initial program. Chose several parameters and
-  created a simple parameterized sine model, implemented a random hill
-  climbing algorithm to optimize the parameters, ran some trial
-  iterations, began setting up the cameras for feedback. Questions --
-  Did the initial program work? What parameters are important? Are
-  additional parameters necessary? What algorithm should we implement
-  for the final program?
-\item \emph{10/4-10/10:} Plan for final implementation. Discussed
-  possible algorithms to use and new parameters to add. Worked on
-  report for code review. Discussed feedback from code review.  Questions -- Advantages for gradient
-  descent? Should we start with a completely random parameter vector
-  or should we start with one that results in motion and let the
-  program optimize it? How does the camera system work?
-\item \emph{10/11-10/17:} Discussed how we were going to proceed with the project and set up a more detailed schedule. Got the cameras working and calibrated them. Researched the 3 available streaming protocols. Questions -- Which streaming protocol would work best? Which improvements should we start with?
-\item \emph{10/18-10/24:} Created a variation on the random hill climbing algorithm to choose the next neighbor based on a Gaussian distribution. Tried to work with two of the streaming protocols for the camera system, but were unsuccessful. Decided to use a Wii remote for positional information instead. Wrote the integration code for the Wii remote. Refactored our code to separate the different algorithms. Began planning the algorithm for a modified gradient descent.
-Questions -- What values should we use in the gradient descent algorithm? How much should the each parameter be changed? How many neighbors should be sampled before choosing the next state? How can we compare the results of our different algorithms? How repeatable is the distance traveled for a given parameter vector?
-\item \emph{10/25-11/2}: Created a modified gradient descent algorithm. Ran 150 trials of the three algorithms. Each algorithm started with a specific parameter vector and ran for 50 iterations. Created and ran a program to get a feel for the overall look of the search space. Ran some trials to see how reproducible the distance traveled was. Prepared for code review 2. Questions -- What does the search space look like? Are there a lot of spikes, or is it fairly smooth? Based on the results of the algorithms, what conclusions can we draw?
+\item Different motion representations
+\item Evolutionary algorithms/HyperNEAT\cite{2}
+\item Learning how to turn
+\item Open sourcing code for others to extend
 \end{itemize}
 
+\section{Conclusion}
+% Briefly summarize the important results and conclusions presented in 
+% the paper. What are the most important points illustrated by your 
+% work? How will your results improve future research and applications 
+% in the area?
+Because the fastest learned walk was not
+significantly faster than the fastest randomly generated walk, we
+conjecture that the motion representation for the robot is more
+integral to forward speed than the learning algorithm.
 
+\section{References}
+% A numbered list of all books, articles, and web pages you used in your 
+% work or that you cited in your report. Each item must be cited from 
+% somewhere within the text. When citing a URL, include date visited. 
+% When citing a commercial product, list the company.
 
-\section{Proposal Modifications}
-% Let us know if you are deviating from your original proposal.
-
-We are not deviating from our original proposal.
-
+\section{Acknowledgments}
+% List any people not on the team who helped you with your project: Your
+% TA, other people you consulted with or had useful discussions (say in 
+% a word or two what they did), people who proofread your report, and 
+% any external code you used (libraries etc).
 
 
 \section{Appendix}
