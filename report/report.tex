@@ -1,5 +1,27 @@
-\section{Executive Summary}
-% A few sentences summarizing each of the items below
+\section{Abstract}
+% A brief summary of the report. This is not an introduction -
+% it should be complete. Include 1-2 sentences for each of the items
+% below, up to and including conclusions.
+This paper presents several approaches to optimizing a quadrupedal
+trot gait for forward speed. Given a parameterized walk designed for
+a quadruped robot designed and printed in the Cornell Computational
+Synthesis Lab, we implement, test, and compare different learning strategies, 
+including uniform and Gaussian random hill climbing, a form of policy 
+gradient reinforcement learning\cite{1}, Simplex (Nelder-Mead), 
+linear regression, SVM regression, and an evolutionary neural 
+network (HyperNEAT)\cite{2}. Because the fastest learned walk was not
+significantly faster than the fastest randomly generated walk, we
+conjecture that the motion representation for the robot is more
+integral to forward speed than the learning algorithm.
+
+Keywords: Learning Control, Walking Robots, Multi Legged Robots
+
+\section{Introduction}
+% Motivate and abstractly describe the problem you are addressing and
+% how you are addressing it. What is the problem? Why is it important?
+% What is your basic approach? A short discussion of how it fits into
+% related work in the area is also desirable. Summarize the basic results
+% and conclusions that you will present.
 We are using machine learning to design a gait for a quadruped
 robot. The robot has an on-board computer, drivers for the motors, and
 will have camera feedback. The code so far consists of the robot
@@ -7,44 +29,73 @@ class, optimization class, parameterized model, sine model, and camera
 feedback.  Both the hardware and software are progressing on schedule.
 Some promising gaits have been generated, and we anticipate a final
 evaluation of the robot’s gait in November.
+  
+\section{Problem definition}
+% Precisely define the problem you are addressing (i.e. formally specify
+% the inputs and outputs). Elaborate on why this is an interesting and
+% important problem.
+We are testing several different learning methods to design a gait for 
+a quadraped robot from the Cornell Computational Synthesis Lab. The metric 
+for evaluation of the designed gait is speed. A comparison and evaluation 
+of the many different methods available for optimizing the gait of legged 
+robots will be useful for future work on this challenging multidimensional 
+control problem.
 
+\section{Method}
+% Describe in reasonable detail the algorithm you are using to address this 
+% problem. A pseudo-code description of the algorithm you are using is 
+% frequently useful. If it makes sense for your project, trace through a 
+% concrete example, showing how your algorithm processes this example. The 
+% example should be complex enough to illustrate all of the important aspects 
+% of the problem but simple enough to be easily understood. If possible, 
+% an intuitively meaningful example is better than one with meaningless 
+% symbols.
+We implemented and tested 8 different learning strategies:
+\begin{itemize}
+\item \emph{Uniform random hill climbing}: Creates a random neighbor by
+  randomly choosing one parameter to adjust, and changing it completely 
+  randomly in UniformStrategy(). Then evaluates this neighbor by running 
+  the robot with the newly chosen parameters. If this neighbor results in a
+  longer distance walked then the previous best neighbor, we save this
+  neighbor as the new best neighbor. We then repeat the whole process
+  using the best neighbor as a base.
+\item \emph{Gaussian random hill climbing}: Creates a random neighbor by
+  changing each parameter randomly based on a normal distribution. Then
+  evaluates this neighbor similarly to uniform random hill climbing.
+\item \emph{N-dimensional policy gradient descent}: Estimates the policy
+  gradient by evaluating \emph{t} randomly generated policies
+  near an initial parameter vector. Then computes the average score for
+  each parameter and adjusts the base policy according to the estimated
+  gradient.
+\item \emph{Random}: Randomly generates policies in the range of the motion
+representation.
+\item \emph{Simplex (Nelder-Mead) Method}
+\item \emph{Linear regression}: To initialize, chooses five random points
+and trains on them using least-squares. Then in a loop, takes a fixed-size
+step in the direction of the gradient, and retrains on all points so far.
+\item \emph{SVM regression}
+\item \emph{Evolutionary Neural Network (HyperNEAT)\cite{2}}
+\end{itemize}
 
+\section{Related work}
+% Briefly explain who else worked on related problems in the past and what
+% methods they used. Explain if you are using similar methods, or if your
+% approach is different and if so - how (either is ok).
 
-\section{Proposal Summary}
-% A short (one or two sentence) summary of the project
-% goal/topic. This is just to remind us what you’re working on.
-
-We are using machine learning to design a gait for a quadraped robot
-from Hod Lipson’s lab. The metric for evaluation of the designed gait
-is speed.
-
-
-\section{System Architecture Summary}
-% A summary of the main components of the system, and how they
-% interact with each other to achieve the goal. This is just to remind
-% us what you are planning to develop.
+\section{System Architecture and Implementation}
+% Describe how you implemented your system and how you structured it. 
+% This should give an overview of the system, not a detailed 
+% documentation of the code. The documentation of the code is part of 
+% the code you hand in. You might want to comment on high-level design 
+% decisions that you made. Also explain how you obtained your
+% data and any pre-processing you did to it.
 
 The quadraped robot has an on-board computer running Linux. The lower
 level drivers are in C and we are implementing the system in
 Python. Feedback about distance travelled is provided via a Wii remote. 
 
-
-\section{Implementation Status}
-\seclabel{implement}
-% A list of the major components of the system as well as the current
-% status of each (e.g. designed, implemented, tested, finished, almost
-% finished with coding). For the pieces not yet finished, indicate
-% tentative completion dates. The schedule doesn’t have to be
-% incredibly detailed, but it should include entries for all
-% substantial modules/submodules of your system. Include also who in
-% the team is responsible for completing this module.
-
-
-\subsection*{\code{Robot} class}
-
 \begin{itemize}
-\item \emph{Team member:} Jason.
-\item \emph{Current implementation:} Class wrapper for commanding
+\item \code{Robot} class: Class wrapper for commanding
   motion of the robot.  The \code{Robot} class takes care of the robot
   initialization, communication with the servos, and timing of the
   runs.  In addition, it prevents the servos from ever being commanded
@@ -55,238 +106,144 @@ Python. Feedback about distance travelled is provided via a Wii remote.
   position) and will run the robot using this motion model, including,
   if desired, smooth interpolation over time for the beginning and end
   of the run.
-\item \emph{Future improvements:} None planned, though some will
-  probably arise.
-\item \emph{Status:} 90\% complete.
-\end{itemize}
 
+\item \code{Strategy} and \code{RunManager} class: The user has a choice between seven
+  different learning strategies: uniform random hill climbing, Gaussian random
+  hill climbing, N-dimensional policy gradient descent, random, 
+  simplex, linear regression/prediction, and SVM regression/prediction.
 
+\item \code{Parameterized Motion Model} abstract base class: Several functions exist, but none are within a class framework.
 
-\subsection*{\code{Strategy} and \code{RunManager} class}
-
-\begin{itemize}
-\item \emph{Team member:} Jason and Sarah.
-\item \emph{Current implementation:} The user has a choice between three
-  different learning strategies: uniform random hill climbing, gaussian random
-  hill climbing, and N-dimensional policy gradient algorithm descent.
-  \begin{itemize} 
-  \item \emph{Uniform random hill climbing:} Creates a random neighbor by
-  randomly choosing one parameter to adjust, and changing either
-  completely randomly in UniformStrategy(), or slightly in
-  UniformSlightStrategy(). Then evaluates this neighbor by running the robot
-  with the newly chosen parameters. If this neighbor results in a
-  longer distance walked then the previous best neighbor, we save this
-  neighbor as the new best neighbor. We then repeat the whole process
-  using the best neighbor as a base.
-  \item \emph{Gaussian random hill climbing} Creates a random neighbor byi
-  changing each parameter randomly based on a normal distribution. Then
-  evaluates this neighbor similarly to uniform random hill climbing.
-  \item \emph{N-dimensional policy gradient descent} Estimates the policy
-  gradient by evaluating \emph{t} randomly generated policies
-  near an initial parameter vector. Then computes the average score 
-  \end{itemize}
-\item \emph{Future improvements:} Machine learning of objective function.
-\item \emph{Status:} Described algorithms coded. Machine learning of objective
-  function to be coded by Jason.
-\end{itemize}
-
-
-
-\subsection*{\code{Parameterized Motion Model} abstract base class}
-
-\begin{itemize}
-\item \emph{Team member:} Jason.
-\item \emph{Current implementation:} Several functions exist, but none are within a class framework.
-\item \emph{Future improvements:} Make into class.
-\item \emph{Status:} 40\% complete.
-\end{itemize}
-
-
-
-\subsection*{\code{SineModel} classes}
-
-\begin{itemize}
-\item \emph{Team member:} Jason.
-\item \emph{Current implementation:} Commands motors to positions
+\item \code{SineModel} classes: Commands motors to positions
   based on a sine wave, creating a periodic pattern. Parameters are:
-  amplitude, wavelength, scale inner vs outer motors, multiply
-  left-right, multiply back-front, shift front-back, shift right-left.
-  Currently a function, not a class.
-\item \emph{Future improvements:} Make class, add time offset
-  parameters.  Continued tweaking of this class and other motion
-  models will be a main goal of the next month.
-\item \emph{Status:} 30\% complete.
+  amplitude, wavelength, scale inner vs outer motors, scale left vs right
+  motors, scale back vs front motors. Currently a function, not a class.
+
+\item Other derived motion model classes: Several versions of a SineModel
+  exist, each with different parameters, though solely as functions.
+
+\item \code{WiiTrackClient} and \code{WiiTrackServer} classes
+ and hardware: A Wii remote tracks the location of the robot through an infrared LED mounted on top of the robot. We used CWiid library which is able to interface with the remote via bluetooth to determine the location of the infrared LED. This information is accessed through some functions we wrote and passed to the program. The program gets the robot's position at the beginning of each run and then again at the end. The program then calculates the net change in position and uses that as the distance walked.
+
 \end{itemize}
 
+\section{Experimental (or Theoretical) Evaluation}
 
-
-\subsection*{Other derived motion model classes}
-
+\subsection{Methodology}
+% What are the criteria you are using to evaluate your method? What
+% specific hypotheses does your experiment test? Describe the 
+% experimental methodology that you used. What are the dependent and 
+% independent variables? For projects in machine learning, what is 
+% the training/test data that was used, and why is it realistic or
+% interesting? Exactly what performance data did you collect and how 
+% are you presenting and analyzing it? Comparisons to competing methods 
+% that address the same problem or to variations of your own algorithm 
+% are particularly useful.
 \begin{itemize}
-\item \emph{Team member:} All.
-\item \emph{Current implementation:} Several versions of a SineModel
-  exist, each with different parameters, though solely as functions
-  (not as derived classes of \code{ParameterizedMotionModel}).
-\item \emph{Future improvements:} Implementing and tweaking current
-  and new motion model classes will be our primary effort over the
-  next month.
-\item \emph{Status:} 20\% complete.
+\item Each algorithm was run on 3 different initial parameter vectors on the
+physical robot. We stop each run after plateauing results (no improvement 
+for half the policies seen so far). We evaluate each method based on the
+amount of improvement seen from the initial parameter vectors, and on the
+fastest speeds achieved during runs.
 \end{itemize}
 
-
-
-\subsection*{\code{WiiTrackClient} and \code{WiiTrackServer} classes
- and hardware}
-
+\subsection{Results}
+% Present the quantitative results of your experiments. Graphical data
+% presentation such as graphs and histograms are frequently better 
+% than tables. Explain what are the basic differences revealed in the 
+% data. If your method is stochastic or you analyze multiple datasets, 
+% calculate mean and standard error for every quantitative
+% performance result you show based on multiple runs.
 \begin{itemize}
-\item \emph{Team member:} Jason and Diana.
-\item \emph{Current implementation:} A Wii remote tracks the location of the robot through an infrared LED mounted on top of the robot. We used CWiid library which is able to interface with the remote via bluetooth to determine the location of the infrared LED. This information is accessed through some functions we wrote and passed to the program. The program gets the robot's position at the beginning of each run and then again at the end. The program then calculates the net change in position and uses that as the distance walked.
-\item \emph{Status:} Complete.
-\end{itemize}
-
-
-
-\section{Evaluation status}
-% A list of the major steps in your planned evaluation of the system
-% and the status of each. For some projects it may be easier to merge
-% this list with the component/module status list above of your
-% system. Include also who in the team is responsible for completing
-% this module.
-
-\begin{itemize}
-\item After running our program and finding a good gait, we will then
-evaluate our system by the distance walked in a certain amount
-of time. This evaluation metric depend on the result of
-running our program for many iterations. We have done 50 runs of 
+\item We have done runs of 
 3 different inital parameter vectors for random hill climbing, 
-gaussian random hill climbing, and policy gradient descent.
-The evaluation for our particular project is an ongoing
-process, but we anticipate a final evaluation taking place
-early-to-mid November. The evaluation process will be completed by
-Jason, Sarah, and Diana.
+gaussian random hill climbing, policy gradient descent, random,
+simplex, and linear regression. We developed several
+gaits that were about 4 times faster than the original hand-coded gait. 
 
 \item We also coded \code{explore\_dimensions} to collect data for dimension
 varying plots. We intend to do further explore this by running
 \code{explore\_dimension} around a parameter that produces a medium-good gait.
 \end{itemize}
 
+\subsection{Discussion}
+% Is your hypothesis supported? What conclusions do the results support
+% about the strengths and weaknesses of your method compared to other 
+% methods? How can the results be explained in terms of the underlying 
+% properties of the algorithm and/or the data.
 
-
-\section{Project schedule timeline}
-% Tell us if you are meeting your project timeline or you are
-% exceeding it or falling behind. If you are falling behind, explain
-% how you will catch up or adjust the goals.
-
-We are meeting our project timeline. We have developed two new algorithms,
-gaussian hill climbing and policy gradient descent and tested all three of
-our major algorithms on the robot. We have also quantified our current results. 
-In the next month we hope to develop one more learning strategy, machine
-learning of an objective function.
-
-\section{Schedule}
-
-Below is a rough schedule of fixed external deadlines and anticipated
-team milestones.
-
-\definecolor{doneColor}{rgb}{0.0,0.7,0.0}
-\newcommand{\done}[1]{{\color{doneColor}\sout{#1}}}
-%\newcommand{\done}[1]{#1}
-
-\begin{center}
-\begin{tabular}{|l||p{2.5in}|p{1.5in}|}
-\hline
-                        & {\bf Milestones} & {\bf Deadlines}
-\\ \hline
-
-Week 1 (9/13-9/19)    & \done{Read papers, get lab access, talk to relevant other researchers} & 9/17 Final proposals due
-\\ \hline
-
-Week 2 (9/20-9/26)    & \done{Continue reading, get robot to move} &
-\\ \hline
-
-Week 3 (9/27-10/03)   & \done{Implement parametrized gait and determine proposed coding schedule for more advanced algorithms in time for Code Review \#1.} &
-\\ \hline
-
-Week 4 (10/04-10/10)  & \done{Begin main algorithm dev/testing effort} & 10/5 Code Review \#1
-\\ \hline
-
-Week 5 (10/11-10/17)  & \done{Algorithm dev/testing} &
-\\ \hline
-
-Week 6 (10/18-10/24)  & \done{Algorithm dev/testing} &
-\\ \hline
-
-Week 7 (10/25-10/31)  & \done{Algorithm dev/testing, quantify/solidify current results for Code Review \#2} &
-\\ \hline
-
-Week 8 (11/1-11/7)    & \done{Finish collecting results, begin writing} & 11/2 Code Review \#2
-\\ \hline
-
-Week 9 (11/8-11/14)   & Algorithm dev/testing &
-\\ \hline
-
-Week 10 (11/15-11/21) & Finish collecting results, writing, get final demo ready &
-\\ \hline
-
-Week 11 (11/22-11/28) & Finish collecting results, writing, get final demo ready  &
-\\ \hline
-
-Week 12 (11/29-11/30) & Final demo  & 11/30 Final presentation
-\\ \hline
-\end{tabular}
-\end{center}
-
-
-
-\section{Activity log (Optional)}
-
-% an informal log your efforts. If you’ve been keeping notes on your
-% progress, feel free to turn these in as well. These might include:
-% (1) notes on what aspect of the project you worked on and when, (2)
-% what was accomplished in each “session”, (3) design questions, (4)
-% implementation questions, (5) descriptions of experiments and
-% results, (6) problems that arose, (7) anything else that you think
-% is relevant to the project.
-
+\section{Future work}
+% What are the major shortcomings of your current method? For each 
+% shortcoming, propose additions or enhancements that would help overcome it.
 \begin{itemize}
-\item \emph{9/13-9/19:} Set up. Set up trac, worked on pre-proposal
-  and presentation, got lab access, met with Jim Torresen, contacted
-  Juan Cristobal Zagal, read papers, got the robot to walk using
-  previously coded program. Questions -- How do we move the robot? How
-  do we command the motors?
-\item \emph{9/20-9/26:} Moving the robot. Installed Linux on the
-  robot, figured out how to command the motors, coded a program to
-  make the robot stand up, coded a simple motion pattern. Questions --
-  For initial program, what parameters and model should be used? How
-  do we limit the search space? What algorithm should we start with?
-  How will the robot get information about how far it moved?
-\item \emph{9/27-10/3:} Initial program. Chose several parameters and
-  created a simple parameterized sine model, implemented a random hill
-  climbing algorithm to optimize the parameters, ran some trial
-  iterations, began setting up the cameras for feedback. Questions --
-  Did the initial program work? What parameters are important? Are
-  additional parameters necessary? What algorithm should we implement
-  for the final program?
-\item \emph{10/4-10/10:} Plan for final implementation. Discussed
-  possible algorithms to use and new parameters to add. Worked on
-  report for code review. Discussed feedback from code review.  Questions -- Advantages for gradient
-  descent? Should we start with a completely random parameter vector
-  or should we start with one that results in motion and let the
-  program optimize it? How does the camera system work?
-\item \emph{10/11-10/17:} Discussed how we were going to proceed with the project and set up a more detailed schedule. Got the cameras working and calibrated them. Researched the 3 available streaming protocols. Questions -- Which streaming protocol would work best? Which improvements should we start with?
-\item \emph{10/18-10/24:} Created a variation on the random hill climbing algorithm to choose the next neighbor based on a Gaussian distribution. Tried to work with two of the streaming protocols for the camera system, but were unsuccessful. Decided to use a Wii remote for positional information instead. Wrote the integration code for the Wii remote. Refactored our code to separate the different algorithms. Began planning the algorithm for a modified gradient descent.
-Questions -- What values should we use in the gradient descent algorithm? How much should the each parameter be changed? How many neighbors should be sampled before choosing the next state? How can we compare the results of our different algorithms? How repeatable is the distance traveled for a given parameter vector?
-\item \emph{10/25-11/2}: Created a modified gradient descent algorithm. Ran 150 trials of the three algorithms. Each algorithm started with a specific parameter vector and ran for 50 iterations. Created and ran a program to get a feel for the overall look of the search space. Ran some trials to see how reproducible the distance traveled was. Prepared for code review 2. Questions -- What does the search space look like? Are there a lot of spikes, or is it fairly smooth? Based on the results of the algorithms, what conclusions can we draw?
+\item Different motion representations
+\item Evolutionary algorithms/HyperNEAT\cite{2}
+\item Learning how to turn
+\item Open sourcing code for others to extend
 \end{itemize}
 
+\section{Conclusion}
+% Briefly summarize the important results and conclusions presented in 
+% the paper. What are the most important points illustrated by your 
+% work? How will your results improve future research and applications 
+% in the area?
+Because the fastest learned walk was not
+significantly faster than the fastest randomly generated walk, we
+conjecture that the motion representation for the robot is more
+integral to forward speed than the learning algorithm.
 
+\section{References}
+% A numbered list of all books, articles, and web pages you used in your 
+% work or that you cited in your report. Each item must be cited from 
+% somewhere within the text. When citing a URL, include date visited. 
+% When citing a commercial product, list the company.
 
-\section{Proposal Modifications}
-% Let us know if you are deviating from your original proposal.
+\section{Acknowledgments}
+% List any people not on the team who helped you with your project: Your
+% TA, other people you consulted with or had useful discussions (say in 
+% a word or two what they did), people who proofread your report, and 
+% any external code you used (libraries etc).
+\begin{itemize}
+\item Hod Lipson, Cornell Computational Synthesis Lab: advisor
+\item Jim T\o rreson, University of Oslo: advisor
+\item Juan Zagal, University of Chile: designed and printed robot and provided assistance
+\item Jeff Clune, CCSL Red Couch: collaborated on HyperNEAT implementation/testing
+\item Cooper Bills, Cornell University: assisted with Wii tracker development
+\item Anshumali Srivastava, Cornell University: Teaching Assistant
+\end{itemize}
 
-We are not deviating from our original proposal.
-
-
+\section{The Team}
+% A table listing the names of the people who worked on the project, and who
+% did what.
+\begin{itemize}
+\item Diana Hidalgo: 
+\begin{itemize}
+\item Simplex (Nelder-Mead)
+\item \code{WiiTrackClient} and \code{WiiTrackServer} classes and hardware
+\item Plotting and evaluating results
+\end{itemize}
+\item Sarah Nguyen
+\begin{itemize}
+\item Random
+\item Uniform random hill climbing
+\item Gaussian random hill climbing
+\item N-dimensional policy gradient descent
+\item Linear regression and prediction
+\item \code{RunManager} and \code{Strategy} classes
+\item Video editing
+\end{itemize}
+\item Jason Yosinski
+\begin{itemize}
+\item SVM regression and prediction
+\item Evolutionary Neural Network (HyperNEAT)
+\item \code{WiiTrackClient} and \code{WiiTrackServer} classes and hardware
+\item \code{Robot}, \code{RunManager}, and \code{Strategy} classes
+\item \code{Parameterized Motion Model} abstract base class
+\item \code{SineModel} classes
+\item \code{explore\_dimensions}
+\item Plotting and evaluating results
+\end{itemize}
+\end{itemize}
 
 \section{Appendix}
 % Describe the code files you uploaded into CMS
