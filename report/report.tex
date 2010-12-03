@@ -28,14 +28,14 @@ will have camera feedback. The code so far consists of the robot
 class, optimization class, parameterized model, sine model, and camera
 feedback.  Both the hardware and software are progressing on schedule.
 Some promising gaits have been generated, and we anticipate a final
-evaluation of the robot’s gait in November.
+evaluation of the robots gait in November.
   
 \section{Problem definition}
 % Precisely define the problem you are addressing (i.e. formally specify
 % the inputs and outputs). Elaborate on why this is an interesting and
 % important problem.
 We are testing several different learning methods to design a gait for 
-a quadraped robot from the Cornell Computational Synthesis Lab. The metric 
+a quadruped robot from the Cornell Computational Synthesis Lab. The metric 
 for evaluation of the designed gait is speed. A comparison and evaluation 
 of the many different methods available for optimizing the gait of legged 
 robots will be useful for future work on this challenging multidimensional 
@@ -69,7 +69,7 @@ We implemented and tested 8 different learning strategies:
   gradient.
 \item \emph{Random}: Randomly generates policies in the range of the motion
 representation.
-\item \emph{Simplex (Nelder-Mead) Method}
+\item \emph{Simplex (Nelder-Mead) Method}: Creates a simplex with 6 vertices and tests the fitness of each vertex. The worst vertex is reflected over the centroid. If the reflected point is better than the second worst point and worse than the best point, then the reflected point replaces the worst. If the reflected point is better than the best point, the simplex is expanded in the direction of the reflected point. The better of the reflected and the expanded point replaces the worst point. If the reflected point is worse than the second worst point, then the simplex is contracted away from the reflected point. If the contracted point is better than the reflected point, the contracted point replaces the worst point. If the contracted point is worse than the reflected point, the entire simplex is shrunk.
 \item \emph{Linear regression}: To initialize, chooses five random points
 and trains on them using least-squares. Then in a loop, takes a fixed-size
 step in the direction of the gradient, and retrains on all points so far.
@@ -90,9 +90,8 @@ step in the direction of the gradient, and retrains on all points so far.
 % decisions that you made. Also explain how you obtained your
 % data and any pre-processing you did to it.
 
-The quadraped robot has an on-board computer running Linux. The lower
-level drivers are in C and we are implementing the system in
-Python. Feedback about distance travelled is provided via a Wii remote. 
+The quadruped robot has an on-board computer running Linux. The lower
+level drivers are in C and the system is implemented in Python. Feedback about distance travelled is provided via an infrared LED and a Wii remote. 
 
 \begin{itemize}
 \item \code{Robot} class: Class wrapper for commanding
@@ -127,7 +126,7 @@ Python. Feedback about distance travelled is provided via a Wii remote.
 
 \end{itemize}
 
-\section{Experimental (or Theoretical) Evaluation}
+\section{Experimental Evaluation}
 
 \subsection{Methodology}
 % What are the criteria you are using to evaluate your method? What
@@ -142,7 +141,7 @@ Python. Feedback about distance travelled is provided via a Wii remote.
 \begin{itemize}
 \item Each algorithm was run on 3 different initial parameter vectors on the
 physical robot. We stop each run after plateauing results (no improvement 
-for half the policies seen so far). We evaluate each method based on the
+for one third of the policies seen so far). We evaluate each method based on the
 amount of improvement seen from the initial parameter vectors, and on the
 fastest speeds achieved during runs.
 \end{itemize}
@@ -161,6 +160,14 @@ gaussian random hill climbing, policy gradient descent, random,
 simplex, and linear regression. We developed several
 gaits that were about 4 times faster than the original hand-coded gait. 
 
+\item For vector A, linear regression worked significantly better than the other algorithms, resulting in a gait (27.58 body lengths/minute) that walked over twice as fast as the next best gait (uniform random hill climbing - 11.37 body lengths/minute).
+
+\item Vector B resulted in similarly performing gaits with all the algorithms. Random produced the best gait (17.26 body lengths/minute) and uniform random hill climbing produced the worst (9.44 body lengths/minute). The remaining algorithms each produced a gait around 13 body lengths/minute.
+
+\item For vector C, simplex and Gaussian random hill climbing each produced a gait that substantially outperformed the other algorithms. Simplex resulted in a gait of nearly 15 body lengths/minute  and Gaussian random hill climbing produced a gait of just over 13 body lengths/minute, whereas the other algorithms returned gaits of less than 5 body lengths/minute.
+
+\item Based on the three trials, linear regression worked the best, followed by simplex. Gaussian random hill climbing performed about as well as random, but it is unclear whether Gaussian would continue to improve and become much better than random if allowed to run for more iterations. Uniform random hill climbing and policy gradient descent performed similarly.
+
 \item We also coded \code{explore\_dimensions} to collect data for dimension
 varying plots. We intend to do further explore this by running
 \code{explore\_dimension} around a parameter that produces a medium-good gait.
@@ -171,6 +178,11 @@ varying plots. We intend to do further explore this by running
 % about the strengths and weaknesses of your method compared to other 
 % methods? How can the results be explained in terms of the underlying 
 % properties of the algorithm and/or the data.
+\begin{itemize}
+\item  Since only three trials were tested with each algorithm and no algorithm consistently outperformed the others, there is a large standard error for each algorithm. For this reason, it is unclear if any algorithm is superior to another in this application. More trials with each algorithm would be necessary to reach a definitive ranking of the performance of the algorithms.
+
+\item Each algorithm discovered at least one gait of over 10 body lengths/minute, including random. For this reason, we speculate that the motion model may be more critical than the learning algorithm.
+\end{itemize}
 
 \section{Future work}
 % What are the major shortcomings of your current method? For each 
