@@ -12,7 +12,11 @@ class, optimization class, parameterized model, sine model, and camera
 feedback.  Both the hardware and software are progressing on schedule.
 Some promising gaits have been generated, and we anticipate a final
 evaluation of the robots gait in November.
-  
+
+\edit{write this}
+
+
+
 \section{Problem definition}
 % Precisely define the problem you are addressing (i.e. formally specify
 % the inputs and outputs). Elaborate on why this is an interesting and
@@ -24,6 +28,10 @@ of the many different methods available for optimizing the gait of legged
 robots will be useful for future work on this challenging multidimensional 
 control problem.
 
+\edit{flesh this out... more details}
+
+
+
 \section{Method}
 % Describe in reasonable detail the algorithm you are using to address this 
 % problem. A pseudo-code description of the algorithm you are using is 
@@ -33,6 +41,9 @@ control problem.
 % of the problem but simple enough to be easily understood. If possible, 
 % an intuitively meaningful example is better than one with meaningless 
 % symbols.
+
+\edit{also describe parameterized motion model}
+
 We implemented and tested 8 different learning strategies:
 \begin{itemize}
 \item \emph{Uniform random hill climbing}: Creates a random neighbor by
@@ -52,7 +63,7 @@ We implemented and tested 8 different learning strategies:
   gradient.
 \item \emph{Random}: Randomly generates policies in the range of the motion
 representation.
-\item \emph{Simplex (Nelder-Mead) Method}: Creates a simplex with 6 vertices and tests the fitness of each vertex. The worst vertex is reflected over the centroid. If the reflected point is better than the second worst point and worse than the best point, then the reflected point replaces the worst. If the reflected point is better than the best point, the simplex is expanded in the direction of the reflected point. The better of the reflected and the expanded point replaces the worst point. If the reflected point is worse than the second worst point, then the simplex is contracted away from the reflected point. If the contracted point is better than the reflected point, the contracted point replaces the worst point. If the contracted point is worse than the reflected point, the entire simplex is shrunk.
+\item \emph{Simplex (Nelder-Mead) Method}: Creates a simplex with 6 vertices and tests the fitness of each vertex. The worst vertex is reflected over the centroid. If the reflected point is better than the second worst point and worse than the best point, then the reflected point replaces the worst. If the reflected point is better than the best point, the simplex is expanded in the direction of the reflected point. The better of the reflected and the expanded point replaces the worst point. If the reflected point is worse than the second worst point, then the simplex is contracted away from the reflected point. If the contracted point is better than the reflected point, the contracted point replaces the worst point. If the contracted point is worse than the reflected point, the entire simplex is shrunk \cite{NMWebsite}.
 \item \emph{Linear regression}: To initialize, chooses five random points
 and trains on them using least-squares. Then in a loop, takes a fixed-size
 step in the direction of the gradient, and retrains on all points so far.
@@ -60,12 +71,19 @@ step in the direction of the gradient, and retrains on all points so far.
 \item \emph{Evolutionary Neural Network (HyperNEAT)\cite{2}}
 \end{itemize}
 
+
+
 \section{Related work}
 % Briefly explain who else worked on related problems in the past and what
 % methods they used. Explain if you are using similar methods, or if your
 % approach is different and if so - how (either is ok).
 
+\edit{Actually write this...}
+
+
+
 \section{System Architecture and Implementation}
+\seclabel{implement}
 % Describe how you implemented your system and how you structured it. 
 % This should give an overview of the system, not a detailed 
 % documentation of the code. The documentation of the code is part of 
@@ -77,6 +95,7 @@ The quadruped robot has an on-board computer running Linux. The lower
 level drivers are in C and the system is implemented in Python. Feedback about distance travelled is provided via an infrared LED and a Wii remote. 
 
 \begin{itemize}
+
 \item \code{Robot} class: Class wrapper for commanding
   motion of the robot.  The \code{Robot} class takes care of the robot
   initialization, communication with the servos, and timing of the
@@ -89,23 +108,33 @@ level drivers are in C and the system is implemented in Python. Feedback about d
   if desired, smooth interpolation over time for the beginning and end
   of the run.
 
-\item \code{Strategy} and \code{RunManager} class: The user has a choice between seven
+\item \code{RunManager} class \edit{write this}
+
+\item \code{Strategy} class: The user has a choice between seven
   different learning strategies: uniform random hill climbing, Gaussian random
   hill climbing, N-dimensional policy gradient descent, random, 
   simplex, linear regression/prediction, and SVM regression/prediction.
 
-\item \code{Parameterized Motion Model} abstract base class: Several functions exist, but none are within a class framework.
+\item \code{MotionModel} abstract base class: Several functions exist,
+  but none are within a class framework. ... ??? ... \code{SineModel}
+  classes: Commands motors to positions based on a sine wave, creating
+  a periodic pattern. Parameters are: amplitude, wavelength, scale
+  inner vs outer motors, scale left vs right motors, scale back vs
+  front motors. Currently a function, not a class. ... ??? ... THere
+  are also other motion models... Other derived motion model classes:
+  Several versions of a SineModel exist, each with different
+  parameters, though solely as functions.
 
-\item \code{SineModel} classes: Commands motors to positions
-  based on a sine wave, creating a periodic pattern. Parameters are:
-  amplitude, wavelength, scale inner vs outer motors, scale left vs right
-  motors, scale back vs front motors. Currently a function, not a class.
-
-\item Other derived motion model classes: Several versions of a SineModel
-  exist, each with different parameters, though solely as functions.
-
-\item \code{WiiTrackClient} and \code{WiiTrackServer} classes
- and hardware: A Wii remote tracks the location of the robot through an infrared LED mounted on top of the robot. We used CWiid library which is able to interface with the remote via bluetooth to determine the location of the infrared LED. This information is accessed through some functions we wrote and passed to the program. The program gets the robot's position at the beginning of each run and then again at the end. The program then calculates the net change in position and uses that as the distance walked.
+\item \code{WiiTrackClient} and \code{WiiTrackServer} classes and
+  hardware: A Wii remote tracks the location of the robot through an
+  infrared LED mounted on top of the robot. We used the CWiid library
+  which is able to interface with the remote via bluetooth to
+  determine the location of the infrared LED. This information is
+  accessed through some functions we wrote and passed to the
+  program. The program gets the robot's position at the beginning of
+  each run and then again at the end. The program then calculates the
+  net change in position and uses that as the distance
+  walked. \edit{Jason: add details}.
 
 \end{itemize}
 
@@ -121,13 +150,23 @@ level drivers are in C and the system is implemented in Python. Feedback about d
 % are you presenting and analyzing it? Comparisons to competing methods 
 % that address the same problem or to variations of your own algorithm 
 % are particularly useful.
-\begin{itemize}
-\item Each algorithm was run on 3 different initial parameter vectors on the
-physical robot. We stop each run after plateauing results (no improvement 
-for one third of the policies seen so far). We evaluate each method based on the
-amount of improvement seen from the initial parameter vectors, and on the
-fastest speeds achieved during runs.
-\end{itemize}
+
+\editbox{mention using speed as evaluating factor, ``we started the
+  robot, and it would collect data on its own.  if it walks otusdie fo
+  the viewable area, it tells us and we move it back inside and
+  restart it (but the data collection continues)''}
+
+We stop each run after plateauing results (no improvement 
+for one third of the policies seen so far)  (WHY??)
+
+Each algorithm was run on 3 different initial parameter vectors on the
+physical robot.  ``We decided to evaluate all methods starting at the
+same three vectors, to have more of a fair comparison...'' We evaluate
+each method based on the amount of improvement seen from the initial
+parameter vectors, and on the fastest speeds achieved during runs.
+
+Compare to Juan's run too.
+
 
 
 
@@ -139,12 +178,31 @@ fastest speeds achieved during runs.
 % calculate mean and standard error for every quantitative
 % performance result you show based on multiple runs.
 
-\begin{itemize}
-\item We have done runs of 
+We have done runs of 
 3 different initial parameter vectors for random hill climbing, 
 Gaussian random hill climbing, policy gradient descent, random,
 simplex, and linear regression. We developed several
 gaits that were about 4 times faster than the original hand-coded gait. 
+
+\editbox{Pull out vectors A, B, and C into separte bulletted list, and
+  make table, like below}
+
+
+\begin{tabular}{|r|c|c|c|}
+\hline
+                       & A     & B     & C    \\
+\hline
+Solution depth ???        & 14    & 54    & 21   \\
+\hline
+Nodes visited          & 992   & 2405  & 383  \\
+\hline
+Time to find solution  & 139ms & 451ms & 54ms \\
+\hline
+\end{tabular}
+
+
+
+\begin{itemize}
 
 \item For vector A, linear regression worked significantly better than the other algorithms, resulting in a gait (27.58 body lengths/minute) that walked over twice as fast as the next best gait (uniform random hill climbing - 11.37 body lengths/minute).
 
@@ -152,12 +210,15 @@ gaits that were about 4 times faster than the original hand-coded gait.
 
 \item For vector C, simplex and Gaussian random hill climbing each produced a gait that substantially outperformed the other algorithms. Simplex resulted in a gait of nearly 15 body lengths/minute  and Gaussian random hill climbing produced a gait of just over 13 body lengths/minute, whereas the other algorithms returned gaits of less than 5 body lengths/minute.
 
-\item Based on the three trials, linear regression worked the best, followed by simplex. Gaussian random hill climbing performed about as well as random, but it is unclear whether Gaussian would continue to improve and become much better than random if allowed to run for more iterations. Uniform random hill climbing and policy gradient descent performed similarly.
+\end{itemize}
 
-\item We also coded \code{explore\_dimensions} to collect data for dimension
+Based on the three trials, linear regression worked the best, followed by simplex. Gaussian random hill climbing performed about as well as random, but it is unclear whether Gaussian would continue to improve and become much better than random if allowed to run for more iterations. Uniform random hill climbing and policy gradient descent performed similarly.
+
+We also coded \code{explore\_dimensions} to collect data for dimension
 varying plots. We intend to do further explore this by running
 \code{explore\_dimension} around a parameter that produces a medium-good gait.
-\end{itemize}
+
+\edit{fix captions in this section too!}
 
 \figvarp{vectorA}{.65}{Vector A.... more here....}{}
 
@@ -168,6 +229,8 @@ varying plots. We intend to do further explore this by running
 \figvarp{std_error}{1}{Standard error....}{}
 
 
+\edit{Jason: add SVM and HyperNEAT results here!}
+
 
 
 \subsection{Discussion}
@@ -175,38 +238,47 @@ varying plots. We intend to do further explore this by running
 % about the strengths and weaknesses of your method compared to other 
 % methods? How can the results be explained in terms of the underlying 
 % properties of the algorithm and/or the data.
+
+\edit{important points... talk about these more :)}
+
 \begin{itemize}
 \item  Since only three trials were tested with each algorithm and no algorithm consistently outperformed the others, there is a large standard error for each algorithm. For this reason, it is unclear if any algorithm is superior to another in this application. More trials with each algorithm would be necessary to reach a definitive ranking of the performance of the algorithms.
 
 \item Each algorithm discovered at least one gait of over 10 body lengths/minute, including random. For this reason, we speculate that the motion model may be more critical than the learning algorithm.
 \end{itemize}
 
+
+
 \section{Future work}
 % What are the major shortcomings of your current method? For each 
 % shortcoming, propose additions or enhancements that would help overcome it.
 
+\edit{Intro sentence here...}
+
 \begin{itemize}
+\item More runs and/or longer runs
 \item Different motion representations
 \item Evolutionary algorithms/HyperNEAT\cite{2}
 \item Learning how to turn
 \item Open sourcing code for others to extend
 \end{itemize}
 
+
+
 \section{Conclusion}
 % Briefly summarize the important results and conclusions presented in 
 % the paper. What are the most important points illustrated by your 
 % work? How will your results improve future research and applications 
 % in the area?
+
+\edit{make this more awesome}
+
 Because the fastest learned walk was not
 significantly faster than the fastest randomly generated walk, we
 conjecture that the motion representation for the robot is more
 integral to forward speed than the learning algorithm.
 
-\section{References}
-% A numbered list of all books, articles, and web pages you used in your 
-% work or that you cited in your report. Each item must be cited from 
-% somewhere within the text. When citing a URL, include date visited. 
-% When citing a commercial product, list the company.
+
 
 \section{Acknowledgments}
 % List any people not on the team who helped you with your project: Your
@@ -274,6 +346,6 @@ A brief description of the code uploaded to the CMS follows:
 \item \code{SineModel.py}: Implements a sine based motion model,
   described in \secref{implement}.
 \item \code{Motion.py}: Motion helper functions.
-\item \code{WiiTrackServer.py}: Broadcasts the position of the infrared LED>
+\item \code{WiiTrackServer.py}: Broadcasts the position of the infrared LED.
 \item \code{WiiTrackClient.py}: Connects to the WiiTrackServer to get the current position information.
 \end{itemize}
