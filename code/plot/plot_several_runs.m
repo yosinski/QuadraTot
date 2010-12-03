@@ -34,8 +34,12 @@ function plot_several_runs(files)
     %plot(idx, best(idx), 'o', 'Color', clr{mod(ii,6)+1}, 'MarkerSize', 5);
   end
 
-  title(titl, 'Interpreter', 'none');
+  % [JBY] This line (the title) causes eps files which cause errors
+  %title(titl, 'Interpreter', 'none');   
+
   legend(leg);
+  xlabel('Iteration');
+  ylabel('Body lengths/minute');
 
   for ii = 1:length(files)
     file = files{ii};
