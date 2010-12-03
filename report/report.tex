@@ -108,7 +108,10 @@ level drivers are in C and the system is implemented in Python. Feedback about d
   if desired, smooth interpolation over time for the beginning and end
   of the run.
 
-\item \code{RunManager} class \edit{write this}
+\item \code{RunManager} class: Deals with all the details of running the robot,
+  including choosing an initial parameter, running the robot multiple times, 
+  tracking distance walked, and writing to the log file. Also includes the
+  \code{explore\_dimensions} method.
 
 \item \code{Strategy} class: The user has a choice between seven
   different learning strategies: uniform random hill climbing, Gaussian random
