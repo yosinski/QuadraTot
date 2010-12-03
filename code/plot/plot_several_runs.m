@@ -1,4 +1,4 @@
-function plot_several_runs(files)
+function plot_several_runs(files, saveFileName)
   % Plots the fitness of two runs together
 
   clr = {};
@@ -55,8 +55,11 @@ function plot_several_runs(files)
   end
   
   % Save
-  disp(sprintf('Saving as %s', titl));
-  print('-dpng', strcat(titl, '.png'));
-  print('-depsc', strcat(titl, '.eps'));
+  if ~exist('saveFileName', 'var')
+    saveFileName = titl
+  end
+  disp(sprintf('Saving as %s', saveFileName));
+  print('-dpng', strcat(saveFileName, '.png'));
+  print('-depsc', strcat(saveFileName, '.eps'));
 
 end

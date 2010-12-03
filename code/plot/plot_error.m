@@ -1,9 +1,4 @@
-files = {'log_uniform_a.txt', 'log_uniform_b.txt', 'log_uniform_c.txt', ...
-         'log_gaussian_a.txt', 'log_gaussian_b.txt', 'log_gaussian_c.txt', ...
-         'log_gradient_a.txt', 'log_gradient_b.txt', 'log_gradient_c.txt', ...
-         'log_random_a.txt', 'log_random_b.txt', 'log_random_c.txt', ...
-         'log_linear_regression_a.txt', 'log_linear_regression_b.txt', 'log_linear_regression_c.txt', ...
-         'log_simplex_a.txt', 'log_simplex_b.txt', 'log_simplex_c.txt'};
+function plot_error(files, saveFileName)
 
 clr = {};
   clr{end+1} = 'k';
@@ -14,7 +9,7 @@ clr = {};
   clr{end+1} = 'm';
 %  clr{end+1} = 'y';
 
-figure(1); clf; hold on;
+figure(2); clf; hold on;
 ax = zeros(4, 1);
 ax(1) = 0; ax(2) = 80; ax(3) = 0; ax(4) = 20;
 axis(ax);
@@ -62,12 +57,20 @@ for ii = 0:5
   %plot(iteration, best, '-', 'color', clr{mod(ii,6)+1});
   e = errorbar(x, means, stdev);
   set(e, "color", clr{mod(ii,6)+1});
+
+  %e = plot(x, means, 'linewidth', 2);
+  %set(e, "color", clr{mod(ii,6)+1});
+  %e = plot(x, means + stdev);
+  %set(e, "color", clr{mod(ii,6)+1});
+  %e = plot(x, means - stdev);
+  %set(e, "color", clr{mod(ii,6)+1});
 end
 
 legend(leg);
 
-title('Mean and Standard Error', 'Interpreter', 'none');
+% I think this causes problems...
+%title('Mean and Standard Error', 'Interpreter', 'none');
 
 % Save
-print('-dpng', strcat('error_plot', '.png'));
-print('-depsc', strcat('error_plot', '.eps'));
+print('-dpng', strcat(saveFileName, '.png'));
+print('-depsc', strcat(saveFileName, '.eps'));
