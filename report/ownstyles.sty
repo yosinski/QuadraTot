@@ -1,0 +1,58 @@
+% Short commands
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\andd}{\wedge}
+\newcommand{\orr}{\vee}
+\def\naive{na\"{\i}ve}
+\def\Naive{Na\"{\i}ve}
+\def\naively{na\"{\i}vely}
+\def\Naively{Na\"{\i}vely}
+\newcommand{\ta}{\hspace*{2em}}     % like a tab?
+
+% Refs and labels
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\seclabel}[1]{\label{sec:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+
+% figgy - Simple centered figure
+\newcommand{\figgy}[2]{
+\begin{center}
+\vspace*{0.2cm}
+\includegraphics[width=#2\textwidth]{#1}
+\end{center}
+}
+
+% figvarp - More full featured figure
+\newcommand{\figvarp}[5][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+\vspace*{0.2cm}
+  \includegraphics[width=#3\textwidth]{#2}
+
+\vspace*{0.2cm}
+  \caption[#5]{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% codebox
+%\definecolor{codecolor}{rgb}{0.87,0.87,0.87}
+%\definecolor{codecolor}{rgb}{0.7,0.7,0.7}
+\definecolor{codecolor}{rgb}{0.9,0.9,0.9}
+\makeatletter\newenvironment{codeboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{codecolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\codebox}[1]{ \begin{codeboxx} \texttt{#1} \end{codeboxx} \newline}
+
+% edit boxes
+\definecolor{editcolor}{rgb}{1,0.87,0.87}
+\makeatletter\newenvironment{editboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{editcolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\editbox}[1]{ \begin{editboxx} \textbf{\textit{Edit:}} \\ #1 \end{editboxx} \newline}
+\newcommand{\edit}[1]{ \fcolorbox{black}{editcolor}{\textbf{\textit{Edit:}} #1}}
