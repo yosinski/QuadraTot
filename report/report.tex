@@ -13,6 +13,7 @@ feedback.  Both the hardware and software are progressing on schedule.
 Some promising gaits have been generated, and we anticipate a final
 evaluation of the robots gait in November.
 
+A video presentation of this project should be viewed at http://www.youtube.com/watch?v=ODoiOj9DdGg.
 \edit{write this}
 
 
@@ -108,7 +109,10 @@ level drivers are in C and the system is implemented in Python. Feedback about d
   if desired, smooth interpolation over time for the beginning and end
   of the run.
 
-\item \code{RunManager} class \edit{write this}
+\item \code{RunManager} class: Deals with all the details of running the robot,
+  including choosing an initial parameter, running the robot multiple times, 
+  tracking distance walked, and writing to the log file. Also includes the
+  \code{explore\_dimensions} method.
 
 \item \code{Strategy} class: The user has a choice between seven
   different learning strategies: uniform random hill climbing, Gaussian random
@@ -151,13 +155,15 @@ level drivers are in C and the system is implemented in Python. Feedback about d
 % that address the same problem or to variations of your own algorithm 
 % are particularly useful.
 
-\editbox{mention using speed as evaluating factor, ``we started the
+\editbox{``we started the
   robot, and it would collect data on its own.  if it walks otusdie fo
   the viewable area, it tells us and we move it back inside and
   restart it (but the data collection continues)''}
 
-We stop each run after plateauing results (no improvement 
-for one third of the policies seen so far)  (WHY??)
+The metric for evaluation of the designed gait is speed. We stop each 
+run after plateauing results (no improvement for one third of the 
+policies seen so far). The standard length of a run designates that it
+should be stopped
 
 Each algorithm was run on 3 different initial parameter vectors on the
 physical robot.  ``We decided to evaluate all methods starting at the
