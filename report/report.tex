@@ -161,26 +161,40 @@ level drivers are in C and the system is implemented in Python. Feedback about d
 % that address the same problem or to variations of your own algorithm 
 % are particularly useful.
 
-\editbox{``we started the
-  robot, and it would collect data on its own.  if it walks otusdie fo
-  the viewable area, it tells us and we move it back inside and
-  restart it (but the data collection continues)''}
-
 The metric for evaluation of the designed gait is speed. We stop each 
 run after plateauing results (no improvement for one third of the 
 policies seen so far). The standard length of a run designates that it
-should be stopped
+should be stopped after there is no improvement for one half of the policies
+seen so far, but since all runs took place on the actual robot, without use
+of a simulator, certain time limitations were imposed on the learning process.
+
+We controlled our experiments from a computer that was connected via a 
+wireless ethernet to the robot. The robot collected data about distance
+walked automatically on its own. If it walked outside of the Wii remote's
+viewable area, it informed the user, so the only human intervention
+required during an experiment involved moving the robot back inside the 
+viewable area and restarting it and dealing with various mechanical failures,
+which did not interrupt the learning process or result in the loss of data.
+
+We evaluated the efficacy of a set of parameters by sending these
+parameters to the robot and instructing it to walk for a certain length
+of time. The robot always begins from the same position and returns to the
+starting position at the end of the run in order to allow for uniformity
+in measuring. More efficient parameters resulted in a faster gait, which
+translated into a longer distance walked and a better score. After completing
+an evluation, the robot sent the resulting distance walked back to the
+host computer and prepared itself for a new set of parameters to evaluate.
 
 Each algorithm was run on 3 different initial parameter vectors on the
-physical robot.  ``We decided to evaluate all methods starting at the
-same three vectors, to have more of a fair comparison...'' We evaluate
+physical robot. We decided to evaluate all methods starting at the
+same three vector in order to allow for the fair comparison of each
+algorihtm.  We evaluate
 each method based on the amount of improvement seen from the initial
 parameter vectors, and on the fastest speeds achieved during runs.
 
-Compare to Juan's run too.
-
-
-
+The resulting gaits from our algorithms quickly outperformed the original
+hand-coded walk designed for this robot. The fasted walk, for example, was
+4 times faster.
 
 \subsection{Results}
 % Present the quantitative results of your experiments. Graphical data
