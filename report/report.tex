@@ -7,32 +7,34 @@
 % results and conclusions that you will present.
 
 Applications of walking robots often call for the ability to walk as
-quickly, efficiently, or with as little power as possible.
-Oftentimes, these optimizations are done manually by an expert who
-designs a gait to be, for example, as fast as possible \cite{someone}.  Some groups (Kohl and Stone) have 
+quickly, efficiently, or with as little power as possible.  Often
+these optimizations are done manually by an expert who designs and
+tweaks a gait specifically for a given objective.  Other groups have
+used learning methods to generate gaits optimized for some metric.
+Approaches differ in their starting assumptions, some essentially
+tweaking the parameters of a hand-tuned model \cite{chernova}, others
+exploring a reasonably compact parameter space \cite{kohl}, and still
+others beginning with few assumptions besides periodicity
+\cite{zykov}.
 
-Previous
-Walking robots often have
+We aimed to strike a middle ground between these approaches.  Our
+motion generator did not relying on hand-tweaked gaits, but it did use
+a parameterized gait which, by its nature, imposes some assumptions on
+the answers produced.  From this model, we used machine learning to
+design a gait for a quadruped robot.
 
+This paper presents a comparison of varied learning methods to design
+a gait for a quadruped robot. Using these methods we have created
+walks that are several times faster than the original hand-tuned gait.
+We invite readers with short attention spans to view a video of some
+of our results online here:
 
-Many previous walking robots have had walking motions -- or gaits --
-designed and tweaked by hand \cite{someone,else}, or in some cases, beginning with a 
+\url{http://www.youtube.com/watch?v=ODoiOj9DdGg}
 
+%The code so far consists of the robot class, optimization class,
+%parameterized model, sine model, and camera feedback.
 
-We are using machine learning to design a gait for a quadruped
-robot. The code so far consists of the robot class, optimization
-class, parameterized model, sine model, and camera feedback.
-
-This paper presents a comparison of varied learning methods to
-design a gait for a quadruped robot. Using these methods we have
-created walks that are several times faster than the original
-hand-tuned gait. 
-
-
-A video presentation of this project should be viewed at
-
-http://www.youtube.com/watch?v=ODoiOj9DdGg.
-\edit{write this}
+\edit{proofread}
 
 
 
