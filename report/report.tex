@@ -72,15 +72,21 @@ step in the direction of the gradient, and retrains on all points so far.
 \item \emph{Evolutionary Neural Network (HyperNEAT)\cite{2}}
 \end{itemize}
 
-
-
 \section{Related work}
 % Briefly explain who else worked on related problems in the past and what
 % methods they used. Explain if you are using similar methods, or if your
 % approach is different and if so - how (either is ok).
 
-\edit{Actually write this...}
-
+Various maching learning techniques have proven to be useful in finding
+control policies for a wide variety of robots. Kohl and Stone\cite{1}
+presented a policy gradient reinforcement learning approach for generating
+a fast walk on legged robots. We experimented with this method to create
+a walk for our robot (Policy Gradient Descent). Chernova and Velosa\cite{3}
+took an evolutionary approach to this problem which we did not implement.
+Zykov, Bongard, and Lipson\cite{4} describe the evolution of dynamic gaits 
+on a physical robot requiring no prior
+assumptions about the locomotion pattern beyond the fact that it should be
+rhythmic. 
 
 
 \section{System Architecture and Implementation}
