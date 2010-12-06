@@ -10,6 +10,8 @@ all: ${TARGETS}
 
 %.dvi : %.tex
 	latex $*
+	bibtex $*
+	latex $*
 	latex $*
 
 clean:
