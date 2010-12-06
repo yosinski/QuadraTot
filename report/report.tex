@@ -1,8 +1,7 @@
 \section{Introduction}
 % Motivate and abstractly describe the problem you are addressing and
 % how you are addressing it. What is the problem? Why is it important?
-% What is your basic approach? A short discussion of how it fits into
-% related work in the area is also desirable. Summarize the basic results
+% What is your basic approach? A short discussion of how it fits into % related work in the area is also desirable. Summarize the basic results
 % and conclusions that you will present.
 
 We are using machine learning to design a gait for a quadruped
@@ -40,7 +39,11 @@ control problem.
 % an intuitively meaningful example is better than one with meaningless 
 % symbols.
 
-\edit{also describe parameterized motion model}
+We have a parameterized motion model that commands motors to positions
+based on a sine wave, creating a periodic pattern. Parameters are: 
+amplitude, wavelength, scale inner vs outer motors, scale left vs right 
+motors, scale back vs front motors. Each strategy below attempts to choose
+the best possible parameters for this motion model. 
 
 We implemented and tested 8 different learning strategies:
 \begin{itemize}
@@ -59,8 +62,8 @@ We implemented and tested 8 different learning strategies:
   near an initial parameter vector. Then computes the average score for
   each parameter and adjusts the base policy according to the estimated
   gradient.
-\item \emph{Random}: Randomly generates policies in the range of the motion
-representation.
+\item \emph{Random}: Randomly generates parameter vector in the allowable
+  range. This strategy is used only as base line.
 \item \emph{Simplex (Nelder-Mead) Method}: Creates a simplex with 6 vertices and tests the fitness of each vertex. The worst vertex is reflected over the centroid. If the reflected point is better than the second worst point and worse than the best point, then the reflected point replaces the worst. If the reflected point is better than the best point, the simplex is expanded in the direction of the reflected point. The better of the reflected and the expanded point replaces the worst point. If the reflected point is worse than the second worst point, then the simplex is contracted away from the reflected point. If the contracted point is better than the reflected point, the contracted point replaces the worst point. If the contracted point is worse than the reflected point, the entire simplex is shrunk \cite{NMWebsite}.
 \item \emph{Linear regression}: To initialize, chooses five random points
 and trains on them using least-squares. Then in a loop, takes a fixed-size
@@ -117,14 +120,20 @@ level drivers are in C and the system is implemented in Python. Feedback about d
   simplex, linear regression/prediction, and SVM regression/prediction.
 
 \item \code{MotionModel} abstract base class: Several functions exist,
-  but none are within a class framework. ... ??? ... \code{SineModel}
+  but none are within a class framework. ... ??? ...
+  
+  \begin{itemize} 
+  \item \code{SineModel}
   classes: Commands motors to positions based on a sine wave, creating
   a periodic pattern. Parameters are: amplitude, wavelength, scale
   inner vs outer motors, scale left vs right motors, scale back vs
-  front motors. Currently a function, not a class. ... ??? ... THere
-  are also other motion models... Other derived motion model classes:
+  front motors. Currently a function, not a class. ... ??? ... There
+  are also other motion models... 
+
+  \item Other derived motion model classes:
   Several versions of a SineModel exist, each with different
   parameters, though solely as functions.
+  \end{itemize}
 
 \item \code{WiiTrackClient} and \code{WiiTrackServer} classes and
   hardware: A Wii remote tracks the location of the robot through an
@@ -267,13 +276,22 @@ varying plots. We intend to do further explore this by running
 % shortcoming, propose additions or enhancements that would help overcome it.
 
 \edit{Intro sentence here...}
+There are several additions we would make to flesh out our project. First,
+the error margins for our runs was quite large, so reducing them would lead
+to more conclusive data. It would also be insightful to run our algorithms
+on different motion models to get a better idea of how well different
+algorithms perform overall, and not just for our current motion model. We
+also intend to experiment more with evolutionary algorithms/HyperNEAT. 
+Some parameter vectors resulted in the robot turning, as opposed to it
+walking long distances. This could be an interesting learning goal in
+future projects. To these ends, we propose the following additions
+and enhancements:
 
 \begin{itemize}
 \item More runs and/or longer runs
 \item Different motion representations
 \item Evolutionary algorithms/HyperNEAT\cite{2}
 \item Learning how to turn
-\item Open sourcing code for others to extend
 \end{itemize}
 
 
