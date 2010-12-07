@@ -32,8 +32,6 @@ a video of some of our results online here:
 %The code so far consists of the robot class, optimization class,
 %parameterized model, sine model, and camera feedback.
 
-\edit{proofread}
-
 
 
 \section{Problem definition}
@@ -329,12 +327,12 @@ regression.  We also evaluated the SVM regression and HyperNEAT
 methods, but these methods were more experimental, and thus we do not
 yet have the same volume of data for these runs.  We developed several
 gaits that were about 4 times faster than the original hand-coded
-gait.
-
-\edit{Convert to Table}
+gait.  Results are shown in \tabref{results_table}.
 
 
 
+\begin{table}
+\begin{center}
 \begin{tabular}{|r|c|c|c||c|}
 \hline
                                          & A       & B      & C      &  Average \\
@@ -359,10 +357,11 @@ Linear Regression                        & 27.58   & 12.51  & 1.95   &  14.01 \\
 %Evolutionary Neural Network (HyperNEAT)  & ???     & ???    & ???   &   \\
 \hline
 \end{tabular}
-
-\edit{Caption: The best gaits found for each starting vector and
-  algorithm, in body lengths per minute.}
-
+\caption{The best gaits found for each starting vector and algorithm,
+  in body lengths per minute.}
+\tablabel{results_table}
+\end{center}
+\end{table}
 
 
 \begin{itemize}
