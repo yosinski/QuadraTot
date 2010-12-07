@@ -242,8 +242,12 @@ class SVMLearningStrategy(OneStepStrategy):
 
 
     def plot(self):
-        from matplotlib.pyplot import plot, show
+        from matplotlib.pyplot import plot, show, savefig, xlabel, ylabel
         plot(self.y)
+        xlabel('Iteration')
+        ylabel('Fitness (arbitrary units)')
+        savefig('svm_sim_results.eps')
+        savefig('svm_sim_results.png')
         show()
 
     def saveAndCleanup(self):
