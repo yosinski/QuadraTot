@@ -430,13 +430,24 @@ on average, but differed greatly on individual runs.
 
 
 In addition to running strategies to optimize parameterized gaits, we
-also ......
+also wanted to investigate the space of possible gaits.  To accomplish
+this, we selected a parameter vector that resulted in motion, but not
+an exceptional gait, and plotted performance along each dimension
+individually.  In addition, we duplicated each measurement to be able
+to estimate the measurement noise at each point.  Results for this
+exploration are shown in \figref{explore_dim_1} through
+\figref{explore_dim_5}.
 
-We also coded \code{explore\_dimensions} to collect data for dimension
-varying plots. We intend to do further explore this by running
-\code{explore\_dimension} around a parameter that produces a medium-good gait.
+\figvarp{explore_dim_1}{.5}{Motion for varying just dimension 1}{}
 
-\edit{Jason: add exploration runs}
+\figvarp{explore_dim_2}{.5}{Motion for varying just dimension 2}{}
+
+\figvarp{explore_dim_3}{.5}{Motion for varying just dimension 3}{}
+
+\figvarp{explore_dim_4}{.5}{Motion for varying just dimension 4}{}
+
+\figvarp{explore_dim_5}{.5}{Motion for varying just dimension 5}{}
+
 
 
 
