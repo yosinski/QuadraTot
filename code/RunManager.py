@@ -15,7 +15,6 @@ class RunManager:
         self.robot = Robot(commandRate = 40, loud = False)
         self.statesSoFar = set()  # Keeps track of the states tested so far
         
-    # TODO: Am I calling stuff in here correctly..?
     def run_robot(self, currentState):
         '''
         Runs the robot with currentState parameters and returns the
