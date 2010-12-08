@@ -24,7 +24,8 @@ MIN_INNER = 150
 MAX_INNER = 770
 MIN_OUTER = 30
 #MAX_OUTER = 940
-MAX_OUTER = 800 # changing because Robot hits antenna
+#MAX_OUTER = 800 # changing because Robot hits antenna
+MAX_OUTER = 680  # changing because screws still interfere
 MIN_CENTER = 512 - 180
 MAX_CENTER = 512 + 180
 NORM_CENTER = 512
@@ -33,6 +34,11 @@ POS_FLAT      = [512] * 9
 POS_READY     = [800,  40] * 4 + [512]
 POS_HALFSTAND = [700, 100] * 4 + [512]
 POS_STAND     = [512, 150] * 4 + [512]
+
+
+
+class RobotFailure(Exception):
+    pass
 
 
 
@@ -58,6 +64,7 @@ class Robot():
 
         # The number of Dynamixels on the bus.
         self.nServos = nServos
+        self.silentNetFail = silentNetFail
 
         self.sleep = 1. / float(commandRate)
         self.loud  = loud
@@ -65,14 +72,24 @@ class Robot():
         if self.nServos != 9:
             raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
 
-        # Set your serial port accordingly.
-        if os.name == "posix":
-            portName = "/dev/ttyUSB0"
-        else:
-            portName = "COM11"
-
         # Default baud rate of the USB2Dynamixel device.
         self.baudRate = 1000000
+
+        self.initServos()
+
+
+    def initServos(self):
+        # Set your serial port accordingly.
+        if os.name == "posix":
+            possibilities = ['/dev/ttyUSB0', '/dev/ttyUSB1']
+            portName = None
+            for pos in possibilities:
+                if os.path.exists(pos):
+                    portName = pos
+            if portName is None:
+                raise Exception('Could not find any of %s' % repr(possibilities))
+        else:
+            portName = "COM11"
 
         serial = dynamixel.SerialStream(port = portName,
                                         baudrate = self.baudRate,
@@ -82,16 +99,18 @@ class Robot():
         print "Scanning for Dynamixels...",
         self.net.scan(0, self.nServos-1)
 
-        self.actuators = list()
+        self.actuators   = []
+        self.actuatorIds = []
 
         for dyn in self.net.get_dynamixels():
             print dyn.id,
+            self.actuatorIds.append(dyn.id)
             self.actuators.append(self.net[dyn.id])
         print "...Done"
 
-        if len(self.actuators) != self.nServos and not silentNetFail:
-            raise Exception('Expected to find %d servos on network, but only got %d (%s)'
-                            % (self.nServos, len(self.actuators), repr(self.actuators)))
+        if len(self.actuators) != self.nServos and not self.silentNetFail:
+            raise RobotFailure('Expected to find %d servos on network, but only got %d (%s)'
+                               % (self.nServos, len(self.actuators), repr(self.actuatorIds)))
 
         for actuator in self.actuators:
             #actuator.moving_speed = 90
@@ -100,14 +119,17 @@ class Robot():
             #actuator.torque_limit = 1000
             #actuator.max_torque = 1000
 
-            actuator.moving_speed = 90
+            actuator.moving_speed = 250
             actuator.synchronized = True
             actuator.torque_enable = True
-            actuator.torque_limit = 500
+            actuator.torque_limit = 1000
             actuator.max_torque = 1000
+
+        self.net.synchronize()
             
         self.currentPos = None
         self.resetClock()
+
         
     def run(self, motionFunction, runSeconds = 10, resetFirst = True,
             interpBegin = 0, interpEnd = 0):
@@ -159,6 +181,13 @@ class Robot():
         if self.loud:
             print 'Starting motion.'
 
+        failures = self.pingAll()
+        if failures:
+            self.initServos()
+            failures = self.pingAll()
+            if failures:
+                raise RobotFailure('Could not communicate with servos %s at beginning of run.' % repr(failures))
+
         self.resetClock()
         self.currentPos = self.readCurrentPosition()
 
@@ -184,6 +213,15 @@ class Robot():
         # motion model and a ready position.
         if interpEnd is not None:
             self.interpMove(motionFunction, POS_READY, interpEnd)
+
+        failures = self.pingAll()
+        if failures:
+            # give it a second chance
+            sleep(1)
+            failures = self.pingAll()
+            if failures:
+                raise RobotFailure('Servos %s may have died during run.' % repr(failures))
+
         
     def interpMove(self, start, end, seconds):
         '''Moves between start and end over seconds seconds.  stard
@@ -256,6 +294,10 @@ class Robot():
         timeDiff  = datetime.now() - self.time0
         self.time = timeDiff.seconds + timeDiff.microseconds/1e6
 
+    def readyPosition(self):
+        self.commandPosition(POS_READY)
+        sleep(2)
+
     def commandPosition(self, position, cropWarning = False):
         '''Command the given position
 
@@ -307,10 +349,20 @@ class Robot():
 
     def readCurrentPosition(self):
         ret = []
+        if len(self.actuators) != self.nServos:
+            raise RobotFailure('Lost some servos, now we only have %d' % len(self.actuators))
         for ac in self.actuators:
             ac.read_all()
             ret.append(ac.cache[dynamixel.defs.REGISTER['CurrentPosition']])
         return ret
+
+    def pingAll(self):
+        failures = []
+        for ii in self.actuatorIds:
+            result = self.net.ping(ii)
+            if result is False:
+                failures.append(ii)
+        return failures
 
     def printStatus(self):
         pos = self.readCurrentPosition()

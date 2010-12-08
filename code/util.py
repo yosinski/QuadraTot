@@ -15,9 +15,10 @@ def matInterp(x, xp, fp):
 
 
 
-def prettyVec(vec):
+def prettyVec(vec, prec=4):
+    st = '%%.%df' % prec
     return ('[' +
-            ' '.join(['%.4f' % xx if isinstance(xx,float) else repr(xx) for xx in vec]) +
+            ' '.join([st % xx if isinstance(xx,float) else repr(xx) for xx in vec]) +
             ']')
 
 

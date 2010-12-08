@@ -2,7 +2,7 @@ import math, pdb, sys
 import random
 from datetime import datetime
 from copy import copy
-from Robot import Robot
+from Robot import Robot, RobotFailure
 from SineModel import SineModel5
 from Neighbor import Neighbor
 from util import prettyVec
@@ -31,21 +31,31 @@ class RunManager:
             motionModel = lambda time: model.model(time,
                                                    parameters = currentState)
 
+        # Reset before measuring
+        self.robot.readyPosition()
+
         wiiTrack = WiiTrackClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
         if beginPos is None:
             # Robot walked out of sensor view
-            self.manual_reset()
+            self.manual_reset('Robot has walked outisde sensor view.  Please place back in center and push enter to continue.')
             print 'Retrying last run'
             return self.run_robot(currentState)
-        
-        self.robot.run(motionModel, runSeconds = 10, resetFirst = False,
-                       interpBegin = 1, interpEnd = 1)
+
+        try:
+            self.robot.run(motionModel, runSeconds = 10, resetFirst = False,
+                           interpBegin = 1, interpEnd = 1)
+        except RobotFailure as ee:
+            print ee
+            self.manual_reset('Robot run failure.  Fix something and push enter to continue.')
+            print 'Retrying last run'
+            return self.run_robot(currentState)
+            
 
         endPos = wiiTrack.getPosition()
         if endPos is None:
             # Robot walked out of sensor view
-            self.manual_reset()
+            self.manual_reset('Robot has walked outisde sensor view.  Please place back in center and push enter to continue.')
             print 'Retrying last run'
             return self.run_robot(currentState)
 
@@ -158,6 +168,6 @@ class RunManager:
                     self.log_results(point, dist)
 
 
-    def manual_reset(self):
-        print 'Robot has walked outisde sensor view.  Please place back in center and push enter to continue.'
+    def manual_reset(self, st):
+        print st
         raw_input()

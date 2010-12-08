@@ -55,7 +55,7 @@ def doRun():
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
         #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
-        #strategy = RandomStrategy(currentState)
+        #strategy = RandomStrategy(currentState, SineModel5.typicalRanges)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
         strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
 
