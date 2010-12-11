@@ -24,6 +24,10 @@ class NEATStrategy(OneStepStrategy):
         ##############################
         #   HyperNEAT Parameters
         ##############################
+
+        now = datetime.now()
+        #self.identifier = ''.join([random.choice('abcdef1234567890') for x in range(8)])
+        self.identifier = now.strftime('neat_%y%m%d_%H%M%S')
         
         self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/Hypercube_NEAT'
         #self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/spiderJointAngles.txt'
@@ -171,6 +175,16 @@ class NEATStrategy(OneStepStrategy):
         #positions = hstack((positions,
         #                    NORM_CENTER * ones((positions.shape[0],1))))
         times = linspace(0,12,positions.shape[0])
+
+        # Dump both raw positions and positions to file
+        ff = open('%s_%03d_raw' % (self.identifier, self.nRuns), 'w')
+        for row in rawPositions:
+            ff.write(row)
+        ff.close()
+        ff = open('%s_%03d_filt' % (self.identifier, self.nRuns), 'w')
+        for row in positions:
+            ff.write(row)
+        ff.close()
         
         # return function of time
         return lambda time: matInterp(time, times, positions)
@@ -215,7 +229,7 @@ class NEATStrategy(OneStepStrategy):
             pass
 
     def logHeader(self):
-        return '# NEATStrategy starting\n'
+        return '# NEATStrategy starting, identifier %s\n' % self.identifier
 
 
 
