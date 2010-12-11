@@ -5,7 +5,7 @@ from numpy import array, ix_, vstack, linspace, hstack, ones, mean
 from time import sleep
 import os
 
-from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER
+from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
 from Strategy import Strategy, OneStepStrategy
 from util import matInterp, prettyVec
 from SineModel import SineModel5
@@ -34,7 +34,8 @@ class NEATStrategy(OneStepStrategy):
         self.junkPoints      = 1000
         # How many lines to expect from HyperNEAT file
         self.expectedLines   = self.junkPoints + 12 * 40 * self.avgPoints
-        self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
+        #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
+        self.motorColumns    = [0,1,4,5,2,3,6,7,8]         # Order of motors in HyperNEAT file
         self.generationSize  = 9
         self.initNeatFile    = kwargs.get('initNeatFile', None)   # Pop file to start with, None for restart
         self.prefix          = 'delme'
@@ -114,7 +115,7 @@ class NEATStrategy(OneStepStrategy):
             lines = ff.readlines()
             nLines = len(lines)
             if nLines < self.expectedLines:
-                print 'Oops, only %d of %d lines!' % (nLines, self.expectedLines)
+                print '   only %d of %d lines, waiting...' % (nLines, self.expectedLines)
                 ff.close()
                 sleep(.5)
                 continue
@@ -155,15 +156,20 @@ class NEATStrategy(OneStepStrategy):
         # scale from [0,1] to appropriate ranges
         innerIdx = [0, 2, 4, 6]
         outerIdx = [1, 3, 5, 7]
+        centerIdx = [8]
         for ii in innerIdx:
             positions[:,ii] *= (MAX_INNER - MIN_INNER)
             positions[:,ii] += MIN_INNER
         for ii in outerIdx:
             positions[:,ii] *= (MAX_OUTER - MIN_OUTER)
             positions[:,ii] += MIN_OUTER
-        # append a column of 512s
-        positions = hstack((positions,
-                            NORM_CENTER * ones((positions.shape[0],1))))
+        for ii in centerIdx:
+            positions[:,ii] *= (MAX_CENTER - MIN_CENTER)
+            positions[:,ii] += MIN_CENTER
+            
+        # append a column of 512s for center
+        #positions = hstack((positions,
+        #                    NORM_CENTER * ones((positions.shape[0],1))))
         times = linspace(0,12,positions.shape[0])
         
         # return function of time
