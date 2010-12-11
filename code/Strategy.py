@@ -26,6 +26,14 @@ class Strategy(object):
         self.ranges     = ranges
         
     def getNext(self):
+        if getattr(self, 'separateLogInfo', False):
+            next, logInfo = self._getNext()
+        else:
+            next = self._getNext()
+            logInfo = next
+        return next, logInfo
+
+    def _getNext(self):
         raise Exception('Need to implement this')
 
     def updateResults(self, dist):
@@ -64,7 +72,7 @@ class RandomStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self):
+    def _getNext(self):
         ret = copy(self.bestState)
 
         if self.bestDist is not None:
@@ -86,7 +94,7 @@ class UniformStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self):
+    def _getNext(self):
         ret = copy(self.bestState)
 
         if self.bestDist is not None:
@@ -110,7 +118,7 @@ class UniformSlightStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self):
+    def _getNext(self):
         ret = copy(self.bestState)
         print '  ** Neighbor old', ret
         index = random.randint(0, len(parameters) - 1)
@@ -136,7 +144,7 @@ class GaussianStrategy(OneStepStrategy):
     
     """
 
-    def getNext(self):
+    def _getNext(self):
         ret = copy(self.bestState)
         index = random.randint(0, (len(self.ranges) - 1))
     
@@ -177,7 +185,7 @@ class GradientSampleStrategy(Strategy):
         self.triedSoFar = []
         self.stillToTry = []
 
-    def getNext(self):
+    def _getNext(self):
         if len(self.stillToTry) == 0:
             self.populateStillToTry()
 
@@ -325,7 +333,7 @@ class SimplexStrategy(Strategy):
         self.bestDist = 0
         self.reflectDist = 0
         
-    def getNext(self):
+    def _getNext(self):
         if self.transformation == 0 and len(self.toTry) == 0:
             print ' create simplex'
             self.createSimplex(self.ranges)
@@ -540,7 +548,7 @@ class LearningStrategy(Strategy):
         self.y = []
         self.theta = []
 
-    def getNext(self):
+    def _getNext(self):
         '''Learn model on X and y...'''
 
         # 1. Learn
@@ -563,7 +571,7 @@ class LinearRegressionStrategy(LearningStrategy):
     parameters there are) random vectors first.
     '''
 
-    def getNext(self):
+    def _getNext(self):
         '''Learn model on X and Y...'''
         # If we still need to test initial 5 random params:
         if len(self.X) < len(self.ranges):

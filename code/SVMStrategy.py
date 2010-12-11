@@ -122,7 +122,7 @@ class SVMLearningStrategy(OneStepStrategy):
         self.y = None
 
 
-    def getNext(self):
+    def _getNext(self):
         '''Get the next point to try.  The first few times this will
         return a random point near the initialPoint, and after that it
         will return the best predicted point by the learning model,

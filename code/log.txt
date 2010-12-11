@@ -4336,3 +4336,417 @@ function call run, 154.693244843
 function call run, 16.6433169771
 function call run, 28.7923600978
 function call run, 187.296556295
+
+# RunManager log started at Fri Dec 10 19:15:10 2010
+# NEATStrategy starting, identifier neat_101210_191510
+function call run, 88.5268320906
+function call run, 6.0827625303
+function call run, 12.3693168769
+
+# RunManager log started at Fri Dec 10 19:18:41 2010
+# NEATStrategy starting, identifier neat_101210_191841
+function call run, 152.947703481
+
+# RunManager log started at Fri Dec 10 19:20:14 2010
+# NEATStrategy starting, identifier neat_101210_192014
+
+# RunManager log started at Fri Dec 10 19:20:42 2010
+# NEATStrategy starting, identifier neat_101210_192042
+function call run, 95.4620343383
+function call run, 38.8329756779
+
+# RunManager log started at Fri Dec 10 19:37:13 2010
+# NEATStrategy starting, identifier neat_101210_193713
+
+# RunManager log started at Fri Dec 10 19:38:50 2010
+# NEATStrategy starting, identifier neat_101210_193850
+
+# RunManager log started at Fri Dec 10 19:38:58 2010
+# NEATStrategy starting, identifier neat_101210_193858
+
+# RunManager log started at Fri Dec 10 19:39:05 2010
+# NEATStrategy starting, identifier neat_101210_193905
+
+# RunManager log started at Fri Dec 10 19:39:18 2010
+# NEATStrategy starting, identifier neat_101210_193918
+
+# RunManager log started at Fri Dec 10 19:42:28 2010
+# NEATStrategy starting, identifier neat_101210_194228
+
+# RunManager log started at Fri Dec 10 19:43:01 2010
+# NEATStrategy starting, identifier neat_101210_194301
+
+# RunManager log started at Fri Dec 10 19:44:17 2010
+# NEATStrategy starting, identifier neat_101210_194417
+function call run, 102.0
+function call run, 43.1740662898
+function call run, 24.0208242989
+function call run, 42.7551166529
+
+# RunManager log started at Fri Dec 10 19:48:22 2010
+# NEATStrategy starting, identifier neat_101210_194822
+
+# RunManager log started at Fri Dec 10 19:48:44 2010
+# NEATStrategy starting, identifier neat_101210_194844
+function call run, 131.209755735
+function call run, 6.0827625303
+
+# RunManager log started at Fri Dec 10 19:49:52 2010
+# NEATStrategy starting, identifier neat_101210_194952
+
+# RunManager log started at Fri Dec 10 19:50:31 2010
+# NEATStrategy starting, identifier neat_101210_195031
+
+# RunManager log started at Fri Dec 10 19:51:33 2010
+# NEATStrategy starting, identifier neat_101210_195133
+
+# RunManager log started at Fri Dec 10 19:51:58 2010
+# NEATStrategy starting, identifier neat_101210_195158
+
+# RunManager log started at Fri Dec 10 19:54:52 2010
+# NEATStrategy starting, identifier neat_101210_195452
+function call run, 150.7846146
+function call run, 33.1360830516
+function call run, 1.0
+function call run, 44.2944691807
+function call run, 10.0
+function call run, 15.2643375225
+function call run, 0.0
+function call run, 0.0
+function call run, 119.753914341
+function call run, 77.1621668954
+function call run, 75.4254598925
+
+# RunManager log started at Fri Dec 10 20:01:05 2010
+# NEATStrategy starting, identifier neat_101210_200105
+function call run, 28.0178514522
+function call run, 48.754486973
+function call run, 74.4311762637
+
+# RunManager log started at Fri Dec 10 20:02:23 2010
+# NEATStrategy starting, identifier neat_101210_200223
+function call run, 222.524155992
+function call run, 37.1618083521
+function call run, 22.2036033112
+function call run, 36.1247837364
+function call run, 15.1327459504
+function call run, 1.0
+function call run, 2.2360679775
+function call run, 2.0
+function call run, 117.923704148
+function call run, 81.3019064967
+function call run, 0.0
+function call run, 59.0
+function call run, 304.277833567
+function call run, 194.02319449
+function call run, 15.0332963784
+function call run, 8.60232526704
+function call run, 46.8401537145
+function call run, 28.6006992922
+function call run, 128.222462931
+function call run, 40.4969134626
+function call run, 6.0827625303
+function call run, 23.8537208838
+function call run, 214.462117867
+function call run, 65.2150289427
+function call run, 98.8382517045
+function call run, 21.2602916255
+function call run, 17.0
+function call run, 33.2415402772
+function call run, 23.769728648
+function call run, 20.591260282
+function call run, 21.2602916255
+function call run, 302.034766211
+function call run, 14.0356688476
+function call run, 65.7343137182
+function call run, 0.0
+function call run, 10.4403065089
+function call run, 4.24264068712
+function call run, 21.4709105536
+function call run, 11.401754251
+function call run, 12.0830459736
+function call run, 63.0634601017
+function call run, 2.2360679775
+function call run, 10.295630141
+function call run, 129.031004026
+function call run, 90.426765949
+function call run, 64.4748012793
+function call run, 20.0
+function call run, 1.41421356237
+function call run, 39.0
+function call run, 6.0827625303
+function call run, 5.38516480713
+function call run, 7.61577310586
+function call run, 46.872166581
+function call run, 285.427749177
+function call run, 97.9489663039
+function call run, 100.722390758
+function call run, 15.2315462117
+function call run, 37.8549864615
+function call run, 144.516435052
+function call run, 3.16227766017
+function call run, 28.2842712475
+function call run, 77.1621668954
+
+# RunManager log started at Fri Dec 10 20:50:41 2010
+# NEATStrategy starting, identifier neat_101210_205041
+function call run, 54.3783044973
+function call run, 25.2982212813
+function call run, 20.5182845287
+function call run, 42.4499705536
+function call run, 74.5184540902
+function call run, 76.1577310586
+function call run, 27.892651362
+function call run, 3.16227766017
+function call run, 9.48683298051
+function call run, 5.83095189485
+function call run, 8.0622577483
+function call run, 14.4222051019
+function call run, 6.0
+function call run, 31.2409987036
+function call run, 18.2482875909
+function call run, 23.4307490277
+function call run, 102.649890404
+
+# RunManager log started at Fri Dec 10 22:12:24 2010
+
+# RunManager log started at Fri Dec 10 22:12:34 2010
+355.6349609431939 4.879980019626009 -1.3382066584857051 -0.92977538241516555 0.29130935149620929, 1.41421356237
+199.63472191083505 4.5111523134551934 -1.8946157083319037 0.71342735187285111 0.36436835503109943, 1.0
+164.87058000550596 5.7388658553478376 0.67600491470815705 -0.42599974446557143 -0.00069357328615593516, 9.48683298051
+116.52102356327619 0.65332865051054334 1.8310962954487549 -0.0094191158835801314 0.82524246478964591, 16.7630546142
+228.65032482422919 1.1497853448313067 0.59288990495658611 -0.083764512727041884 0.79061407753332347, 19.4164878389
+337.74658563004959 4.8459680365504871 -1.8648280631961192 -0.50657063364012234 -0.98684241022499886, 1.41421356237
+358.8596294646245 2.3729808583318888 -1.1657205135953808 -0.39015731315612201 -0.46689370007882536, 12.1655250606
+
+# RunManager log started at Fri Dec 10 22:17:04 2010
+
+# RunManager log started at Fri Dec 10 22:17:13 2010
+
+# RunManager log started at Fri Dec 10 22:17:20 2010
+
+# RunManager log started at Fri Dec 10 22:17:21 2010
+
+# RunManager log started at Fri Dec 10 22:32:02 2010
+# NEATStrategy starting, identifier neat_101210_223202
+
+# RunManager log started at Fri Dec 10 22:32:51 2010
+# NEATStrategy starting, identifier neat_101210_223251
+
+# RunManager log started at Fri Dec 10 22:33:50 2010
+# NEATStrategy starting, identifier neat_101210_223350
+
+# RunManager log started at Fri Dec 10 22:36:25 2010
+# NEATStrategy starting, identifier neat_101210_223625
+
+# RunManager log started at Fri Dec 10 22:38:32 2010
+# NEATStrategy starting, identifier neat_101210_223832
+
+# RunManager log started at Fri Dec 10 22:42:31 2010
+# NEATStrategy starting, identifier neat_101210_224231
+
+# RunManager log started at Fri Dec 10 22:42:58 2010
+# NEATStrategy starting, identifier neat_101210_224258
+function call run, 23.0217288664
+
+# RunManager log started at Fri Dec 10 22:44:31 2010
+# NEATStrategy starting, identifier neat_101210_224431
+
+# RunManager log started at Fri Dec 10 22:46:39 2010
+# NEATStrategy starting, identifier neat_101210_224639
+function call run, 21.3775583264
+function call run, 4.0
+function call run, 53.5093449782
+function call run, 7.07106781187
+function call run, 6.7082039325
+
+# RunManager log started at Fri Dec 10 22:55:12 2010
+# NEATStrategy starting, identifier neat_101210_225512
+
+# RunManager log started at Fri Dec 10 22:56:48 2010
+# NEATStrategy starting, identifier neat_101210_225648
+
+# RunManager log started at Fri Dec 10 22:59:21 2010
+# NEATStrategy starting, identifier neat_101210_225921
+function call run, 108.673823895
+function call run, 84.403791384
+function call run, 52.2398315464
+function call run, 6.36396103068
+function call run, 15.5563491861
+
+# RunManager log started at Sat Dec 11 14:23:14 2010
+# NEATStrategy starting, identifier neat_101211_142314
+function call run, 340.411515669
+
+# RunManager log started at Sat Dec 11 14:35:12 2010
+# NEATStrategy starting, identifier neat_101211_143512
+
+# RunManager log started at Sat Dec 11 14:37:52 2010
+# NEATStrategy starting, identifier neat_101211_143752
+function call run, 186.810063969
+function call run, 10.6301458127
+function call run, 5.38516480713
+
+# RunManager log started at Sat Dec 11 14:42:35 2010
+# NEATStrategy starting, identifier neat_101211_144235
+
+# RunManager log started at Sat Dec 11 14:43:33 2010
+# NEATStrategy starting, identifier neat_101211_144333
+function call run, 171.210396881
+
+# RunManager log started at Sat Dec 11 14:46:12 2010
+# NEATStrategy starting, identifier neat_101211_144612
+function call run, 97.5832977512
+
+# RunManager log started at Sat Dec 11 14:48:51 2010
+# NEATStrategy starting, identifier neat_101211_144851
+
+# RunManager log started at Sat Dec 11 15:00:32 2010
+# NEATStrategy starting, identifier neat_101211_150032
+function call run, 134.833230325
+function call run, 6.0827625303
+function call run, 4.12310562562
+function call run, 33.9558536927
+function call run, 10.0498756211
+
+# RunManager log started at Sat Dec 11 15:12:40 2010
+# NEATStrategy starting, identifier neat_101211_151240
+
+# RunManager log started at Sat Dec 11 15:14:50 2010
+# NEATStrategy starting, identifier neat_101211_151450
+function call run, 101.597244057
+function call run, 57.008771255
+function call run, 29.0688837075
+function call run, 96.3872398194
+function call run, 18.2002747232
+function call run, 89.6841680566
+function call run, 20.3960780544
+function call run, 19.4164878389
+function call run, 70.4716254957
+function call run, 86.893613114
+function call run, 16.6207701386
+function call run, 3.60555127546
+function call run, 40.8931534612
+function call run, 18.3371208209
+function call run, 42.36153916
+function call run, 42.6057507855
+function call run, 62.6498204307
+function call run, 118.308917669
+function call run, 4.472135955
+function call run, 22.6384628453
+function call run, 41.4366987102
+function call run, 26.0048072479
+function call run, 37.6563407675
+function call run, 17.0880074906
+function call run, 32.6840939908
+function call run, 70.4006392016
+function call run, 41.3098051315
+function call run, 6.32455532034
+function call run, 32.5576411922
+function call run, 16.9779268463
+function call run, 62.0322496771
+function call run, 39.5126562003
+function call run, 76.9220384545
+function call run, 89.0056178002
+function call run, 20.1246117975
+function call run, 5.59016994375
+function call run, 19.9123077517
+function call run, 5.0
+function call run, 19.0
+function call run, 2.06155281281
+function call run, 27.9508497187
+function call run, 5.0
+function call run, 4.12310562562
+function call run, 7.21110255093
+function call run, 28.1113855937
+function call run, 23.0217288664
+function call run, 16.0312195419
+function call run, 29.1547594742
+function call run, 0.707106781187
+function call run, 3.04138126515
+function call run, 59.1713613161
+function call run, 16.1554944214
+function call run, 30.700162866
+function call run, 50.7666228934
+function call run, 1.11803398875
+function call run, 53.0212221662
+function call run, 79.2464510246
+function call run, 54.3737068812
+function call run, 16.4468842034
+function call run, 61.8546683768
+function call run, 34.8281495345
+function call run, 4.12310562562
+function call run, 2.91547594742
+function call run, 36.0034720548
+function call run, 8.74642784227
+function call run, 50.8035431835
+function call run, 120.830459736
+function call run, 32.5576411922
+function call run, 123.175687536
+function call run, 12.0830459736
+function call run, 95.6713123146
+function call run, 208.580919549
+function call run, 28.1602556807
+function call run, 66.597672632
+function call run, 5.7008771255
+function call run, 171.856044409
+function call run, 48.3838816136
+function call run, 18.7882942281
+function call run, 42.5793377121
+function call run, 48.1274350033
+function call run, 109.457754408
+function call run, 101.283019307
+function call run, 35.5879192985
+function call run, 16.3477827243
+function call run, 70.7548584904
+function call run, 61.1902770054
+function call run, 24.0208242989
+
+# RunManager log started at Sat Dec 11 16:36:10 2010
+# NEATStrategy starting, identifier neat_101211_163610
+function call run, 4.52769256907
+function call run, 8.54400374532
+function call run, 46.9920205992
+function call run, 126.669846451
+function call run, 27.2946881279
+function call run, 19.4743420942
+function call run, 5.0
+function call run, 278.804591067
+function call run, 226.1769219
+function call run, 124.679589348
+function call run, 8.0622577483
+function call run, 4.03112887415
+function call run, 10.1980390272
+function call run, 17.734147851
+function call run, 27.5136329844
+function call run, 59.42432162
+function call run, 30.2034766211
+
+# RunManager log started at Sat Dec 11 17:01:54 2010
+# NEATStrategy starting, identifier neat_101211_170154
+
+# RunManager log started at Sat Dec 11 17:06:15 2010
+# NEATStrategy starting, identifier neat_101211_170615
+function call run, 13.6014705087
+
+# RunManager log started at Sat Dec 11 17:13:59 2010
+# NEATStrategy starting, identifier neat_101211_171359
+neat_101211_171359_001, 54.8292804987
+neat_101211_171359_002, 19.4164878389
+neat_101211_171359_003, 164.658738001
+neat_101211_171359_004, 124.227613677
+neat_101211_171359_005, 12.5
+
+# RunManager log started at Sat Dec 11 17:20:47 2010
+# NEATStrategy starting, identifier neat_101211_172047
+neat_101211_172047_001, 23.5
+neat_101211_172047_002, 0.707106781187
+neat_101211_172047_003, 9.19238815543
+neat_101211_172047_004, 59.1354377679
+neat_101211_172047_005, 165.169609796
+neat_101211_172047_006, 29.6816441593
+
+# RunManager log started at Sat Dec 11 17:29:32 2010
+# NEATStrategy starting, identifier neat_101211_172932
+neat_101211_172932_001, 22.8089894559
+neat_101211_172932_002, 53.8144961883

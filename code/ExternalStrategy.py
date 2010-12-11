@@ -3,11 +3,12 @@
 
 from numpy import array, ix_, vstack, linspace, hstack, ones, mean
 from time import sleep
+from datetime import datetime
 import os
 
 from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
 from Strategy import Strategy, OneStepStrategy
-from util import matInterp, prettyVec
+from util import matInterp, prettyVec, writeArray
 from SineModel import SineModel5
 import subprocess as sp
 from asyncproc import Process
@@ -30,8 +31,9 @@ class NEATStrategy(OneStepStrategy):
         self.identifier = now.strftime('neat_%y%m%d_%H%M%S')
         
         self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/Hypercube_NEAT'
-        #self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/spiderJointAngles.txt'
-        self.motionFile = 'spiderJointAngles.txt'
+        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/spiderJointAngles.txt'
+        #self.motionFile = 'spiderJointAngles.txt'
+        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/fitness'
         self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/SpiderRobotExperiment.dat'
 
         self.avgPoints       = 4                         # Average over this many points
@@ -44,20 +46,26 @@ class NEATStrategy(OneStepStrategy):
         self.initNeatFile    = kwargs.get('initNeatFile', None)   # Pop file to start with, None for restart
         self.prefix          = 'delme'
         self.nextNeatFile    = '%s_pop.xml' % self.prefix
+
+        self.separateLogInfo = True
         
         #self.proc = sp.Popen((self.executable,
         #                      '-O', 'delme', '-R', '102', '-I', self.datFile),
         #                     stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE)
         #os.system('%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
-        if self.initNeatFile is None:
-            self.proc = Process((self.executable,
-                                 '-O', self.prefix, '-R', '102', '-I',
-                                 self.datFile))
-        else:
-            print 'Starting with neatfile', self.initNeatFile
-            self.proc = Process((self.executable,
-                                 '-O', self.prefix, '-R', '102', '-I',
-                                 self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
+
+        self.spawnProc = False
+
+        if self.spawnProc:
+            if self.initNeatFile is None:
+                self.proc = Process((self.executable,
+                                     '-O', self.prefix, '-R', '102', '-I',
+                                     self.datFile))
+            else:
+                print 'Starting with neatfile', self.initNeatFile
+                self.proc = Process((self.executable,
+                                     '-O', self.prefix, '-R', '102', '-I',
+                                     self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
             
         #'%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
 
@@ -65,12 +73,13 @@ class NEATStrategy(OneStepStrategy):
 
 
     def __del__(self):
-        print 'Waiting for %s to exit...' % self.executable,
-        code = self.proc.wait()
-        print 'done.'
+        if self.spawnProc:
+            print 'Waiting for %s to exit...' % self.executable,
+            code = self.proc.wait()
+            print 'done.'
 
 
-    def getNext(self):
+    def _getNext(self):
         '''Get the next point to try.  This reads from the file
         self.motionFile'''
 
@@ -88,32 +97,34 @@ class NEATStrategy(OneStepStrategy):
             print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
             raw_input()
             #sleep(10)
-            print 'Continuing with neatfile', self.nextNeatFile
-            self.proc = Process((self.executable,
-                                 '-O', self.prefix, '-R', '102', '-I',
-                                 self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
+            if self.spawnProc:
+                print 'Continuing with neatfile', self.nextNeatFile
+                self.proc = Process((self.executable,
+                                     '-O', self.prefix, '-R', '102', '-I',
+                                     self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
             self.nRuns = 0
 
         #print 'On iteration', self.nRuns+1
 
         while True:
 
-            out = self.proc.read()
-            if out != '':
-                #print 'Got stdout:'
-                #print out
-                pass
-            out = self.proc.readerr()
-            if out != '':
-                #print 'Got stderr:'
-                #print out
-                pass
+            if self.spawnProc:
+                out = self.proc.read()
+                if out != '':
+                    #print 'Got stdout:'
+                    #print out
+                    pass
+                out = self.proc.readerr()
+                if out != '':
+                    #print 'Got stderr:'
+                    #print out
+                    pass
 
             try:
                 ff = open(self.motionFile, 'r')
             except IOError:
                 print 'File does not exist yet'
-                sleep(.2)
+                sleep(1)
                 continue
 
             lines = ff.readlines()
@@ -177,17 +188,17 @@ class NEATStrategy(OneStepStrategy):
         times = linspace(0,12,positions.shape[0])
 
         # Dump both raw positions and positions to file
-        ff = open('%s_%03d_raw' % (self.identifier, self.nRuns), 'w')
-        for row in rawPositions:
-            ff.write(row)
+        thisIdentifier = '%s_%03d' % (self.identifier, self.nRuns)
+
+        ff = open('%s_raw' % thisIdentifier, 'w')
+        writeArray(ff, rawPositions)
         ff.close()
-        ff = open('%s_%03d_filt' % (self.identifier, self.nRuns), 'w')
-        for row in positions:
-            ff.write(row)
+        ff = open('%s_filt' % thisIdentifier, 'w')
+        writeArray(ff, positions)
         ff.close()
         
         # return function of time
-        return lambda time: matInterp(time, times, positions)
+        return lambda time: matInterp(time, times, positions), thisIdentifier
 
 
     def updateResults(self, dist):
@@ -204,8 +215,22 @@ class NEATStrategy(OneStepStrategy):
         # Send fitness to process
         #out,err = proc.communicate('%f\n' % dist)
 
-        print 'Sending to process: %f' % dist
-        self.proc.write('%f\n' % dist)
+
+        print 'Deleting old motion file %s' % self.motionFile
+        os.remove(self.motionFile)
+        
+        print 'Sending to process: %f' % dist,
+
+        if self.spawnProc:
+            print 'via process'
+            self.proc.write('%f\n' % dist)
+        else:
+            print 'via file'
+            # Instead, write this to a file
+            ff = open('.fitness', 'w')
+            ff.write('%s\n' % dist)
+            ff.close()
+            os.rename('.fitness', self.fitnessFile)
 
         #print 'TRYING READ STDOUT'
         #stdout = self.proc.stdout.read()
@@ -217,16 +242,17 @@ class NEATStrategy(OneStepStrategy):
         #print 'Got stderr:'
         #print stderr
 
-        out = self.proc.read()
-        if out != '':
-            #print 'Got stdout:'
-            #print out
-            pass
-        out = self.proc.readerr()
-        if out != '':
-            #print 'Got stderr:'
-            #print out
-            pass
+        if self.spawnProc:
+            out = self.proc.read()
+            if out != '':
+                #print 'Got stdout:'
+                #print out
+                pass
+            out = self.proc.readerr()
+            if out != '':
+                #print 'Got stderr:'
+                #print out
+                pass
 
     def logHeader(self):
         return '# NEATStrategy starting, identifier %s\n' % self.identifier

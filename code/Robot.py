@@ -3,6 +3,7 @@ from datetime import datetime
 from time import sleep
 from types import FunctionType
 from copy import copy
+from numpy import array
 
 import dynamixel
 from Motion import lInterp
@@ -26,14 +27,20 @@ MIN_OUTER = 30
 #MAX_OUTER = 940
 #MAX_OUTER = 800 # changing because Robot hits antenna
 MAX_OUTER = 680  # changing because screws still interfere
-MIN_CENTER = 512 - 180
-MAX_CENTER = 512 + 180
+#MIN_CENTER = 512 - 180
+#MAX_CENTER = 512 + 180
+MIN_CENTER = 512 - 120
+MAX_CENTER = 512 + 120
 NORM_CENTER = 512
 
 POS_FLAT      = [512] * 9
-POS_READY     = [800,  40] * 4 + [512]
+POS_READY     = [770,  40] * 4 + [512]
 POS_HALFSTAND = [700, 100] * 4 + [512]
 POS_STAND     = [512, 150] * 4 + [512]
+
+POS_CHECK_1   = [770, 200] * 4 + [512]
+POS_CHECK_2   = [670, 300] * 4 + [512]
+POS_CHECK_3   = [670, 300] * 4 + [512-70]
 
 
 
@@ -352,8 +359,10 @@ class Robot():
         if len(self.actuators) != self.nServos:
             raise RobotFailure('Lost some servos, now we only have %d' % len(self.actuators))
         for ac in self.actuators:
-            ac.read_all()
-            ret.append(ac.cache[dynamixel.defs.REGISTER['CurrentPosition']])
+            #ac.read_all()
+            #ret.append(ac.cache[dynamixel.defs.REGISTER['CurrentPosition']])
+            ret.append(ac.current_position)
+            #sleep(.001)
         return ret
 
     def pingAll(self):
@@ -369,3 +378,44 @@ class Robot():
         print 'Positions:', ' '.join(['%d:%d' % (ii,pp) for ii,pp in enumerate(pos)])
 
 
+    def shimmy(self):
+        '''Moves through a set of checks and makes sure the robot is
+        still moving.'''
+
+        self.commandPosition(POS_READY)
+        sleep(.8)
+
+        success = True
+        success &= self.checkMove(POS_READY, POS_CHECK_1)
+        success &= self.checkMove(POS_CHECK_1, POS_CHECK_2)
+        success &= self.checkMove(POS_CHECK_2, POS_CHECK_3)
+        success &= self.checkMove(POS_CHECK_3, POS_CHECK_2)
+        success &= self.checkMove(POS_CHECK_2, POS_CHECK_1)
+        success &= self.checkMove(POS_CHECK_1, POS_READY)
+
+        return success
+
+    def checkMove(self, aa, bb):
+        aa = array(aa)
+        bb = array(bb)
+        self.commandPosition(aa)
+
+        posAA = array(self.readCurrentPosition())
+
+        self.commandPosition(bb)
+
+        sleep(.4)
+        posBB = array(self.readCurrentPosition())
+
+        success = True
+        success &= all( abs((aa-bb) - (posAA-posBB)) < 50)
+        success &= all( abs(aa - posAA) < 50)
+        success &= all( abs(bb - posBB) < 50)
+
+        if not success and False:
+            print 'shimmy errors'
+            print (aa-bb) - (posAA-posBB)
+            print aa - posAA
+            print bb - posBB
+        return success
+        

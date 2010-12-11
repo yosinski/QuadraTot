@@ -79,3 +79,8 @@ def unif2phys(X, ranges):
     ret += array([x[0] for x in ranges])
     return ret
 
+
+def writeArray(ff, arr):
+    '''Write array arr to file object ff in human readable format.''' 
+    for row in arr:
+        ff.write('%s\n' % ' '.join([str(x) for x in row]))

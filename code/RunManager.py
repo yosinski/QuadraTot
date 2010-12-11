@@ -42,9 +42,13 @@ class RunManager:
             print 'Retrying last run'
             return self.run_robot(currentState)
 
+        if not self.robot.shimmy():
+            self.manual_reset('Shimmy failed.  Fix and restart.')
+            return self.run_robot(currentState)
+
         try:
-            self.robot.run(motionModel, runSeconds = 10, resetFirst = False,
-                           interpBegin = 1, interpEnd = 1)
+            self.robot.run(motionModel, runSeconds = 9, resetFirst = False,
+                           interpBegin = 1, interpEnd = 2)
         except RobotFailure as ee:
             print ee
             self.manual_reset('Robot run failure.  Fix something and push enter to continue.')
@@ -55,14 +59,24 @@ class RunManager:
         endPos = wiiTrack.getPosition()
         if endPos is None:
             # Robot walked out of sensor view
-            self.manual_reset('Robot has walked outisde sensor view.  Please place back in center and push enter to continue.')
-            print 'Retrying last run'
-            return self.run_robot(currentState)
+            override = self.manual_reset('Robot has walked outisde sensor view.  Please place back in center\nand push enter to retry or enter manual fitness override to skip.')
+            try:
+                manualDist = float(override)
+                return manualDist
+            except ValueError:
+                print 'Retrying last run'
+                return self.run_robot(currentState)
 
         distance_walked = self.calculate_distance(beginPos, endPos)
         #print '        walked %.2f' % distance_walked
-    
-        return distance_walked
+
+        if not self.robot.shimmy():
+            ret = distance_walked / 2.0
+            print 'Shimmy failed, returning %.2f instead of %.2f' % (ret, distance_walked)
+            self.manual_reset('Shimmy failed at end, reset robot if necessary and push enter to continue.')
+            return ret
+        else:
+            return distance_walked
             
     def log_start(self, extra=None):
         logFile = open('log.txt', 'a')
@@ -78,13 +92,21 @@ class RunManager:
         logFile.write(string)
         logFile.close()
         
-    def log_results(self, currentState, currentDistance):
+    def log_results(self, logInfo, currentDistance):
         """Writes to log file that keeps track of tests so far"""
-        if hasattr(currentState, '__call__'):
-            stats = 'function call run'
-        else:
-            stats = ' '.join([repr(xx) for xx in currentState])
         logFile = open('log.txt', 'a')
+
+        #if hasattr(currentState, '__call__'):
+        #    stats = 'function call run'
+        #else:
+        #    stats = ' '.join([repr(xx) for xx in currentState])
+        if isinstance(logInfo, list):
+            stats = ' '.join([repr(xx) for xx in currentState])
+        elif isinstance(logInfo, basestring):
+            stats = logInfo
+        else:
+            raise Exception('Do not know how to log %s' % repr(logInfo))
+
         logFile.write(stats + ", " + str(currentDistance) + "\n")
         logFile.close()
 
@@ -102,13 +124,15 @@ class RunManager:
         self.log_start(strategy.logHeader())
 
         for ii in xrange(limit):
-            currentState = strategy.getNext()
+            currentState, logInfo = strategy.getNext()
             
             print
-            if hasattr(currentState, '__call__'):
-                print 'Iteration %2d' % (ii+1),
-            else:
-                print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
+            #if hasattr(currentState, '__call__'):
+            #    print 'Iteration %2d: %s' % (ii+1, logStr),
+            #else:
+            #    print 'Iteration %2d params' % (ii+1), prettyVec(currentState),
+            paramStr = logInfo if isinstance(logInfo, basestring) else prettyVec(logInfo)
+            print 'Iteration %2d: %s' % (ii+1, paramStr)
             sys.stdout.flush()
 
             # Check if this state is new, and possibly skip it
@@ -131,7 +155,7 @@ class RunManager:
 
             #print '        best so far', prettyVec(strategy.bestState), '%.2f' % strategy.bestDist  # Prints best state and distance so far
 
-            self.log_results(currentState, currentDistance)
+            self.log_results(logInfo, currentDistance)
 
 
 
@@ -170,4 +194,4 @@ class RunManager:
 
     def manual_reset(self, st):
         print st
-        raw_input()
+        return raw_input()
