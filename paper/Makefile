@@ -9,8 +9,8 @@ all: ${TARGETS}
 	dvips -t letter -o $@ $<
 
 %.dvi : %.tex
-	latex $*
-	bibtex $*
+	#latex $*
+	#bibtex $*
 	latex $*
 	latex $*
 
