@@ -52,7 +52,7 @@ class RobotFailure(Exception):
 class Robot():
     ''''''
 
-    def __init__(self, silentNetFail = False, nServos = 9, commandRate = 40,
+    def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
                  loud = False):
         '''Initialize the robot.
         
@@ -70,14 +70,16 @@ class Robot():
         '''
 
         # The number of Dynamixels on the bus.
-        self.nServos = nServos
+        self.expectedIds   = expectedIds if expectedIds is not None else range(9)
+        self.nServos       = len(self.expectedIds)
         self.silentNetFail = silentNetFail
 
         self.sleep = 1. / float(commandRate)
         self.loud  = loud
 
-        if self.nServos != 9:
-            raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
+        #if self.nServos != 9:
+        #    pass
+        #    #raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
 
         # Default baud rate of the USB2Dynamixel device.
         self.baudRate = 1000000
@@ -104,7 +106,7 @@ class Robot():
         self.net = dynamixel.DynamixelNetwork(serial)
 
         print "Scanning for Dynamixels...",
-        self.net.scan(0, self.nServos-1)
+        self.net.scan(min(self.expectedIds), max(self.expectedIds))
 
         self.actuators   = []
         self.actuatorIds = []
@@ -305,7 +307,7 @@ class Robot():
         self.commandPosition(POS_READY)
         sleep(2)
 
-    def commandPosition(self, position, cropWarning = False):
+    def commandPosition(self, position, crop = True, cropWarning = False):
         '''Command the given position
 
         commandPosition will command the robot to move its servos to
@@ -323,8 +325,11 @@ class Robot():
         if len(position) != self.nServos:
             raise Exception('Expected postion vector of length %d, got %s instead'
                             % (self.nServos, repr(position)))
-        
-        goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
+
+        if crop:
+            goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
+        else:
+            goalPosition = [int(xx) for xx in position]
 
         if self.loud:
             posstr = ', '.join(['%4d' % xx for xx in goalPosition])
