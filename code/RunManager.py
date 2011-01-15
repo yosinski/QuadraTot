@@ -51,9 +51,15 @@ class RunManager:
                            interpBegin = 1, interpEnd = 2)
         except RobotFailure as ee:
             print ee
-            self.manual_reset('Robot run failure.  Fix something and push enter to continue.')
-            print 'Retrying last run'
-            return self.run_robot(currentState)
+            override = self.manual_reset('Robot run failure.  Fix something and push enter to continue, or enter a fitness to manually enter it.')
+#            print 'Retrying last run'
+#            return self.run_robot(currentState)
+            try:
+                manualDist = float(override)
+                return manualDist
+            except ValueError:
+                print 'Retrying last run'
+                return self.run_robot(currentState)
             
 
         endPos = wiiTrack.getPosition()
