@@ -107,7 +107,7 @@ class RunManager:
         #else:
         #    stats = ' '.join([repr(xx) for xx in currentState])
         if isinstance(logInfo, list):
-            stats = ' '.join([repr(xx) for xx in currentState])
+            stats = ' '.join([repr(xx) for xx in logInfo])
         elif isinstance(logInfo, basestring):
             stats = logInfo
         else:
