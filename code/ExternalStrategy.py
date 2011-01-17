@@ -30,11 +30,11 @@ class NEATStrategy(OneStepStrategy):
         #self.identifier = ''.join([random.choice('abcdef1234567890') for x in range(8)])
         self.identifier = now.strftime('neat_%y%m%d_%H%M%S')
         
-        self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/Hypercube_NEAT'
-        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/spiderJointAngles.txt'
+        self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/Hypercube_NEAT'
+        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/spiderJointAngles.txt'
         #self.motionFile = 'spiderJointAngles.txt'
-        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/fitness'
-        self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/SpiderRobotExperiment.dat'
+        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/fitness'
+        self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/SpiderRobotExperiment.dat'
 
         self.avgPoints       = 4                         # Average over this many points
         self.junkPoints      = 1000
@@ -69,7 +69,8 @@ class NEATStrategy(OneStepStrategy):
             
         #'%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
 
-        self.nRuns = 0
+        self.genId = 0
+        self.orgId = 0
 
 
     def __del__(self):
@@ -93,7 +94,7 @@ class NEATStrategy(OneStepStrategy):
         #print 'STDERR:'
         #print stderr
 
-        if self.nRuns == self.generationSize:
+        if self.orgId == self.generationSize:
             print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
             raw_input()
             #sleep(10)
@@ -102,9 +103,10 @@ class NEATStrategy(OneStepStrategy):
                 self.proc = Process((self.executable,
                                      '-O', self.prefix, '-R', '102', '-I',
                                      self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
-            self.nRuns = 0
+            self.genId += 1
+            self.orgId = 0
 
-        #print 'On iteration', self.nRuns+1
+        #print 'On iteration', self.orgId+1
 
         while True:
 
@@ -136,7 +138,7 @@ class NEATStrategy(OneStepStrategy):
                 continue
             break
 
-        self.nRuns += 1
+        self.orgId += 1
 
         for ii,line in enumerate(lines[self.junkPoints:]):
             #print 'line', ii, 'is', line
@@ -188,7 +190,7 @@ class NEATStrategy(OneStepStrategy):
         times = linspace(0,12,positions.shape[0])
 
         # Dump both raw positions and positions to file
-        thisIdentifier = '%s_%03d' % (self.identifier, self.nRuns)
+        thisIdentifier = '%s_%05d_%03d' % (self.identifier, self.genId, self.orgId)
 
         ff = open('%s_raw' % thisIdentifier, 'w')
         writeArray(ff, rawPositions)
