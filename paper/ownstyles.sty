@@ -38,6 +38,26 @@
   \end{figure}
 }
 
+\newcommand{\acmFig}[4][0]{
+  \begin{figure}
+  \centering
+  \hspace*{#1\linewidth}
+  \epsfig{file=#2.eps, width=#3\linewidth}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFigDouble}[4][0]{
+  \begin{figure*}
+  \centering
+  \hspace*{#1\linewidth}
+  \epsfig{file=#2.eps, width=#3\linewidth}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure*}
+}
+
 % codebox
 %\definecolor{codecolor}{rgb}{0.87,0.87,0.87}
 %\definecolor{codecolor}{rgb}{0.7,0.7,0.7}

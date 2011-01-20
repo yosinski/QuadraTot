@@ -78,26 +78,26 @@ Linear Regression                        & 27.58   & 12.51  & 1.95   &  14.01 \\
 
 \end{itemize}
 
-\figvarp{vectorA}{1}{Results for runs beginning with vector A.
+\acmFig{vectorA}{1}{Results for runs beginning with vector A.
   Linear regression worked significantly better than the other
   algorithms, resulting in a gait (27.58 body lengths/minute) that
   walked over twice as fast as the next best gait -- uniform random
   hill climbing at 11.37 body lengths/minute -- and 5.3 times better
-  than the previous hand-coded gait.}{}
+  than the previous hand-coded gait.}
 
-\figvarp{vectorB}{1}{Results for run starting with vector B.  All
+\acmFig{vectorB}{1}{Results for run starting with vector B.  All
   algorithms performed similarly.  The random method actually got
   lucky this time and produced the best gait (17.26 body
   lengths/minute) and uniform random hill climbing produced the worst
   (9.44 body lengths/minute). The remaining algorithms each produced a
-  gait around 13 body lengths/minute.}{}
+  gait around 13 body lengths/minute.}
 
-\figvarp{vectorC}{1}{Results for runs starting with vector C.
+\acmFig{vectorC}{1}{Results for runs starting with vector C.
   Simplex and Gaussian random hill climbing each produced a gait that
   substantially outperformed the other algorithms, with around 15 body
   lengths/minute and 13 body lengths/minute, respectively, whereas the
   other algorithms returned gaits of less than 5 body
-  lengths/minute.}{}
+  lengths/minute.}
 
 Based on the three trials, as shown in \figref{std_error}, linear
 regression worked the best, followed by simplex. Gaussian random hill
@@ -107,7 +107,7 @@ search if allowed to run for more iterations. Uniform random hill
 climbing and policy gradient descent performed similarly to each other
 on average, but differed greatly on individual runs.
 
-\figvarp{std_error}{1}{Average results for each method starting with
+\acmFigDouble{std_error}{.6}{Average results for each method starting with
   parameter vectors A, B, and C.  Error bars are plotted showing the
   standard error.  Linear regression outperformed other methods,
   followed by simplex. Gaussian random hill climbing performed about
@@ -115,7 +115,7 @@ on average, but differed greatly on individual runs.
   to improve and become much better than random search if allowed to
   run for more iterations. Uniform random hill climbing and policy
   gradient descent performed similarly to each other on average, but
-  differed greatly on individual runs.}{}
+  differed greatly on individual runs.}
 
 
 In addition to running strategies to optimize parameterized gaits, we
@@ -128,21 +128,21 @@ exploration are shown in \figref{explore_dim_1} through
 \figref{explore_dim_5}.  As is shown in the figures, some dimensions
 are smoother than others, and some measurements are fairly noisy.
 
-\figvarp{explore_dim_1}{.65}{Fitness mean and standard deviation
+\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
   vs. dimension 1.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
-\figvarp{explore_dim_2}{.65}{Fitness mean and standard deviation
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
+\acmFig{explore_dim_2}{1}{Fitness mean and standard deviation
   vs. dimension 2.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
-\figvarp{explore_dim_3}{.65}{Fitness mean and standard deviation
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
+\acmFig{explore_dim_3}{1}{Fitness mean and standard deviation
   vs. dimension 3.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
-\figvarp{explore_dim_4}{.65}{Fitness mean and standard deviation
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
+\acmFig{explore_dim_4}{1}{Fitness mean and standard deviation
   vs. dimension 4.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
-\figvarp{explore_dim_5}{.65}{Fitness mean and standard deviation
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
+\acmFig{explore_dim_5}{1}{Fitness mean and standard deviation
   vs. dimension 5.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
 
 
 
