@@ -1,0 +1,166 @@
+\section{Results and Discussion}
+
+\edit{write this.}
+
+% Present the quantitative results of your experiments. Graphical data
+% presentation such as graphs and histograms are frequently better 
+% than tables. Explain what are the basic differences revealed in the 
+% data. If your method is stochastic or you analyze multiple datasets, 
+% calculate mean and standard error for every quantitative
+% performance result you show based on multiple runs.
+
+We have done complete runs of 3 different initial parameter vectors
+for random search, uniform random hill climbing, Gaussian random hill
+climbing, policy gradient descent, Nelder-Mead simplex, and linear
+regression.  We also evaluated the SVM regression and HyperNEAT
+methods, but these methods were more experimental, and thus we do not
+yet have the same volume of data for these runs.  We developed several
+gaits that were about 4 times faster than the original hand-coded
+gait.  Results are shown in \tabref{results_table}.
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|r|c|c|c||c|}
+\hline
+                                         & A       & B      & C      &  Average \\
+\hline                                                               
+\hline                                                               
+Previous hand-coded gait                 & --      & --     & --     &  5.16 \\
+\hline                                                                 
+Random search                            & 6.04    & 17.26  & 4.90   &  9.40 \\
+\hline                                                                 
+Uniform Random Hill Climbing             & 11.37   & 9.44   & 2.69   &  7.83 \\
+\hline                                                                 
+Gaussian Random Hill Climbing            & 3.10    & 13.59  & 13.40  &  10.03 \\
+\hline                                                                 
+Policy Gradient Descent                  & 0.68    & 14.69  & 3.60   &  6.32 \\
+\hline                                                                 
+Nelder-Mead simplex                      & 8.51    & 13.62  & 14.83  &  12.32 \\
+\hline                                                                 
+Linear Regression                        & 27.58   & 12.51  & 1.95   &  14.01 \\
+%\hline                                                                
+%SVM Regression                           & ???     & ???    & ???   &   \\
+%\hline                                                                
+%Evolutionary Neural Network (HyperNEAT)  & ???     & ???    & ???   &   \\
+\hline
+\end{tabular}
+\caption{The best gaits found for each starting vector and algorithm,
+  in body lengths per minute.}
+\tablabel{results_table}
+\end{center}
+\end{table}
+
+
+\begin{itemize}
+
+\item For vector A, shown in \figref{vectorA}, linear regression
+  worked significantly better than the other algorithms, resulting in
+  a gait (27.58 body lengths/minute) that walked over twice as fast as
+  the next best gait -- uniform random hill climbing at 11.37 body
+  lengths/minute -- and 5.3 times better than the previous hand-coded
+  gait.
+
+\item Vector B, depicted in \figref{vectorB}, resulted in similarly
+  performing gaits with all the algorithms. The random method got
+  lucky and produced the best gait (17.26 body lengths/minute) and
+  uniform random hill climbing produced the worst (9.44 body
+  lengths/minute). The remaining algorithms each produced a gait
+  around 13 body lengths/minute.
+
+\item For vector C, shown in \figref{vectorC}, simplex and Gaussian
+  random hill climbing each produced a gait that substantially
+  outperformed the other algorithms. Simplex resulted in a gait of
+  nearly 15 body lengths/minute and Gaussian random hill climbing
+  produced a gait of just over 13 body lengths/minute, whereas the
+  other algorithms returned gaits of less than 5 body lengths/minute.
+
+\end{itemize}
+
+\figvarp{vectorA}{1}{Results for runs beginning with vector A.
+  Linear regression worked significantly better than the other
+  algorithms, resulting in a gait (27.58 body lengths/minute) that
+  walked over twice as fast as the next best gait -- uniform random
+  hill climbing at 11.37 body lengths/minute -- and 5.3 times better
+  than the previous hand-coded gait.}{}
+
+\figvarp{vectorB}{1}{Results for run starting with vector B.  All
+  algorithms performed similarly.  The random method actually got
+  lucky this time and produced the best gait (17.26 body
+  lengths/minute) and uniform random hill climbing produced the worst
+  (9.44 body lengths/minute). The remaining algorithms each produced a
+  gait around 13 body lengths/minute.}{}
+
+\figvarp{vectorC}{1}{Results for runs starting with vector C.
+  Simplex and Gaussian random hill climbing each produced a gait that
+  substantially outperformed the other algorithms, with around 15 body
+  lengths/minute and 13 body lengths/minute, respectively, whereas the
+  other algorithms returned gaits of less than 5 body
+  lengths/minute.}{}
+
+Based on the three trials, as shown in \figref{std_error}, linear
+regression worked the best, followed by simplex. Gaussian random hill
+climbing performed about as well as random, but it is unclear whether
+Gaussian would continue to improve and become much better than random
+search if allowed to run for more iterations. Uniform random hill
+climbing and policy gradient descent performed similarly to each other
+on average, but differed greatly on individual runs.
+
+\figvarp{std_error}{1}{Average results for each method starting with
+  parameter vectors A, B, and C.  Error bars are plotted showing the
+  standard error.  Linear regression outperformed other methods,
+  followed by simplex. Gaussian random hill climbing performed about
+  as well as random, but it is unclear whether Gaussian would continue
+  to improve and become much better than random search if allowed to
+  run for more iterations. Uniform random hill climbing and policy
+  gradient descent performed similarly to each other on average, but
+  differed greatly on individual runs.}{}
+
+
+In addition to running strategies to optimize parameterized gaits, we
+also wanted to investigate the space of possible gaits.  To accomplish
+this, we selected a parameter vector that resulted in motion, but not
+an exceptional gait, and plotted performance along each dimension
+individually.  In addition, we duplicated each measurement to be able
+to estimate the measurement noise at each point.  Results for this
+exploration are shown in \figref{explore_dim_1} through
+\figref{explore_dim_5}.  As is shown in the figures, some dimensions
+are smoother than others, and some measurements are fairly noisy.
+
+\figvarp{explore_dim_1}{.65}{Fitness mean and standard deviation
+  vs. dimension 1.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+\figvarp{explore_dim_2}{.65}{Fitness mean and standard deviation
+  vs. dimension 2.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+\figvarp{explore_dim_3}{.65}{Fitness mean and standard deviation
+  vs. dimension 3.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+\figvarp{explore_dim_4}{.65}{Fitness mean and standard deviation
+  vs. dimension 4.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+\figvarp{explore_dim_5}{.65}{Fitness mean and standard deviation
+  vs. dimension 5.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}{}
+
+
+
+\subsection{Discussion}
+% Is your hypothesis supported? What conclusions do the results support
+% about the strengths and weaknesses of your method compared to other 
+% methods? How can the results be explained in terms of the underlying 
+% properties of the algorithm and/or the data.
+
+Because only three trials were tested with each algorithm and no
+algorithm consistently outperformed the others, there is a large
+standard error for each algorithm, as show in \figref{std_error}. For
+this reason, it is unclear if any algorithm is superior to another in
+this application. More trials with each algorithm would be necessary
+to reach a definitive ranking of the performance of the algorithms.
+
+However, each algorithm discovered at least one gait of over 10 body
+lengths/minute, including random. For this reason, we speculate that
+the motion model is at least as critical as the learning algorithm
+used.
+

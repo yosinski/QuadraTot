@@ -1,0 +1,32 @@
+\section{Conclusion and Future Work}
+
+\edit{write this, old section below}
+
+% Briefly summarize the important results and conclusions presented in 
+% the paper. What are the most important points illustrated by your 
+% work? How will your results improve future research and applications 
+% in the area?
+
+
+We have presented an array of approaches to optimizing a quadrupedal
+gait for forward speed.  We have implemented and tested different
+learning strategies, including uniform and Gaussian random hill
+climbing, policy gradient reinforcement learning, Nelder-Mead simplex,
+several new predictive methods based on linear and support vector
+regression, and an evolved neural network (HyperNEAT).  We have also
+compared these approaches to random search as a baseline. Many of the
+methods resulted in walks significantly faster than previously
+hand-tuned gaits.
+
+Because only three trials were tested with each algorithm and no
+algorithm consistently outperformed the others, there was a large
+standard error for each method, as shown in \figref{std_error}. Thus
+it was unclear if any algorithm was superior to another in this
+application. More trials with each algorithm would be necessary to
+reach a definitive ranking. Because each algorithm discovered at least one gait of
+over 10 body lengths/minute, including random search, we also
+conjectured that the motion representation for the robot is more
+integral to forward speed than the learning algorithm.  How to learn
+the motion representation, in addition to its parameters, remains an
+open problem.
+

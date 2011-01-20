@@ -1,0 +1,49 @@
+\section{Introduction and Background}
+
+\edit{Write this}
+
+\editbox{Outline \\
+ - Why gait learning is cool \\
+ - Gait learning has been done before, in simulation and on hardware (cite, cite, cite) \\
+ - HyperNEAT has been used to evolve gaits before in sim (cite, ...) \\
+ - Here, we do two cool things for the first time: \\
+ - - evolve HN in hardware \\
+ - - compare it to other learning methods on the same hardware.}
+
+
+
+
+\edit{Old Quadratot intro follows}
+
+% Motivate and abstractly describe the problem you are addressing and
+% how you are addressing it. What is the problem? Why is it important?
+% What is your basic approach? A short discussion of how it fits into
+% % related work in the area is also desirable. Summarize the basic
+% results and conclusions that you will present.
+
+Applications of walking robots often call for the ability to walk as
+quickly, efficiently, or with as little power as possible.  Often
+these optimizations are done manually by an expert who designs and
+tweaks a gait specifically for a given objective.  Other groups have
+used learning methods to generate gaits optimized for some metric.
+Approaches differ in their starting assumptions, some essentially
+tweaking the parameters of a hand-tuned model \cite{chernova}, others
+exploring a reasonably compact parameter space \cite{kohl}, and still
+others beginning with few assumptions besides periodicity
+\cite{zykov}.
+
+We aimed to strike a middle ground between these approaches.  Our
+motion generator did not rely on hand-tweaked gaits, but it did use
+parameterized gaits which, by their nature, impose some assumptions on
+the answers produced.  We then used machine learning to design gaits
+for a quadruped robot with these models.  This paper presents a
+comparison of the different learning methods implemented.  Most
+methods created walks that are several times faster than the original
+hand-tuned gait.  We invite readers with short attention spans to view
+a video of some of our results online here:
+
+%\url{http://www.youtube.com/watch?v=ODoiOj9DdGg}
+\texttt{http://www.youtube.com/watch?v=ODoiOj9DdGg}
+
+%The code so far consists of the robot class, optimization class,
+%parameterized model, sine model, and camera feedback.

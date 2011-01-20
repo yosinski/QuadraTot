@@ -1,0 +1,29 @@
+%\section{Future work}
+
+\edit{write this, old section below}
+
+% What are the major shortcomings of your current method? For each 
+% shortcoming, propose additions or enhancements that would help overcome it.
+
+There are several directions in which we could continue our
+work. First, the error margins for our runs were large, so reducing
+them by running more trials would lead to more conclusive data. It
+would also be insightful to run our algorithms on different motion
+models.  We suspect that our choice of motion model influenced the
+results greatly, as even random choices in the space produced gaits
+that moved a significant fraction of the time (> 5\%).  It would be
+interesting to see how learning methods would perform using a model
+that included a much higher percentage of unproductive gaits. We also
+intend to experiment further with SVM regression and evolutionary
+algorithms/HyperNEAT.  Some parameter vectors resulted in the robot
+turning, as opposed to it walking long distances. This could be an
+interesting learning goal in future projects. To these ends, we
+propose the following additions and enhancements:
+
+\begin{itemize}
+\item More runs and/or longer runs
+\item Different motion representations
+\item Better tuning of SVM regression
+\item Evolutionary algorithms/HyperNEAT\cite{clune}
+\item Learning how to turn
+\end{itemize}
