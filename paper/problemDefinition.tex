@@ -26,13 +26,43 @@ work on this challenging multidimensional control problem.
 
 
 
-Given our physical robot, the gait learning problem aims to find a
-\emph{gait} that maximizes some performance metric.  Gaits may loosely
-be defined either with or without feedback from the robot.  Gaits
-without feedback simply specify the motor commands to be given at any
-time, and
-
 \edit{Jason writing this now}
 
-can best be
-formulated as follows: find functions
+The gait learning problem aims to find a \emph{gait} that maximizes
+some performance metric.
+
+Mathematically, we define a gait as a function that specifies
+commanded motor positions for a robot over time.  Using this
+definition, we require one function per motor.  We can write gaits
+without feedback --- also called feed forward gaits --- as
+
+\be
+x_i = f_i(t)
+\ee
+
+\noindent for commanded position $x_i$ for motor $i$.  The
+function depends only on time.  Using the same framework, a gait
+including measured motor position, force, or other values could be
+written as
+
+\be
+x_i = f_i(t, z)
+\ee
+
+\noindent for some measurement $z$.  Though perhaps obvious, it is
+worth noting that feedforward gaits are deterministic (unless they
+include random elements), producing the same command pattern each time
+they are run.  The output of a gait that includes feedback, on the
+other hand, depends on the actual measurements, and noise in these
+measurements may result in different $x_i$ values each time they are
+run.
+
+For the system evaluated in this paper, we chose to use only
+feedforward gaits.  An interesting extension would be to allow gaits
+to depend on the measured servo positions, loads, voltage drops, or
+other quantities.
+
+The ultimate goal was to design gaits that were as fast as possible,
+so to optimize for speed, our performance metric was displacement over
+a period of motion lasting approximately 10 seconds.  For details of
+exactly how this displacement was measured, see \secref{foo}.
