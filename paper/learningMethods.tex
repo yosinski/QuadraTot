@@ -1,29 +1,66 @@
-\subsection{Learning Methods}
+\subsection{Parametrized Motion Models}
+\seclabel{motionModel}
 
-There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
+\edit{this might no longer flow...fix} There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
 
 The first method is to choose a family of \emph{parametrized functions}.  By fixing the parameters to a particular set of values, we obtain a deterministic motion function over time.  We tried several parametrizations on the robot and, obtaining reasonble early success, settled on one particular parametrization.  We dubbed this the \emph{SineModel5}, as it has five parameters and employs a sine wave as its root pattern.
 
-The five parameters are as follows:
+The five parameters in $\vec{\theta}$ are as follows:
 
- - amp - Amplitude
- - tau   - sine wave period
- - multIO - multiplier scaling inner joings from outer joints
- - multFB - multiplier scaling front joints from back joints
- - multLR - multiplier scaling left joints from right joints
+ - amp - Amplitude       - allowable range
+ - tau   - sine wave period   - allowable range
+ - multIO - multiplier scaling inner joings from outer joints  - allowable range
+ - multFB - multiplier scaling front joints from back joints  - allowable range
+ - multLR - multiplier scaling left joints from right joints  - allowable range
 (verify this)
 
-Inuitively, SineModel5 starts with a sine wave of amplitude 1
+\newcommand{\amp}{\mathrm{amp}}
+
+Inuitively, SineModel5 starts with 8 identicaly sine waves of amplitude $\amp$ and period $\tau$, multiplies the waves for all inner motors by multIO, multiplies the waves for all front motors by multFB, and multiplies the waves for all left motors by multLR.  To obtain the actual motor position commands, these waves are offset by an appropriate fixed constant so that the base position (when the sine waves are at 0) is approximately a crouch (the position shown in \figref{crouchingRobot}).  Finally, in this motion model, the ninth "hip" motor is kept at a neutral position.  Thus, the commanded position for all motors, as a vector function of time, is:
+
+\begin{verbatim}
+        [g_0(t) ]    [ \amp * sin(\tau t) ]
+        [g_1(t) ]    [ \amp * sin(\tau t) ]
+        [g_2(t) ]    [ \amp * sin(\tau t) ]
+g(t)   [g_3(t) ] = [ \amp * sin(\tau t) ]
+        [g_4(t) ]    [ \amp * sin(\tau t) ]
+        [g_5(t) ]    [ \amp * sin(\tau t) ]
+        [g_6(t..) ]    [ \amp * sin(\tau t) ]
+\end{verbatim}
+
+The nine subscripted functions correspond to the nine labeled motors in \figref{robotDiagram}
+
+% used is a function parametrized by five numbers, shown in \figref{foo}
 
 
- used is a function parametrized by five numbers, shown in \figref{foo}
 
-\edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
+
+
+\subsection{Learning Methods for Parametrized Motion Models}
+\seclabel{learningMethods}
+
+Using the SineModel5 parametrized motion model described in the previous section, along with the allowable ranges for each of the five parameters (shown in \tabref{parameterTable}), the task becomes how to choose the combination of five parameters that results in the fastest motion, per the evaluation methods in \secref{fitnessEvaluation}.
+
+If we choose a value for the five dimensional parameter $\vec{\theta}$, then a given physical trial gives us one measurement of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two things make learnign difficult.  First, each evaluation of $f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on average.  Second, the fitness returned by such evaluations has proven to be very noisy, with the standard deviation of the noise often being roughly equivalent to the size of the measurement.
+
+For both of these reasons, an intelligent learning algorithm is needed.
+
+In this context, by learning algorithm we simply mean a method for choosing:
+
+1) The value for $\vec{\theta}$ for the initial trial, and
+2) The next value of $\vec{\theta}$ to try, given the $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials
+
+We evaluated a total of eight subtly or not so subtly different learning methods.  All employed a simple random sampling method for requirement (1); that is, all methods picked their initial $\vec{\theta}$ value via uniform random sampling within the allowed parameter ranges. \edit{make sure this is true}.  Thus, the differences in the algorithms was how the selected new $\vec{\theta}$ values to try from their past experience.
+
+The eight methods used, and their methods for choosing the next $\vec{\theta}$ are:
+
+
+
 
 \edit{write this.  Old quadratot Method section below alsdkfj }
 
 %\section{Method}
-\seclabel{method}
+%\seclabel{method}
 
 % Describe in reasonable detail the algorithm you are using to address
 % this problem. A pseudo-code description of the algorithm you are
@@ -34,22 +71,22 @@ Inuitively, SineModel5 starts with a sine wave of amplitude 1
 % enough to be easily understood. If possible, an intuitively
 % meaningful example is better than one with meaningless symbols.
 
-We use several parametrized motion models that command motors to
-positions based on a sine wave, creating a periodic pattern.  While we
-investigated several models, for the bulk of our experiments, we used
-a model whose five parameters are: amplitude, wavelength, scale inner
-vs outer motors, scale left vs right motors, scale back vs front
-motors. Each strategy below attempts to choose the best possible
-parameters for this motion model.  
+%We use several parametrized motion models that command motors to
+%positions based on a sine wave, creating a periodic pattern.  While we
+%investigated several models, for the bulk of our experiments, we used
+%a model whose five parameters are: amplitude, wavelength, scale inner
+%vs outer motors, scale left vs right motors, scale back vs front
+%motors. Each strategy below attempts to choose the best possible
+%parameters for this motion model.  
 
-We implemented and tested 8 different learning strategies.  All
-strategies except for the HyperNEAT method\cite{clune} were
-constrained to pick parameters from within predetermined ranges.
+%We implemented and tested 8 different learning strategies.  All
+%strategies except for the HyperNEAT method\cite{clune} were
+%constrained to pick parameters from within predetermined ranges.
 
 \begin{itemize}
 
 \item \emph{Random}: This method randomly generates parameter vectors
-  in the allowable range. This strategy is used only as baseline.
+  in the allowable range for every trial. This strategy was used only as baseline for comparison.
 
 \item \emph{Uniform random hill climbing}: This method begins by
   selecting a single random parameter vector.  Subsequent iterations
@@ -70,38 +107,41 @@ constrained to pick parameters from within predetermined ranges.
   that the standard deviation of the noise was 5\% of the range of
   that dimension.
 
-\item \emph{N-dimensional policy gradient descent}: As opposed to the
-  previous methods, this method explicitly estimates the gradient for
-  the objective function. It does this by first evaluating \emph{t}
-  randomly generated parameter vectors near the initial vector, each
-  dimension of these vectors being perturbed by either $-\epsilon$,
-  $0$, or $\epsilon$. Then, for each dimension, it groups vectors into
-  three groups: $-\epsilon$, $0$, and $\epsilon$.  The gradient along
-  this dimension is then estimated as the average score for the
-  $\epsilon$ group minus the average score for the $-\epsilon$
-  group. Finally, the method creates a new vector by changing all
-  parameters by a fixed-size step in the direction of the gradient.
+\item \emph{N-dimensional policy gradient descent}: In \cite{kohl},
+  Kohl and Stone document a method for local gradient ascent for gait
+  learning with noisy fitness evaluations, and we have included this
+  method in our evaluation.  This strategy explicitly estimates the
+  gradient for the objective function. It does this by first
+  evaluating \emph{n} randomly generated parameter vectors near the
+  initial vector, each dimension of these vectors being perturbed by
+  either $-\epsilon$, $0$, or $\epsilon$. Then, for each dimension, it
+  groups vectors into three groups: $-\epsilon$, $0$, and $\epsilon$.
+  The gradient along this dimension is then estimated as the average
+  score for the $\epsilon$ group minus the average score for the
+  $-\epsilon$ group. Finally, the method creates a new vector by
+  changing all parameters by a fixed-size step in the direction of the
+  gradient.
 
-\item \emph{Nelder-Mead simplex method}\cite{nm}: The Nelder-Mead
-  simplex method creates an initial simplex with 6 vertices. The
-  initial parameter vector is stored as the first vertex and the other
-  five vertices are created by adding to one dimension at a time one
-  tenth of the allowable range for that parameter. It then tests the
-  fitness of each vertex and based on these fitnesses, it reflects the
-  worst point over the centroid in an attempt to improve it.  However,
-  to prevent cycles and becoming stuck in local minima, several other
-  rules are used.  In general, the worst vertex is reflected over the
-  centroid. If the reflected point is better than the second worst
-  point and worse than the best point, then the reflected point
-  replaces the worst. If the reflected point is better than the best
-  point, the simplex is expanded in the direction of the reflected
-  point. The better of the reflected and the expanded point replaces
-  the worst point. If the reflected point is worse than the second
-  worst point, then the simplex is contracted away from the reflected
-  point. If the contracted point is better than the reflected point,
-  the contracted point replaces the worst point. If the contracted
-  point is worse than the reflected point, the entire simplex is
-  shrunk \cite{nm}.
+\item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
+  method \cite{nm} creates an initial simplex with $d+1$ vertices,
+  where $d$ is the dimension of the parameter space. The initial
+  parameter vector is stored as the first vertex and the other five
+  vertices are created by adding to one dimension at a time one tenth
+  of the allowable range for that parameter. It then tests the fitness
+  of each vertex and based on these fitnesses, it reflects the worst
+  point over the centroid in an attempt to improve it.  In general,
+  the worst vertex is reflected; however, to prevent cycles and
+  becoming stuck in local minima, several other rules are used.  If
+  the reflected point is better than the second worst point and worse
+  than the best point, then the reflected point replaces the worst. If
+  the reflected point is better than the best point, the simplex is
+  expanded in the direction of the reflected point. The better of the
+  reflected and the expanded point replaces the worst point. If the
+  reflected point is worse than the second worst point, then the
+  simplex is contracted away from the reflected point. If the
+  contracted point is better than the reflected point, the contracted
+  point replaces the worst point. If the contracted point is worse
+  than the reflected point, the entire simplex is shrunk \cite{nm}.
 
 \item \emph{Linear regression}: To initialize, this method chooses and
   evaluates five random parameter vectors. It then fits a linear model
