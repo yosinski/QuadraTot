@@ -2,31 +2,28 @@
 % Precisely define the problem you are addressing (i.e. formally specify
 % the inputs and outputs). Elaborate on why this is an interesting and
 % important problem.
+%
+%\edit{write this.  Quadratot report section below}
+%
+%We are testing several different learning methods to design a
+%parametrized gait for a quadruped robot from the Cornell Computational
+%Synthesis Lab.
+%
+%The output each of the learning algorithms is a function of time,
+%$f(t)$, that outputs a vector of commanded motor positions.  This
+%function is generated using a parametrized motion model, described in
+%\secref{implement}.
+%
+%The robot executes these commands and measures its change in location
+%using the tracking system described in \secref{implement}.  The input
+%to the learning algorithms is this measured displacement, which the
+%algorithms attempt to maximize. This displacement is measured for each
+%gait over a constant length run, usually 12 seconds.
+%
+%A comparison and evaluation of the many different methods available
+%for optimizing the gait of legged robots will be useful for future
+%work on this challenging multidimensional control problem.
 
-\edit{write this.  Quadratot report section below}
-
-We are testing several different learning methods to design a
-parametrized gait for a quadruped robot from the Cornell Computational
-Synthesis Lab.
-
-The output each of the learning algorithms is a function of time,
-$f(t)$, that outputs a vector of commanded motor positions.  This
-function is generated using a parametrized motion model, described in
-\secref{implement}.
-
-The robot executes these commands and measures its change in location
-using the tracking system described in \secref{implement}.  The input
-to the learning algorithms is this measured displacement, which the
-algorithms attempt to maximize. This displacement is measured for each
-gait over a constant length run, usually 12 seconds.
-
-A comparison and evaluation of the many different methods available
-for optimizing the gait of legged robots will be useful for future
-work on this challenging multidimensional control problem.
-
-
-
-\edit{Jason writing this now}
 
 The gait learning problem aims to find a \emph{gait} that maximizes
 some performance metric.
@@ -65,4 +62,5 @@ other quantities.
 The ultimate goal was to design gaits that were as fast as possible,
 so to optimize for speed, our performance metric was displacement over
 a period of motion lasting approximately 10 seconds.  For details of
-exactly how this displacement was measured, see \secref{foo}.
+exactly how this displacement was measured, see
+\secref{fitnessEvaluation}.
