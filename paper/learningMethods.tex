@@ -1,6 +1,26 @@
 \subsection{Learning Methods}
 
-\edit{write this.  Old quadratot Method section below}
+There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
+
+The first method is to choose a family of \emph{parametrized functions}.  By fixing the parameters to a particular set of values, we obtain a deterministic motion function over time.  We tried several parametrizations on the robot and, obtaining reasonble early success, settled on one particular parametrization.  We dubbed this the \emph{SineModel5}, as it has five parameters and employs a sine wave as its root pattern.
+
+The five parameters are as follows:
+
+ - amp - Amplitude
+ - tau   - sine wave period
+ - multIO - multiplier scaling inner joings from outer joints
+ - multFB - multiplier scaling front joints from back joints
+ - multLR - multiplier scaling left joints from right joints
+(verify this)
+
+Inuitively, SineModel5 starts with a sine wave of amplitude 1
+
+
+ used is a function parametrized by five numbers, shown in \figref{foo}
+
+\edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
+
+\edit{write this.  Old quadratot Method section below alsdkfj }
 
 %\section{Method}
 \seclabel{method}
@@ -14,7 +34,7 @@
 % enough to be easily understood. If possible, an intuitively
 % meaningful example is better than one with meaningless symbols.
 
-We use several parameterized motion models that command motors to
+We use several parametrized motion models that command motors to
 positions based on a sine wave, creating a periodic pattern.  While we
 investigated several models, for the bulk of our experiments, we used
 a model whose five parameters are: amplitude, wavelength, scale inner

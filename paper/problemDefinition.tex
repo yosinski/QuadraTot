@@ -10,7 +10,7 @@
 %Synthesis Lab.
 %
 %The output each of the learning algorithms is a function of time,
-%$f(t)$, that outputs a vector of commanded motor positions.  This
+%$g(t)$, that outputs a vector of commanded motor positions.  This
 %function is generated using a parametrized motion model, described in
 %\secref{implement}.
 %
@@ -29,29 +29,31 @@ The gait learning problem aims to find a \emph{gait} that maximizes
 some performance metric.
 
 Mathematically, we define a gait as a function that specifies
-commanded motor positions for a robot over time.  Using this
-definition, we require one function per motor.  We can write gaits
-without feedback --- also called feed forward gaits --- as
+a vector of commanded motor positions for a robot over time.
+%Using this definition, we require one function per motor.
+We can write gaits without feedback --- also called feed forward gaits
+--- as
 
 \be
-x_i = f_i(t)
+\vec{x} = g(t)
 \ee
 
-\noindent for commanded position $x_i$ for motor $i$.  The
+%\noindent for commanded position $x_i$ for motor $i$.  The
+\noindent for commanded position vector $\vec{x}$.  The
 function depends only on time.  Using the same framework, a gait
 including measured motor position, force, or other values could be
 written as
 
 \be
-x_i = f_i(t, z)
+\vec{x} = g(t, \vec{z})
 \ee
 
-\noindent for some measurement $z$.  Though perhaps obvious, it is
-worth noting that feedforward gaits are deterministic (unless they
+\noindent for some measurement vector $\vec{z}$.  Though perhaps obvious, it
+is worth noting that feedforward gaits are deterministic (unless they
 include random elements), producing the same command pattern each time
 they are run.  The output of a gait that includes feedback, on the
 other hand, depends on the actual measurements, and noise in these
-measurements may result in different $x_i$ values each time they are
+measurements may result in different $\vec{x}$ values each time they are
 run.
 
 For the system evaluated in this paper, we chose to use only
