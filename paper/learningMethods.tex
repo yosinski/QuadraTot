@@ -19,6 +19,7 @@ Inuitively, SineModel5 starts with a sine wave of amplitude 1
  used is a function parametrized by five numbers, shown in \figref{foo}
 
 \edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
+\edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
 
 \edit{write this.  Old quadratot Method section below alsdkfj }
 
@@ -43,11 +44,12 @@ motors. Each strategy below attempts to choose the best possible
 parameters for this motion model.  
 
 We implemented and tested 8 different learning strategies.  All
-strategies except for the HyperNEAT method\cite{clune} were
+strategies except for the HyperNEAT method\cite{clune2009evolving} were
 constrained to pick parameters from within predetermined ranges.
 
-\begin{itemize}
+\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
 
+\begin{itemize}
 \item \emph{Random}: This method randomly generates parameter vectors
   in the allowable range. This strategy is used only as baseline.
 
@@ -140,16 +142,27 @@ constrained to pick parameters from within predetermined ranges.
   Interestingly, a non-zero value of \code{bumpBy} resulted in better
   learning than noise free (exploration free) learning.
 
+  \edit{JMC: This next paragraph sounds like it belongs in Results?}
   Ultimately, however, the version of SVM tuned for simulation still
   did not show competitive performance on the real robot.  We tried
   tuning some parameters on the real robot, but after some amount of
   tuning, the method still exhibited too little exploration and easily
   became stuck in local minima.
 
-\item \emph{Evolutionary Neural Network (HyperNEAT)\cite{clune}}: We 
-  put together an interface between HyperNEAT
-  -- an implementation of a method for evolving neural networks -- and
-  the robot, requiring a slightly modified strategy interface.
+\item \emph{Neuroevolution (Evolving Artificial Neural Networks with HyperNEAT)}: 
+    
+  HyperNEAT is an indirect encoding for evolving artificial neural networks (ANNs) that is inspired by the way natural organisms develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of which is a genome that encodes an ANN phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed graph, where each node is a mathematical function, such as sine or Gaussian. The nature of these functions can facilitate the evolution of properties such as symmetry (e.g., an absolute value or Gaussian function) and repetition (e.g., a sine function)~\cite{stanley2009hypercube, stanley2007compositional}. The signal on each link in the CPPN is multiplied by that link's weight, which can alter its effect.
+  A CPPN is queried once for each link in the ANN substrate to determine that link's weight. The inputs to the CPPN are the Cartesian coordinates of both the source (e.g., $x = 2$, $y = 4$) and target (e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias value. The CPPN takes these five values as inputs and produces one or two output values, depending on the substrate topology. If there is no hidden layer in the substrate, the single output is the weight of the link between a source node on the input layer and a target node on the output layer. If there is a hidden layer, the first output value determines the weight of the link between the associated input (source) and hidden layer (target) nodes, and the second output value determines the weight of the link between the associated hidden (source) and output (target) layer nodes. All pairwise combinations of source and target nodes are iteratively passed as inputs to a CPPN to deter-mine the weight of each substrate link. HyperNEAT is capable of exploiting the geometry of a problem: because the link values between nodes in the final ANN substrate are a function of the geometric positions of those nodes, HyperNEAT can exploit such information when solving a problem~\cite{stanley2009hypercube, clune2009sensitivity, clune2011performance}. In the case of quadruped locomotion, this property helped Hyper-NEAT produce gaits with front-back, left-right, and four-way symmetries~\cite{clune2009evolving, clune2011performance}.
+  The evolution of the population of CPPNs occurs according to the principles of the NeuroEvolution of Augmenting Topologies (NEAT) algorithm~\cite{stanley2002evolving}, which was originally designed to evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their structural similarity to ANNs. For example, mutations can add a node, and thus a function, to a CPPN graph, or change its link weights. The NEAT algorithm is unique in three main ways~\cite{stanley2002evolving}. Initially, it starts with small genomes that encode simple networks and slowly complexifies them via mutations that add nodes and links to the network, enabling the algorithm to evolve the network topology in addition to its weights. Secondly, NEAT has a fitness sharing mechanism that preserves diversity in the system and gives time for new innovations to be tuned by evolution before competing them against more adapted rivals. Finally, NEAT tracks historical information to perform intelligent crossover while avoiding the need for expensive topological analysis. A full explanation of NEAT can be found in~\cite{stanley2002evolving}]. 
+  
+\edit{JMC: fix next paragraph}  
+Following Clune et al.~\cite{clune2011performance, clune2009evolving}, the ANNs for the robot consist of three 5x4 Cartesian grids of nodes forming input, hidden, and output layers. Adjacent layers were completely connected, meaning that there were (5x4)2 x 2 = 800 links in each substrate. The inputs to the substrate were the current angles of each of the 12 joints of the robot (described below), a touch sen-sor that provides a 1 if the lower leg is touching the ground and a 0 if it is not, the pitch, roll, and yaw of the torso, and a modified sine wave (to facilitate the production of periodic behaviors). The sine wave was the following function of time (t) in milli-seconds: sin(120 x t) x ¹. This function produces numbers from Ð¹?to ¹, which was the range of the unconstrained joints. During preliminary tests, we experimentally found the constant 120 to produce fast, natural gaits, and determined that the touch, pitch, roll, yaw, and sine inputs all contributed to the ability to evolve fast gaits [3].
+
+The ANN substrate outputs were the desired angles for each joint, which were fed into proportional controllers that applied forces to move the joints toward the desired angles. Robots were evaluated in the ODE physics simulator (www.ode.org). The rectangular torso of the robot was (in ODE units) 0.15 wide, 0.3 long, and .05 tall. Each of four legs was composed of three cylinders (length 0.075, radius 0.02) and three hinge joints. The first cylinder functioned as a hip bone. It was parallel to the proximal-distal axis of the torso and barely stuck out from it. The other two cylinders were the upper and lower leg. There were two hip joints and one knee joint. The first hip joint allowed the legs to swing forward and backward (anterior-posterior) and was constrained to 180¡ such that, at maximum extension, it was parallel with the torso. The second hip joint allowed a leg to swing in and out (proximal-distal). Together, the two hip joints approximated a universal joint. The knee joint swung forward and backward. The second hip and knee joints were unconstrained.  
+
+Each controller in a population of 150 was simulated for 3000 time steps (3 sec-onds). Experiments lasted 1000 generations with a switch point at generation 500. Trials were cut short if any part of the robot except its lower leg touched the ground, or if the number of direction changes in joints exceeded 960. The latter condition re-flects the fact that servo motors cannot be vibrated incessantly without breaking. The fitness of controllers was the following function of d, the maximum distance traveled:  . The exponential nature of the function magnified the selective advantage of small increases in the distance traveled. Because HyperNEAT greatly outperforms FT-NEAT on this problem [3], we compare HybrID to only HyperNEAT. 
+
+
   
 
   % Preliminary HyperNEAT runs were promising and resulted in several
