@@ -1,30 +1,68 @@
-\subsection{Learning Methods}
+\subsection{Parametrized Motion Models}
+\seclabel{motionModel}
 
-There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
+\edit{this might no longer flow...fix} There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
 
 The first method is to choose a family of \emph{parametrized functions}.  By fixing the parameters to a particular set of values, we obtain a deterministic motion function over time.  We tried several parametrizations on the robot and, obtaining reasonble early success, settled on one particular parametrization.  We dubbed this the \emph{SineModel5}, as it has five parameters and employs a sine wave as its root pattern.
 
-The five parameters are as follows:
+The five parameters in $\vec{\theta}$ are as follows:
 
- - amp - Amplitude
- - tau   - sine wave period
- - multIO - multiplier scaling inner joings from outer joints
- - multFB - multiplier scaling front joints from back joints
- - multLR - multiplier scaling left joints from right joints
+ - amp - Amplitude       - allowable range
+ - tau   - sine wave period   - allowable range
+ - multIO - multiplier scaling inner joings from outer joints  - allowable range
+ - multFB - multiplier scaling front joints from back joints  - allowable range
+ - multLR - multiplier scaling left joints from right joints  - allowable range
 (verify this)
 
-Inuitively, SineModel5 starts with a sine wave of amplitude 1
+\newcommand{\amp}{\mathrm{amp}}
 
+Inuitively, SineModel5 starts with 8 identicaly sine waves of amplitude $\amp$ and period $\tau$, multiplies the waves for all inner motors by multIO, multiplies the waves for all front motors by multFB, and multiplies the waves for all left motors by multLR.  To obtain the actual motor position commands, these waves are offset by an appropriate fixed constant so that the base position (when the sine waves are at 0) is approximately a crouch (the position shown in \figref{crouchingRobot}).  Finally, in this motion model, the ninth "hip" motor is kept at a neutral position.  Thus, the commanded position for all motors, as a vector function of time, is:
 
- used is a function parametrized by five numbers, shown in \figref{foo}
+\begin{verbatim}
+        [g_0(t) ]    [ \amp * sin(\tau t) ]
+        [g_1(t) ]    [ \amp * sin(\tau t) ]
+        [g_2(t) ]    [ \amp * sin(\tau t) ]
+g(t)   [g_3(t) ] = [ \amp * sin(\tau t) ]
+        [g_4(t) ]    [ \amp * sin(\tau t) ]
+        [g_5(t) ]    [ \amp * sin(\tau t) ]
+        [g_6(t..) ]    [ \amp * sin(\tau t) ]
+\end{verbatim}
 
 \edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
 \edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
+The nine subscripted functions correspond to the nine labeled motors in \figref{robotDiagram}
+
+% used is a function parametrized by five numbers, shown in \figref{foo}
+
+
+
+
+
+\subsection{Learning Methods for Parametrized Motion Models}
+\seclabel{learningMethods}
+
+Using the SineModel5 parametrized motion model described in the previous section, along with the allowable ranges for each of the five parameters (shown in \tabref{parameterTable}), the task becomes how to choose the combination of five parameters that results in the fastest motion, per the evaluation methods in \secref{fitnessEvaluation}.
+
+If we choose a value for the five dimensional parameter $\vec{\theta}$, then a given physical trial gives us one measurement of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two things make learnign difficult.  First, each evaluation of $f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on average.  Second, the fitness returned by such evaluations has proven to be very noisy, with the standard deviation of the noise often being roughly equivalent to the size of the measurement.
+
+For both of these reasons, an intelligent learning algorithm is needed.
+
+In this context, by learning algorithm we simply mean a method for choosing:
+
+1) The value for $\vec{\theta}$ for the initial trial, and
+2) The next value of $\vec{\theta}$ to try, given the $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials
+
+We evaluated a total of eight subtly or not so subtly different learning methods.  All employed a simple random sampling method for requirement (1); that is, all methods picked their initial $\vec{\theta}$ value via uniform random sampling within the allowed parameter ranges. \edit{make sure this is true}.  Thus, the differences in the algorithms was how the selected new $\vec{\theta}$ values to try from their past experience.
+
+The eight methods used, and their methods for choosing the next $\vec{\theta}$ are:
+
+
+
 
 \edit{write this.  Old quadratot Method section below alsdkfj }
 
 %\section{Method}
-\seclabel{method}
+%\seclabel{method}
 
 % Describe in reasonable detail the algorithm you are using to address
 % this problem. A pseudo-code description of the algorithm you are
@@ -35,23 +73,24 @@ Inuitively, SineModel5 starts with a sine wave of amplitude 1
 % enough to be easily understood. If possible, an intuitively
 % meaningful example is better than one with meaningless symbols.
 
-We use several parametrized motion models that command motors to
-positions based on a sine wave, creating a periodic pattern.  While we
-investigated several models, for the bulk of our experiments, we used
-a model whose five parameters are: amplitude, wavelength, scale inner
-vs outer motors, scale left vs right motors, scale back vs front
-motors. Each strategy below attempts to choose the best possible
-parameters for this motion model.  
+%We use several parametrized motion models that command motors to
+%positions based on a sine wave, creating a periodic pattern.  While we
+%investigated several models, for the bulk of our experiments, we used
+%a model whose five parameters are: amplitude, wavelength, scale inner
+%vs outer motors, scale left vs right motors, scale back vs front
+%motors. Each strategy below attempts to choose the best possible
+%parameters for this motion model.  
 
-We implemented and tested 8 different learning strategies.  All
-strategies except for the HyperNEAT method\cite{clune2009evolving} were
-constrained to pick parameters from within predetermined ranges.
+%We implemented and tested 8 different learning strategies.  All
+%strategies except for the HyperNEAT method\cite{clune} were
+%constrained to pick parameters from within predetermined ranges.
 
 \edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
 
 \begin{itemize}
+
 \item \emph{Random}: This method randomly generates parameter vectors
-  in the allowable range. This strategy is used only as baseline.
+  in the allowable range for every trial. This strategy was used only as baseline for comparison.
 
 \item \emph{Uniform random hill climbing}: This method begins by
   selecting a single random parameter vector.  Subsequent iterations
@@ -72,38 +111,41 @@ constrained to pick parameters from within predetermined ranges.
   that the standard deviation of the noise was 5\% of the range of
   that dimension.
 
-\item \emph{N-dimensional policy gradient descent}: As opposed to the
-  previous methods, this method explicitly estimates the gradient for
-  the objective function. It does this by first evaluating \emph{t}
-  randomly generated parameter vectors near the initial vector, each
-  dimension of these vectors being perturbed by either $-\epsilon$,
-  $0$, or $\epsilon$. Then, for each dimension, it groups vectors into
-  three groups: $-\epsilon$, $0$, and $\epsilon$.  The gradient along
-  this dimension is then estimated as the average score for the
-  $\epsilon$ group minus the average score for the $-\epsilon$
-  group. Finally, the method creates a new vector by changing all
-  parameters by a fixed-size step in the direction of the gradient.
+\item \emph{N-dimensional policy gradient descent}: In \cite{kohl},
+  Kohl and Stone document a method for local gradient ascent for gait
+  learning with noisy fitness evaluations, and we have included this
+  method in our evaluation.  This strategy explicitly estimates the
+  gradient for the objective function. It does this by first
+  evaluating \emph{n} randomly generated parameter vectors near the
+  initial vector, each dimension of these vectors being perturbed by
+  either $-\epsilon$, $0$, or $\epsilon$. Then, for each dimension, it
+  groups vectors into three groups: $-\epsilon$, $0$, and $\epsilon$.
+  The gradient along this dimension is then estimated as the average
+  score for the $\epsilon$ group minus the average score for the
+  $-\epsilon$ group. Finally, the method creates a new vector by
+  changing all parameters by a fixed-size step in the direction of the
+  gradient.
 
-\item \emph{Nelder-Mead simplex method}\cite{nm}: The Nelder-Mead
-  simplex method creates an initial simplex with 6 vertices. The
-  initial parameter vector is stored as the first vertex and the other
-  five vertices are created by adding to one dimension at a time one
-  tenth of the allowable range for that parameter. It then tests the
-  fitness of each vertex and based on these fitnesses, it reflects the
-  worst point over the centroid in an attempt to improve it.  However,
-  to prevent cycles and becoming stuck in local minima, several other
-  rules are used.  In general, the worst vertex is reflected over the
-  centroid. If the reflected point is better than the second worst
-  point and worse than the best point, then the reflected point
-  replaces the worst. If the reflected point is better than the best
-  point, the simplex is expanded in the direction of the reflected
-  point. The better of the reflected and the expanded point replaces
-  the worst point. If the reflected point is worse than the second
-  worst point, then the simplex is contracted away from the reflected
-  point. If the contracted point is better than the reflected point,
-  the contracted point replaces the worst point. If the contracted
-  point is worse than the reflected point, the entire simplex is
-  shrunk \cite{nm}.
+\item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
+  method \cite{nm} creates an initial simplex with $d+1$ vertices,
+  where $d$ is the dimension of the parameter space. The initial
+  parameter vector is stored as the first vertex and the other five
+  vertices are created by adding to one dimension at a time one tenth
+  of the allowable range for that parameter. It then tests the fitness
+  of each vertex and based on these fitnesses, it reflects the worst
+  point over the centroid in an attempt to improve it.  In general,
+  the worst vertex is reflected; however, to prevent cycles and
+  becoming stuck in local minima, several other rules are used.  If
+  the reflected point is better than the second worst point and worse
+  than the best point, then the reflected point replaces the worst. If
+  the reflected point is better than the best point, the simplex is
+  expanded in the direction of the reflected point. The better of the
+  reflected and the expanded point replaces the worst point. If the
+  reflected point is worse than the second worst point, then the
+  simplex is contracted away from the reflected point. If the
+  contracted point is better than the reflected point, the contracted
+  point replaces the worst point. If the contracted point is worse
+  than the reflected point, the entire simplex is shrunk \cite{nm}.
 
 \item \emph{Linear regression}: To initialize, this method chooses and
   evaluates five random parameter vectors. It then fits a linear model
@@ -152,8 +194,11 @@ constrained to pick parameters from within predetermined ranges.
 \item \emph{Neuroevolution (Evolving Artificial Neural Networks with HyperNEAT)}: 
     
   HyperNEAT is an indirect encoding for evolving artificial neural networks (ANNs) that is inspired by the way natural organisms develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of which is a genome that encodes an ANN phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed graph, where each node is a mathematical function, such as sine or Gaussian. The nature of these functions can facilitate the evolution of properties such as symmetry (e.g., an absolute value or Gaussian function) and repetition (e.g., a sine function)~\cite{stanley2009hypercube, stanley2007compositional}. The signal on each link in the CPPN is multiplied by that link's weight, which can alter its effect.
-  A CPPN is queried once for each link in the ANN substrate to determine that link's weight. The inputs to the CPPN are the Cartesian coordinates of both the source (e.g., $x = 2$, $y = 4$) and target (e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias value. The CPPN takes these five values as inputs and produces one or two output values, depending on the substrate topology. If there is no hidden layer in the substrate, the single output is the weight of the link between a source node on the input layer and a target node on the output layer. If there is a hidden layer, the first output value determines the weight of the link between the associated input (source) and hidden layer (target) nodes, and the second output value determines the weight of the link between the associated hidden (source) and output (target) layer nodes. All pairwise combinations of source and target nodes are iteratively passed as inputs to a CPPN to deter-mine the weight of each substrate link. HyperNEAT is capable of exploiting the geometry of a problem: because the link values between nodes in the final ANN substrate are a function of the geometric positions of those nodes, HyperNEAT can exploit such information when solving a problem~\cite{stanley2009hypercube, clune2009sensitivity, clune2011performance}. In the case of quadruped locomotion, this property helped Hyper-NEAT produce gaits with front-back, left-right, and four-way symmetries~\cite{clune2009evolving, clune2011performance}.
-  The evolution of the population of CPPNs occurs according to the principles of the NeuroEvolution of Augmenting Topologies (NEAT) algorithm~\cite{stanley2002evolving}, which was originally designed to evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their structural similarity to ANNs. For example, mutations can add a node, and thus a function, to a CPPN graph, or change its link weights. The NEAT algorithm is unique in three main ways~\cite{stanley2002evolving}. Initially, it starts with small genomes that encode simple networks and slowly complexifies them via mutations that add nodes and links to the network, enabling the algorithm to evolve the network topology in addition to its weights. Secondly, NEAT has a fitness sharing mechanism that preserves diversity in the system and gives time for new innovations to be tuned by evolution before competing them against more adapted rivals. Finally, NEAT tracks historical information to perform intelligent crossover while avoiding the need for expensive topological analysis. A full explanation of NEAT can be found in~\cite{stanley2002evolving}]. 
+  
+A CPPN is queried once for each link in the ANN substrate to determine that link's weight. The inputs to the CPPN are the Cartesian coordinates of both the source (e.g., $x = 2$, $y = 4$) and target (e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias value. The CPPN takes these five values as inputs and produces one or two output values, depending on the substrate topology. If there is no hidden layer in the substrate, the single output is the weight of the link between a source node on the input layer and a target node on the output layer. If there is a hidden layer, the first output value determines the weight of the link between the associated input (source) and hidden layer (target) nodes, and the second output value determines the weight of the link between the associated hidden (source) and output (target) layer nodes. All pairwise combinations of source and target nodes are iteratively passed as inputs to a CPPN to deter-mine the weight of each substrate link. 
+HyperNEAT is capable of exploiting the geometry of a problem: because the link values between nodes in the final ANN substrate are a function of the geometric positions of those nodes, HyperNEAT can exploit such information when solving a problem~\cite{stanley2009hypercube, clune2009sensitivity, clune2011performance}. In the case of quadruped locomotion, this property helped Hyper-NEAT produce gaits with front-back, left-right, and four-way symmetries~\cite{clune2009evolving, clune2011performance}.
+  
+The evolution of the population of CPPNs occurs according to the principles of the NeuroEvolution of Augmenting Topologies (NEAT) algorithm~\cite{stanley2002evolving}, which was originally designed to evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their structural similarity to ANNs. For example, mutations can add a node, and thus a function, to a CPPN graph, or change its link weights. The NEAT algorithm is unique in three main ways~\cite{stanley2002evolving}. Initially, it starts with small genomes that encode simple networks and slowly complexifies them via mutations that add nodes and links to the network, enabling the algorithm to evolve the network topology in addition to its weights. Secondly, NEAT has a fitness sharing mechanism that preserves diversity in the system and gives time for new innovations to be tuned by evolution before competing them against more adapted rivals. Finally, NEAT tracks historical information to perform intelligent crossover while avoiding the need for expensive topological analysis. A full explanation of NEAT can be found in~\cite{stanley2002evolving}]. 
   
 \edit{JMC: fix next paragraph}  
 Following Clune et al.~\cite{clune2011performance, clune2009evolving}, the ANNs for the robot consist of three 5x4 Cartesian grids of nodes forming input, hidden, and output layers. Adjacent layers were completely connected, meaning that there were (5x4)2 x 2 = 800 links in each substrate. The inputs to the substrate were the current angles of each of the 12 joints of the robot (described below), a touch sen-sor that provides a 1 if the lower leg is touching the ground and a 0 if it is not, the pitch, roll, and yaw of the torso, and a modified sine wave (to facilitate the production of periodic behaviors). The sine wave was the following function of time (t) in milli-seconds: sin(120 x t) x ¹. This function produces numbers from Ð¹?to ¹, which was the range of the unconstrained joints. During preliminary tests, we experimentally found the constant 120 to produce fast, natural gaits, and determined that the touch, pitch, roll, yaw, and sine inputs all contributed to the ability to evolve fast gaits [3].
