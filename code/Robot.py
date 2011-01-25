@@ -105,6 +105,9 @@ class Robot():
                                         timeout = 1)
         self.net = dynamixel.DynamixelNetwork(serial)
 
+        print 'Prescan...'
+        print self.net.get_dynamixels()
+
         print "Scanning for Dynamixels...",
         self.net.scan(min(self.expectedIds), max(self.expectedIds))
 

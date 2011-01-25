@@ -36,9 +36,11 @@ def doRun():
             ff = open(filename, 'r')
             strategy = pickle.load(ff)
             ff.close()
-        elif (len(sys.argv) > 2 and
-            sys.argv[1] == '-neat'):
+        elif (len(sys.argv) > 2 and sys.argv[1] == '-neat'):
             neatFile = sys.argv[2]
+            currentState = None
+        elif (len(sys.argv) > 2 and sys.argv[1] == '-filt'):
+            filtFile = sys.argv[2]
             currentState = None
         else:
             # normal
@@ -57,8 +59,9 @@ def doRun():
         #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
         #strategy = RandomStrategy(currentState, SineModel5.typicalRanges)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
-        strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
-
+        #strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
+        strategy = FileStrategy(filtFile = filtFile)
+        
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))
     #runman.do_many_runs(currentState, lambda state: gradient_search(SineModel5.typicalRanges, state))
     runman.do_many_runs(strategy, SineModel5.typicalRanges)
