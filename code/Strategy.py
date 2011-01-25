@@ -14,7 +14,7 @@ from numpy import *
 from numpy.linalg import *
 import random
 from copy import copy
-from util import prettyVec
+from util import prettyVec, readArray, matInterp
 
 class Strategy(object):
     '''Base class for strategies.'''
@@ -146,6 +146,8 @@ class GaussianStrategy(OneStepStrategy):
 
     def _getNext(self):
         ret = copy(self.bestState)
+        # return ret  # [JBY] This is a hack to reuse the same gait!
+    
         index = random.randint(0, (len(self.ranges) - 1))
     
         for index in range(len(self.ranges)):
@@ -627,7 +629,7 @@ class LinearRegressionStrategy(LearningStrategy):
         '''
         Given a weight vector and an input vector, predicts the distance
         walked by the robot.        
-        '''
+<        '''
         return sum([self.theta[i]*inputs[i] for i in range(len(self.theta))])
 
     def calculate_weights(self, training_params, distances_walked):
@@ -645,6 +647,46 @@ class LinearRegressionStrategy(LearningStrategy):
         self.bestIter = 1
         self.current = self.X[-1] 
         print '        Got update, ', self.X[-1], ' walked ', self.y[-1]
+
+
+
+class FileStrategy(OneStepStrategy):
+    '''
+    Loads commanded positions from a file.
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super(FileStrategy, self).__init__([], [])
+
+        self.filtFile = kwargs.get('filtFile', None)
+
+        self.junkPoints      = 1000
+        # How many lines to expect from HyperNEAT file
+        self.expectedLines   = self.junkPoints + 12 * 40
+
+
+        if self.filtFile is None:
+            raise Exception('Need a filtFile')
+
+        ff = open(self.filtFile)
+        self.positions = readArray(ff)
+        ff.close()
+        self.times = linspace(0,12,self.positions.shape[0])
+
+        self.separateLogInfo = True
+        
+        self.counter = 0
+
+    def _getNext(self):
+        '''just return function of time, same every time'''
+
+        ident = 'file__%s__%d' % (self.filtFile, self.counter)
+        self.counter += 1
+
+        print 'returning', lambda time: matInterp(time, self.times, self.positions), ident
+        return lambda time: matInterp(time, self.times, self.positions), ident
+
+
 
 if __name__ == "__main__":
     import doctest

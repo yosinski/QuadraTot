@@ -3,7 +3,7 @@
 '''Just a few utility functions'''
 
 from copy import copy
-from numpy import array, random, diag, interp
+from numpy import array, random, diag, interp, vstack
 
 
 
@@ -84,3 +84,19 @@ def writeArray(ff, arr):
     '''Write array arr to file object ff in human readable format.''' 
     for row in arr:
         ff.write('%s\n' % ' '.join([str(x) for x in row]))
+
+def readArray(ff):
+    '''Read array from file object ff in writeArray format.'''
+    
+    for ii,line in enumerate(ff):
+        #print 'line', ii, 'is', line
+        nums = [float(xx) for xx in line.split()]
+        if ii == 0:
+            ll = len(nums)
+            ret = array(nums)
+        else:
+            if len(nums) != ll:
+                raise Exception('Row %s contained unexpected number of fields' % line)
+            ret = vstack((ret, array(nums)))
+
+    return ret
