@@ -31,8 +31,8 @@ some performance metric.
 Mathematically, we define a gait as a function that specifies
 a vector of commanded motor positions for a robot over time.
 %Using this definition, we require one function per motor.
-We can write gaits without feedback --- also called feedforward gaits
---- as
+We can write gaits without feedback --- also called open-loop or
+feedforward gaits --- as
 
 \be
 \vec{x} = g(t)
@@ -40,24 +40,27 @@ We can write gaits without feedback --- also called feedforward gaits
 
 %\noindent for commanded position $x_i$ for motor $i$.  The
 \noindent for commanded position vector $\vec{x}$.  The
-function depends only on time.  Using the same framework, a gait
-including measured motor position, force, or other values could be
-written as
+function depends only on time.
 
-\be
-\vec{x} = g(t, \vec{z})
-\ee
+%Using the same framework, a gait
+%including measured motor position, force, or other values could be
+%written as
+%
+%\be
+%\vec{x} = g(t, \vec{z})
+%\ee
+%
+%\noindent for some measurement vector $\vec{z}$.
 
-\noindent for some measurement vector $\vec{z}$.  Feedforward gaits
-are deterministic (unless they include random elements), so they
-produce the same command pattern each time they are run.  While the
-commanded positions will be the same from trial to trial, the actual
-robot motion and measured fitness will vary due to the noisiness of
-trials in the real world.
+It follows that feedforward gaits are deterministic, producing the
+same command pattern each time they are run.  While the commanded
+positions will be the same from trial to trial, the actual robot
+motion and measured fitness will vary due to the noisiness of trials
+in the real world.
 
-The output of a gait that includes feedback, on the other hand,
-depends on the actual measurements, and noise in these measurements
-may result in different $\vec{x}$ values each time they are run.
+%The output of a gait that includes feedback, on the other hand,
+%depends on the actual measurements, and noise in these measurements
+%may result in different $\vec{x}$ values each time they are run.
 
 For the system evaluated in this paper, we chose to use only
 feedforward gaits.  An interesting extension would be to allow gaits
