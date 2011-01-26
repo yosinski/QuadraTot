@@ -53,4 +53,6 @@ interrupt the learning process or result in the loss of data.
 The robot is run using a given motion model, including, if desired, 
 smooth interpolation over time for the beginning and end of the run. 
 The servos are prevented from being commanded to a point outside their
-normal range (0 - 1023) as well as beyond points where limbs would collide.
+normal range (0 - 1023) as well as beyond points where limbs would collide
+(150 - 770 for inner leg servos, 30 - 680 for outer leg servos, and 392 - 623
+for the center, or "hip" servo.
