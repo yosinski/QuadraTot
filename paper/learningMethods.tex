@@ -94,29 +94,29 @@ motion, per the evaluation methods in \secref{fitnessEvaluation}.
 If we choose a value for the five dimensional parameter
 $\vec{\theta}$, then a given physical trial gives us one measurement
 of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two
-things make learnign difficult.  First, each evaluation of
+things make learning difficult.  First, each evaluation of
 $f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on
-average.  Second, the fitness returned by such evaluations has proven
+average.  Second, the fitness returned by such evaluations has proved
 to be very noisy, with the standard deviation of the noise often being
 roughly equivalent to the size of the measurement.
 
 For both of these reasons, an intelligent learning algorithm is
 needed.
 
-In this context, by learning algorithm we simply mean a method for
-choosing:
+In this context, by learning algorithm we mean a method for choosing:
 
-1) The value for $\vec{\theta}$ for the initial trial, and
-
-2) The next value of $\vec{\theta}$ to try, given the $\vec{\theta}$
-and $f(\vec{\theta})$ for all previous trials
+\begin{enumerate}
+\item The value for $\vec{\theta}$ for the initial trial, and
+\item The next value of $\vec{\theta}$ to try, given the
+  $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials.
+\end{enumerate}
 
 We evaluated a total of eight subtly or not so subtly different
 learning methods.  All employed a simple random sampling method for
 requirement (1); that is, all methods picked their initial
 $\vec{\theta}$ value via uniform random sampling within the allowed
-parameter ranges. \edit{make sure this is true}.  Thus, the
-differences in the algorithms was how the selected new $\vec{\theta}$
+parameter ranges. \edit{make sure this is true. Isn't really, should say that we started with A, B, C}.  Thus, the
+differences in the algorithms was how they selected new $\vec{\theta}$
 values to try from their past experience.
 
 The eight methods used, and their methods for choosing the next
