@@ -15,21 +15,39 @@ wave as its root pattern.
 
 The five parameters in $\vec{\theta}$ are as follows:
 
- - amp - Amplitude       - allowable range
- - tau   - sine wave period   - allowable range
- - multIO - multiplier scaling inner joings from outer joints  - allowable range
- - multFB - multiplier scaling front joints from back joints  - allowable range
- - multLR - multiplier scaling left joints from right joints  - allowable range
-(verify this)
+%\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
+\newcommand{\amp}{\ensuremath{\alpha}}
 
-\newcommand{\amp}{\mathrm{amp}}
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameter    & Description               & Range \\
+\hline
+\hline
+\amp         & Amplitude                 & [0, 400] \\
+\hline
+$\tau$       & Period                    & [.5, 8] \\
+\hline
+$m_O$        & Outer motor multiplier    & [-2, 2] \\
+\hline
+$m_F$        & Front motor multiplier    & [-1, 1] \\
+\hline
+$m_R$        & Right motor multiplier    & [-1, 1] \\
+\hline
+\end{tabular}
+\caption{The parameters used for the \emph{SineModel5} motion model.}
+\tablabel{parameters}
+\end{center}
+\end{table}
 
-Inuitively, SineModel5 starts with 8 identicaly sine waves of
+
+Intuitively, SineModel5 starts with 8 identically sine waves of
 amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
 motors by multIO, multiplies the waves for all front motors by multFB,
 and multiplies the waves for all left motors by multLR.  To obtain the
-actual motor position commands, these waves are offset by an
-appropriate fixed constant so that the base position (when the sine
+actual motor position commands, these waves are offset by
+appropriate fixed constants so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
 \figref{crouchingRobot}).  Finally, in this motion model, the ninth
 "hip" motor is kept at a neutral position.  Thus, the commanded
@@ -37,26 +55,30 @@ position for all motors, as a vector function of time, is:
 
 \[
 \vec{g}(t) =
-\left[ {\begin{array}{cc} 
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_O & + offset \\ % 0
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F           & + offset \\ % 1
-a \cdot \sin(\frac{2\pi t}{\tau})                     & + offset \\ % 2
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_O           & + offset \\ % 3
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R           & + offset \\ % 4
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R \cdot m_O & + offset \\ % 5
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 6
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 7
-0                                                     & + offset \\ % 8
+\left[ {\begin{array}{c@{ }l@{ }l}
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
+\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
+0                              & \                                  & + C_C \\ % 8
 \end{array} } \right]
 \]
 
-\edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
-\edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
-The nine subscripted functions correspond to the nine labeled motors in \figref{robotDiagram}
+\noindent Here the fixed constants that determine the crouched
+position are $C_I$ for inner motors, $C_O$ for outer motors, and $C_C$
+for the center hip motor.
+
+\edit{make figure to go here (or another section), show drawing with
+  inner/outer, l/r, and f/b motors.}
+
+The nine subscripted functions correspond to the nine labeled motors
+in \figref{robotDiagram}
 
 % used is a function parametrized by five numbers, shown in \figref{foo}
-
-
 
 
 
@@ -65,7 +87,7 @@ The nine subscripted functions correspond to the nine labeled motors in \figref{
 
 Using the SineModel5 parametrized motion model described in the
 previous section, along with the allowable ranges for each of the five
-parameters (shown in \tabref{parameterTable}), the task becomes how to
+parameters (shown in \tabref{parameters}), the task becomes how to
 choose the combination of five parameters that results in the fastest
 motion, per the evaluation methods in \secref{fitnessEvaluation}.
 
