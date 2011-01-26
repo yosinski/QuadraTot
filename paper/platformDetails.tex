@@ -23,25 +23,27 @@
 \acmFig{topdown.png}{1}{A figure of the robot from a top-down perspective,
 with motors labeled}
 
-The quadruped robot has an on-board computer running Linux. The lower
+The quadruped robot (\figref{robot_close.jpg}) has an on-board computer running Linux. The lower
 level drivers are in C and the system is implemented in
 Python. 
 
-\acmFig{robot.JPG}{1}{The infrared LED mounted on top of the robot, which
-provides feedback about distance traveled in conjunction with a Wii
-remote}
-\acmFig{wiiMote.JPG}{1}{A Wii remote tracks the location of the robot,
-providing feedback about distance traveled}
+\acmFigg{wiiMote.JPG}{robot.JPG}{1}{A Nintendo Wii remote tracks the location
+of the robot, providing feedback about distance traveled, in pixels, through
+an infrared LED mounted on top of the robot.}
 
-A Wii remote tracks the location of the robot, providing feedback
-about distance traveled, through an infrared LED mounted on top of 
-the robot. A server is run on the robot and continuously tracks its
+We controlled the experiments from a computer that was connected via a
+wireless Ethernet to the robot. A Nintendo Wii remote tracks the location 
+of the robot, providing feedback
+about distance traveled, in pixels, through an infrared LED mounted on top of 
+the robot (\figref{wiiMote.JPG}). A server is run on the robot and continuously tracks its
 position using the CWiid library\cite{cwiid} to interface with the remote
 via bluetooth. A client then connects via a socket to the tracking
-server and requests position updates periodically. If the robot moves 
-beyond the viewable range of the Wii remote, the system pauses and
-directs the user to move the robot back within the viewable range 
-before running again.
+server and requests position updates periodically. If the robot walks 
+beyond the viewable range of the Wii remote, a prompt informed the
+user. The only human intervention required during the
+experiment was to move the robot back inside the viewable area and resume
+the run, and to handle any mechnanical failures that arose. This did not
+interrupt the learning process or result in the loss of data.
 
 The robot is run using a given motion model, including, if desired, 
 smooth interpolation over time for the beginning and end of the run. 

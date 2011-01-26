@@ -12,18 +12,6 @@ methods at these points...
 
 %\section{Experimental Evaluation}
 
-We controlled the experiments from a computer that was connected via a
-wireless Ethernet to the robot. An infrared LED was mounted to the
-antenna on top of the robot and a Wii remote was attached to the
-ceiling. The Wii remote tracked the location of the LED. The robot
-tracked its position via Bluetooth by using the CWiid
-library\cite{cwiid} to communicate with the Wii remote. If the robot
-walked outside of the Wii remote's viewable area, a prompt informed
-the experimenter. The only human intervention required during an
-experiment was to move the robot back inside the viewable area and
-resume the run. This did not interrupt the learning process or result
-in the loss of data.
-
 The metric for evaluation of the designed gait was speed. To evaluate
 a set of parameters, the robot was sent the parameters and instructed
 to walk for a certain length of time. For each evaluation, the robot
@@ -31,11 +19,11 @@ always started and ended in the same position in order to measure true
 displacement and not reward gaits the ended in a lean, since the LED
 would have moved a different distance the robot. More efficient
 parameters resulted in a faster gait, which translated into a longer
-distance walked and a better score.
+distance walked, measured in pixels, and a better score.
 
 Each of the parameter ??? methods was run on 3 different initial
-parameter vectors, in order to allow for the fair comparison of the
-algorithms. We allowed each run for the parameter ??? methods to
+parameter vectors, in order to fairly compare the algorithms. We allowed 
+each run for the parameter ??? methods to
 continue until the results plateaued (no improvement for one third of
 the policies seen so far). Three runs of HyperNEAT were completed,
 each with a different initial seed and run for 20 generations.
