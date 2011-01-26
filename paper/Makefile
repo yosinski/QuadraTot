@@ -2,17 +2,30 @@ TARGETS=main.pdf
 
 all: ${TARGETS}
 
-%.pdf : %.ps
-	ps2pdf $< $@
 
-%.ps : %.dvi
-	dvips -t letter -o $@ $<
+# pdflatex method
 
-%.dvi : %.tex
-	latex $*
+%.pdf : %.tex
+	pdflatex $<
 	bibtex $*
-	latex $*
-	latex $*
+	pdflatex $<
+	pdflatex $<
+
+
+# latex method
+
+#%.pdf : %.ps
+#	ps2pdf $< $@
+#
+#%.ps : %.dvi
+#	dvips -t letter -o $@ $<
+#
+#%.dvi : %.tex
+#	latex $*
+#	bibtex $*
+#	latex $*
+#	latex $*
+
 
 clean:
 	rm -f *.aux *.log *~ *.dvi *.out *.bbl *.blg *.lot *.lof *.toc ${TARGETS}

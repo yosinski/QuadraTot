@@ -42,7 +42,8 @@
   \begin{figure}
   \centering
   \hspace*{#1\linewidth}
-  \epsfig{file=#2.eps, width=#3\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
   \caption{#4}
   \label{fig:#2}
   \end{figure}
@@ -52,7 +53,8 @@
   \begin{figure*}
   \centering
   \hspace*{#1\linewidth}
-  \epsfig{file=#2.eps, width=#3\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
   \caption{#4}
   \label{fig:#2}
   \end{figure*}
