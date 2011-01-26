@@ -1,65 +1,126 @@
 \subsection{Parametrized Motion Models}
 \seclabel{motionModel}
 
-\edit{this might no longer flow...fix} There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
+\edit{this might no longer flow...fix} There are a plethora of methods
+available for the creation of a vector motion generating function
+$g(t)$, and we've chosen two for comparison in this study.
 
-The first method is to choose a family of \emph{parametrized functions}.  By fixing the parameters to a particular set of values, we obtain a deterministic motion function over time.  We tried several parametrizations on the robot and, obtaining reasonble early success, settled on one particular parametrization.  We dubbed this the \emph{SineModel5}, as it has five parameters and employs a sine wave as its root pattern.
+The first method is to choose a family of \emph{parametrized
+  functions}.  By fixing the parameters to a particular set of values,
+we obtain a deterministic motion function over time.  We tried several
+parametrizations on the robot and, upon obtaining reasonable early
+success, settled on one particular parametrization.  We dubbed this
+the \emph{SineModel5}, as it has five parameters and employs a sine
+wave as its root pattern.
 
 The five parameters in $\vec{\theta}$ are as follows:
 
- - amp - Amplitude       - allowable range
- - tau   - sine wave period   - allowable range
- - multIO - multiplier scaling inner joings from outer joints  - allowable range
- - multFB - multiplier scaling front joints from back joints  - allowable range
- - multLR - multiplier scaling left joints from right joints  - allowable range
-(verify this)
+%\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
+\newcommand{\amp}{\ensuremath{\alpha}}
 
-\newcommand{\amp}{\mathrm{amp}}
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameter    & Description               & Range \\
+\hline
+\hline
+\amp         & Amplitude                 & [0, 400] \\
+\hline
+$\tau$       & Period                    & [.5, 8] \\
+\hline
+$m_O$        & Outer motor multiplier    & [-2, 2] \\
+\hline
+$m_F$        & Front motor multiplier    & [-1, 1] \\
+\hline
+$m_R$        & Right motor multiplier    & [-1, 1] \\
+\hline
+\end{tabular}
+\caption{The parameters used for the \emph{SineModel5} motion model.}
+\tablabel{parameters}
+\end{center}
+\end{table}
 
-Inuitively, SineModel5 starts with 8 identicaly sine waves of amplitude $\amp$ and period $\tau$, multiplies the waves for all inner motors by multIO, multiplies the waves for all front motors by multFB, and multiplies the waves for all left motors by multLR.  To obtain the actual motor position commands, these waves are offset by an appropriate fixed constant so that the base position (when the sine waves are at 0) is approximately a crouch (the position shown in \figref{crouchingRobot}).  Finally, in this motion model, the ninth "hip" motor is kept at a neutral position.  Thus, the commanded position for all motors, as a vector function of time, is:
+
+Intuitively, SineModel5 starts with 8 identically sine waves of
+amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
+motors by multIO, multiplies the waves for all front motors by multFB,
+and multiplies the waves for all left motors by multLR.  To obtain the
+actual motor position commands, these waves are offset by
+appropriate fixed constants so that the base position (when the sine
+waves are at 0) is approximately a crouch (the position shown in
+\figref{crouchingRobot}).  Finally, in this motion model, the ninth
+"hip" motor is kept at a neutral position.  Thus, the commanded
+position for all motors, as a vector function of time, is:
 
 \[
 \vec{g}(t) =
-\left[ {\begin{array}{cc} 
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_O & + offset \\ % 0
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F           & + offset \\ % 1
-a \cdot \sin(\frac{2\pi t}{\tau})                     & + offset \\ % 2
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_O           & + offset \\ % 3
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R           & + offset \\ % 4
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R \cdot m_O & + offset \\ % 5
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 6
-a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 7
-0                                                     & + offset \\ % 8
+\left[ {\begin{array}{c@{ }l@{ }l}
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
+\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
+0                              & \                                  & + C_C \\ % 8
 \end{array} } \right]
 \]
 
-\edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
-\edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
-The nine subscripted functions correspond to the nine labeled motors in \figref{robotDiagram}
+\noindent Here the fixed constants that determine the crouched
+position are $C_I$ for inner motors, $C_O$ for outer motors, and $C_C$
+for the center hip motor.
+
+\edit{make figure to go here (or another section), show drawing with
+  inner/outer, l/r, and f/b motors.}
+
+The nine subscripted functions correspond to the nine labeled motors
+in \figref{robotDiagram}
 
 % used is a function parametrized by five numbers, shown in \figref{foo}
-
-
 
 
 
 \subsection{Learning Methods for Parametrized Motion Models}
 \seclabel{learningMethods}
 
-Using the SineModel5 parametrized motion model described in the previous section, along with the allowable ranges for each of the five parameters (shown in \tabref{parameterTable}), the task becomes how to choose the combination of five parameters that results in the fastest motion, per the evaluation methods in \secref{fitnessEvaluation}.
+Using the SineModel5 parametrized motion model described in the
+previous section, along with the allowable ranges for each of the five
+parameters (shown in \tabref{parameters}), the task becomes how to
+choose the combination of five parameters that results in the fastest
+motion, per the evaluation methods in \secref{fitnessEvaluation}.
 
-If we choose a value for the five dimensional parameter $\vec{\theta}$, then a given physical trial gives us one measurement of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two things make learnign difficult.  First, each evaluation of $f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on average.  Second, the fitness returned by such evaluations has proven to be very noisy, with the standard deviation of the noise often being roughly equivalent to the size of the measurement.
+If we choose a value for the five dimensional parameter
+$\vec{\theta}$, then a given physical trial gives us one measurement
+of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two
+things make learning difficult.  First, each evaluation of
+$f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on
+average.  Second, the fitness returned by such evaluations has proved
+to be very noisy, with the standard deviation of the noise often being
+roughly equivalent to the size of the measurement.
 
-For both of these reasons, an intelligent learning algorithm is needed.
+For both of these reasons, an intelligent learning algorithm is
+needed.
 
-In this context, by learning algorithm we simply mean a method for choosing:
+In this context, by learning algorithm we mean a method for choosing:
 
-1) The value for $\vec{\theta}$ for the initial trial, and
-2) The next value of $\vec{\theta}$ to try, given the $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials
+\begin{enumerate}
+\item The value for $\vec{\theta}$ for the initial trial, and
+\item The next value of $\vec{\theta}$ to try, given the
+  $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials.
+\end{enumerate}
 
-We evaluated a total of eight subtly or not so subtly different learning methods.  All employed a simple random sampling method for requirement (1); that is, all methods picked their initial $\vec{\theta}$ value via uniform random sampling within the allowed parameter ranges. \edit{make sure this is true}.  Thus, the differences in the algorithms was how the selected new $\vec{\theta}$ values to try from their past experience.
+We evaluated a total of eight subtly or not so subtly different
+learning methods.  All employed a simple random sampling method for
+requirement (1); that is, all methods picked their initial
+$\vec{\theta}$ value via uniform random sampling within the allowed
+parameter ranges. \edit{make sure this is true. Isn't really, should say that we started with A, B, C}.  Thus, the
+differences in the algorithms was how they selected new $\vec{\theta}$
+values to try from their past experience.
 
-The eight methods used, and their methods for choosing the next $\vec{\theta}$ are:
+The eight methods used, and their methods for choosing the next
+$\vec{\theta}$ are:
 
 
 
@@ -200,18 +261,31 @@ The eight methods used, and their methods for choosing the next $\vec{\theta}$ a
     
   HyperNEAT is an indirect encoding for evolving artificial neural networks (ANNs) that is inspired by the way natural organisms develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of which is a genome that encodes an ANN phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed graph, where each node is a mathematical function, such as sine or Gaussian. The nature of these functions can facilitate the evolution of properties such as symmetry (e.g., an absolute value or Gaussian function) and repetition (e.g., a sine function)~\cite{stanley2009hypercube, stanley2007compositional}. The signal on each link in the CPPN is multiplied by that link's weight, which can alter its effect.
   
-A CPPN is queried once for each link in the ANN substrate to determine that link's weight. The inputs to the CPPN are the Cartesian coordinates of both the source (e.g., $x = 2$, $y = 4$) and target (e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias value. The CPPN takes these five values as inputs and produces one or two output values, depending on the substrate topology. If there is no hidden layer in the substrate, the single output is the weight of the link between a source node on the input layer and a target node on the output layer. If there is a hidden layer, the first output value determines the weight of the link between the associated input (source) and hidden layer (target) nodes, and the second output value determines the weight of the link between the associated hidden (source) and output (target) layer nodes. All pairwise combinations of source and target nodes are iteratively passed as inputs to a CPPN to deter-mine the weight of each substrate link. 
+A CPPN is queried once for each link in the ANN substrate to determine that link's weight. The inputs to the CPPN are the Cartesian coordinates of both the source (e.g., $x = 2$, $y = 4$) and target (e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias value. The CPPN takes these five values as inputs and produces one or two output values, depending on the substrate topology. If there is no hidden layer in the substrate, the single output is the weight of the link between a source node on the input layer and a target node on the output layer. If there is a hidden layer, the first output value determines the weight of the link between the associated input (source) and hidden layer (target) nodes, and the second output value determines the weight of the link between the associated hidden (source) and output (target) layer nodes. All pairwise combinations of source and target nodes are iteratively passed as inputs to a CPPN to determine the weight of each substrate link. 
+
+\edit{following paragraph is figure caption for file named: hyperneatExplanation.png}
+HyperNEAT Produces ANNs from CPPNs. ANN weights are specified as a function of the geometric coordinates of the source node and the target node for each connection. The coordinates of these nodes and a constant bias are iteratively passed to the CPPN to determine each connection weight. The CPPN has two output values, which specify the weights for each connection layer as shown. 
+
 HyperNEAT is capable of exploiting the geometry of a problem: because the link values between nodes in the final ANN substrate are a function of the geometric positions of those nodes, HyperNEAT can exploit such information when solving a problem~\cite{stanley2009hypercube, clune2009sensitivity, clune2011performance}. In the case of quadruped locomotion, this property helped Hyper-NEAT produce gaits with front-back, left-right, and four-way symmetries~\cite{clune2009evolving, clune2011performance}.
   
 The evolution of the population of CPPNs occurs according to the principles of the NeuroEvolution of Augmenting Topologies (NEAT) algorithm~\cite{stanley2002evolving}, which was originally designed to evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their structural similarity to ANNs. For example, mutations can add a node, and thus a function, to a CPPN graph, or change its link weights. The NEAT algorithm is unique in three main ways~\cite{stanley2002evolving}. Initially, it starts with small genomes that encode simple networks and slowly complexifies them via mutations that add nodes and links to the network, enabling the algorithm to evolve the network topology in addition to its weights. Secondly, NEAT has a fitness sharing mechanism that preserves diversity in the system and gives time for new innovations to be tuned by evolution before competing them against more adapted rivals. Finally, NEAT tracks historical information to perform intelligent crossover while avoiding the need for expensive topological analysis. A full explanation of NEAT can be found in~\cite{stanley2002evolving}]. 
   
-\edit{JMC: fix next paragraph}  
-Following Clune et al.~\cite{clune2011performance, clune2009evolving}, the ANNs for the robot consist of three 5x4 Cartesian grids of nodes forming input, hidden, and output layers. Adjacent layers were completely connected, meaning that there were (5x4)2 x 2 = 800 links in each substrate. The inputs to the substrate were the current angles of each of the 12 joints of the robot (described below), a touch sen-sor that provides a 1 if the lower leg is touching the ground and a 0 if it is not, the pitch, roll, and yaw of the torso, and a modified sine wave (to facilitate the production of periodic behaviors). The sine wave was the following function of time (t) in milli-seconds: sin(120 x t) x ¹. This function produces numbers from Ð¹?to ¹, which was the range of the unconstrained joints. During preliminary tests, we experimentally found the constant 120 to produce fast, natural gaits, and determined that the touch, pitch, roll, yaw, and sine inputs all contributed to the ability to evolve fast gaits [3].
+The ANN configuration follows previous studies that evolved quadruped gaits with HyperNEAT in simulation~\cite{clune2011performance, clune2009evolving}, but was adapted to accommodate differences in the robot. Specifically, the ANNs consists of three $3 \times 4$ Cartesian grids of nodes forming input, hidden, and output layers. Adjacent layers were completely connected, meaning that there were $(3 \times 4)^2= 288$ links in each substrate. The inputs to the substrate were the current angles of each of the 9 joints of the robot (described below) and a sine and cosine wave (to facilitate the production of periodic behaviors). The sine and cosine waves were the following function of time (t) in milli-seconds: $sin(t/12.0)\pi$. This function produces numbers in the range [$-\pi, \pi$], which were then JASON FILL ME IN TO DESCRIBE HOW JOINT COMMANDS WERE SPECIFIED. 
 
-The ANN substrate outputs were the desired angles for each joint, which were fed into proportional controllers that applied forces to move the joints toward the desired angles. Robots were evaluated in the ODE physics simulator (www.ode.org). The rectangular torso of the robot was (in ODE units) 0.15 wide, 0.3 long, and .05 tall. Each of four legs was composed of three cylinders (length 0.075, radius 0.02) and three hinge joints. The first cylinder functioned as a hip bone. It was parallel to the proximal-distal axis of the torso and barely stuck out from it. The other two cylinders were the upper and lower leg. There were two hip joints and one knee joint. The first hip joint allowed the legs to swing forward and backward (anterior-posterior) and was constrained to 180¡ such that, at maximum extension, it was parallel with the torso. The second hip joint allowed a leg to swing in and out (proximal-distal). Together, the two hip joints approximated a universal joint. The knee joint swung forward and backward. The second hip and knee joints were unconstrained.  
+\edit{are we mentioning that we gave HyperNEAT the center joint here or earlier?}
+\edit{jason: edit this section to reflect the post-processing...}
 
-Each controller in a population of 150 was simulated for 3000 time steps (3 sec-onds). Experiments lasted 1000 generations with a switch point at generation 500. Trials were cut short if any part of the robot except its lower leg touched the ground, or if the number of direction changes in joints exceeded 960. The latter condition re-flects the fact that servo motors cannot be vibrated incessantly without breaking. The fitness of controllers was the following function of d, the maximum distance traveled:  . The exponential nature of the function magnified the selective advantage of small increases in the distance traveled. Because HyperNEAT greatly outperforms FT-NEAT on this problem [3], we compare HybrID to only HyperNEAT. 
+\edit{add the following paragraph as a figure caption to SpiderANN.jpg}
 
+ANN Configuration for HyperNEAT Runs. The first two columns of each row of the input layer receive information about a single leg (the current angle of its two joints). The final column provides a sine and cosine wave to enable periodic movements and the angle of the center joint. Evolution determines the function of the hidden-layer nodes. The nodes in the output layer specify new joint angles for each respective joint. The unlabeled node in the input and output layer is ignored.  
+
+
+\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
+  vs. dimension 1.  The circle is a common point in
+  \figref{explore_dim_1} through \figref{explore_dim_5}}
+
+
+The population size for HyperNEAT was 9 and runs lasted 20 generations. These numbers are small, but were necesary given how much time it took to conduct evolution directly on a real robot. The remaining parameters were identical to Clune et al. ~\cite{clune2011performance}.	
 
   
 
