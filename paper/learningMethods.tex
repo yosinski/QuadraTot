@@ -18,15 +18,20 @@ The five parameters in $\vec{\theta}$ are as follows:
 
 Inuitively, SineModel5 starts with 8 identicaly sine waves of amplitude $\amp$ and period $\tau$, multiplies the waves for all inner motors by multIO, multiplies the waves for all front motors by multFB, and multiplies the waves for all left motors by multLR.  To obtain the actual motor position commands, these waves are offset by an appropriate fixed constant so that the base position (when the sine waves are at 0) is approximately a crouch (the position shown in \figref{crouchingRobot}).  Finally, in this motion model, the ninth "hip" motor is kept at a neutral position.  Thus, the commanded position for all motors, as a vector function of time, is:
 
-\begin{verbatim}
-        [g_0(t) ]    [ \amp * sin(\tau t) ]
-        [g_1(t) ]    [ \amp * sin(\tau t) ]
-        [g_2(t) ]    [ \amp * sin(\tau t) ]
-g(t)   [g_3(t) ] = [ \amp * sin(\tau t) ]
-        [g_4(t) ]    [ \amp * sin(\tau t) ]
-        [g_5(t) ]    [ \amp * sin(\tau t) ]
-        [g_6(t..) ]    [ \amp * sin(\tau t) ]
-\end{verbatim}
+\[
+\vec{g}(t) =
+\left[ {\begin{array}{cc} 
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_O & + offset \\ % 0
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F           & + offset \\ % 1
+a \cdot \sin(\frac{2\pi t}{\tau})                     & + offset \\ % 2
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_O           & + offset \\ % 3
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R           & + offset \\ % 4
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_R \cdot m_O & + offset \\ % 5
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 6
+a \cdot \sin(\frac{2\pi t}{\tau}) \cdot m_F \cdot m_R & + offset \\ % 7
+0                                                     & + offset \\ % 8
+\end{array} } \right]
+\]
 
 \edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
 \edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
