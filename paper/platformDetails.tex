@@ -21,11 +21,16 @@
 % data and any pre-processing you did to it.
 
 \acmFig{topdown.png}{1}{A figure of the robot from a top-down perspective,
-with motors labeled}
+with servos labeled}
 
-The quadruped robot (\figref{robot_close.jpg}) has an on-board computer running Linux. The lower
-level drivers are in C and the system is implemented in
-Python. 
+The quadruped robot was printed on the Objet
+Connex 500 3-D Printing System. It weights 1884 g and measures approximately
+15 centimeters from leg to leg in the crouch position depicted in
+\figref{robot_close.jpg}. There are a total of 9 AX-12+ Dynamixel
+Servomotors: 4 outer leg joint
+servos, 4 inner leg joint servos, and a final servo at the center "hip" of the
+robot (displayed in \figref{topdown.png}). The robot has an on-board computer running Linux. 
+The lower level drivers are in C and the system is implemented in Python. 
 
 \acmFigg{wiiMote.JPG}{robot.JPG}{1}{A Nintendo Wii remote tracks the location
 of the robot, providing feedback about distance traveled, in pixels, through
