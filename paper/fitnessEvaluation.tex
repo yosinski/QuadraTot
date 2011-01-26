@@ -1,53 +1,12 @@
 \subsection{Fitness evaluation details}
 \seclabel{fitnessEvaluation}
 
-\editbox{write this.  Old quadratot Experimental Evaluation section below.}
+\editbox{proofread.}
 
 %\section{Experimental Evaluation}
 
-%\subsection{Methodology}
-% What are the criteria you are using to evaluate your method? What
-% specific hypotheses does your experiment test? Describe the 
-% experimental methodology that you used. What are the dependent and 
-% independent variables? For projects in machine learning, what is 
-% the training/test data that was used, and why is it realistic or
-% interesting? Exactly what performance data did you collect and how 
-% are you presenting and analyzing it? Comparisons to competing methods 
-% that address the same problem or to variations of your own algorithm 
-% are particularly useful.
+We controlled the experiments from a computer that was connected via a wireless Ethernet to the robot. An infrared LED was mounted to the antenna on top of the robot and a Wii remote was attached to the ceiling. The Wii remote tracked the location of the LED. The robot tracked its position via Bluetooth by using the CWiid library\cite{cwiid} to communicate with the Wii remote. If the robot walked outside of the Wii remote’s viewable area, a prompt informed the experimenter. The only human intervention required during an experiment was to move the robot back inside the viewable area and resume the run. This did not interrupt the learning process or result in the loss of data.
 
-The metric for evaluation of the designed gait is speed. We stop each 
-run after plateauing results (no improvement for one third of the 
-policies seen so far). The standard length of a run designates that it
-should be stopped after there is no improvement for one half of the policies
-seen so far, but since all runs took place on the actual robot, without use
-of a simulator, certain time limitations were imposed on the learning process.
+The metric for evaluation of the designed gait was speed. To evaluate a set of parameters, the robot was sent the parameters and instructed to walk for a certain length of time. For each evaluation, the robot always started and ended in the same position in order to measure true displacement and not reward gaits the ended in a lean, since the LED would have moved a different distance the robot. More efficient parameters resulted in a faster gait, which translated into a longer distance walked and a better score.
 
-We controlled our experiments from a computer that was connected via a
-wireless ethernet to the robot. The robot collected data about
-distance walked automatically on its own. If it walked outside of the
-Wii remote's viewable area, it informed the user, so the only human
-intervention required during an experiment was to move the robot back
-inside the viewable area and to resume the run, which did not
-interrupt the learning process or result in the loss of data.
-
-We evaluated the efficacy of a set of parameters by sending these
-parameters to the robot and instructing it to walk for a certain
-length of time. The robot always began from the same position and
-returned to the starting position at the end of the run in order to
-measure true displacement without giving credit for ending in a leaned
-position. More efficient parameters resulted in a faster gait, which
-translated into a longer distance walked and a better score. After completing
-an evaluation, the robot sent the resulting distance walked back to the
-host computer and prepared itself for a new set of parameters to evaluate.
-
-Each algorithm was run on 3 different initial parameter vectors on the
-physical robot. We decided to evaluate all methods starting at the
-same three vector in order to allow for the fair comparison of each
-algorithm.  We evaluate each method based on the amount of improvement
-seen from the initial parameter vectors, and on the fastest speeds
-achieved during runs.
-
-The resulting gaits from our algorithms quickly outperformed the original
-hand-coded walk designed for this robot. The fastest walk, for example, was
-4 times faster.
+Each of the parameter ??? methods was run on 3 different initial parameter vectors, in order to allow for the fair comparison of the algorithms. We allowed each run for the parameter ??? methods to continue until the results plateaued (no improvement for one third of the policies seen so far). Three runs of HyperNEAT were completed, each with a different initial seed and run for 20 generations.
