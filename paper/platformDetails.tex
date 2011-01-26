@@ -10,9 +10,6 @@
 
 
 
-
-\editbox{write this, old quadratot System Architecture and Implementation section below.}
-
 %\section{System Architecture and Implementation}
 \seclabel{implement}
 
@@ -25,65 +22,19 @@
 
 The quadruped robot has an on-board computer running Linux. The lower
 level drivers are in C and the system is implemented in
-Python. Feedback about distance travelled is provided via an infrared
-LED mounted on the robot and a Wii remote fixed to the ceiling.
+Python. 
 
-An overview of the code follows.
+A Wii remote tracks the location of the robot, providing feedback
+about distance traveled, through an infrared LED mounted on top of 
+the robot. A server is run on the robot and continuously tracks its
+position using the CWiid library\cite{cwiid} to interface with the remote
+via bluetooth. A client then connects via a socket to the tracking
+server and requests position updates periodically. If the robot moves 
+beyond the viewable range of the Wii remote, the system pauses and
+directs the user to move the robot back within the viewable range 
+before running again.
 
-\begin{itemize}
-
-\item \code{Robot} class: Class wrapper for commanding
-  motion of the robot.  The \code{Robot} class takes care of the robot
-  initialization, communication with the servos, and timing of the
-  runs.  In addition, it prevents the servos from ever being commanded
-  to a point outside their normal range (0 - 1023) as well as beyond
-  points where limbs would collide with parts of the robot body.  The
-  main class function, \code{run}, accepts a motion model (any
-  function that takes a time argument and outputs a 9 dimensional
-  position) and will run the robot using this motion model, including,
-  if desired, smooth interpolation over time for the beginning and end
-  of the run.
-
-\item \code{RunManager} class: Deals with all the details of running
-  the robot, including running the robot multiple times, tracking
-  distance walked via a \code{WiiTrackClient} member object, and
-  writing results to the log file. Also includes the
-  \code{explore\_dimensions} method to generate plots by varying each
-  parameter independently.
-
-\item \code{Strategy} class: The user has a choice between eight
-  different learning strategies: Random search, uniform random hill
-  climbing, Gaussian random hill climbing, N-dimensional policy
-  gradient descent, Nelder-Mead simplex, linear regression / prediction,
-  SVM regression/prediction, and HyperNEAT evolution.  Each strategy
-  must derive from the base \code{Strategy} class and must implement
-  two methods: \code{getNext}, for getting the next parameter vector
-  to try, and \code{updateResults}, for communicating results of a run
-  back to the strategy.
-
-\item \code{MotionModel} class: We implemented several motion models,
-  the main being the \code{SineModel5} class.  All motion models take
-  as input a parameter vector and produce as output a motion model,
-  which is simply a function mapping from time to nine motor
-  positions.  The \code{SineModel5} model commands positions based on
-  a sine wave, creating a periodic pattern. The parameters are:
-  amplitude, wavelength, a multiplier for the inner vs outer motors,
-  multiplier for left vs right motors, and multiplier for back vs
-  front motors.  Other similar models were tested, including a seven
-  parameter model which allowed sine waves shifted in time, but these
-  were not used as extensively in our experiments as
-  \code{SineModel5}.
-
-\item \code{WiiTrackClient} and \code{WiiTrackServer} classes and
-  hardware: A Wii remote tracks the location of the robot through an
-  infrared LED mounted on top of the robot. A \code{WiiTrackServer} is
-  run on the robot and continuously tracks its position using the
-  CWiid library\cite{cwiid} to interface with the remote via
-  bluetooth.  The \code{RunManager} then makes a
-  \code{WiiTrackClient}, which connects via socket to the tracking
-  server and requests position updates periodically.
-  \code{RunManager} currently gets the robot's position at the
-  beginning of each run and then again at the end and uses this to
-  calculate the net change in position.
-
-\end{itemize}
+The robot is run using a given motion model, including, if desired, 
+smooth interpolation over time for the beginning and end of the run. 
+The servos are prevented from being commanded to a point outside their
+normal range (0 - 1023) as well as beyond points where limbs would collide.
