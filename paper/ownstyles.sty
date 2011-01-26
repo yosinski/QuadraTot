@@ -49,6 +49,17 @@
   \end{figure}
 }
 
+\newcommand{\acmFigg}[5][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#4\linewidth}
+  \includegraphics[width=#4\linewidth]{#2}
+  \includegraphics[width=#4\linewidth]{#3}
+  \caption{#5}
+  \label{fig:#2}
+  \end{figure}
+}
+
 \newcommand{\acmFigDouble}[4][0]{
   \begin{figure*}
   \centering
