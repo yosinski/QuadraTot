@@ -1,60 +1,126 @@
 \subsection{Parametrized Motion Models}
 \seclabel{motionModel}
 
-\edit{this might no longer flow...fix} There are a plethora of methods available for the creation of a vector motion generating function $g(t)$, and we've chosen two for comparison in this study.
+\edit{this might no longer flow...fix} There are a plethora of methods
+available for the creation of a vector motion generating function
+$g(t)$, and we've chosen two for comparison in this study.
 
-The first method is to choose a family of \emph{parametrized functions}.  By fixing the parameters to a particular set of values, we obtain a deterministic motion function over time.  We tried several parametrizations on the robot and, obtaining reasonble early success, settled on one particular parametrization.  We dubbed this the \emph{SineModel5}, as it has five parameters and employs a sine wave as its root pattern.
+The first method is to choose a family of \emph{parametrized
+  functions}.  By fixing the parameters to a particular set of values,
+we obtain a deterministic motion function over time.  We tried several
+parametrizations on the robot and, upon obtaining reasonable early
+success, settled on one particular parametrization.  We dubbed this
+the \emph{SineModel5}, as it has five parameters and employs a sine
+wave as its root pattern.
 
 The five parameters in $\vec{\theta}$ are as follows:
 
- - amp - Amplitude       - allowable range
- - tau   - sine wave period   - allowable range
- - multIO - multiplier scaling inner joings from outer joints  - allowable range
- - multFB - multiplier scaling front joints from back joints  - allowable range
- - multLR - multiplier scaling left joints from right joints  - allowable range
-(verify this)
+%\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
+\newcommand{\amp}{\ensuremath{\alpha}}
 
-\newcommand{\amp}{\mathrm{amp}}
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameter    & Description               & Range \\
+\hline
+\hline
+\amp         & Amplitude                 & [0, 400] \\
+\hline
+$\tau$       & Period                    & [.5, 8] \\
+\hline
+$m_O$        & Outer motor multiplier    & [-2, 2] \\
+\hline
+$m_F$        & Front motor multiplier    & [-1, 1] \\
+\hline
+$m_R$        & Right motor multiplier    & [-1, 1] \\
+\hline
+\end{tabular}
+\caption{The parameters used for the \emph{SineModel5} motion model.}
+\tablabel{parameters}
+\end{center}
+\end{table}
 
-Inuitively, SineModel5 starts with 8 identicaly sine waves of amplitude $\amp$ and period $\tau$, multiplies the waves for all inner motors by multIO, multiplies the waves for all front motors by multFB, and multiplies the waves for all left motors by multLR.  To obtain the actual motor position commands, these waves are offset by an appropriate fixed constant so that the base position (when the sine waves are at 0) is approximately a crouch (the position shown in \figref{crouchingRobot}).  Finally, in this motion model, the ninth "hip" motor is kept at a neutral position.  Thus, the commanded position for all motors, as a vector function of time, is:
 
-\begin{verbatim}
-        [g_0(t) ]    [ \amp * sin(\tau t) ]
-        [g_1(t) ]    [ \amp * sin(\tau t) ]
-        [g_2(t) ]    [ \amp * sin(\tau t) ]
-g(t)   [g_3(t) ] = [ \amp * sin(\tau t) ]
-        [g_4(t) ]    [ \amp * sin(\tau t) ]
-        [g_5(t) ]    [ \amp * sin(\tau t) ]
-        [g_6(t..) ]    [ \amp * sin(\tau t) ]
-\end{verbatim}
+Intuitively, SineModel5 starts with 8 identically sine waves of
+amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
+motors by multIO, multiplies the waves for all front motors by multFB,
+and multiplies the waves for all left motors by multLR.  To obtain the
+actual motor position commands, these waves are offset by
+appropriate fixed constants so that the base position (when the sine
+waves are at 0) is approximately a crouch (the position shown in
+\figref{crouchingRobot}).  Finally, in this motion model, the ninth
+"hip" motor is kept at a neutral position.  Thus, the commanded
+position for all motors, as a vector function of time, is:
 
-\edit{make figure to go here, show drawing with inner/outer, l/r, and f/b motors.}
-\edit{JMC: Use photo of physical robot in this image, and add labels in photoshop?}
-The nine subscripted functions correspond to the nine labeled motors in \figref{robotDiagram}
+\[
+\vec{g}(t) =
+\left[ {\begin{array}{c@{ }l@{ }l}
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
+\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
+0                              & \                                  & + C_C \\ % 8
+\end{array} } \right]
+\]
+
+\noindent Here the fixed constants that determine the crouched
+position are $C_I$ for inner motors, $C_O$ for outer motors, and $C_C$
+for the center hip motor.
+
+\edit{make figure to go here (or another section), show drawing with
+  inner/outer, l/r, and f/b motors.}
+
+The nine subscripted functions correspond to the nine labeled motors
+in \figref{robotDiagram}
 
 % used is a function parametrized by five numbers, shown in \figref{foo}
-
-
 
 
 
 \subsection{Learning Methods for Parametrized Motion Models}
 \seclabel{learningMethods}
 
-Using the SineModel5 parametrized motion model described in the previous section, along with the allowable ranges for each of the five parameters (shown in \tabref{parameterTable}), the task becomes how to choose the combination of five parameters that results in the fastest motion, per the evaluation methods in \secref{fitnessEvaluation}.
+Using the SineModel5 parametrized motion model described in the
+previous section, along with the allowable ranges for each of the five
+parameters (shown in \tabref{parameters}), the task becomes how to
+choose the combination of five parameters that results in the fastest
+motion, per the evaluation methods in \secref{fitnessEvaluation}.
 
-If we choose a value for the five dimensional parameter $\vec{\theta}$, then a given physical trial gives us one measurement of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two things make learnign difficult.  First, each evaluation of $f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on average.  Second, the fitness returned by such evaluations has proven to be very noisy, with the standard deviation of the noise often being roughly equivalent to the size of the measurement.
+If we choose a value for the five dimensional parameter
+$\vec{\theta}$, then a given physical trial gives us one measurement
+of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two
+things make learning difficult.  First, each evaluation of
+$f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on
+average.  Second, the fitness returned by such evaluations has proved
+to be very noisy, with the standard deviation of the noise often being
+roughly equivalent to the size of the measurement.
 
-For both of these reasons, an intelligent learning algorithm is needed.
+For both of these reasons, an intelligent learning algorithm is
+needed.
 
-In this context, by learning algorithm we simply mean a method for choosing:
+In this context, by learning algorithm we mean a method for choosing:
 
-1) The value for $\vec{\theta}$ for the initial trial, and
-2) The next value of $\vec{\theta}$ to try, given the $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials
+\begin{enumerate}
+\item The value for $\vec{\theta}$ for the initial trial, and
+\item The next value of $\vec{\theta}$ to try, given the
+  $\vec{\theta}$ and $f(\vec{\theta})$ for all previous trials.
+\end{enumerate}
 
-We evaluated a total of eight subtly or not so subtly different learning methods.  All employed a simple random sampling method for requirement (1); that is, all methods picked their initial $\vec{\theta}$ value via uniform random sampling within the allowed parameter ranges. \edit{make sure this is true}.  Thus, the differences in the algorithms was how the selected new $\vec{\theta}$ values to try from their past experience.
+We evaluated a total of eight subtly or not so subtly different
+learning methods.  All employed a simple random sampling method for
+requirement (1); that is, all methods picked their initial
+$\vec{\theta}$ value via uniform random sampling within the allowed
+parameter ranges. \edit{make sure this is true. Isn't really, should say that we started with A, B, C}.  Thus, the
+differences in the algorithms was how they selected new $\vec{\theta}$
+values to try from their past experience.
 
-The eight methods used, and their methods for choosing the next $\vec{\theta}$ are:
+The eight methods used, and their methods for choosing the next
+$\vec{\theta}$ are:
 
 
 
