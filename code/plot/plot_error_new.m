@@ -1,5 +1,21 @@
 function plot_error_new(files, saveFileName)
 
+mark = {};
+  mark{end+1} = '+';
+  mark{end+1} = '+';
+  mark{end+1} = '*';
+  mark{end+1} = 'o';
+  mark{end+1} = 'x';
+  mark{end+1} = 'x';
+
+clr = {};
+  clr{end+1} = 'r';
+  clr{end+1} = 'k';
+  clr{end+1} = 'b';
+  clr{end+1} = 'b';
+  clr{end+1} = 'k';
+  clr{end+1} = 'r';
+  
 figure(2); clf; hold on;
 ax = zeros(4, 1);
 ax(1) = 0; ax(2) = 80; ax(3) = 0; ax(4) = 20;
@@ -8,7 +24,8 @@ fs = 30; %font size
 xlabel("Iteration", "fontsize", fs);
 ylabel("Body lengths/minute", "fontsize", fs);
 
-leg = cell(1, (((length(files))/3)-1));
+%leg = cell(1, (((length(files))/3)-1));
+leg = cell(1, (length(files)-6));
 
 frac = 5;
 
@@ -22,7 +39,10 @@ for ii = 0:(((length(files))/3)-1)
   
   legName = strrep (a, "_", "\\_");
   legName = substr(legName, 6, (length(legName) - 12));
-  leg{1, ii+1} = legName;
+  %leg{1, ii+1} = legName;
+  leg{1, ii*2+1} = legName;
+  leg{1, ii*2+2} = '';
+  %leg{1, ii*2+3} = '';
   
   % find shortest
   N = min(aN, bN);
@@ -58,15 +78,16 @@ for ii = 0:(((length(files))/3)-1)
   someX = zeros(N/frac, 1);
   someSD = zeros(N/frac, 1);
   for i = 1:(N/frac)
-    someMeans(i) = means(i*frac);
-    someX(i) = x(i*frac);
-    someSD(i) = stdev(i*frac);
+    offset = mod(ii,3) - 1;
+    someMeans(i) = means(i*frac + offset);
+    someX(i) = x(i*frac + offset);
+    someSD(i) = stdev(i*frac + offset);
   end
   
-  %plot(someX, someMeans, 'o');
-  
-  e = errorbar(someX, someMeans, someSD);
-  plot(means);
+ % plot(someX, someMeans, mark{mod(ii,6)+1}, 'color', clr{mod(ii,6)+1});
+  e = errorbar(someX, someMeans, someSD, '~');
+  set(e, 'color', clr{mod(ii,6)+1});
+  plot(means, 'color', clr{mod(ii,6)+1});
   
   %plot(iteration, best, '-', 'color', clr{mod(ii,6)+1});
   %e = errorbar(x, means, stdev);
