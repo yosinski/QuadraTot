@@ -74,10 +74,10 @@ for ii = 0:(((length(files))/3)-1)
   
   
   % get every frac data point and the error for those points
-  someMeans = zeros(N/frac, 1);
-  someX = zeros(N/frac, 1);
-  someSD = zeros(N/frac, 1);
-  for i = 1:(N/frac)
+  someMeans = zeros((N/frac) - 1, 1);
+  someX = zeros((N/frac) - 1, 1);
+  someSD = zeros((N/frac) - 1, 1);
+  for i = 1:((N/frac)-1)
     offset = mod(ii,3) - 1;
     someMeans(i) = means(i*frac + offset);
     someX(i) = x(i*frac + offset);
