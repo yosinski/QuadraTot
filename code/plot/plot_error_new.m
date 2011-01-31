@@ -29,6 +29,7 @@ set(gcf, 'DefaultLineLineWidth', 2.5);
 leg = cell(1, (length(files)-6));
 
 frac = 15;
+markSize = 11;
 
 for ii = 0:(((length(files))/3)-1)
   a = files{(ii * 3) + 1};
@@ -75,23 +76,27 @@ for ii = 0:(((length(files))/3)-1)
   
   
   % get every frac data point and the error for those points
-  someMeans = zeros((N/frac) - 1, 1);
-  someX = zeros((N/frac) - 1, 1);
-  someSD = zeros((N/frac) - 1, 1);
-  for i = 1:((N/frac)-1)
-    offset = ii*3;
-    %offset = mod(ii,3) - 1;
-    %offset = 0;
-    someMeans(i) = means(i*frac + offset);
-    someX(i) = x(i*frac + offset);
-    %someX(i) = x(i*frac + offset) + ii/10.;
-    someSD(i) = stdev(i*frac + offset);
+  fracLen = 2;
+  someMeans = zeros(fracLen, 1);
+  someX = zeros(fracLen, 1);
+  someSD = zeros(fracLen, 1);
+  for i = 1:fracLen
+    ind = round(i * N/2);
+    if (ii == 2 && i == 1)
+      ind = ind - 2;
+    elseif (ii==2)
+      ind = ind -1;
+    end
+    someMeans(i) = means(ind);
+    someX(i) = x(ind);
+    %someX(i) = x(ind);
+    someSD(i) = stdev(ind);
   end
   
  % plot(someX, someMeans, mark{mod(ii,6)+1}, 'color', clr{mod(ii,6)+1});
   e = errorbar(someX, someMeans, someSD, '~');
   %set(e, 'linestyle', 'none');
-  set(e, 'color', clr{mod(ii,6)+1});
+  set(e, 'color', clr{mod(ii,6)+1}, 'markerSize', markSize);
   plot(means, 'color', clr{mod(ii,6)+1});
   
   %plot(iteration, best, '-', 'color', clr{mod(ii,6)+1});
