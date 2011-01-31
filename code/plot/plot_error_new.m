@@ -115,7 +115,7 @@ for ii = 0:(((length(files))/3)-1)
   %set(e, 'color', clr{mod(ii,6)+1}, 'markerSize', markSize);
   set(e, 'color', clr{mod(ii,6)+1}, 'marker', '.');
   plot(means, 'color', clr{mod(ii,6)+1});
-  plot(someX, someMeans, mark{mod(ii,6)+1}, 'color', clr{mod(ii,6)+1}, 'MarkerFaceColor', 'k');
+  plot(someX, someMeans, mark{mod(ii,6)+1}, 'color', clr{mod(ii,6)+1}, 'MarkerFaceColor', 'k', 'markerSize', markSize);
 end
 
 disp(leg);
