@@ -12,9 +12,9 @@ clr = {};
   clr{end+1} = 'r';
   clr{end+1} = 'k';
   clr{end+1} = 'b';
-  clr{end+1} = 'b';
-  clr{end+1} = 'k';
-  clr{end+1} = 'r';
+  clr{end+1} = [0.5, 0.75, 0.15];
+  clr{end+1} = [.3, 0, .5];
+  clr{end+1} = [1 128/255, 0];
   
 figure(2); clf; hold on;
 ax = zeros(4, 1);
@@ -23,11 +23,12 @@ axis(ax);
 fs = 30; %font size
 xlabel("Iteration", "fontsize", fs);
 ylabel("Body lengths/minute", "fontsize", fs);
+set(gcf, 'DefaultLineLineWidth', 2.5);
 
 %leg = cell(1, (((length(files))/3)-1));
 leg = cell(1, (length(files)-6));
 
-frac = 10;
+frac = 15;
 
 for ii = 0:(((length(files))/3)-1)
   a = files{(ii * 3) + 1};
@@ -78,7 +79,8 @@ for ii = 0:(((length(files))/3)-1)
   someX = zeros((N/frac) - 1, 1);
   someSD = zeros((N/frac) - 1, 1);
   for i = 1:((N/frac)-1)
-    offset = mod(ii,3) - 1;
+    offset = ii*3;
+    %offset = mod(ii,3) - 1;
     %offset = 0;
     someMeans(i) = means(i*frac + offset);
     someX(i) = x(i*frac + offset);
@@ -88,6 +90,7 @@ for ii = 0:(((length(files))/3)-1)
   
  % plot(someX, someMeans, mark{mod(ii,6)+1}, 'color', clr{mod(ii,6)+1});
   e = errorbar(someX, someMeans, someSD, '~');
+  %set(e, 'linestyle', 'none');
   set(e, 'color', clr{mod(ii,6)+1});
   plot(means, 'color', clr{mod(ii,6)+1});
   

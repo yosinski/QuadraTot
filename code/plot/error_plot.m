@@ -1,0 +1,3 @@
+function error_plot()
+
+plot_error_new({'log_uniform_a.txt', 'log_uniform_b.txt', 'log_uniform_c.txt', 'log_gaussian_a.txt', 'log_gaussian_b.txt', 'log_gaussian_c.txt', 'log_gradient_a.txt', 'log_gradient_b.txt', 'log_gradient_c.txt', 'log_random_a.txt', 'log_random_b.txt', 'log_random_c.txt',  'log_linear_regression_a.txt', 'log_linear_regression_b.txt', 'log_linear_regression_c.txt', 'log_simplex_a.txt', 'log_simplex_b.txt', 'log_simplex_c.txt'}, 'name')
