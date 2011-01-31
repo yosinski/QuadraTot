@@ -1,24 +1,30 @@
 \subsection{Parametrized Motion Models}
 \seclabel{motionModel}
 
-\edit{this might no longer flow...fix} There are a plethora of methods
-available for the creation of a vector motion generating function
-$g(t)$, and we've chosen two for comparison in this study.
+There are a plethora of methods available for the creation of the
+vector motion generating function $g(t)$ introduced in
+\secref{problemDefinition}, and we've chosen two for comparison in
+this study.  The first method we evaluated was to use a family of
+parametrized gaits, described in this section and the next, and the
+second method was to use an evolved non-parametric gait, detailed in
+\secref{hyperNeatMethod}.
 
-The first method is to choose a family of \emph{parametrized
-  functions}.  By fixing the parameters to a particular set of values,
-we obtain a deterministic motion function over time.  We tried several
-parametrizations on the robot and, upon obtaining reasonable early
-success, settled on one particular parametrization.  We dubbed this
-the \emph{SineModel5}, as it has five parameters and employs a sine
-wave as its root pattern.
+By a \emph{parametrized gait}, we mean a gait produced by a
+parametrized function $g(t; \vec{\theta})$. Fixing the parameter
+$\vec{\theta}$ yields a deterministic motion function over time.  We
+tried several parametrizations on the robot and, upon obtaining
+reasonable early success, settled on one particular parametrization.
+We dubbed this the \emph{SineModel5}, as it has five parameters and
+employs a sine wave as its root pattern.
 
 The five parameters in $\vec{\theta}$ are as follows:
+
+\edit{make sure this text flows into the table}
 
 %\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
 \newcommand{\amp}{\ensuremath{\alpha}}
 
-\begin{table}[h]
+\begin{table}[h!]
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -44,13 +50,13 @@ $m_R$        & Right motor multiplier    & [-1, 1] \\
 
 Intuitively, SineModel5 starts with 8 identically sine waves of
 amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
-motors by multIO, multiplies the waves for all front motors by multFB,
-and multiplies the waves for all left motors by multLR.  To obtain the
+motors by $m_o$, multiplies the waves for all front motors by $m_F$,
+and multiplies the waves for all left motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
 appropriate fixed constants so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
-\figref{crouchingRobot}).  Finally, in this motion model, the ninth
-"hip" motor is kept at a neutral position.  Thus, the commanded
+\figref{robot_close.jpg}).  Finally, in this motion model, the ninth
+``hip'' motor is kept at a neutral position.  Thus, the commanded
 position for all motors, as a vector function of time, is:
 
 \[
@@ -70,15 +76,8 @@ position for all motors, as a vector function of time, is:
 
 \noindent Here the fixed constants that determine the crouched
 position are $C_I$ for inner motors, $C_O$ for outer motors, and $C_C$
-for the center hip motor.
-
-\edit{make figure to go here (or another section), show drawing with
-  inner/outer, l/r, and f/b motors.}
-
-The nine subscripted functions correspond to the nine labeled motors
-in \figref{robotDiagram}
-
-% used is a function parametrized by five numbers, shown in \figref{foo}
+for the center hip motor.  The nine subscripted functions correspond
+to the nine labeled motors in \figref{topdown.png}.
 
 
 
@@ -126,13 +125,10 @@ one possible contribution of noise.
 %differences in the algorithms was how they selected new $\vec{\theta}$
 %values to try from their past experience.
 
-The eight methods used, and their methods for choosing the next
+The seven methods used, and their methods for choosing the next
 $\vec{\theta}$ are:
 
 
-
-
-\edit{write this.  Old quadratot Method section below alsdkfj }
 
 %\section{Method}
 %\seclabel{method}
@@ -158,12 +154,13 @@ $\vec{\theta}$ are:
 %strategies except for the HyperNEAT method\cite{clune} were
 %constrained to pick parameters from within predetermined ranges.
 
-\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
+%\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
 
 \begin{itemize}
 
 \item \emph{Random}: This method randomly generates parameter vectors
-  in the allowable range for every trial. This strategy was used only as baseline for comparison.
+  in the allowable range for every trial. This strategy was used only
+  as baseline for comparison.
 
 \item \emph{Uniform random hill climbing}: This method begins by
   selecting a single random parameter vector.  Subsequent iterations
@@ -264,133 +261,8 @@ $\vec{\theta}$ are:
   tuning, the method still exhibited too little exploration and easily
   became stuck in local minima.
 
-\item \emph{Neuroevolution (Evolving Artificial Neural Networks with HyperNEAT)}: 
-    
-HyperNEAT is an indirect encoding for evolving artificial neural
-networks (ANNs) that is inspired by the way natural organisms
-develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
-Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
-which is a genome that encodes an ANN
-phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed
-graph, where each node is a mathematical function, such as sine or
-Gaussian. The nature of these functions can facilitate the evolution
-of properties such as symmetry (e.g., an absolute value or Gaussian
-function) and repetition (e.g., a sine
-function)~\cite{stanley2009hypercube, stanley2007compositional}. The
-signal on each link in the CPPN is multiplied by that link's weight,
-which can alter its effect.
-  
-A CPPN is queried once for each link in the ANN substrate to determine
-that link's weight. The inputs to the CPPN are the Cartesian
-coordinates of both the source (e.g., $x = 2$, $y = 4$) and target
-(e.g., $x = 3$, $y = 5$) nodes of a link and a constant bias
-value. The CPPN takes these five values as inputs and produces one or
-two output values, depending on the substrate topology. If there is no
-hidden layer in the substrate, the single output is the weight of the
-link between a source node on the input layer and a target node on the
-output layer. If there is a hidden layer, the first output value
-determines the weight of the link between the associated input
-(source) and hidden layer (target) nodes, and the second output value
-determines the weight of the link between the associated hidden
-(source) and output (target) layer nodes. All pairwise combinations of
-source and target nodes are iteratively passed as inputs to a CPPN to
-determine the weight of each substrate link.
-
-\edit{following paragraph is figure caption for file named:
-  hyperneatExplanation.png} HyperNEAT Produces ANNs from CPPNs. ANN
-weights are specified as a function of the geometric coordinates of
-the source node and the target node for each connection. The
-coordinates of these nodes and a constant bias are iteratively passed
-to the CPPN to determine each connection weight. The CPPN has two
-output values, which specify the weights for each connection layer as
-shown.
-
-HyperNEAT is capable of exploiting the geometry of a problem: because
-the link values between nodes in the final ANN substrate are a
-function of the geometric positions of those nodes, HyperNEAT can
-exploit such information when solving a
-problem~\cite{stanley2009hypercube, clune2009sensitivity,
-  clune2011performance}. In the case of quadruped locomotion, this
-property helped Hyper-NEAT produce gaits with front-back, left-right,
-and four-way symmetries~\cite{clune2009evolving,
-  clune2011performance}.
-  
-The evolution of the population of CPPNs occurs according to the
-principles of the NeuroEvolution of Augmenting Topologies (NEAT)
-algorithm~\cite{stanley2002evolving}, which was originally designed to
-evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their
-structural similarity to ANNs. For example, mutations can add a node,
-and thus a function, to a CPPN graph, or change its link weights. The
-NEAT algorithm is unique in three main
-ways~\cite{stanley2002evolving}. Initially, it starts with small
-genomes that encode simple networks and slowly complexifies them via
-mutations that add nodes and links to the network, enabling the
-algorithm to evolve the network topology in addition to its
-weights. Secondly, NEAT has a fitness sharing mechanism that preserves
-diversity in the system and gives time for new innovations to be tuned
-by evolution before competing them against more adapted
-rivals. Finally, NEAT tracks historical information to perform
-intelligent crossover while avoiding the need for expensive
-topological analysis. A full explanation of NEAT can be found
-in~\cite{stanley2002evolving}].
-  
-The ANN configuration follows previous studies that evolved quadruped
-gaits with HyperNEAT in simulation~\cite{clune2011performance,
-  clune2009evolving}, but was adapted to accommodate differences in
-the robot. Specifically, the ANNs consists of three $3 \times 4$
-Cartesian grids of nodes forming input, hidden, and output
-layers. Adjacent layers were completely connected, meaning that there
-were $(3 \times 4)^2= 288$ links in each substrate. The inputs to the
-substrate were the current angles of each of the 9 joints of the robot
-(described below) and a sine and cosine wave (to facilitate the
-production of periodic behaviors). The sine and cosine waves were the
-following function of time (t) in milli-seconds:
-$sin(t/12.0)\pi$. This function produces numbers in the range [$-\pi,
-  \pi$], which were then JASON FILL ME IN TO DESCRIBE HOW JOINT
-COMMANDS WERE SPECIFIED.
-
-\edit{are we mentioning that we gave HyperNEAT the center joint here or earlier?}
-\edit{jason: edit this section to reflect the post-processing...}
-
-\edit{add the following paragraph as a figure caption to SpiderANN.jpg}
-
-ANN Configuration for HyperNEAT Runs. The first two columns of each
-row of the input layer receive information about a single leg (the
-current angle of its two joints). The final column provides a sine and
-cosine wave to enable periodic movements and the angle of the center
-joint. Evolution determines the function of the hidden-layer
-nodes. The nodes in the output layer specify new joint angles for each
-respective joint. The unlabeled node in the input and output layer is
-ignored.
 
 
-\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
-  vs. dimension 1.  The circle is a common point in
-  \figref{explore_dim_1} through \figref{explore_dim_5}}
-
-
-The population size for HyperNEAT was 9 and runs lasted 20
-generations. These numbers are small, but were necesary given how much
-time it took to conduct evolution directly on a real robot. The
-remaining parameters were identical to Clune et
-al. ~\cite{clune2011performance}.
-
-  
-
-  % Preliminary HyperNEAT runs were promising and resulted in several
-  % interesting gaits.  
-
-  % Unfortunately, the gaits generated by HyperNEAT
-  % also tended to stress the robot more than typical gaits had before,
-  % and the servos would often overheat and malfunction, requiring
-  % restarts.  We think these issues may be addressed by adding a small
-  % layer between the HyperNEAT strategy and the robot that disallows
-  % quickly shifting commanded positions, and we hope to be able to test
-  % these methods further once this filter is in place.
 
 \end{itemize}
 
-\acmFig{svm_sim_results}{1}{Results for the SVM regression strategy
-  in simulation.  This simulation was used to tune the SVM strategy's
-  parameters before trying it on the physical robot.  The strategy
-  quickly approaches the maximum simulated fitness of 100.}
