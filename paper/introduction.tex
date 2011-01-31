@@ -3,6 +3,54 @@
 \acmFig{robot_close.jpg}{1}{The 3D printed quadruped robot used for
   this study.}
 
+
+Gaits for walking robots are often designed with some explicit or
+implicit goal in mind.  For some applications, the design criteria may
+be obvious: perhaps the robot needs to move as quickly or as
+efficiently as possible, or with minimal power usage or strain on
+actuators.  In many cases, however, the objective is more complicated,
+requiring simultaneous optimization of several desired traits, each
+with its own relative importance.  For example, Honda's Asimo
+\cite{_asmio} and Boston Dynamic's Big Dog \cite{_bigdog} both require
+gaits that are relatively quick, power efficient, and robust to
+changing terrain, but with they vary widely in the importance placed
+on each attribute.  A primary concern for Big Dog's gait is that it is
+robust to steep terrain, whereas
+
+In other cases, the objective may be more complicated; perhaps it is
+desired that the gait be fairly [robust]
+
+\_asimo and \_bigDog very different (and some hexapod?)
+
+Many times gait will be designed and tweaked by hand \cite{_asimo}
+
+here we describe a study, a comparison of few methods. started with
+sped, but then not-breaking as well.
+
+
+When designing gaits for walking robots, often it is desirable that
+this gait enable the robot to walk as
+
+Old: design by hand
+Newer: Learn gait
+  - parmametrized or more free form (HN, ???)
+  - in sim or hardware
+Us: first time HN in hardware, first time compared to other methods aiming for symmetry on same hardware
+
+Often
+these optimizations are done manually by an expert who designs and
+tweaks a gait specifically for a given objective.  Other groups have
+used learning methods to generate gaits optimized for some metric.
+Approaches differ in their starting assumptions, some essentially
+tweaking the parameters of a hand-tuned model \cite{chernova}, others
+exploring a reasonably compact parameter space \cite{kohl}, and still
+others beginning with few assumptions besides periodicity
+\cite{zykov}.
+
+
+
+
+
 \edit{Write this}
 
 %\editbox{Outline \\
