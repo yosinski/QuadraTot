@@ -27,7 +27,7 @@ ylabel("Body lengths/minute", "fontsize", fs);
 %leg = cell(1, (((length(files))/3)-1));
 leg = cell(1, (length(files)-6));
 
-frac = 5;
+frac = 10;
 
 for ii = 0:(((length(files))/3)-1)
   a = files{(ii * 3) + 1};
@@ -79,8 +79,10 @@ for ii = 0:(((length(files))/3)-1)
   someSD = zeros((N/frac) - 1, 1);
   for i = 1:((N/frac)-1)
     offset = mod(ii,3) - 1;
+    %offset = 0;
     someMeans(i) = means(i*frac + offset);
     someX(i) = x(i*frac + offset);
+    %someX(i) = x(i*frac + offset) + ii/10.;
     someSD(i) = stdev(i*frac + offset);
   end
   
