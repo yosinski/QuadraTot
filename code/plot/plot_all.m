@@ -51,3 +51,6 @@ files = {'log_uniform_a.txt', 'log_uniform_b.txt', 'log_uniform_c.txt', ...
          'log_linear_regression_a.txt', 'log_linear_regression_b.txt', 'log_linear_regression_c.txt', ...
          'log_simplex_a.txt', 'log_simplex_b.txt', 'log_simplex_c.txt'};
 plot_error(files, 'std_error');
+
+
+plot_angles();
