@@ -6,19 +6,32 @@
 
 Gaits for walking robots are often designed with some explicit or
 implicit goal in mind.  For some applications, the design criteria may
-be obvious: perhaps the robot needs to move as quickly or as
-efficiently as possible, or with minimal power usage or strain on
-actuators.  In many cases, however, the objective is more complicated,
+be obvious --- perhaps the robot needs to move as quickly or as
+efficiently as possible --- but other times the objective is more complicated,
 requiring simultaneous optimization of several desired traits, each
-with its own relative importance.  For example, Honda's Asimo
+with its own relative importance.  The different combinations of desired traits and the relative weight placed on each can produce drastically different gaits.    For example, Honda's Asimo
 \cite{_asmio} and Boston Dynamic's Big Dog \cite{_bigdog} both require
 gaits that are relatively quick, power efficient, and robust to
-changing terrain, but with they vary widely in the importance placed
-on each attribute.  A primary concern for Big Dog's gait is that it is
-robust to steep terrain, whereas
+changing terrain, but they vary widely in the importance placed
+on each attribute.  Big Dog's gait is optimzed for much more difficult terrain than Asimo's, resulting in a gait of a completely different form.
 
-In other cases, the objective may be more complicated; perhaps it is
-desired that the gait be fairly [robust]
+Whatever the design goals, gaits may be obtained by one of several methods.  Gaits may be designed by hand by an expert, as in \cite{_asmio, _bigdog}, or they may be learned by repeated trial and evaluation.  Learned gaits offer several advantages over manually designed gaits.  Automatically learning gaits can save valuable engineering time and can allow customization of gaits to a particular robot and its unique actuators.  Most importantly, learned gaits can outperform manually designed gaits
+
+save programmer time
+customize gaits per model
+design better gaits than people
+
+
+
+In many cases additional objectives may be 
+
+, or with minimal power usage or strain on
+actuators.  In many cases, however, 
+
+
+
+
+In other cases, the objective may be more complicated; perhaps it is desired that the gait be fairly [robust]
 
 \_asimo and \_bigDog very different (and some hexapod?)
 
