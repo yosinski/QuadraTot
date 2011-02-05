@@ -1,17 +1,9 @@
 \subsection{Platform details}
+\seclabel{platformDetails}
 
 
 
-
-
-
-\edit{figure:robotDiagram make figure to go somewhere here, show drawing with inner/outer, l/r, and f/b motors.}
-
-
-
-
-%\section{System Architecture and Implementation}
-\seclabel{implement}
+%\seclabel{implement}
 
 % Describe how you implemented your system and how you structured it. 
 % This should give an overview of the system, not a detailed 
@@ -23,36 +15,73 @@
 \acmFig{topdown.png}{1}{A figure of the robot from a top-down perspective,
 with servos labeled}
 
-The quadruped robot was printed on the Objet
-Connex 500 3-D Printing System. It weights 1884 g and measures approximately
-38 centimeters from leg to leg in the crouch position depicted in
-\figref{robot_close.jpg}. There are a total of 9 AX-12+ Dynamixel
-Servomotors, displayed in \figref{topdown.png}: 4 outer leg joint
-servos, 4 inner leg joint servos, and a final servo at the center ``hip'' of the
-robot. The robot has an on-board computer running Linux. 
-The lower level drivers are in C and the system is implemented in Python. 
+The quadruped robot used in this study was assembled from parts
+printed on the Objet Connex 500 3-D Printing System. It weights 1.88
+kg with the on-board computer and measures approximately 38
+centimeters from leg to opposite leg in the crouch position depicted
+in \figref{robot_close.jpg}. The robot is actuated by 9 AX-12+
+Dynamixel servos: one inner joint and one outer joint servo in each of
+the four legs, and one servo at the center ``hip'' joint.  This final
+unique servo allows the two halves of the robot to rotate with respect
+to each other. \figref{topdown.png} shows the positions and numerical
+designations of all nine servoes.
 
-\acmFigg{wiiMote.JPG}{robot.JPG}{1}{A Nintendo Wii remote tracks the location
-of the robot, providing feedback about distance traveled, in pixels, through
-an infrared LED mounted on top of the robot.}
+Computation for gait learning, fitness evaluation, and robot control
+is performed on the compact on-board CompuLab Fit-PC2, running Ubuntu
+Linux.  All gait generation, learning, and fitness evaluation code,
+except HyperNEAT, is written in Python and is available on our website
+\cite{quadraWeb}.  HyperNEAT is written in C++.  We made use of the
+excellent \code{pydynamixel} library \cite{pydynamixel} for
+controlling the servos, available under the GPLv2 license.  The robot
+was set up to connect to a wireless network on boot, and thus we were
+able to control all experiments via ssh.
 
-We controlled the experiments from a computer that was connected via a
-wireless Ethernet to the robot. A Nintendo Wii remote tracks the location 
-of the robot, providing feedback
-about distance traveled, in pixels, through an infrared LED mounted on top of 
-the robot (\figref{wiiMote.JPG}). A server is run on the robot and continuously tracks its
-position using the CWiid library\cite{cwiid} to interface with the remote
-via bluetooth. A client then connects via a socket to the tracking
-server and requests position updates periodically. If the robot walks 
-beyond the viewable range of the Wii remote, a prompt informed the
-user. The only human intervention required during the
-experiment was to move the robot back inside the viewable area and resume
-the run, and to handle any mechnanical failures that arose. This did not
-interrupt the learning process or result in the loss of data.
+%\acmFigg{wiiMote.jpg}{robot_led.jpg}{1}{A Nintendo Wii remote tracks the
+%  location of the robot, providing feedback about distance traveled,
+%  in pixels, through an infrared LED mounted on top of the robot.}
 
-The robot is run using a given motion model, including, if desired, 
-smooth interpolation over time for the beginning and end of the run. 
-The servos are prevented from being commanded to a point outside their
-normal range (0 - 1023) as well as beyond points where limbs would collide
-(150 - 770 for inner leg servos, 30 - 680 for outer leg servos, and 392 - 623
-for the center, or ``hip'' servo.
+\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii remote tracks the
+  location of the robot, providing feedback about distance traveled,
+  in pixels, through an infrared LED mounted on top of the robot.}
+
+
+To track the position of the robot and determine gait fitness, we
+mounted a Nintendo Wii remote on the ceiling and an infrared LED on
+top of the robot (\figref{wiiMote.JPG}).  The Wii remote contains an
+IR camera that can track and report the position of any IR sources in
+its image frame.  The resolution of the camera was 1024 by 768 pixels,
+which produced a resolution of 1.7mm per pixel when mounted at a
+height of \edit{???}m.
+
+A separate tracking server, written in Python, ran on the robot and
+interfaced with the Wii remote via bluetooth using the CWiid
+library\cite{cwiid}.  Our fitness testing code connected to this
+server via socket and requested position updates at the beginning and
+end of each run (see \secref{fitnessEvaluation for more details}).
+
+%to interface with the remote via bluetooth. A client then connects via
+%a socket to the tracking server and requests position updates
+%periodically. If the robot walks beyond the viewable range of the Wii
+%remote, a prompt informed the user. The only human intervention
+%required during the experiment was to move the robot back inside the
+%viewable area and resume the run, and to handle any mechnanical
+%failures that arose. This did not interrupt the learning process or
+%result in the loss of data.
+
+To run a gait on the robot, one simply provides a \emph{gait
+  function}, any Python function that accepts a single input --- time
+starting at 0 --- and outputs a list of nine commanded positions, one
+for each servo.  To safeguard against limb collision with the robot
+body, the robot control code cropped the commands to a safe range.
+This range was [150, 770] for the inner leg servos, [30, 680] for the
+outer leg servos, and [392, 623] for the center hip servo.
+
+
+%The robot was set up to run when given any giat 
+
+%is run using a given motion model, including, if desired, 
+%smooth interpolation over time for the beginning and end of the run. 
+
+%The servos are prevented from being commanded to a point outside their
+%normal range (0 - 1023) as well as beyond points where limbs would collide
+
