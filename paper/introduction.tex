@@ -15,40 +15,23 @@ gaits that are relatively quick, power efficient, and robust to
 changing terrain, but they vary widely in the importance placed
 on each attribute.  Big Dog's gait is optimzed for much more difficult terrain than Asimo's, resulting in a gait of a completely different form.
 
-Whatever the design goals, gaits may be obtained by one of several methods.  Gaits may be designed by hand by an expert, as in \cite{_asmio, _bigdog}, or they may be learned by repeated trial and evaluation.  Learned gaits offer several advantages over manually designed gaits.  Automatically learning gaits can save valuable engineering time and can allow customization of gaits to a particular robot and its unique actuators.  Most importantly, learned gaits can outperform manually designed gaits
+Once the design goals are decided upon, gaits may be obtained by one of several methods.  Gaits may be designed by hand by an expert, as in \cite{_asmio, _bigdog}.  Alternately, they may be learned through repeated trial and evaluation.  Learned gaits offer several advantages over manually designed gaits.  Automatically learning gaits can save valuable engineering time and can allow customization of gaits to a particular robot and its unique actuators.  Most importantly, in some cases learned gaits can outperform manually designed gaits.
 
-save programmer time
-customize gaits per model
-design better gaits than people
+In this paper we compare the performance of three different methods of designing gaits: manual design, parametrized gait optimized using one of seven learnign methods, and gaits generated and evolved by HyperNEAT.  All experiments were done in hardware using the platform shown in \figref{robot_close.jpg}. To our knowledge this is the first time HyperNEAT has been used to directly evolve gaits in hardware.
 
+In simulation HyperNEAT has been shown to produce the highest performing gaits when using an encoding that respects the geometric regularity of a problem \cite{jeffSomething}. To take advantage of this fact, we used an encoding for the physical robot that respects the symmetry of its form; this encoding is shown in \figref{hyperEncoding???}.
 
+In addition, past research has suggested \cite{jeffSomething} one advantage the HyperNEAT encoding has over the NEAT encoding is in the bias toward regularity of its output. That is, biasing gaits toward regularity appears to be beneficial. Thus, to make our comparison as fair as possible, for the parametrized family of gaits, we used a construction that also biases toward regularity.
 
-In many cases additional objectives may be 
-
-, or with minimal power usage or strain on
-actuators.  In many cases, however, 
+\edit{more past work in here???}
 
 
 
-
-In other cases, the objective may be more complicated; perhaps it is desired that the gait be fairly [robust]
-
-\_asimo and \_bigDog very different (and some hexapod?)
-
-Many times gait will be designed and tweaked by hand \cite{_asimo}
-
-here we describe a study, a comparison of few methods. started with
-sped, but then not-breaking as well.
-
-
-When designing gaits for walking robots, often it is desirable that
-this gait enable the robot to walk as
-
-Old: design by hand
-Newer: Learn gait
-  - parmametrized or more free form (HN, ???)
-  - in sim or hardware
-Us: first time HN in hardware, first time compared to other methods aiming for symmetry on same hardware
+%Old: design by hand
+%Newer: Learn gait
+%  - parmametrized or more free form (HN, ???)
+%  - in sim or hardware
+%Us: first time HN in hardware, first time compared to other methods aiming for %symmetry on same hardware
 
 Often
 these optimizations are done manually by an expert who designs and
