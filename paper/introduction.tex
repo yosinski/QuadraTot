@@ -21,3 +21,33 @@ In this paper we compare the performance of three different methods of designing
 Previous work has shown that quadruped gaits perform better when they are \emph{regular} (i.e.\ when the legs are coordinated)~\cite{clune2009evolving, clune2011performance,valsalam2008modular}. For example, HyperNEAT produced fast, natural gaits in part because its bias towards regular gaits created coordinated movements that outperformed gaits evolved by an encoding not biased towards regularity~\cite{clune2009evolving, clune2011performance}. One of the motivations of this paper is to investigate whether any learning method biased towards regularity would perform well at producing quadruped gaits, or whether HyperNEAT's high performance is due to additional factors, such as its abstraction of biological development (described below). We test this hypothesis by comparing HyperNEAT to seven machine learning algorithms biased toward regularity. 
 
 A final motivation of this problem is to simply evolve effective gaits for a physical robot. Because HyperNEAT performed well in simulation, it is interesting to test whether it can produce a fast gait for a physical robot. It is additionally interesting to test how more traditional machine learning techniques compete with evolutionary algorithms when evolving in hardware.
+
+
+
+% Put back in for reference... some good text here I think
+
+% Applications of walking robots often call for the ability to walk as 
+% quickly, efficiently, or with as little power as possible.  Often 
+% these optimizations are done manually by an expert who designs and 
+% tweaks a gait specifically for a given objective.  Other groups have 
+% used learning methods to generate gaits optimized for some metric. 
+% Approaches differ in their starting assumptions, some essentially 
+% tweaking the parameters of a hand-tuned model \cite{chernova}, others 
+% exploring a reasonably compact parameter space \cite{kohl}, and still 
+% others beginning with few assumptions besides periodicity 
+% \cite{zykov}. 
+%  
+% We aimed to strike a middle ground between these approaches.  Our 
+% motion generator did not rely on hand-tweaked gaits, but it did use 
+% parameterized gaits which, by their nature, impose some assumptions on 
+% the answers produced.  We then used machine learning to design gaits 
+% for a quadruped robot with these models.  This paper presents a 
+% comparison of the different learning methods implemented.  Most 
+% methods created walks that are several times faster than the original 
+% hand-tuned gait.  We invite readers with short attention spans to view 
+% a video of some of our results online here: 
+%  
+% 
+% %\url{http://www.youtube.com/watch?v=ODoiOj9DdGg} 
+% \texttt{http://www.youtube.com/watch?v=ODoiOj9DdGg} 
+
