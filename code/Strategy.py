@@ -628,8 +628,8 @@ class LinearRegressionStrategy(LearningStrategy):
     def predict_distance_walked(self, inputs):
         '''
         Given a weight vector and an input vector, predicts the distance
-        walked by the robot.        
-<        '''
+        walked by the robot.
+        '''
         return sum([self.theta[i]*inputs[i] for i in range(len(self.theta))])
 
     def calculate_weights(self, training_params, distances_walked):
