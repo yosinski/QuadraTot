@@ -1,25 +1,17 @@
 \subsection{Parametrized Motion Models}
 \seclabel{motionModel}
 
-There are a plethora of methods available for the creation of the
-vector motion generating function $g(t)$ introduced in
-\secref{problemDefinition}, and we've chosen two for comparison in
-this study.  The first method we evaluated was to use a family of
-parametrized gaits, described in this section and the next, and the
-second method was to use an evolved non-parametric gait, detailed in
+We have chosen to implement two classes of algorithms to automatically create the motion-generating function $g(t)$ (described in
+\secref{problemDefinition}).  The first method uses a family of
+parametrized gaits, described in this section and the next. The
+second method evolves a non-parametric gait controlled by neural networks, and is detailed in
 \secref{hyperNeatMethod}.
 
 By a \emph{parametrized gait}, we mean a gait produced by a
 parametrized function $g(t; \vec{\theta})$. Fixing the parameter
 $\vec{\theta}$ yields a deterministic motion function over time.  We
 tried several parametrizations on the robot and, upon obtaining
-reasonable early success, settled on one particular parametrization.
-We dubbed this the \emph{SineModel5}, as it has five parameters and
-employs a sine wave as its root pattern.
-
-The five parameters in $\vec{\theta}$ are as follows:
-
-\edit{make sure this text flows into the table}
+reasonable early success, settled on one particular parametrization, which we call  \emph{SineModel5}. Its root pattern is a sine wave and it has five parameters (Table~\ref{tab:params}) .
 
 %\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
 \newcommand{\amp}{\ensuremath{\alpha}}
@@ -35,28 +27,30 @@ Parameter    & Description               & Range \\
 \hline
 $\tau$       & Period                    & [.5, 8] \\
 \hline
-$m_O$        & Outer motor multiplier    & [-2, 2] \\
+$m_O$        & Outer-motor multiplier    & [-2, 2] \\
 \hline
-$m_F$        & Front motor multiplier    & [-1, 1] \\
+$m_F$        & Front-motor multiplier    & [-1, 1] \\
 \hline
-$m_R$        & Right motor multiplier    & [-1, 1] \\
+$m_R$        & Right-motor multiplier    & [-1, 1] \\
 \hline
 \end{tabular}
-\caption{The parameters used for the \emph{SineModel5} motion model.}
+\caption{The \emph{SineModel5} motion model parameters.}
 \tablabel{parameters}
+\label{tab:params}
 \end{center}
 \end{table}
 
+\edit{called outer multiplier, but text says we multiply by inner. same for left}
 
-Intuitively, SineModel5 starts with 8 identically sine waves of
+Intuitively, SineModel5 starts with 8 identical sine waves of
 amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
-motors by $m_o$, multiplies the waves for all front motors by $m_F$,
+motors by $m_O$, multiplies the waves for all front motors by $m_F$,
 and multiplies the waves for all left motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
 appropriate fixed constants so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
-\figref{robot_close.jpg}).  Finally, in this motion model, the ninth
-``hip'' motor is kept at a neutral position.  Thus, the commanded
+\figref{robot_close.jpg}).  In this motion model, the ninth
+(center) motor is kept at a neutral position.  Thus, the commanded
 position for all motors, as a vector function of time, is:
 
 \[
@@ -79,6 +73,8 @@ position are $C_I$ for inner motors, $C_O$ for outer motors, and $C_C$
 for the center hip motor.  The nine subscripted functions correspond
 to the nine labeled motors in \figref{topdown.png}.
 
+\edit{what subscripts?}
+
 
 
 \subsection{Learning Methods for Parametrized Motion Models}
@@ -94,29 +90,19 @@ If we choose a value for the five dimensional parameter
 $\vec{\theta}$, then a given physical trial gives us one measurement
 of the fitness of that parameter vector, or $f(\vec{\theta})$.  Two
 things make learning difficult.  First, each evaluation of
-$f(\vec{\theta})$ is expensive, taking 15-20 seconds of time on
+$f(\vec{\theta})$ is expensive, taking 15-20 seconds on
 average.  Second, the fitness returned by such evaluations has proved
 to be very noisy, with the standard deviation of the noise often being
 roughly equivalent to the size of the measurement.
 
-For both of these reasons, an intelligent \emph{learning algorithm} is
-needed.
-In this context, a learning algorithm is a method for choosing
-%\begin{enumerate}
-%\item The value for $\vec{\theta}$ for the initial trial, and
-the next value of $\vec{\theta}$ to try, given a list of the
-$\vec{\theta}$ values tried so far and the fitness $f(\vec{\theta})$
-measured for each.
-%\end{enumerate}
+We test the ability of different \emph{learning algorithms} to choose the next value of $\vec{\theta}$ to try, given a list of the
+$\vec{\theta}$ values already evaluated and their fitness measurements $f(\vec{\theta})$.
 
-We evaluated a total of seven subtly or not so subtly different
-learning methods for the parametrized motion models.  All methods
-needed a way of picking a $\vec{\theta}$ for the first trial.  In
-general this is done by selecting a random starting vector within the
+We evaluated a total of seven different
+learning algorithms for the parametrized motion models.  All methods
+needed a way of picking a $\vec{\theta}$ for the first trial of each run.  This could be done by selecting a random starting vector within the
 allowable domain.  However, as discussed in
-\secref{fitnessEvaluation}, we decided to evaluate the different
-methods starting at one of several common starting points to reduce
-one possible contribution of noise.
+\secref{fitnessEvaluation}, we started all of the methods at the same three starting points in the three different runts to make comparisons fair.
 
 %All employed a simple random sampling method for
 %requirement (1); that is, all methods picked their initial
@@ -125,8 +111,7 @@ one possible contribution of noise.
 %differences in the algorithms was how they selected new $\vec{\theta}$
 %values to try from their past experience.
 
-The seven methods used, and their methods for choosing the next
-$\vec{\theta}$ are:
+The seven learning algorithms for the parametrized motion models are as follows:
 
 
 
@@ -159,10 +144,10 @@ $\vec{\theta}$ are:
 \begin{itemize}
 
 \item \emph{Random}: This method randomly generates parameter vectors
-  in the allowable range for every trial. This strategy was used only
+  in the allowable range for every trial. This strategy serves
   as baseline for comparison.
 
-\item \emph{Uniform random hill climbing}: This method begins by
+\item \emph{Uniform random hill climbing}: \edit{this contradicts what we say earlier, where we say that we use the same initial vector for all runs in the 3 different treatments} This method begins by
   selecting a single random parameter vector.  Subsequent iterations
   generate a neighbor by randomly choosing one parameter to adjust and
   replacing it with a new value chosen with uniform probability in the
@@ -181,13 +166,12 @@ $\vec{\theta}$ are:
   that the standard deviation of the noise was 5\% of the range of
   that dimension.
 
-\item \emph{N-dimensional policy gradient descent}: In \cite{kohl},
-  Kohl and Stone document a method for local gradient ascent for gait
-  learning with noisy fitness evaluations, and we have included this
-  method in our evaluation.  This strategy explicitly estimates the
-  gradient for the objective function. It does this by first
-  evaluating \emph{n} randomly generated parameter vectors near the
-  initial vector, each dimension of these vectors being perturbed by
+\item \emph{N-dimensional policy gradient descent}: This method, presented in \cite{kohl},
+  features local gradient \edit{descent?} ascent for gait
+  learning with noisy fitness evaluations.  It explicitly estimates the
+  gradient for the objective function by first
+  evaluating \emph{n} randomly-generated parameter vectors near the
+  initial vector, with each dimension of the vector being perturbed by
   either $-\epsilon$, $0$, or $\epsilon$. Then, for each dimension, it
   groups vectors into three groups: $-\epsilon$, $0$, and $\epsilon$.
   The gradient along this dimension is then estimated as the average
