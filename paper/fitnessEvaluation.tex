@@ -79,6 +79,13 @@ ensure we could
 start and end each run in the same position,
 
 
+\acmFig{linearInterp}{1}{To ensure fair fitness measurements, the
+  position of the robot was measured at the beginning and end of each
+  run in the same ``ready pose'' (\figref{robot_close.jpg}).  Motion
+  was interpolated linearly between this stationary pose and the
+  commanded gait g(t) for one second at the beginning of the run and
+  two seconds at the end, as shown above.}
+
 \begin{tabular}{ccccc}
 Ready position & a & b & c & d\\
 \hline
@@ -88,12 +95,6 @@ t = 0, measure  & $t \in [0,1]$ & $t \in [1,10]$ & $t \in [10,12]$ & t = 12
 
 
 
-\edit{Put this in there somewhere:}
-
-To be as fair as possible when obtaining the results presented in
-\secref{results}, we picked three random points --- $\vec{\theta}_A$,
-$\vec{\theta}_B$, and $\vec{\theta}_C$ --- and started all seven
-methods at these points...
 
 \editbox{proofread. especially middle paragraph}
 
@@ -118,9 +119,3 @@ The only human intervention required during most learning was to
 occasionally move the robot back into the viewable area of the w
 
 
-Each of the parameter ??? methods was run on 3 different initial
-parameter vectors, in order to fairly compare the algorithms. We allowed 
-each run for the parameter ??? methods to
-continue until the results plateaued (no improvement for one third of
-the policies seen so far). Three runs of HyperNEAT were completed,
-each with a different initial seed and run for 20 generations.
