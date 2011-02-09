@@ -1,25 +1,29 @@
 \section{Results and Discussion}
 \seclabel{results}
 
-% Present the quantitative results of your experiments. Graphical data
-% presentation such as graphs and histograms are frequently better 
-% than tables. Explain what are the basic differences revealed in the 
-% data. If your method is stochastic or you analyze multiple datasets, 
-% calculate mean and standard error for every quantitative
-% performance result you show based on multiple runs.
-
-\edit{proofread this.}
+% Outline:
+% - exploration of parameter space
+% - parameterized optimization results, discussion
+% - HyperNEAT results, discussion
 
 
-\subsection{Exploration of Parameter Space}
 
-In addition to running strategies to optimize parameterized gaits, we
-also wanted to investigate the space of possible gaits.  To accomplish
-this, we selected a parameter vector that resulted in motion, but not
-an exceptional gait, and plotted performance along each dimension
-individually.  In addition, we duplicated each measurement to be able
-to estimate the measurement noise at each point.  Results for this
-exploration are shown in \figref{explore_dim_1} through
+\subsection{Exploration of Parameterized Gait Space}
+
+%\edit{Jeff: proofread}
+
+Before attempting to use the learning methods
+(\secref{learningMethods}) to optimize the chosen family of
+parameterized gaits (SineModel5, \secref{motionModel}), we did a brief
+experiment to explore the five dimensions of the parameter space. To
+accomplish this, we first selected a random parameter vector that resulted
+in motion, but not an exceptional gait.
+
+Then, in five different experiments, we varied each parameter
+individually and plotted performance versus each changing parameter.
+In addition, we duplicated each measurement to be able to estimate
+standard deviation of the measurement noise at each point.  Results
+for this exploration are shown in \figref{explore_dim_1} through
 \figref{explore_dim_5}.  As is shown in the figures, some dimensions
 are smoother than others, and some measurements are fairly noisy.
 
