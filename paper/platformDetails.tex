@@ -26,15 +26,12 @@ unique servo allows the two halves of the robot to rotate with respect
 to each other. \figref{topdown.png} shows the positions and numerical
 designations of all nine servoes.
 
-Computation for gait learning, fitness evaluation, and robot control
-is performed on the compact on-board CompuLab Fit-PC2, running Ubuntu
+All of the computation for gait learning, fitness evaluation, and robot control
+was performed on the compact on-board CompuLab Fit-PC2, running Ubuntu
 Linux.  All gait generation, learning, and fitness evaluation code,
-except HyperNEAT, is written in Python and is available on our website
-\cite{quadraWeb}.  HyperNEAT is written in C++.  We made use of the
-excellent \code{pydynamixel} library \cite{pydynamixel} for
-controlling the servos, available under the GPLv2 license.  The robot
-was set up to connect to a wireless network on boot, and thus we were
-able to control all experiments via ssh.
+except HyperNEAT, is in Python and is available on our website
+\cite{quadraWeb}.  HyperNEAT is written in C++.  We controlled the servos with the \code{pydynamixel} library \cite{pydynamixel}.  The robot
+connects to a wireless network on boot, which enabled us to control it via SSH.
 
 %\acmFigg{wiiMote.jpg}{robot_led.jpg}{1}{A Nintendo Wii remote tracks the
 %  location of the robot, providing feedback about distance traveled,
@@ -45,9 +42,9 @@ able to control all experiments via ssh.
   in pixels, through an infrared LED mounted on top of the robot.}
 
 
-To track the position of the robot and determine gait fitness, we
+To track the position of the robot and thus determine gait fitness, we
 mounted a Nintendo Wii remote on the ceiling and an infrared LED on
-top of the robot (\figref{wiiMote.JPG}).  The Wii remote contains an
+top of the robot (\figref{wiiMote_crop.jpg}).  The Wii remote contains an
 IR camera that can track and report the position of any IR sources in
 its image frame.  The resolution of the camera was 1024 by 768 pixels,
 which produced a resolution of 1.7mm per pixel when mounted at a
@@ -57,7 +54,7 @@ A separate tracking server, written in Python, ran on the robot and
 interfaced with the Wii remote via bluetooth using the CWiid
 library\cite{cwiid}.  Our fitness testing code connected to this
 server via socket and requested position updates at the beginning and
-end of each run (see \secref{fitnessEvaluation for more details}).
+end of each run (see \secref{fitnessEvaluation}).
 
 %to interface with the remote via bluetooth. A client then connects via
 %a socket to the tracking server and requests position updates
@@ -68,8 +65,8 @@ end of each run (see \secref{fitnessEvaluation for more details}).
 %failures that arose. This did not interrupt the learning process or
 %result in the loss of data.
 
-To run a gait on the robot, one simply provides a \emph{gait
-  function}, any Python function that accepts a single input --- time
+To run a gait on the robot, a \emph{gait
+  function} is provided, any Python function that accepts a single input --- time
 starting at 0 --- and outputs a list of nine commanded positions, one
 for each servo.  To safeguard against limb collision with the robot
 body, the robot control code cropped the commands to a safe range.

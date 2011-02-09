@@ -52,7 +52,7 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{color}
-\usepackage{ulem}
+%\usepackage{ulem}
 \usepackage{ownstyles}
 \usepackage{hyperref}
 
@@ -70,7 +70,6 @@
 % --- End of Author Metadata ---
 
 \title{A comparison of gait learning methods on a quadruped robot}
-\subtitle{[Extended Abstract]}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -209,20 +208,15 @@ Anonymous Author \\
 \end{abstract}
 
 % A category with the (minimum) three required fields
-\category{H.4}{Information Systems Applications}{Miscellaneous}
-%A category including the fourth, optional field follows...
-\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
-\category{J.4.2 \edit{fix this}}{Jason isn't sure what this is}{The Dewey}[Decimal system for papers?]
-\edit{JMC: See hidden comment}
+\category{I.2.6}{Artificial Intelligence}{Learning}
 
-%ACM requires this bizarre classification. You can copy mine from the quad paper...or if you care, find a gecco/acm paper where they evolve gaits in physical robots and copy theirs.
 
 
 % \terms is one of 16 general terms here:
 % http://homepages.inf.ed.ac.uk/wadler/fool/authors/sig-alternate-v1.htm
 \terms{Algorithms, Experimentation, Performance}
 
-\keywords{\edit{fix this} Learning Control, Walking Robots, Gait Learning, Quadruped}
+\keywords{Evolving Quadruped Robotic Gaits, HyperNEAT, Machine Learning, Legged Robots}
 
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -235,8 +229,34 @@ Anonymous Author \\
 % Section 2
 \input{problemDefinition}
 
-% Section 3
-\input{approach}
+% Section 3 (approach)
+	\section{Experimental Setup}
+	\seclabel{experimentalSetup}
+	
+	\secref{platformDetails} discusses the hardware platform used for the
+	experiments presented in this paper, and \secref{fitnessEvaluation}
+	describes the method we used to measure a gait's fitness.
+	
+	% Given the goal of producing a deterministic, feedforward motion
+	% function $g(t)$, we now turn to several important considerations.
+	% \secref{learningMethods} talks about how this function is generated,
+	% \secref{platformDetails} discusses the hardware platform on which it
+	% is run, and \secref{fitnessEvaluation} details exactly how its
+	% fitness is measured.
+	
+	\input{platformDetails}
+	
+	\input{fitnessEvaluation}
+	
+	
+	
+	\section{Gait Generation and Learning}
+	\seclabel{gaitGenLearn}
+	
+	\input{learningMethods}
+	
+	\input{hyperNeatMethod}
+
 
 % Section 4
 \input{results}
@@ -248,7 +268,6 @@ Anonymous Author \\
 % Section 6
 \input{acknowledgments}
 
-\input{notes}
 
 %%%%%%%%%%%%%%%%%%%%%%
 

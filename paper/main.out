@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Introduction and Background}{}
+\BOOKMARK [2][-]{subsection.1.1}{Related Work}{section.1}
+\BOOKMARK [2][-]{subsection.1.2}{Outline of Sections}{section.1}
+\BOOKMARK [1][-]{section.2}{Problem definition}{}
+\BOOKMARK [1][-]{section.3}{Experimental Setup}{}
+\BOOKMARK [2][-]{subsection.3.1}{Platform details}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Fitness Evaluation Details}{section.3}
+\BOOKMARK [1][-]{section.4}{Gait Generation and Learning}{}
+\BOOKMARK [2][-]{subsection.4.1}{Parametrized Motion Models}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Learning Methods for Parametrized Motion Models}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{HyperNEAT Motion Model}{section.4}
+\BOOKMARK [1][-]{section.5}{Results and Discussion}{}
+\BOOKMARK [2][-]{subsection.5.1}{Exploration of Parameter Space}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Maximizing Strategies}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Predictive Strategies}{section.5}
+\BOOKMARK [2][-]{subsection.5.4}{Evolved Neural Network Strategy}{section.5}
+\BOOKMARK [2][-]{subsection.5.5}{Discussion}{section.5}
+\BOOKMARK [1][-]{section.6}{Conclusion and Future Work}{}
+\BOOKMARK [1][-]{section.7}{Acknowledgments}{}
+\BOOKMARK [1][-]{section.8}{References}{}
