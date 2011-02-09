@@ -72,50 +72,45 @@ the direction of travel.  While this would mean that a part of the
 robot has traveled farther, this extra distance would not generalize
 to a longer run.  Thus, we chose not to reward this behavior.
 
+In order to measure start and end position in the same pose, we
+linearly interpolated the motion of the robot between the ready
+position and the commanded gait, $g(t)$.  As shown in
+\figref{linearInterp}, motion for the first second was interpolated
+between the ready position and $g(t)$, for the next nine seconds the
+robot moved exactly as specified by $g(t)$, and for the final two
+seconds its motion was interpolated smoothly back to the ready
+position.
 
-In order to measure start and end position in the same pose, 
-
-ensure we could
-start and end each run in the same position,
-
-
-\acmFig{linearInterp}{1}{To ensure fair fitness measurements, the
-  position of the robot was measured at the beginning and end of each
-  run in the same ``ready pose'' (\figref{robot_close.jpg}).  Motion
-  was interpolated linearly between this stationary pose and the
-  commanded gait g(t) for one second at the beginning of the run and
-  two seconds at the end, as shown above.}
-
-\begin{tabular}{ccccc}
-Ready position & a & b & c & d\\
-\hline
-t = 0, measure  & $t \in [0,1]$ & $t \in [1,10]$ & $t \in [10,12]$ & t = 12
-\end{tabular}
+\acmFig{linearInterp}{1}{To ensure fair fitness evaluations with as
+  little noise as possible, the position of the robot was measured at
+  the beginning and end of each run (red circles) in the same
+  \emph{ready} pose (\figref{robot_close.jpg}).  Motion was
+  interpolated linearly between this stationary pose and the commanded
+  gait g(t) for one second at the beginning of the run and two seconds
+  at the end, as shown above.}
 
 
+% finite size
+% shimmy
 
+The only human intervention required during most learning trials was
+to occasionally move the robot back into the viewable area of the Wii
+remote if it had walked outside.  Initially this was a rare
+occurrence, as the gaits did not typically produce motion as large as
+the size of the window (roughly 175 x 120 cm).  However, as gaits
+improved, particularly when using HyperNEAT, the robot began to walk
+out of the measurement area a non-negligible fraction of the time.
+Whenever it did so, we would discard the trial and repeat it until the
+gait was entirely within the window.
 
+While this process guaranteed that we always obtained a measurement
+for a given gait before proceeding, it also biased the measurements
+downward.  Because the performance of the robot on a given gait varied
+from trial to trial, a successful measurement was more likely to be
+obtained when the gait happened to perform poorly.  This phenomenon
+was negligible at first, but became significantly more pronounced when
+evaluating several gaits that produced motion across nearly the entire
+area.  For future studies we will likely use a 2x2 array of Wii
+remotes to double the length and width of the measurement arena.
 
-\editbox{proofread. especially middle paragraph}
-
-%\section{Experimental Evaluation}
-
-The metric for evaluation of the designed gait was speed. To evaluate
-a set of parameters, the robot was sent the parameters and instructed
-to walk for a certain length of time. For each evaluation, the robot
-always started and ended in the same position in order to measure true
-displacement and not reward gaits the ended in a lean, since the LED
-would have moved a different distance the robot. More efficient
-parameters resulted in a faster gait, which translated into a longer
-distance walked, measured in pixels, and a better score.
-
-The size of the Wii remote window is approximately 175 x 120 cm. A
-concern about this is that if the robot walks further than usual,
-it walks outside the viewable range and thus does not count the run.
-This possibility could bias the final results reported on the robot.
-% probably could be better written
-
-The only human intervention required during most learning was to
-occasionally move the robot back into the viewable area of the w
-
-
+%We made one final tweak to the fitness measurement process.  HN..... 1/2
