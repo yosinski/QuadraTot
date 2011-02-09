@@ -30,28 +30,52 @@
 %
 % Finite sized window kinda hurt stuff.
 
+
+\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
+  remote provided the location of the robot by tracking the infrared
+  LED mounted on the robot's antenna.  The LED position was measured
+  in pixels and transmitted from the Wii remote to the robot via
+  bluetooth.}
+
+To track the position of the robot and thus determine gait fitness, we
+mounted a Nintendo Wii remote on the ceiling and an infrared LED on
+top of the robot (\figref{wiiMote_crop.jpg}).  The Wii remote contains
+an IR camera that can track and report the position of up to four IR
+sources in its image frame.  The resolution of the camera was 1024 by
+768 pixels with view angles of about 40$^\circ$ by 30$^\circ$, which
+produced a resolution of 1.7mm per pixel when mounted at a height of
+2.63m.  At this height, the viewable window on the floor was
+approximately 175 x 120 cm.
+
+A separate tracking server, written in Python, ran on the robot and
+interfaced with the Wii remote via bluetooth using the CWiid
+library\cite{cwiid}.  Our fitness testing code communicated with this
+server via socket connection and requested position updates at the
+beginning and end of each run.
+
+
+
 As mentioned earlier, the metric for evaluating gaits was their
 average speed.  In reality this was measured as the distance the robot
-moved over a 12 second run, measured by the Wii remote tracking system
-(\secref{platformDetails}).  The Euclidean distance between the
+moved over a 12 second run.  The Euclidean distance between the
 starting position and the ending position, in pixels, was reported
-directly as the fitness (save for a tweak for HyperNEAT; see later in
-this section).
+directly as the fitness (save for a tweak for HyperNEAT; see below).
 
 Since only a single point on the robot --- the IR LED --- was measured
 for the purposes of computing fitness, it was important that the
 position of the IR LED accurately reflect the position of the robot as
 a whole.  To enforce this constraint, the robot was always measured
-while in the \emph{ready} position (see \figref{robot_close.jpg}).  If
-this was not done, it would have resulted in giving extra fitness to,
-for example, gaits that ended with the robot leaning into the
-direction of travel.  While this might mean that a part of the robot
-has traveled farther, this extra distance would not generalize to a
-longer run.  Thus, we chose not to reward this behavior.
+while in the \emph{ready} position (the position shown in
+\figref{robot_close.jpg}).  This was done to prevent assigning extra
+fitness to, for example, gaits that ended with the robot leaning into
+the direction of travel.  While this would mean that a part of the
+robot has traveled farther, this extra distance would not generalize
+to a longer run.  Thus, we chose not to reward this behavior.
 
-Wishing to measure start and end position in the same pose, 
 
-In order to ensure we could
+In order to measure start and end position in the same pose, 
+
+ensure we could
 start and end each run in the same position,
 
 

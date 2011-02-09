@@ -24,54 +24,27 @@ Dynamixel servos: one inner joint and one outer joint servo in each of
 the four legs, and one servo at the center ``hip'' joint.  This final
 unique servo allows the two halves of the robot to rotate with respect
 to each other. \figref{topdown.png} shows the positions and numerical
-designations of all nine servoes.
+designations of all nine servos.  Each servo could be commanded to a
+position in the range [0,~1023], corresponding to a physical range
+[-120$^{\circ}$,~+120$^{\circ}$].
 
-All of the computation for gait learning, fitness evaluation, and robot control
-was performed on the compact on-board CompuLab Fit-PC2, running Ubuntu
-Linux.  All gait generation, learning, and fitness evaluation code,
-except HyperNEAT, is in Python and is available on our website
-\cite{quadraWeb}.  HyperNEAT is written in C++.  We controlled the servos with the \code{pydynamixel} library \cite{pydynamixel}.  The robot
-connects to a wireless network on boot, which enabled us to control it via SSH.
-
-%\acmFigg{wiiMote.jpg}{robot_led.jpg}{1}{A Nintendo Wii remote tracks the
-%  location of the robot, providing feedback about distance traveled,
-%  in pixels, through an infrared LED mounted on top of the robot.}
-
-\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii remote tracks the
-  location of the robot, providing feedback about distance traveled,
-  in pixels, through an infrared LED mounted on top of the robot.}
+All of the computation for gait learning, fitness evaluation, and
+robot control was performed on the compact on-board CompuLab Fit-PC2,
+running Ubuntu Linux.  All gait generation, learning, and fitness
+evaluation code, except HyperNEAT, was written in Python and is
+available on our website \cite{quadratotWeb}.  HyperNEAT is written in
+C++.  We controlled the servos with the \code{pydynamixel} library
+\cite{pydynamixel}.  The robot connected to a wireless network on
+boot, which enabled us to control it via SSH.
 
 
-To track the position of the robot and thus determine gait fitness, we
-mounted a Nintendo Wii remote on the ceiling and an infrared LED on
-top of the robot (\figref{wiiMote_crop.jpg}).  The Wii remote contains an
-IR camera that can track and report the position of any IR sources in
-its image frame.  The resolution of the camera was 1024 by 768 pixels,
-which produced a resolution of 1.7mm per pixel when mounted at a
-height of \edit{???}m.
-
-A separate tracking server, written in Python, ran on the robot and
-interfaced with the Wii remote via bluetooth using the CWiid
-library\cite{cwiid}.  Our fitness testing code connected to this
-server via socket and requested position updates at the beginning and
-end of each run (see \secref{fitnessEvaluation}).
-
-%to interface with the remote via bluetooth. A client then connects via
-%a socket to the tracking server and requests position updates
-%periodically. If the robot walks beyond the viewable range of the Wii
-%remote, a prompt informed the user. The only human intervention
-%required during the experiment was to move the robot back inside the
-%viewable area and resume the run, and to handle any mechnanical
-%failures that arose. This did not interrupt the learning process or
-%result in the loss of data.
-
-To run a gait on the robot, a \emph{gait
-  function} is provided, any Python function that accepts a single input --- time
-starting at 0 --- and outputs a list of nine commanded positions, one
-for each servo.  To safeguard against limb collision with the robot
-body, the robot control code cropped the commands to a safe range.
-This range was [150, 770] for the inner leg servos, [30, 680] for the
-outer leg servos, and [392, 623] for the center hip servo.
+To run a gait on the robot, one needed only to provide a \emph{gait
+  function} --- any Python function that accepts a single input, time
+starting at 0, and outputs a list of nine commanded positions, one for
+each servo.  To safeguard against limb collision with the robot body,
+the robot control code cropped the commands to a safe range.  This
+range was [150,~770] for the inner leg servos, [30,~680] for the outer
+leg servos, and [392,~623] for the center hip servo.
 
 
 %The robot was set up to run when given any giat 
