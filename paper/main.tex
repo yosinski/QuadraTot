@@ -230,10 +230,27 @@ Anonymous Author \\
 \input{problemDefinition}
 
 % Section 3
-\input{experimentalSetup}
+\section{Experimental Setup}
+	\seclabel{experimentalSetup}
+	
+	An important aspect of this study was to evaluate gait generation and
+	learning algorithms in the noisy, unforgiving real world, instead of
+	using a simulator.  In this section we give details of the hardware
+	setup we used: \secref{platformDetails} discusses the robotic
+	platform, and \secref{fitnessEvaluation} describes the tracking system
+	we used to measure each gait's fitness.
+	
+	\input{platformDetails}
+	\input{fitnessEvaluation}
+
+
+
 	
 % Section 4
-\input{gaitGenLearn}
+\section{Gait Generation and Learning}
+	\seclabel{gaitGenLearn}
+	\input{learningMethods}
+	\input{hyperNeatMethod}
 
 % Section 5
 \input{results}
