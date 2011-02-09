@@ -1,6 +1,69 @@
 \subsection{Fitness Evaluation Details}
 \seclabel{fitnessEvaluation}
 
+% Points to make:
+% - linear interpolation
+% - fitness reported in pixels
+% - parametrized models
+%   - started all on three thetas
+%   - plateued at 1/3 of lifetime
+% - HyperNEAT
+%   - broke things a lot... so guided evolution (or in HN section?)
+%   - eventually included ``shimmy''
+% - finite sized window led to unfortunate bias
+%
+% Given earlier section, now have way of evaluating any gait g(t).
+%
+% Want to measure average speed, so we measure distance displaced over
+% a fixed lenght run. Because we're measureing a single point on
+% robot, need to start and end in same position (crouch)
+% So we linearly interpolate begining (1s) and end (2s).
+%
+% Fitness is measured and reported directly as euclidian distance of pixels moved: equation
+%
+% For the parametrized models, the starting location may be important. To be as fair as possible, we picked three random points and starred all models there.
+%   generally ran until 1/3 plateau
+%
+% For HN, couldn't do a,b,c thing, so just did three runs of length <foo>
+% Things started breaking, so included shimmy to test brokenness
+% penalized runs that broke servos
+%
+% Finite sized window kinda hurt stuff.
+
+As mentioned earlier, the metric for evaluating gaits was their
+average speed.  In reality this was measured as the distance the robot
+moved over a 12 second run, measured by the Wii remote tracking system
+(\secref{platformDetails}).  The Euclidean distance between the
+starting position and the ending position, in pixels, was reported
+directly as the fitness (save for a tweak for HyperNEAT; see later in
+this section).
+
+Since only a single point on the robot --- the IR LED --- was measured
+for the purposes of computing fitness, it was important that the
+position of the IR LED accurately reflect the position of the robot as
+a whole.  To enforce this constraint, the robot was always measured
+while in the \emph{ready} position (see \figref{robot_close.jpg}).  If
+this was not done, it would have resulted in giving extra fitness to,
+for example, gaits that ended with the robot leaning into the
+direction of travel.  While this might mean that a part of the robot
+has traveled farther, this extra distance would not generalize to a
+longer run.  Thus, we chose not to reward this behavior.
+
+Wishing to measure start and end position in the same pose, 
+
+In order to ensure we could
+start and end each run in the same position,
+
+
+\begin{tabular}{ccccc}
+Ready position & a & b & c & d\\
+\hline
+t = 0, measure  & $t \in [0,1]$ & $t \in [1,10]$ & $t \in [10,12]$ & t = 12
+\end{tabular}
+
+
+
+
 \edit{Put this in there somewhere:}
 
 To be as fair as possible when obtaining the results presented in
