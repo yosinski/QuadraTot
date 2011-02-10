@@ -1,33 +1,20 @@
 \section{Conclusion and Future Work}
 \seclabel{conclusion}
 
-We have presented an array of approaches to optimizing a quadrupedal
-gait for forward speed.  We implemented and tested six learning
-strategies for parameterized gaits and compared them with gaits
-encoded and evolved by HyperNEAT.
+We have presented an array of approaches to optimizing a fast quadrupedal
+gait.  We implemented and tested six learning
+strategies for parameterized gaits and compared them to gaits produced by neural networks
+evolved with the HyperNEAT generative encoding.
 
 All methods resulted in an improvement over the robot's previous
-hand-coded gait.  Using linear regression to build a model of gait
-performance and predict promising directions for further exploration
-seemed to work well, producing at best a gait 27.58 of body
-lengths/minute.  The Nelder-Mead simplex method also worked fairly
-well, likely due to its robustness to noise.  The other parameterized
-methods did not outperform a random gait generation method.  Because
-randomly choosing SineModel5 gaits performed so well, we concluded
-that the motion representation for the robot may be more critical to
-parameterized gait development than the learning algorithm itself.
+hand-coded gait.  Building a model of gait
+performance with linear regression to predict promising directions for further exploration
+worked well, producing a gait of 27.58 body
+lengths/minute.  The Nelder-Mead simplex method performed nearly as well, likely due to its robustness to noise.  The other parameterized
+methods did not outperform random search.  One reason the randomly-generated SineModel5 gaits performed so well could be because the gait representation was biased towards effective, regular gaits, making the highly exploratory random strategy more effective than more exploitative learning algorithms. 
 
-The HyperNEAT gaits performed much better than all parameterized
-methods, considering both the average and best gaits for each.  We
-conjecture that this was because the HyperNEAT encoding allowed it to
-take advantage of the symmetries of the problem, but otherwise left
-the evolution to explore a much larger space of possibilities than the
-more restrictive 5-dimensional parameterized space.  The typical
-higher-performance HyperNEAT gait pictured in
-\figref{neat_110115_211410_00000_002_filt_zoom} shows the fairly
-complex pattern of motion that was obtained.  Whereas the
-parameterized gaits were restricted to scaled and shifted sine waves
-of a single frequency, this evolved gait contains some patterns with
-multiple frequencies.  Despite this larger space of possibilities,
-this gait also reused the same pattern for multiple motors.
-
+HyperNEAT produced higher-performing gaits than all of the parameterized
+methods.  This could be because HyperNEAT tends to generate coordinated gaits~\cite{clune2011performance, clune2009evolving}, allowing it to
+take advantage of the symmetries of the problem, but can also explore a much larger space of possibilities than the
+more restrictive 5-dimensional parameterized space.  HyperNEAT gaits tended to produce more complex sequences of motor commands, with different frequencies and degrees of coordination, whereas the
+parameterized gaits were restricted to scaling single-frequency sine waves and could only produce certain types of motor regularities. 
