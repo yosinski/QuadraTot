@@ -194,13 +194,17 @@ and regular, in that patterns of multiple motors are coordinated.
 
 The evaluation of the gaits produced by HyperNEAT was more noisy than for the parameterized gaits, which made learning difficult. For example, we tested an example HyperNEAT generation-champion gait 11 times and found that its mean performance was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many effective HyperNEAT gaits were not preserved across generations because if performance in one trial was poor, the genome was unlikely to be selected for. We believe the slope of the HyperNEAT learning curve would be steeper if the noise in the evaluations could be reduced.
 
-\acmFig{hnResults}{1}{Average fitness ($\pm $ SE) of
-  the highest performing individual in the population for each generation of HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits were halved if the gait overly stressed the motors (see text), meaning that HyperNEAT's true performance without this penalty would be much higher.}
+\acmFig{hnResults}{.8}{Average fitness ($\pm $ SE) of the highest
+  performing individual in the population for each generation of
+  HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits
+  were halved if the gait overly stressed the motors (see text),
+  meaning that HyperNEAT's true performance without this penalty would
+  be much higher.}
 
 %\acmFig{neat_110115_211410_00000_002_filt}{1}{Caption here...???}
 
-\acmFig{neat_110115_211410_00000_002_filt_zoom}{1}{Example of one
-  particular high-performance gait produced by HyperNEAT showing
+\acmFig{neat_110115_211410_00000_002_filt_zoom}{.8}{Example of one
+  high-performance gait produced by HyperNEAT showing
   commands for each of nine motors.  Note the complexity of the motion
   pattern. Such patterns were not possible with the parameterized
   SineModel5, nor would they likely be contrived by a human designing
