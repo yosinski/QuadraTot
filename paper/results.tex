@@ -162,10 +162,10 @@ Evolved Neural Network              &        &          \\
 
 
 
-\acmFig{std_error}{1}{Average results ($\pm $ standard error) for each
+\acmFig{std_error}{1}{Average results ($\pm $ SE) for each
   of the parameterized learning methods.  Linear regression found the
   fastest overall gait and had the highest average, followed by
-  Nelder-Mead simplex. Many methods were beaten by the simple random
+  Nelder-Mead simplex. Many methods were beaten by the random
   strategy.}
 
 
@@ -173,22 +173,22 @@ Evolved Neural Network              &        &          \\
 
 \subsection{HyperNEAT Gaits}
 
-The results for the gaits produced and evolved by HyperNEAT are shown
-in \figref{hnResults} and \tabref{results}.  Overall the evolved gaits
+The results for the gaits evolved by HyperNEAT are shown
+in \figref{hnResults} and \tabref{results}.  Overall the HyperNEAT gaits
 were the fastest by far, beating all the parameterized models when
-comparing either the average or the best gaits of each.  We suspect
-that this is due to the fact that HyperNEAT was allowed to explore a
+comparing either average or best gaits.  We believe
+that this is because HyperNEAT was allowed to explore a
 much richer space of motions, but did so while still utilizing
 symmetries when advantageous.
 \figref{neat_110115_211410_00000_002_filt_zoom} shows a typical
 HyperNEAT gait that had high fitness.  The pattern of motion is both
-complex --- containing multiple frequencies and repeating patterns ---
-and reuses patterns for multiple motors.
+complex (containing multiple frequencies and repeating patterns across time)
+and regular, in that patterns of multiple motors are coordinated. 
 
-\acmFig{hnResults}{1}{Average fitness ($\pm $ standard error) of
-  generation champion (highest performing individual among the
-  population of nine individuals) for each generation of the three
-  HyperNEAT runs.}
+The evaluation of the gaits produced by HyperNEAT was more noisy than for the parameterized gaits, which made learning difficult. For example, we tested an example HyperNEAT generation-champion gait 11 times and found that its mean performance was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many effective HyperNEAT gaits were not preserved across generations because if performance in one trial was poor, the genome was unlikely to be selected for. We believe the slope of the HyperNEAT learning curve would be steeper if the noise in the evaluations could be reduced.
+
+\acmFig{hnResults}{1}{Average fitness ($\pm $ SE) of
+  the highest performing individual in the population for each generation of HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits were halved if the gait overly stressed the motors (see text), meaning that HyperNEAT's true performance without this penalty would be much higher.}
 
 %\acmFig{neat_110115_211410_00000_002_filt}{1}{Caption here...???}
 
