@@ -68,13 +68,7 @@ Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
 could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
 substrate were the current angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
-production of periodic behaviors). The sine and cosine waves were the
-following function of time ($t$) in milli-seconds:
-$\sin(t/12)\pi$, which produces numbers in the range [$-\pi, \pi$].
-
-\editbox{Jeff: this can't be right, because it would imply a period of only 12*2*pi=75 ms. Perhaps this was as a function of time in units of timesteps?}
-\editbox{Jeff: proofread this paragraph to make sure I didn't lie (too
-  much)}
+production of periodic behaviors). The sine and cosine waves had a period of about half a second.
 
 The outputs of the substrate at each time step were nine numbers in
 the range $[-1,1]$, which were scaled according to the allowable
