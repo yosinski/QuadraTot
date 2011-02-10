@@ -60,16 +60,24 @@ each plot of \figref{explore_dim_1}.
 % - real world noise yay
 
 The results for the parameterized gaits are shown in
-\figref{std_error} and \tabref{results}.  As a group, these strategies
-produced results equal to or worse not significantly better than the randomly-generated
-gaits, however, all methods managed to explore the space enough to
-significantly improve on the previous hand coded gait in at least one
-of the three runs.  No single strategy consistently outperformed the
-others: for the first trial Linear Regression produced the fastest
-gait at 27.58 body lengths/minute, for the second a random gait
-actually won with 17.26 body lengths/minute, and for the third trial
-the Nelder-Mead simplex method attained the fastest gait at 14.83 body
-lengths/minute.
+\figref{std_error} and \tabref{results}.  The best overall gait for
+the parameterized methods was found by linear regression, which also
+had the highest average performance. The Nelder-Mead simplex also
+performed quite well on average.  The other local search methods did not
+outperform random search; however, all methods did manage to explore
+enough of the parameter space to significantly improve on the previous
+hand-coded gait in at least one of the three runs.  No single strategy
+consistently beat the others: for the first trial Linear Regression
+produced the fastest gait at 27.58 body lengths/minute, for the second
+a random gait actually won with 17.26 body lengths/minute, and for the
+third trial the Nelder-Mead simplex method attained the fastest gait
+at 14.83 body lengths/minute.
+
+One reason the randomly-generated SineModel5 gaits were so effective
+may have been due to the SineModel5's bias toward regular, symmetric
+gaits.  This may have allowed the random strategy --- focusing on
+exploration --- to be competitive with the more directed strategies
+that exploit information from past runs.
 
 
 
