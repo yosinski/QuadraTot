@@ -5,27 +5,29 @@
   evolved for this robot can be viewed at www.anonymous.url.}
 
 
-Gaits for walking robots are often designed with some explicit or
-implicit goal in mind.  For some applications, the design criteria may
-be obvious --- perhaps the robot needs to move as quickly or as
-efficiently as possible --- but other times the objective is more complicated,
-requiring simultaneous optimization of several desired traits, each
-with its own relative importance.  The different combinations of desired traits and the relative weight placed on each can produce drastically different gaits.    For example, Honda's Asimo
-\cite{chestnutt2006footstep} and Boston Dynamic's Big Dog \cite{raibert2008bigdog} both require
-gaits that are relatively quick, power efficient, and robust to
-changing terrain, but they vary widely in the importance placed
-on each attribute.  Big Dog's gait is optimized for much more difficult terrain than Asimo's, resulting in a gait of a completely different form.
+%Gaits for walking robots are often designed with some explicit or
+%implicit goal in mind.  For some applications, the design criteria may
+%be obvious --- perhaps the robot needs to move as quickly or as
+%efficiently as possible --- but other times the objective is more complicated,
+%requiring simultaneous optimization of several desired traits, each
+%with its own relative importance.  The different combinations of desired traits and the relative weight placed on each can produce drastically different gaits.    For example, Honda's Asimo
+%\cite{chestnutt2006footstep} and Boston Dynamic's Big Dog \cite{raibert2008bigdog} both require
+%gaits that are relatively quick, power efficient, and robust to
+%changing terrain, but they vary widely in the importance placed
+%on each attribute.  Big Dog's gait is optimized for much more difficult terrain than Asimo's, resulting in a gait of a completely different form.
 
-Once the design goals are decided upon, gaits may be obtained by one
-of several methods.  Gaits may be designed manually by an expert, as
-for Asimo and Big Dog \cite{chestnutt2006footstep, raibert2008bigdog}.
-Alternately, they may be learned through repeated trial and
-evaluation.  Learned gaits offer several advantages over manually
-designed gaits.  Automatically learning gaits can save valuable
-engineering time and can allow customization of gaits to a particular
-robot and its unique actuators.  Most importantly, in many cases
-learned gaits can outperform manually designed
-gaits~\cite{hornby2005autonomous, valsalam2008modular}.
+%Once the design goals are decided upon, gaits may be obtained by one
+
+Legged robots have the potential to access many types of terrain
+unsuitable for wheeled robots, but doing so requires the creation of a
+gait specifying how the robot is to walk.  Gaits may be designed
+by one of several methods: either manually by an expert or
+automatically through repeated trial and evaluation.  Learned gaits
+offer several advantages over manually designed gaits.  Automatically
+learning gaits can save valuable engineering time and can allow
+customization of gaits to a particular robot and its unique actuators.
+Most importantly, in many cases learned gaits can outperform manually
+designed gaits~\cite{hornby2005autonomous, valsalam2008modular}.
 
 In this paper we compare the performance of two different methods of
 learning gaits: parameterized gaits optimized with six different
