@@ -15,7 +15,7 @@ signal on each link in the CPPN is multiplied by that link's weight,
 which can magnify or diminish its effect.
   
 A CPPN is queried once for each link in the ANN phenotype to determine
-that link's weight. The inputs to the CPPN are the Cartesian
+that link's weight~(\figref{hyperneatExplanation.png}). The inputs to the CPPN are the Cartesian
 coordinates of both the source (e.g.\ $x = 2$, $y = 4$) and target
 (e.g.\ $x = 3$, $y = 5$) nodes of a link and a constant bias
 value. The CPPN takes these five values as inputs and produces two output values. The first output value
@@ -86,10 +86,10 @@ COMMANDS WERE SPECIFIED.
   column provides a sine and cosine wave to enable periodic movements
   and the angle of the center joint. Evolution determines the function
   of the hidden-layer nodes. The nodes in the output layer specify new
-  joint angles for each respective joint. The unlabeled node in the
-  input and output layer is ignored.}\label{hyperneatLayout}
+  joint angles for each respective joint. The unlabeled nodes in the
+  input and output layers are ignored.}\label{hyperneatLayout}
 
-The population size for HyperNEAT was 9 and runs lasted 20
+As with the parameterized learning methods, three runs of HyperNEAT were performed. The population size for HyperNEAT was 9 and runs lasted 20
 generations. These numbers are small, but were necessarily constrained
 given how much time it took to conduct evolution directly on a real
 robot. The remaining parameters were identical to Clune et

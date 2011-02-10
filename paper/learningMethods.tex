@@ -40,12 +40,10 @@ $m_R$        & Right-motor multiplier    & [-1, 1] \\
 \end{center}
 \end{table}
 
-\edit{called outer multiplier, but text says we multiply by inner. same for left}
-
 Intuitively, SineModel5 starts with 8 identical sine waves of
-amplitude $\amp$ and period $\tau$, multiplies the waves for all inner
+amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
 motors by $m_O$, multiplies the waves for all front motors by $m_F$,
-and multiplies the waves for all left motors by $m_R$.  To obtain the
+and multiplies the waves for all right motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
 appropriate fixed constants so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
@@ -70,11 +68,9 @@ position for all motors, as a vector function of time, is:
 
 \noindent Here the fixed constants that determine the crouched
 position are $C_I = 800$ for inner motors, $C_O = 40$ for outer
-motors, and $C_C = 512$ for the center hip motor.  The nine functions
-correspond to the nine motors in the same order as listed in
+motors, and $C_C = 512$ for the center hip motor.  The nine functions (in order)
+correspond to the nine motors listed in
 \figref{topdown.png}.
-
-\edit{what subscripts?}
 
 
 
@@ -216,6 +212,14 @@ The seven learning algorithms for the parametrized motion models are as follows:
   to minimize the sum of squared errors. The step size is the same as in
   \emph{N-dimensional policy gradient ascent}.
 
+
+\end{itemize}
+
+Each of the seven learning methods was run on 3 different initial
+parameter vectors ($\vec{\theta}_A$,
+$\vec{\theta}_B$, and $\vec{\theta}_C$) in order to fairly compare the algorithms. Three runs were performed per learning method. Runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of
+a run.
+
 %\item \emph{SVM regression}: Similarly to linear regression, this
 %  model starts with several random vectors, but this time they are
 %  chosen in a small neighborhood about some initial random vector.
@@ -255,5 +259,4 @@ The seven learning algorithms for the parametrized motion models are as follows:
 
 
 
-\end{itemize}
 

@@ -68,7 +68,7 @@ fitness to, for example, gaits that ended with the robot leaning toward
 the direction of travel (this extra distance would not likely generalize
 in a longer run, which is why we did not want to reward this behavior).
 
-In order to measure the start and end position in the same pose, we
+In order to measure the start and end position in the same pose, and to ensure fair fitness evaluations with as little noise as possible, we
 linearly interpolated the motion of the robot between the ready
 position and the commanded gait, $g(t)$.  As shown in
 \figref{linearInterp}, motion for the first second was interpolated
@@ -77,10 +77,9 @@ robot moved exactly as specified by $g(t)$, and for the final two
 seconds its motion was interpolated smoothly back to the ready
 position.
 
-\acmFig{linearInterp}{1}{To ensure fair fitness evaluations with as
-  little noise as possible, the position of the robot was measured at
+\acmFig{linearInterp}{1}{Linear interpolation from the ready position to the first and last commanded gait positions. The position of the robot was measured at
   the beginning and end of each run (red circles) in the same
-  \emph{ready} pose (\figref{robot_close.jpg}).  Motion was
+ ready pose.  Motion was
   interpolated linearly between this stationary pose and the commanded
   gait g(t) for one second at the beginning of the run and two seconds
   at the end, as shown above.}

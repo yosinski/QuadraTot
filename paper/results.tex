@@ -12,20 +12,15 @@
 
 %\edit{Jeff: proofread}
 
-Before attempting to use the learning methods
-(\secref{learningMethods}) to optimize the chosen family of
-parameterized gaits (SineModel5, \secref{motionModel}), we did a brief
-experiment to explore the five dimensions of the parameter space. To
-accomplish this, we first selected a random parameter vector that resulted
-in motion, but not an exceptional gait.
-
-Then, in five different experiments, we varied each parameter
-individually and plotted performance versus each changing parameter.
-In addition, we duplicated each measurement to be able to estimate
-standard deviation of the measurement noise at each point.  Results
-for this exploration are shown in \figref{explore_dim_1} through
-\figref{explore_dim_5}.  As is shown in the figures, some dimensions
-are smoother than others, and some measurements are fairly noisy.
+Before optimizing the chosen family of
+parameterized gaits (\secref{motionModel}) with learning methods, we performed an experiment to explore the five dimensions of the parameter space. Specifically, we first selected a random parameter vector that resulted
+in motion, but not an exceptional gait. In five different experiments, we then varied each parameter
+individually and measured performance.
+Each measurement was repeated to get a rough estimate
+of the measurement noise at each point.  The results
+of this exploration (Figures \ref{fig:explore_dim_1} through
+\ref{fig:explore_dim_5}) reveal that some dimensions
+are smoother than others and that the measurement noise is variable and can be quite high. 
 
 \acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
   vs. dimension 1.  The circle is a common point in
@@ -47,27 +42,11 @@ are smoother than others, and some measurements are fairly noisy.
 
 \subsection{Maximizing Strategies}
 
-\edit{maybe useful vvvvv}
-
-To be as fair as possible when obtaining the results presented in
-\secref{results}, we picked three random points --- $\vec{\theta}_A$,
-$\vec{\theta}_B$, and $\vec{\theta}_C$ --- and started all seven
-methods at these points...
-
-Each of the parameter ??? methods was run on 3 different initial
-parameter vectors, in order to fairly compare the algorithms. We allowed 
-each run for the parameter ??? methods to
-continue until the results plateaued (no improvement for one third of
-the policies seen so far). Three runs of HyperNEAT were completed,
-each with a different initial seed and run for 20 generations.
-
-\edit{$\wedge\wedge\wedge\wedge\wedge\wedge\wedge\wedge$}
-
 
 The maximizing strategies implemented include uniform random hill
 climbing, Gaussian random hill climbing, policy gradient descent, and
 Nelder-Mead simplex. As a group, these strategies produced results
-similar to gaits randomly generated using the SineModel5 model. None
+similar to gaits randomly-generated with the SineModel5 model. None
 of these strategies consistently outperformed the others in the three
 trials; A different strategy generated the best gait in each
 trial. Uniform random hill climbing produced the best gait (11.37 body
@@ -205,44 +184,35 @@ Evolutionary Neural Network (HyperNEAT)  & 24.27     & 36.44    & 27.07   & 29.2
 
 \end{itemize}
 
-\acmFig{vectorA}{1}{Results for runs beginning with vector A.
-  Linear regression worked significantly better than the other
-  algorithms, resulting in a gait (27.58 body lengths/minute) that
-  walked over twice as fast as the next best gait -- uniform random
-  hill climbing at 11.37 body lengths/minute -- and 5.3 times better
-  than the previous hand-coded gait.}
+%\acmFig{vectorA}{1}{Results for runs beginning with vector A.
+%  Linear regression worked significantly better than the other
+%  algorithms, resulting in a gait (27.58 body lengths/minute) that
+%  walked over twice as fast as the next best gait -- uniform random
+%  hill climbing at 11.37 body lengths/minute -- and 5.3 times better
+%  than the previous hand-coded gait.}
+%
+%\acmFig{vectorB}{1}{Results for run starting with vector B.  All
+%  algorithms performed similarly.  The random method actually got
+%  lucky this time and produced the best gait (17.26 body
+%  lengths/minute) and uniform random hill climbing produced the worst
+%  (9.44 body lengths/minute). The remaining algorithms each produced a
+%  gait around 13 body lengths/minute.}
+%
+%\acmFig{vectorC}{1}{Results for runs starting with vector C.
+%  Simplex and Gaussian random hill climbing each produced a gait that
+%  substantially outperformed the other algorithms, with around 15 body
+%  lengths/minute and 13 body lengths/minute, respectively, whereas the
+%  other algorithms returned gaits of less than 5 body
+%  lengths/minute.}
 
-\acmFig{vectorB}{1}{Results for run starting with vector B.  All
-  algorithms performed similarly.  The random method actually got
-  lucky this time and produced the best gait (17.26 body
-  lengths/minute) and uniform random hill climbing produced the worst
-  (9.44 body lengths/minute). The remaining algorithms each produced a
-  gait around 13 body lengths/minute.}
 
-\acmFig{vectorC}{1}{Results for runs starting with vector C.
-  Simplex and Gaussian random hill climbing each produced a gait that
-  substantially outperformed the other algorithms, with around 15 body
-  lengths/minute and 13 body lengths/minute, respectively, whereas the
-  other algorithms returned gaits of less than 5 body
-  lengths/minute.}
 
-Based on the three trials, as shown in \figref{std_error}, linear
-regression worked the best, followed by simplex. Gaussian random hill
-climbing performed about as well as random, but it is unclear whether
-Gaussian would continue to improve and become much better than random
-search if allowed to run for more iterations. Uniform random hill
+\acmFigDouble{std_error}{.6}{Average results ($\pm $ SEM) for each of the parametrized learning methods.  Linear regression performed the best,
+  followed by Nelder-Mead simplex. Gaussian random hill
+climbing performed about as well as random search, but may have surpassed random
+with additional iterations. Uniform random hill
 climbing and policy gradient descent performed similarly to each other
-on average, but differed greatly on individual runs.
-
-\acmFigDouble{std_error}{.6}{Average results for each method starting with
-  parameter vectors A, B, and C.  Error bars are plotted showing the
-  standard error.  Linear regression outperformed other methods,
-  followed by simplex. Gaussian random hill climbing performed about
-  as well as random, but it is unclear whether Gaussian would continue
-  to improve and become much better than random search if allowed to
-  run for more iterations. Uniform random hill climbing and policy
-  gradient descent performed similarly to each other on average, but
-  differed greatly on individual runs.}
+and underperformed random search.}
 
 
 
