@@ -60,6 +60,20 @@
   \end{figure}
 }
 
+\newcommand{\acmFiggggg}[9][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#7\linewidth}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#2}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#3}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#4}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#5}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#6}
+  \caption{#9}
+  \label{fig:#2}
+  \end{figure}
+}
+
 \newcommand{\acmFigDouble}[4][0]{
   \begin{figure*}
   \centering
