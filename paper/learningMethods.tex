@@ -95,7 +95,7 @@ roughly equivalent to the size of the measurement.
 We test the ability of different \emph{learning algorithms} to choose the next value of $\vec{\theta}$ to try, given a list of the
 $\vec{\theta}$ values already evaluated and their fitness measurements $f(\vec{\theta})$.
 
-We evaluated a total of seven different
+We evaluated a total of six different
 learning algorithms for the parametrized motion models.  All methods
 needed a way of picking a $\vec{\theta}$ for the first trial of each run.  This could be done by selecting a random starting vector within the
 allowable domain.  However, to most directly compare learning methods
@@ -110,7 +110,7 @@ initial $\vec{\theta}$ vectors in the three runs.
 %differences in the algorithms was how they selected new $\vec{\theta}$
 %values to try from their past experience.
 
-The seven learning algorithms for the parametrized motion models are as follows:
+The six learning algorithms for the parametrized motion models are as follows:
 
 
 
@@ -215,7 +215,7 @@ The seven learning algorithms for the parametrized motion models are as follows:
 
 \end{itemize}
 
-Each of the seven learning methods was run on 3 different initial
+Each of the six learning methods was run on 3 different initial
 parameter vectors ($\vec{\theta}_A$,
 $\vec{\theta}_B$, and $\vec{\theta}_C$) in order to fairly compare the algorithms. Three runs were performed per learning method. Runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of
 a run.
