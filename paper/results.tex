@@ -180,17 +180,20 @@ Evolved Neural Network              &        &          \\
 
 \subsection{HyperNEAT Gaits}
 
-The results for the gaits evolved by HyperNEAT are shown
-in \figref{hnResults} and \tabref{results}.  Overall the HyperNEAT gaits
+The results for the gaits evolved by HyperNEAT are shown in
+\figref{hnResults} and \tabref{results}.  Overall the HyperNEAT gaits
 were the fastest by far, beating all the parameterized models when
-comparing either average or best gaits.  We believe
-that this is because HyperNEAT was allowed to explore a
-much richer space of motions, but did so while still utilizing
-symmetries when advantageous.
+comparing either average or best gaits.  We believe that this is
+because HyperNEAT was allowed to explore a much richer space of
+motions, but did so while still utilizing symmetries when
+advantageous.  The single best gait found during this study had a
+speed of 45.72 body lengths / minute, 66\% better than the best
+non-HyperNEAT gait and 8.9 times faster than the hand-coded gait.
 \figref{neat_110115_211410_00000_002_filt_zoom} shows a typical
 HyperNEAT gait that had high fitness.  The pattern of motion is both
-complex (containing multiple frequencies and repeating patterns across time)
-and regular, in that patterns of multiple motors are coordinated. 
+complex (containing multiple frequencies and repeating patterns across
+time) and regular, in that patterns of multiple motors are
+coordinated.
 
 The evaluation of the gaits produced by HyperNEAT was more noisy than for the parameterized gaits, which made learning difficult. For example, we tested an example HyperNEAT generation-champion gait 11 times and found that its mean performance was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many effective HyperNEAT gaits were not preserved across generations because if performance in one trial was poor, the genome was unlikely to be selected for. We believe the slope of the HyperNEAT learning curve would be steeper if the noise in the evaluations could be reduced.
 
