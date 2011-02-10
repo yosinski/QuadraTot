@@ -67,29 +67,25 @@ gaits with HyperNEAT in simulation~\cite{clune2011performance,
 Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
 could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
-substrate were the current angles of each of the 9 joints of the robot
-(described below \edit{Jeff: is it?}) and a sine and cosine wave (to facilitate the
+substrate were the current angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
 production of periodic behaviors). The sine and cosine waves were the
 following function of time ($t$) in milli-seconds:
-$\sin(t/12)\pi$ \editbox{Jeff: this can't be right, because it would imply a period of only 12*2*pi=75 ms. Perhaps this was as a function of time in units of timesteps?}. This function produces numbers in the range [$-\pi,
-  \pi$] \edit{Jeff: this is actually [-1,1], right?}, which were then JASON FILL ME IN TO DESCRIBE HOW JOINT
-COMMANDS WERE SPECIFIED.
+$\sin(t/12)\pi$, which produces numbers in the range [$-\pi, \pi$].
 
+\editbox{Jeff: this can't be right, because it would imply a period of only 12*2*pi=75 ms. Perhaps this was as a function of time in units of timesteps?}
 \editbox{Jeff: proofread this paragraph to make sure I didn't lie (too
   much)}
 
 The outputs of the substrate at each time step were nine numbers in
 the range $[-1,1]$, which were scaled according to the allowable
-ranges for each of the nine motors and then used as commanded
-positions.  Occasionally HyperNEAT would produce networks that
-exhibited rapid oscillatory behavior, switching between nearly -1 and
-nearly 1 from one time step to the next.  This resulted in motor
-commands to alternate extremes every 25ms (using a command rate of
+ranges for each of the nine motors and then commanded
+the positions for each motor.  Occasionally HyperNEAT would produce networks that
+exhibited rapid oscillatory behaviors, switching from extreme negative to extreme positive numbers each time step.  This resulted in motor
+commands to alternate extremes every 25ms (given the command rate of
 40Hz), which tended to damage and overheat the motors.  To ameliorate
-this problem, we simply requested four times as many commanded
-positions from the ANN and averaged over four commands at a time to
-obtain the actual $g(t)$ to be used as a gait.  This proved to work
-well and did not restrict the expressiveness of HyperNEAT.
+this problem, we requested four times as many commanded
+positions from HyperNEAT ANN's and averaged over four commands at a time to
+obtain the actual gait $g(t)$.  This solution worked well and did not restrict the expressiveness of HyperNEAT.
 
 %\editbox{are we mentioning that we gave HyperNEAT the center joint
 %  here or earlier?}
