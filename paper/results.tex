@@ -61,57 +61,17 @@ each plot of \figref{explore_dim_1}.
 % - no learning strategy outperformed another by that much
 % - real world noise yay
 
-The results for the parameterized 
-
-The maximizing strategies implemented include uniform random hill
-climbing, Gaussian random hill climbing, policy gradient descent, and
-Nelder-Mead simplex. As a group, these strategies produced results
-similar to or worse than gaits randomly-generated with the SineModel5
-model (\figref{std_error}). None of these strategies consistently
-outperformed the other maximizing strategies in the three trials; A
-different strategy generated the best gait in each trial. Uniform
-random hill climbing produced the best gait (11.37 body
-lengths/minute) in the first trial, with the next best performing
-strategy (Nelder-Mead simplex) resulting in a gait of 8.51 body
-lengths/minute. The best gait in the second trial was actually
-generated randomly (17.26 body-lengths/minute). Gaussian random hill
-climbing, policy gradient descent, and Nelder-Mead simplex all
-produced similar best gaits in the second trial, each around 14 body
-lengths/minute. In the third trial, Nelder-Mead simplex and Gaussian
-random hill climbing significantly outperformed the other maximizing
-strategies, resulting in gaits of 14.83 and 13.40 body lengths/minute
-respectively. Overall, Nelder-Mead simplex performed the best,
-producing an average best gait of 12.32 body lengths/minute. Gaussian
-random hill climbing followed, with an average best gait of 10.03 body
-lengths/minute.
-
-The predictive strategies used were linear regression and support
-vector regression. In the first trial, linear regression produced a
-gait (27.58 body lengths/minute) that was over three times faster than
-the best gait produced by a maximizing strategy (uniform random hill
-climbing -- 11.37 body lengths/minute). The average of the best gait
-for the three trials of linear regression was 14.01 body
-lengths/minute, which was better than the average best gait for the
-best performing maximizing strategy (Nelder-Mead simplex -- 12.32 body
-lengths/minute).
-
-%As mentioned above, the SVM strategy involved many tunable
-%parameters. The version of SVM tuned for simulation did not show
-%competitive performance on the real robot. We tried tuning some
-%parameters on the real robot, but after some amount of tuning, the
-%method still exhibited too little exploration and easily became stuck
-%in local minima.
-%
-%\edit{say something about tuning SVM and the sim figure}
-%
-%\acmFig{svm_sim_results}{1}{Results for the SVM regression strategy
-%  in simulation.  This simulation was used to tune the SVM strategy's
-%  parameters before trying it on the physical robot.  The strategy
-%  quickly approaches the maximum simulated fitness of 100.}
-
-
-
-
+The results for the parameterized gaits are shown in
+\figref{std_error} and \tabref{results}.  As a group, these strategies
+produced results not significantly better than the randomly-generated
+gaits, however, all methods managed to explore the space enough to
+significantly improve on the previous hand coded gait in at least one
+of the three runs.  No single strategy consistently outperformed the
+others: for the first trial Linear Regression produced the fastest
+gait at 27.58 body lengths per minute, for the second a random gait
+actually won with 17.26 body lengths / minute, and for the third trial
+the Nelder-Mead simplex method attained the fastest gait at 14.83 body
+lengths / minute.
 
 
 
@@ -166,23 +126,9 @@ lengths/minute).
 % \end{tabular}
 % \caption{The best gaits found for each starting vector and algorithm,
 %   in body lengths per minute.}
-% \tablabel{results_table}
+% \tablabel{results}
 % \end{center}
 % \end{table*}
-
-%  
-
-%  
-
-%  
-
-%  
-
-%  
-
-%  
-
-%  
 
 %%%%%%% NEW TABLE
 \begin{table}
@@ -212,66 +158,17 @@ Evolutionary Neural Network              &        &          \\
 \end{tabular}
 \caption{The best gaits found for each starting vector and algorithm,
   in body lengths per minute.}
-\tablabel{results_table}
+\tablabel{results}
 \end{center}
 \end{table}
 
 
 
-\begin{itemize}
-
-\item For vector A, shown in \figref{vectorA}, linear regression
-  worked significantly better than the other algorithms, resulting in
-  a gait (27.58 body lengths/minute) that walked over twice as fast as
-  the next best gait -- uniform random hill climbing at 11.37 body
-  lengths/minute -- and 5.3 times better than the previous hand-coded
-  gait.
-
-\item Vector B, depicted in \figref{vectorB}, resulted in similarly
-  performing gaits with all the algorithms. The random method got
-  lucky and produced the best gait (17.26 body lengths/minute) and
-  uniform random hill climbing produced the worst (9.44 body
-  lengths/minute). The remaining algorithms each produced a gait
-  around 13 body lengths/minute.
-
-\item For vector C, shown in \figref{vectorC}, simplex and Gaussian
-  random hill climbing each produced a gait that substantially
-  outperformed the other algorithms. Simplex resulted in a gait of
-  nearly 15 body lengths/minute and Gaussian random hill climbing
-  produced a gait of just over 13 body lengths/minute, whereas the
-  other algorithms returned gaits of less than 5 body lengths/minute.
-
-\end{itemize}
-
-%\acmFig{vectorA}{1}{Results for runs beginning with vector A.
-%  Linear regression worked significantly better than the other
-%  algorithms, resulting in a gait (27.58 body lengths/minute) that
-%  walked over twice as fast as the next best gait -- uniform random
-%  hill climbing at 11.37 body lengths/minute -- and 5.3 times better
-%  than the previous hand-coded gait.}
-%
-%\acmFig{vectorB}{1}{Results for run starting with vector B.  All
-%  algorithms performed similarly.  The random method actually got
-%  lucky this time and produced the best gait (17.26 body
-%  lengths/minute) and uniform random hill climbing produced the worst
-%  (9.44 body lengths/minute). The remaining algorithms each produced a
-%  gait around 13 body lengths/minute.}
-%
-%\acmFig{vectorC}{1}{Results for runs starting with vector C.
-%  Simplex and Gaussian random hill climbing each produced a gait that
-%  substantially outperformed the other algorithms, with around 15 body
-%  lengths/minute and 13 body lengths/minute, respectively, whereas the
-%  other algorithms returned gaits of less than 5 body
-%  lengths/minute.}
-
-
-
-\acmFigDouble{std_error}{.6}{Average results ($\pm $ SEM) for each of the parameterized learning methods.  Linear regression performed the best,
-  followed by Nelder-Mead simplex. Gaussian random hill
-climbing performed about as well as random search, but may have surpassed random
-with additional iterations. Uniform random hill
-climbing and policy gradient descent performed similarly to each other
-and underperformed random search.}
+\acmFig{std_error}{1}{Average results ($\pm $ standard error) for each
+  of the parameterized learning methods.  Linear regression found the
+  fastest overall gait and had the highest average, followed by
+  Nelder-Mead simplex. Many methods were beaten by the simple random
+  strategy.}
 
 
 
@@ -305,7 +202,7 @@ regression.  We also evaluated the SVM regression and HyperNEAT
 methods, but these methods were more experimental, and thus we do not
 yet have the same volume of data for these runs.  We developed several
 gaits that were about 4 times faster than the original hand-coded
-gait.  Results are shown in \tabref{results_table}.
+gait.  Results are shown in \tabref{results}.
 
 
 
