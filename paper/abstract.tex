@@ -1,88 +1,31 @@
 Applications of walking robots often call for the ability to walk as
 quickly, efficiently, or with as little power as possible.  Gaits to
-achieve these objectives may be manually designed by an expert or
-learned by repeated trial and error.
-
+achieve these objectives may designed manually or learned by repeated
+trial and error.
 Learning approaches differ in their starting assumptions, some
-essentially tweaking the parameters of a hand-tuned model, others
-exploring a reasonably compact parameter space, and still others
-beginning with few assumptions besides periodicity.
+tweaking the parameters of a hand-tuned model, others exploring a
+reasonably compact parameter space, and still others beginning with
+few assumptions besides periodicity.
 
-This study extensively compares three methods of designing gaits:
-manually design, local search of parameterized motion models, and
-evolution of artificial neural networks using the HyperNEAT encoding.
+This study compares the performance of two methods of learning gaits:
+local search of parameterized motion models and evolution of
+artificial neural networks using the HyperNEAT encoding.
 
-All tests....
+We tested six different learning strategies for parameterized gaits,
+including uniform and Gaussian random hill climbing, policy gradient
+reinforcement learning, Nelder-Mead simplex, and a new method that
+uses linear regression to build a model of the fitness landscape and
+predict promising areas of parameter space for further exploration.
+While all parameter search methods outperformed a manually designed
+gait, only the Nelder-Mead simplex and linear regression strategies
+beat a random baseline strategy.
 
-While these three methods have been used individually for designing
-gaits, to the authors' knowledge they have never been compared 
+The HyperNEAT gaits performed considerably better than all
+parameterized local search methods.  Successful evolved gaits showed
+complex motion patterns containing multiple fundamental frequencies,
+but they also demonstrated reuse of patterns among several motors.
+Both served to produce quick gaits.
 
-LR works, NM works
-
-
-% In this study we make an ex
-% We aimed to strike a middle ground between these approaches.  Our 
-% motion generator did not rely on hand-tweaked gaits, but it did use 
-% parameterized gaits which, by their nature, impose some assumptions on 
-% the answers produced.  We then used machine learning to design gaits 
-% for a quadruped robot with these models.  This paper presents a 
-% comparison of the different learning methods implemented.  Most 
-% methods created walks that are several times faster than the original 
-% hand-tuned gait.  We invite readers with short attention spans to view 
-% a video of some of our results online here: 
-
-
-We have presented an array of approaches to optimizing a quadrupedal
-gait for forward speed.  We implemented and tested six learning
-strategies for parameterized gaits and compared them with gaits
-encoded and evolved by HyperNEAT.
-
-All methods resulted in an improvement over the robot's previous
-hand-coded gait.  Using linear regression to build a model of gait
-performance and predict promising directions for further exploration
-seemed to work well, producing at best a gait 27.58 of body
-lengths/minute.  The Nelder-Mead simplex method also worked fairly
-well, likely due to its robustness to noise.  The other parameterized
-methods did not outperform a random gait generation method.  Because
-randomly choosing SineModel5 gaits performed so well, we concluded
-that the motion representation for the robot may be more critical to
-parameterized gait development than the learning algorithm itself.
-
-The HyperNEAT gaits performed much better than all parameterized
-methods, considering both the average and best gaits for each.  We
-conjecture that this was because the HyperNEAT encoding allowed it to
-take advantage of the symmetries of the problem, but otherwise left
-the evolution to explore a much larger space of possibilities than the
-more restrictive 5-dimensional parameterized space.  The typical
-higher-performance HyperNEAT gait pictured in
-\figref{neat_110115_211410_00000_002_filt_zoom} shows the fairly
-complex pattern of motion that was obtained.  Whereas the
-parameterized gaits were restricted to scaled and shifted sine waves
-of a single frequency, this evolved gait contains some patterns with
-multiple frequencies.  Despite this larger space of possibilities,
-this gait also reused the same pattern for multiple motors.
-
-
-
-
-
-% A brief summary of the report. This is not an introduction -
-% it should be complete. Include 1-2 sentences for each of the items
-% below, up to and including conclusions.
-
-This paper presents an array of approaches to optimizing a quadrupedal
-gait for forward speed.  We implement, test, and compare different
-learning strategies including uniform and Gaussian random hill
-climbing, policy gradient reinforcement learning,
-Nelder-Mead simplex, new predictive methods based on linear
-and support vector regression, and an evolved neural network
-(HyperNEAT).  We compare results to a baseline random
-search method.  Many of the methods resulted in walks significantly
-faster than previously hand-tuned gaits.
-
-%Because the fastest learned walk
-%was not significantly faster than the fastest randomly generated walk,
-%we conjecture that the motion representation for the robot is more
-%integral to forward speed than the learning algorithm.
-
-\edit{Write the abstract}
+All tests were performed directly in hardware on a quadruped robot
+with nine degrees of freedom.  To the authors' knowledge this is the
+first time HyperNEAT gaits have been evolved or tested in hardware.
