@@ -1,16 +1,27 @@
-Creating gaits for legged robots is an important task to enable robots to access rugged terrain, yet designing such gaits by hand is a challenging and time-consuming process. In this paper we investigate various algorithms for automating the creation of quadruped gaits. Because many robots do not have accurate simulators, we test gait learning algorithms entirely on a physical robot.  
-	We compare the performance of two classes of learning gaits:
-locally searching parameterized motion models and evolving artificial neural networks with the HyperNEAT generative encoding. Specifically, we test six different parameterized learning strategies: uniform and Gaussian random hill climbing, policy gradient
-reinforcement learning, Nelder-Mead simplex, a random baseline, and a new method that
-builds a model of the fitness landscape with linear regression to guide further exploration.
-While all parameter search methods outperformed a manually designed
-gait, only the linear regression and Nelder-Mead simplex strategies
-outperform a random baseline strategy. Gaits evolved by HyperNEAT perform considerably better than all
-parameterized local search methods.  The best HyperNEAT gaits exhibit
-complex motion patterns containing multiple frequencies,
-yet are regular in that the leg movements are coordinated. Overall, this research illuminates various approaches to evolving quadruped gaits directly in hardware.
+Creating gaits for legged robots is an important task to enable robots
+to access rugged terrain, yet designing such gaits by hand is a
+challenging and time-consuming process. In this paper we investigate
+various algorithms for automating the creation of quadruped
+gaits. Because many robots do not have accurate simulators, we test
+gait learning algorithms entirely on a physical robot.  We compare the
+performance of two classes of learning gaits: locally searching
+parameterized motion models and evolving artificial neural networks
+with the HyperNEAT generative encoding. Specifically, we test six
+different parameterized learning strategies: uniform and Gaussian
+random hill climbing, policy gradient reinforcement learning,
+Nelder-Mead simplex, a random baseline, and a new method that builds a
+model of the fitness landscape with linear regression to guide further
+exploration.  While all parameter search methods outperformed a
+manually designed gait, only the linear regression and Nelder-Mead
+simplex strategies outperform a random baseline strategy. Gaits
+evolved by HyperNEAT perform considerably better than all
+parameterized local search methods.  The best evolved gaits exhibit
+complex motion patterns that contain multiple frequencies, yet are
+regular in that the leg movements are coordinated.
 
-
+%Overall, this
+%research illuminates various approaches to evolving quadruped gaits
+%directly in hardware.
 
 %Learning approaches differ in their starting assumptions, some
 %tweaking the parameters of a hand-tuned model, others exploring a
