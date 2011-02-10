@@ -183,25 +183,32 @@ The six learning algorithms for the parameterized motion models are as follows:
   \tabref{parameters}), and a step size scaled such that if all dimensions
   were in the range [0,~1], the norm of the step size would be 0.1.
 
+%\item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
+%  method \cite{nm} creates an initial simplex with $d+1$ vertices,
+%  where $d$ is the dimension of the parameter space. The initial
+%  parameter vector is stored as the first vertex and the other five
+%  vertices are created by adding to one dimension at a time one tenth
+%  of the allowable range for that parameter. It then tests the fitness
+%  of each vertex, and, in general, it reflects the worst point over
+%  the centroid in an attempt to improve it.  However, to prevent
+%  cycles and becoming stuck in local minima, several other rules are
+%  used.  If the reflected point is better than the second worst point
+%  and worse than the best point, then the reflected point replaces the
+%  worst. If the reflected point is better than the best point, the
+%  simplex is expanded in the direction of the reflected point. The
+%  better of the reflected and the expanded point replaces the worst
+%  point. If the reflected point is worse than the second worst point,
+%  then the simplex is contracted away from the reflected point. If the
+%  contracted point is better than the reflected point, the contracted
+%  point replaces the worst point. If the contracted point is worse
+%  than the reflected point, the entire simplex is shrunk \cite{nm}.
+
 \item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
   method \cite{nm} creates an initial simplex with $d+1$ vertices,
-  where $d$ is the dimension of the parameter space. The initial
-  parameter vector is stored as the first vertex and the other five
-  vertices are created by adding to one dimension at a time one tenth
-  of the allowable range for that parameter. It then tests the fitness
-  of each vertex, and, in general, it reflects the worst point over
-  the centroid in an attempt to improve it.  However, to prevent
-  cycles and becoming stuck in local minima, several other rules are
-  used.  If the reflected point is better than the second worst point
-  and worse than the best point, then the reflected point replaces the
-  worst. If the reflected point is better than the best point, the
-  simplex is expanded in the direction of the reflected point. The
-  better of the reflected and the expanded point replaces the worst
-  point. If the reflected point is worse than the second worst point,
-  then the simplex is contracted away from the reflected point. If the
-  contracted point is better than the reflected point, the contracted
-  point replaces the worst point. If the contracted point is worse
-  than the reflected point, the entire simplex is shrunk \cite{nm}.
+  where $d$ is the dimension of the parameter space. It then tests the
+  fitness of each vertex, and, in general, it reflects the worst point
+  over the centroid in an attempt to improve it.  Several additional
+  rules are used to prevent cycles and local minima \cite{nm}.
 
 \item \emph{Linear regression}: To initialize, this method chooses and
   evaluates five random parameter vectors. It then fits a linear model
