@@ -1,0 +1,15 @@
+#! /bin/sh
+
+# This should be called on system boot
+
+# Absolute path to this script. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
+
+
+echo >> /home/team/log
+echo "got here 1" >> /home/team/log
+
+# Run as team
+sudo -u team $SCRIPTPATH/startupWalkScriptInner

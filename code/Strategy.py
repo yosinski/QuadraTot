@@ -671,7 +671,9 @@ class FileStrategy(OneStepStrategy):
         ff = open(self.filtFile)
         self.positions = readArray(ff)
         ff.close()
-        self.times = linspace(0,12,self.positions.shape[0])
+
+        TOTAL_TIME = 12
+        self.times = linspace(0, TOTAL_TIME, self.positions.shape[0])
 
         self.separateLogInfo = True
         
