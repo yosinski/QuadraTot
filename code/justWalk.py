@@ -16,7 +16,8 @@ def main():
     if len(sys.argv) > 1:
         filtFile = sys.argv[1]
     else:
-        filtFile = 'out/hyperneatTo20gens_101/neat_110115_175446_00014_008_filt'
+        #filtFile = 'out/hyperneatTo20gens_101/neat_110115_175446_00014_008_filt'
+        filtFile = 'out/hyperneatTo20gens_101/neat_110115_175446_00004_007_filt'
 
 
     

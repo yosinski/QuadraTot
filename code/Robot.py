@@ -374,7 +374,7 @@ class Robot():
         sleep(.8)
 
         success = True
-        success &= self.checkMove(POS_READY, POS_CHECK_1)
+        success &= self.checkMove(POS_READY,   POS_CHECK_1)
         success &= self.checkMove(POS_CHECK_1, POS_CHECK_2)
         success &= self.checkMove(POS_CHECK_2, POS_CHECK_3)
         success &= self.checkMove(POS_CHECK_3, POS_CHECK_2)

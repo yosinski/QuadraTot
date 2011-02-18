@@ -2,20 +2,33 @@
 
 # reboot = +45 sec
 # start from button = +41 sec
+#INITIALWAIT=19
+INITIALWAIT=19
 
-WAIT=19
+MIDDLEWAIT=120
 
-for ii in `seq $WAIT -1 1`; do
+
+for ii in `seq $INITIALWAIT -1 1`; do
     echo $ii
     sleep 1
 done
 
+
+while true; do
 # Absolute path to this script. /home/user/bin/foo.sh
-SCRIPT=$(readlink -f $0)
+    SCRIPT=$(readlink -f $0)
 # Absolute path this script is in. /home/user/bin
-SCRIPTPATH=`dirname $SCRIPT`
+    SCRIPTPATH=`dirname $SCRIPT`
 
-echo $SCRIPT
-echo $SCRIPTPATH
+    echo $SCRIPT
+    echo $SCRIPTPATH
 
-FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
+    FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
+
+
+    for ii in `seq $MIDDLEWAIT -1 1`; do
+        echo $ii
+        sleep 1
+    done
+done
+
