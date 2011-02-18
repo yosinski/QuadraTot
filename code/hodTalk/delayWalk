@@ -4,31 +4,51 @@
 # start from button = +41 sec
 #INITIALWAIT=19
 INITIALWAIT=19
+#INITIALWAIT=$((19+60*4))
 
-MIDDLEWAIT=120
+MIDDLEWAIT=300
+
+ENDWAIT=120
 
 
+
+# Absolute path to this script. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
+
+echo $SCRIPT
+echo $SCRIPTPATH
+
+
+
+# First wait and gait
 for ii in `seq $INITIALWAIT -1 1`; do
     echo $ii
     sleep 1
 done
 
+FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
 
+
+
+# Second wait and gait
+for ii in `seq $MIDDLEWAIT -1 1`; do
+    echo $ii
+    sleep 1
+done
+
+FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
+
+
+
+# Final continuous waits and gait
 while true; do
-# Absolute path to this script. /home/user/bin/foo.sh
-    SCRIPT=$(readlink -f $0)
-# Absolute path this script is in. /home/user/bin
-    SCRIPTPATH=`dirname $SCRIPT`
-
-    echo $SCRIPT
-    echo $SCRIPTPATH
-
-    FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
-
-
-    for ii in `seq $MIDDLEWAIT -1 1`; do
+    for ii in `seq $ENDWAIT -1 1`; do
         echo $ii
         sleep 1
     done
+    
+    FF=`find $SCRIPTPATH/../out/ | grep filt | grep neat_110115_175446_00004_007` && echo $FF &&  $SCRIPTPATH/../justWalk.py $FF
 done
 
