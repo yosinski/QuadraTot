@@ -1,0 +1,57 @@
+\subsection{Platform details}
+\seclabel{platformDetails}
+
+
+
+%\seclabel{implement}
+
+% Describe how you implemented your system and how you structured it. 
+% This should give an overview of the system, not a detailed 
+% documentation of the code. The documentation of the code is part of 
+% the code you hand in. You might want to comment on high-level design 
+% decisions that you made. Also explain how you obtained your
+% data and any pre-processing you did to it.
+
+\acmFig{topdown.png}{.7}{A figure of the robot from a top-down perspective,
+with servos labeled}
+
+The quadruped robot used in this study was assembled from parts
+printed on the Objet Connex 500 3-D Printing System. It weights 1.88
+kg with the on-board computer and measures approximately 38
+centimeters from leg to opposite leg in the crouch position depicted
+in \figref{robot_close.jpg}. The robot is actuated by 9 AX-12+
+Dynamixel servos: one inner joint and one outer joint servo in each of
+the four legs, and one servo at the center ``hip'' joint.  This final
+unique servo allows the two halves of the robot to rotate with respect
+to each other. \figref{topdown.png} shows the positions and numerical
+designations of all nine servos.  Each servo could be commanded to a
+position in the range [0,~1023], corresponding to a physical range
+[-120$^{\circ}$,~+120$^{\circ}$].
+
+All of the computation for gait learning, fitness evaluation, and
+robot control was performed on the compact on-board CompuLab Fit-PC2,
+running Ubuntu Linux.  All gait generation, learning, and fitness
+evaluation code, except HyperNEAT, was written in Python and is
+available on our website \cite{quadratotWeb}.  HyperNEAT is written in
+C++.  We controlled the servos with the \code{pydynamixel} library
+\cite{pydynamixel}.  The robot connected to a wireless network on
+boot, which enabled us to control it via SSH.
+
+
+To run a gait on the robot, one needed only to provide a \emph{gait
+  function} --- any Python function that accepts a single input, time
+starting at 0, and outputs a list of nine commanded positions, one for
+each servo.  To safeguard against limb collision with the robot body,
+the robot control code cropped the commands to a safe range.  This
+range was [150,~770] for the inner leg servos, [30,~680] for the outer
+leg servos, and [392,~623] for the center hip servo.
+
+
+%The robot was set up to run when given any giat 
+
+%is run using a given motion model, including, if desired, 
+%smooth interpolation over time for the beginning and end of the run. 
+
+%The servos are prevented from being commanded to a point outside their
+%normal range (0 - 1023) as well as beyond points where limbs would collide
+

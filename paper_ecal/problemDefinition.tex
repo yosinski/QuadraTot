@@ -1,0 +1,76 @@
+\section{Problem definition}
+\seclabel{problemDefinition}
+
+% Precisely define the problem you are addressing (i.e. formally specify
+% the inputs and outputs). Elaborate on why this is an interesting and
+% important problem.
+%
+%\edit{write this.  Quadratot report section below}
+%
+%We are testing several different learning methods to design a
+%parameterized gait for a quadruped robot from the Cornell Computational
+%Synthesis Lab.
+%
+%The output each of the learning algorithms is a function of time,
+%$g(t)$, that outputs a vector of commanded motor positions.  This
+%function is generated using a parameterized motion model, described in
+%\secref{implement}.
+%
+%The robot executes these commands and measures its change in location
+%using the tracking system described in \secref{implement}.  The input
+%to the learning algorithms is this measured displacement, which the
+%algorithms attempt to maximize. This displacement is measured for each
+%gait over a constant length run, usually 12 seconds.
+%
+%A comparison and evaluation of the many different methods available
+%for optimizing the gait of legged robots will be useful for future
+%work on this challenging multidimensional control problem.
+
+
+The gait learning problem aims to find a \emph{gait} that maximizes
+some performance metric.
+
+Mathematically, we define a gait as a function that specifies
+a vector of commanded motor positions for a robot over time.
+%Using this definition, we require one function per motor.
+We can write gaits without feedback --- also called open-loop or
+feedforward gaits --- as
+
+\be
+\vec{x} = g(t)
+\ee
+
+%\noindent for commanded position $x_i$ for motor $i$.  The
+\noindent for commanded position vector $\vec{x}$.  The
+function depends only on time.
+
+%Using the same framework, a gait
+%including measured motor position, force, or other values could be
+%written as
+%
+%\be
+%\vec{x} = g(t, \vec{z})
+%\ee
+%
+%\noindent for some measurement vector $\vec{z}$.
+
+It follows that feedforward gaits are deterministic, producing the
+same command pattern each time they are run.  While the commanded
+positions will be the same from trial to trial, the actual robot
+motion and measured fitness will vary due to the noisiness of trials
+in the real world.
+
+%The output of a gait that includes feedback, on the other hand,
+%depends on the actual measurements, and noise in these measurements
+%may result in different $\vec{x}$ values each time they are run.
+
+For the system evaluated in this paper, we chose to use only
+feedforward gaits.  An interesting extension would be to allow gaits
+to depend on the measured servo positions, loads, voltage drops, or
+other quantities.
+
+The ultimate goal was to design gaits that were as fast as possible,
+so to optimize for speed, our performance metric was displacement over
+a period of motion lasting approximately 12 seconds.  For details of
+exactly how this displacement was measured, see
+\secref{fitnessEvaluation}.

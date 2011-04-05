@@ -1,0 +1,108 @@
+\subsection{Fitness Evaluation Details}
+\seclabel{fitnessEvaluation}
+
+% Points to make:
+% - linear interpolation
+% - fitness reported in pixels
+% - parameterized models
+%   - started all on three thetas
+%   - plateued at 1/3 of lifetime
+% - HyperNEAT
+%   - broke things a lot... so guided evolution (or in HN section?)
+%   - eventually included ``shimmy''
+% - finite sized window led to unfortunate bias
+%
+% Given earlier section, now have way of evaluating any gait g(t).
+%
+% Want to measure average speed, so we measure distance displaced over
+% a fixed lenght run. Because we're measureing a single point on
+% robot, need to start and end in same position (crouch)
+% So we linearly interpolate begining (1s) and end (2s).
+%
+% Fitness is measured and reported directly as euclidian distance of pixels moved: equation
+%
+% For the parameterized models, the starting location may be important. To be as fair as possible, we picked three random points and starred all models there.
+%   generally ran until 1/3 plateau
+%
+% For HN, couldn't do a,b,c thing, so just did three runs of length <foo>
+% Things started breaking, so included shimmy to test brokenness
+% penalized runs that broke servos
+%
+% Finite sized window kinda hurt stuff.
+
+
+\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{.7}{A Nintendo Wii
+  remote provided the location of the robot by tracking the infrared
+  LED mounted on the robot's antenna.  The LED position was measured
+  in pixels and transmitted from the Wii remote to the robot via
+  bluetooth.}
+
+To track the position of the robot and thus determine gait fitness, we
+mounted a Nintendo Wii remote on the ceiling and an infrared LED on
+top of the robot (\figref{wiiMote_crop.jpg}).  The Wii remote contains
+an IR camera that tracks and reports the position of IR sources.  The resolution of the camera was 1024 by
+768 pixels with view angles of about 40$^\circ$ by 30$^\circ$, which
+produced a resolution of 1.7mm per pixel when mounted at a height of
+2.63m.  At this height, the viewable window on the floor was
+approximately 175 x 120 cm.
+
+A separate tracking server, written in Python, ran on the robot and
+interfaced with the Wii remote via bluetooth using the CWiid
+library\cite{cwiid}.  Our fitness testing code communicated with this
+server via a socket connection and requested position updates at the
+beginning and end of each run.
+
+
+As mentioned earlier, the metric for evaluating gaits was their
+average speed, which was measured as the Euclidian distance the robot
+moved during a 12-second run. For the manual and parameterized gaits, the fitness was this value. The HyperNEAT gaits stressed the motors more than the other gaits, so to encourage gaits that did not tax the motors we penalized gaits that caused the servos to stop responding. The penalty was to set the fitness to half of the distance the robot actually traveled. We tested whether the servos were responding after each gait by commanding them to specific positions and checking whether they actually moved to those positions. This test had the additional benefit of rewarding those gaits that did not flip the robot into a position where it could not move its legs, which HyperNEAT also did more than the other learning methods. Because the fitness of HyperNEAT gaits were often halved, in results we compare actual distance traveled in addition to fitness for the best gaits produced by each class of gait-generating algorithms. 
+
+Since only a single point on the robot --- the IR LED --- was measured
+for the purposes of computing fitness, it was important that the
+position of the IR LED accurately reflect the position of the robot as
+a whole.  To enforce this constraint, the robot was always measured
+while in the \emph{ready} position (the position shown in
+\figref{robot_close.jpg}).  This was done to prevent assigning extra
+fitness to, for example, gaits that ended with the robot leaning toward
+the direction of travel (this extra distance would not likely generalize
+in a longer run, which is why we did not want to reward this behavior).
+
+In order to measure the start and end position in the same pose, and to ensure fair fitness evaluations with as little noise as possible, we
+linearly interpolated the motion of the robot between the ready
+position and the commanded gait, $g(t)$.  As shown in
+\figref{linearInterp}, motion for the first second was interpolated
+between the ready position and $g(t)$, for the next nine seconds the
+robot moved exactly as specified by $g(t)$, and for the final two
+seconds its motion was interpolated smoothly back to the ready
+position.
+
+\acmFig{linearInterp}{1}{Linear interpolation from the ready position to the first and last commanded gait positions. The position of the robot was measured at
+  the beginning and end of each run (red circles) in the same
+ ready pose.  Motion was
+  interpolated linearly between this stationary pose and the commanded
+  gait g(t) for one second at the beginning of the run and two seconds
+  at the end, as shown above.}
+
+
+% finite size
+% shimmy
+
+The only human intervention required during most learning trials was
+to occasionally move the robot back into the viewable area of the Wii
+remote.  Initially this was a rare
+occurrence, as the gaits did not typically produce motion as large as
+the size of the window (roughly 175 x 120 cm).  However, as gaits
+improved, particularly when using HyperNEAT, the robot began to walk
+out of the measurement area a non-negligible fraction of the time.
+Whenever it did so, we would discard the trial and repeat it until the
+gait was entirely within the window.
+
+While this process guaranteed that we always obtained a measurement
+for a given gait before proceeding, it also biased the measurements
+downward.  Because the performance of the robot on a given gait varied
+from trial to trial, a successful measurement was more likely to be
+obtained when the gait happened to perform poorly.  This phenomenon
+was negligible at first, but became significantly more pronounced when
+evaluating several gaits that produced motion across nearly the entire
+area.  HyperNEAT gaits were especially likely to require additional trials, meaning that the reported performance for HyperNEAT is worse than it would have been otherwise. For future studies we will likely use a 2x2 array of Wii
+remotes to double the length and width of the measurement arena.
