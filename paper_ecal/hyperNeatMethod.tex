@@ -67,8 +67,14 @@ gaits with HyperNEAT in simulation~\cite{clune2011performance,
 Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
 could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
-substrate were the current angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
-production of periodic behaviors). The sine and cosine waves had a period of about half a second.
+substrate were the current \emph{commanded} angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
+production of periodic behaviors).  The sine and cosine waves had a period of about half a second.
+
+While measured angles could have been used as input instead of
+commanded angles, this may have given HyperNEAT gaits an unfair
+advantage by making them closed-loop. Thus, we restricted inputs to
+the commanded angles only, which allowed us to produce completely
+deterministic gaits using HyperNEAT.
 
 The outputs of the substrate at each time step were nine numbers in
 the range $[-1,1]$, which were scaled according to the allowable

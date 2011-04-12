@@ -12,30 +12,37 @@
 % decisions that you made. Also explain how you obtained your
 % data and any pre-processing you did to it.
 
-\acmFig{topdown2.jpg}{1}{A figure of the robot from a top-down perspective,
-with the nine joints and associated servos labeled.}
+\acmFig{topdown2.jpg}{1}{(a) Top-down perspective of the robot with
+  the nine joints and associated servos labeled. (b) The robot in a
+  flat pose with the hip joint centered. (c,d,e) Various views of a
+  pose in which the hip joint is rotated.}
 
 The quadruped robot used in this study was assembled from parts
-printed on the Objet Connex 500 3-D Printing System. It weighs 1.88
-kg with the on-board computer and measures approximately 38
-centimeters from leg to opposite leg in the crouch position depicted
-in \figref{robot_whitebg.jpg}. The robot is actuated by 9 AX-12+
+printed on the Objet Connex 500 3-D Printing System. It weighs 1.88 kg
+with the on-board computer and measures approximately 38 centimeters
+from leg to opposite leg in the crouch position depicted in
+\figref{robot_whitebg.jpg}. The robot is actuated by 9 AX-12+
 Dynamixel servos: one inner joint and one outer joint servo in each of
 the four legs, and one servo at the center ``hip'' joint.  This final
 unique servo allows the two halves of the robot to rotate with respect
-to each other. \figref{topdown.png} shows the positions and numerical
-designations of all nine servos.  Each servo could be commanded to a
-position in the range [0,~1023], corresponding to a physical range
-[-120$^{\circ}$,~+120$^{\circ}$].
+to each other. \figref{topdown2.jpg} shows this unique motion, as well
+as the positions and numerical designations of all nine servos.  Each
+servo could be commanded to a position in the range [0,~1023],
+corresponding to a physical range [-120$^{\circ}$,~+120$^{\circ}$].
 
 All of the computation for gait learning, fitness evaluation, and
 robot control was performed on the compact, on-board CompuLab Fit-PC2,
-running Ubuntu Linux.  All gait generation, learning, and fitness
+running Ubuntu Linux 10.10. 
+The most computationally expensive portion of code was HyperNEAT, but even
+this took less than one second to run on the on-board computer. Thus,
+we chose not to offload any computation.
+All gait generation, learning, and fitness
 evaluation code, except HyperNEAT, was written in Python and is
 available on our website \cite{quadratotWeb}.  HyperNEAT is written in
 C++.  We controlled the servos with the \code{pydynamixel} library
-\cite{pydynamixel}.  The robot connected to a wireless network on
-boot, which enabled us to control it via SSH.
+\cite{pydynamixel}, sending commanded positions at 40Hz.  The robot
+connected to a wireless network on boot, which enabled us to control
+it via SSH.
 
 
 To run a gait on the robot, one needed only to provide a \emph{gait
