@@ -63,7 +63,7 @@ in~\cite{stanley2002evolving}.
   
 The ANN configuration follows previous studies that evolved quadruped
 gaits with HyperNEAT in simulation~\cite{clune2011performance,
-  clune2009evolving}, but was adapted to accommodate the physical robot used in this paper. Specifically, the ANNs consists of three $3 \times 4$
+  clune2009evolving}, but was adapted to accommodate the physical robot used in this paper. Specifically, the ANN has a fixed topology (i.e. the number of nodes does not evolve) that consists of three $3 \times 4$
 Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
 could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
@@ -86,7 +86,6 @@ commands to alternate extremes every 25ms (given the command rate of
 this problem, we requested four times as many commanded
 positions from HyperNEAT ANN's and averaged over four commands at a time to
 obtain the actual gait $g(t)$.  This solution worked well and did not restrict the expressiveness of HyperNEAT.
-
 %\editbox{are we mentioning that we gave HyperNEAT the center joint
 %  here or earlier?}
 
@@ -100,11 +99,10 @@ obtain the actual gait $g(t)$.  This solution worked well and did not restrict t
   input and output layers are ignored.}\label{hyperneatLayout}
 
 As with the parameterized methods, three runs of HyperNEAT
-were performed. The population size for HyperNEAT was 9 and runs
-lasted 20 generations. These numbers are small, but were necessarily
+were performed. Runs lasted 20 generations and the population size was 9 (which allowed a bare minimum of diversity within and between NEAT species).  These numbers are small, but were necessarily
 constrained given how much time it took to conduct evolution directly
 on a real robot. The remaining parameters were identical to Clune et
-al.~\cite{clune2011performance}.
+al.~(2011).
   
 
 % Preliminary HyperNEAT runs were promising and resulted in several
