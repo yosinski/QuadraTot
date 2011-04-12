@@ -1,0 +1,24 @@
+#! /bin/sh -x
+
+mkdir pdiff
+
+for file in `cd paper_gecco_8/; ls *tex`; do
+    ./texdiff paper_gecco_8/$file paper_ecal/$file pdiff/$file;
+done
+
+cp paper_ecal/main.tex pdiff/
+cp paper_ecal/Makefile pdiff/
+cp paper_ecal/*sty pdiff/
+cp paper_ecal/*bib pdiff/
+cp paper_ecal/*cls pdiff/
+
+cat pdiff/main.tex | head -n 8 > pdiff/new.tex
+cat <<EOF  >> pdiff/new.tex
+\usepackage{xcolor} \usepackage{ulem} \usepackage{changebar}
+\newcommand\TLSins[1]{\cbstart{}\textcolor{ins}{\uline{#1}}\cbend{}}
+\newcommand\TLSdel[1]{\cbdelete{}\textcolor{del}{\sout{#1}}}
+\colorlet{ins}{blue} \colorlet{del}{red}
+EOF
+cat pdiff/main.tex | tail -n +9 >> pdiff/new.tex
+
+mv pdiff/new.tex pdiff/main.tex
