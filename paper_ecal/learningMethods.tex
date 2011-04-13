@@ -1,11 +1,11 @@
+We have chosen to implement two classes of algorithms to produce
+the motion-generating function $g(t)$ (described earlier).  The
+first method uses a family of parameterized gaits, described in this
+section and the next. The second method, HyperNEAT, evolves a non-parametric gait
+controlled by neural networks and is described last.
+
 \subsection{Parameterized Gaits}
 \seclabel{motionModel}
-
-We have chosen to implement two classes of algorithms to automatically create the motion-generating function $g(t)$ (described in
-\secref{problemDefinition}).  The first method uses a family of
-parameterized gaits, described in this section and the next. The
-second method evolves a non-parametric gait controlled by neural networks, and is detailed in
-\secref{hyperNeatMethod}.
 
 By a \emph{parameterized gait}, we mean a gait produced by a
 parameterized function $g(t; \vec{\theta})$. Fixing the parameter
@@ -81,7 +81,7 @@ Using the SineModel5 parameterized motion model described in the
 previous section, along with the allowable ranges for each of the five
 parameters (shown in \tabref{parameters}), the task becomes how to
 choose the combination of five parameters that results in the fastest
-motion, per the evaluation methods in \secref{fitnessEvaluation}.
+motion, per the chosen evaluation methods described earlier.
 
 If we choose a value for the five dimensional parameter
 $\vec{\theta}$, then a given physical trial gives us one measurement

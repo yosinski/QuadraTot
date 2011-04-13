@@ -32,7 +32,8 @@ determine the weight of each ANN link.
   connection. The coordinates of these nodes and a constant bias are
   iteratively passed to the CPPN to determine each connection
   weight. The CPPN has two output values, which specify the weights
-  for each connection layer as shown.}
+  for each connection layer as shown.  Figure from
+  \cite{clune2011performance}.}
 
 HyperNEAT is capable of exploiting the geometry of a problem because
 the link values between nodes in the final ANN phenotype are a
@@ -96,7 +97,8 @@ obtain the actual gait $g(t)$.  This solution worked well and did not restrict t
   and the angle of the center joint. Evolution determines the function
   of the hidden-layer nodes. The nodes in the output layer specify new
   joint angles for each respective joint. The unlabeled nodes in the
-  input and output layers are ignored.}\label{hyperneatLayout}
+  input and output layers are ignored. Figure adapted from
+  \cite{clune2011performance}.}\label{hyperneatLayout}
 
 As with the parameterized methods, three runs of HyperNEAT
 were performed. Runs lasted 20 generations and the population size was 9 (which allowed a bare minimum of diversity within and between NEAT species).  These numbers are small, but were necessarily

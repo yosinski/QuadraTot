@@ -8,26 +8,26 @@
 
 
 
-\subsection{Exploration of Parameterized Gait Space}
-
-Before optimizing the chosen family of parameterized gaits
-(\secref{motionModel}) with learning methods, we performed an
-experiment to explore the five dimensions of the SineModel5 parameter
-space. Specifically, we selected a random parameter vector that
-resulted in some motion, but not an exceptional gait. We then varied
-each of the five parameters individually and measured performance,
-repeating each measurement twice to get a rough estimate of the
-measurement noise at each point.  The results of this exploration,
-shown in \figref{explore_dim_1}, reveal that some dimensions ($\amp$,
-$\tau$, $m_F$) are fairly smooth and exhibit global structure across
-the allowable parameter range, while others ($m_O$, $m_R$) exhibit
-more complex behavior.  In addition, it gives a rough indication that
-measurement noise is often significant and is more likely to be large
-for gaits that move more.  Of course, this is only a slice in each
-dimension through a single point, and slices through a different point
-could reveal different behavior.  The common point at the
-intersection of all slices is shown as a red triangle in
-each plot of \figref{explore_dim_1}.
+% \subsection{Exploration of Parameterized Gait Space}
+% 
+% Before optimizing the chosen family of parameterized gaits
+% (\secref{motionModel}) with learning methods, we performed an
+% experiment to explore the five dimensions of the SineModel5 parameter
+% space. Specifically, we selected a random parameter vector that
+% resulted in some motion, but not an exceptional gait. We then varied
+% each of the five parameters individually and measured performance,
+% repeating each measurement twice to get a rough estimate of the
+% measurement noise at each point.  The results of this exploration,
+% shown in \figref{explore_dim_1}, reveal that some dimensions ($\amp$,
+% $\tau$, $m_F$) are fairly smooth and exhibit global structure across
+% the allowable parameter range, while others ($m_O$, $m_R$) exhibit
+% more complex behavior.  In addition, it gives a rough indication that
+% measurement noise is often significant and is more likely to be large
+% for gaits that move more.  Of course, this is only a slice in each
+% dimension through a single point, and slices through a different point
+% could reveal different behavior.  The common point at the
+% intersection of all slices is shown as a red triangle in
+% each plot of \figref{explore_dim_1}.
 
 
 %\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
@@ -46,9 +46,9 @@ each plot of \figref{explore_dim_1}.
 %  vs. dimension 5.  The circle is a common point in
 %  \figref{explore_dim_1} through \figref{explore_dim_5}}
 
-\acmFiggggg{explore_dim_1}{explore_dim_2}{explore_dim_3}{explore_dim_4}{explore_dim_5}{1}{.53}{Fitness
-  mean and standard deviation when each parameter dimension is varied
-  independently.  The red triangle in each plot represents the same point in the 5-dimensional parameter space.}
+% \acmFiggggg{explore_dim_1}{explore_dim_2}{explore_dim_3}{explore_dim_4}{explore_dim_5}{1}{.53}{Fitness
+%   mean and standard deviation when each parameter dimension is varied
+%   independently.  The red triangle in each plot represents the same point in the 5-dimensional parameter space.}
 
 
 
