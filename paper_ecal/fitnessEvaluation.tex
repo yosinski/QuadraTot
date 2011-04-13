@@ -47,8 +47,8 @@ produced a resolution of 1.7mm per pixel when mounted at a height of
 approximately 175 x 120 cm.
 
 A separate tracking server, written in Python, ran on the robot and
-interfaced with the Wii remote via bluetooth using the CWiid
-library\citep{cwiid}.  Our fitness testing code communicated with this
+interfaced with the Wii remote via bluetooth using the \code{CWiid}
+library \citep{cwiid}.  Our fitness testing code communicated with this
 server via a socket connection and requested position updates at the
 beginning and end of each run.
 
@@ -89,7 +89,7 @@ position.
 
 The only human intervention required during most learning trials was
 to occasionally move the robot back into the viewable area of the Wii
-remote.  Initially this was a rare
+remote whenever it wandered outside this window.  Initially this was a rare
 occurrence, as the gaits did not typically produce motion as large as
 the size of the window (roughly 175 x 120 cm).  However, as gaits
 improved, particularly when using HyperNEAT, the robot began to walk
