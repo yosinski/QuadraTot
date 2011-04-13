@@ -20,14 +20,11 @@
 
 Legged robots have the potential to access many types of terrain
 unsuitable for wheeled robots, but doing so requires the creation of a
-gait specifying how the robot is to walk.  Gaits may be designed
-by one of several methods: either manually by an expert or
-via computer learning algorithms.  Learned gaits
-offer several advantages over manually designed gaits.  Automatically
-learning gaits can save valuable engineering time and can allow
-customization of gaits to a particular robot and its unique actuators.
-Most importantly, in many cases learned gaits can outperform manually
-designed gaits~\citep{hornby2005autonomous, valsalam2008modular}.
+gait specifying how the robot walks.  Such gaits may be designed either manually by an expert or
+via computer learning algorithms.  It is advantageous to automatically
+learn gaits because doing so can save valuable engineering time and allows
+gaits to be customized to the idiosyncrasies of different robots.
+Additionally, learned gaits have outperformed engineered gaits in some cases~\citep{hornby2005autonomous, valsalam2008modular}.
 
 In this paper we compare the performance of two different methods of
 learning gaits: parameterized gaits optimized with six different
@@ -36,7 +33,7 @@ the HyperNEAT generative encoding~\citep{stanley2009hypercube}. While
 some of these methods, such as HyperNEAT, have been tested in
 simulation~\citep{clune2009evolving, clune2011performance}, we
 investigate how they perform when evolving on a physical robot
-(\figref{robot_whitebg.jpg}) on flat terrain.
+(\figref{robot_whitebg.jpg}).
 
 Previous work has shown that quadruped gaits perform better when they
 are \emph{regular} (i.e.\ when the legs are
@@ -53,12 +50,11 @@ abstraction of biological development (described below). We test this
 hypothesis by comparing HyperNEAT to six local search algorithms with
 a parametrization biased toward regularity.
 
-A final motivation of this problem is to simply evolve effective gaits
-for a physical robot. Because HyperNEAT has performed well in
-simulation, it is interesting to test whether it can produce a fast
-gait for a physical robot. It is additionally interesting to test how
+An additional motivation is to test whether gaits evolved in simulation transfer to reality well, especially those evolved with cutting-edge evolutionary algorithms. Because HyperNEAT gaits performed well in
+simulation, it is interesting to test whether HyperNEAT can produce fast
+gaits for a physical robot. Such tests help us better understand the real world implications of results reported only in simulation. It is additionally interesting to test how
 more traditional gait optimization techniques compete with
-evolutionary algorithms when evolving in hardware.
+evolutionary algorithms when evolving in hardware. A final motivation of this research is simply to evolve effective gaits for a physical robot.
 
 
 
