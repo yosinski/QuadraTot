@@ -135,7 +135,7 @@ The six learning algorithms for the parameterized motion models are as follows:
 %parameters for this motion model.  
 
 %We implemented and tested 8 different learning strategies.  All
-%strategies except for the HyperNEAT method\cite{clune} were
+%strategies except for the HyperNEAT method\citep{clune} were
 %constrained to pick parameters from within predetermined ranges.
 
 %\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
@@ -163,7 +163,7 @@ The six learning algorithms for the parameterized motion models are as follows:
   5\% of the range of that dimension.
 
 \emph{N-dimensional policy gradient ascent}: We implemented Kohl
-  and Stone's \cite{kohl} method for local gradient ascent for gait
+  and Stone's \citep{kohl} method for local gradient ascent for gait
   learning with noisy fitness evaluations. This strategy explicitly
   estimates the gradient of the objective function. It does this by
   first generating $n$ parameter vectors near the initial vector by
@@ -181,7 +181,7 @@ The six learning algorithms for the parameterized motion models are as follows:
   were in the range [0,~1], the norm of the step size would be 0.1.
 
 %\item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
-%  method \cite{nm} creates an initial simplex with $d+1$ vertices,
+%  method \citep{nm} creates an initial simplex with $d+1$ vertices,
 %  where $d$ is the dimension of the parameter space. The initial
 %  parameter vector is stored as the first vertex and the other five
 %  vertices are created by adding to one dimension at a time one tenth
@@ -198,14 +198,14 @@ The six learning algorithms for the parameterized motion models are as follows:
 %  then the simplex is contracted away from the reflected point. If the
 %  contracted point is better than the reflected point, the contracted
 %  point replaces the worst point. If the contracted point is worse
-%  than the reflected point, the entire simplex is shrunk \cite{nm}.
+%  than the reflected point, the entire simplex is shrunk \citep{nm}.
 
 \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
-  method \cite{nm} creates an initial simplex with $d+1$ vertices,
+  method \citep{nm} creates an initial simplex with $d+1$ vertices,
   where $d$ is the dimension of the parameter space. It then tests the
   fitness of each vertex, and, in general, it reflects the worst point
   over the centroid in an attempt to improve it.  Several additional
-  rules are used to prevent cycles and local minima \cite{nm}.
+  rules are used to prevent cycles and local minima \citep{nm}.
 
 \emph{Linear regression}: To initialize, this method chooses and
   evaluates five random parameter vectors. It then fits a linear model

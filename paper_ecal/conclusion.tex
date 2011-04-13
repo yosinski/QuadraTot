@@ -14,7 +14,7 @@ lengths/minute.  The Nelder-Mead simplex method performed nearly as well, likely
 methods did not outperform random search.  One reason the randomly-generated SineModel5 gaits performed so well could be because the gait representation was biased towards effective, regular gaits, making the highly exploratory random strategy more effective than more exploitative learning algorithms. 
 
 HyperNEAT produced higher-performing gaits than all of the parameterized
-methods. Its best-performing gait traveled 45.7 body lengths per minute, which is nearly 9 times the speed of the hand-coded gait.  This could be because HyperNEAT tends to generate coordinated gaits~\cite{clune2011performance, clune2009evolving}, allowing it to
+methods. Its best-performing gait traveled 45.7 body lengths per minute, which is nearly 9 times the speed of the hand-coded gait.  This could be because HyperNEAT tends to generate coordinated gaits~\citep{clune2011performance, clune2009evolving}, allowing it to
 take advantage of the symmetries of the problem, but can also explore a much larger space of possibilities than the
 more restrictive 5-dimensional parameterized space.  HyperNEAT gaits tended to produce more complex sequences of motor commands, with different frequencies and degrees of coordination, whereas the
 parameterized gaits were restricted to scaling single-frequency sine waves and could only produce certain types of motor regularities. 

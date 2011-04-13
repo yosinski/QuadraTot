@@ -3,14 +3,14 @@
     
 HyperNEAT is an indirect encoding for evolving artificial neural
 networks (ANNs) that is inspired by the way natural organisms
-develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
-Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
+develop~\citep{stanley2009hypercube}. It evolves Compositional Pattern
+Producing Networks (CPPNs)~\citep{stanley2007compositional}, each of
 which is a genome that encodes an ANN
-phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed
+phenotype~\citep{stanley2009hypercube}. Each CPPN is itself a directed
 graph, where the nodes in the graph are mathematical functions, such as sine or
 Gaussian. The nature of these functions can facilitate the evolution
 of properties such as symmetry (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
-function)~\cite{stanley2009hypercube, stanley2007compositional}. The
+function)~\citep{stanley2009hypercube, stanley2007compositional}. The
 signal on each link in the CPPN is multiplied by that link's weight,
 which can magnify or diminish its effect.
   
@@ -36,20 +36,20 @@ determine the weight of each ANN link.
 
 HyperNEAT is capable of exploiting the geometry of a problem because
 the link values between nodes in the final ANN phenotype are a
-function of the geometric positions of those nodes~\cite{stanley2009hypercube, clune2009sensitivity,
+function of the geometric positions of those nodes~\citep{stanley2009hypercube, clune2009sensitivity,
   clune2011performance}. In the case of quadruped locomotion, this
 property has previously been shown to help HyperNEAT produce gaits with front-back, left-right,
-and four-way symmetries~\cite{clune2009evolving,
+and four-way symmetries~\citep{clune2009evolving,
   clune2011performance}.
   
 The evolution of the population of CPPNs occurs according to the
 principles of the NeuroEvolution of Augmenting Topologies (NEAT)
-algorithm~\cite{stanley2002evolving}, which was originally designed to
+algorithm~\citep{stanley2002evolving}, which was originally designed to
 evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their
 structural similarity to ANNs. For example, mutations can add a node,
 and thus a function, to a CPPN graph, or change its link weights. The
 NEAT algorithm is unique in three main
-ways~\cite{stanley2002evolving}. Initially, it starts with small
+ways~\citep{stanley2002evolving}. Initially, it starts with small
 genomes that encode simple networks and slowly complexifies them via
 mutations that add nodes and links to the network, enabling the
 algorithm to evolve the topology of an ANN in addition to its
@@ -59,10 +59,10 @@ by evolution before competing them against more adapted
 rivals. Finally, NEAT tracks historical information to perform
 intelligent crossover while avoiding the need for expensive
 topological analysis. A full explanation of NEAT can be found
-in~\cite{stanley2002evolving}.
+in~\citep{stanley2002evolving}.
   
 The ANN configuration follows previous studies that evolved quadruped
-gaits with HyperNEAT in simulation~\cite{clune2011performance,
+gaits with HyperNEAT in simulation~\citep{clune2011performance,
   clune2009evolving}, but was adapted to accommodate the physical robot used in this paper. Specifically, the ANN has a fixed topology (i.e. the number of nodes does not evolve) that consists of three $3 \times 4$
 Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
