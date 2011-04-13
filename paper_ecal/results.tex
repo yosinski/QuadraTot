@@ -60,7 +60,12 @@
 % - real world noise yay
 
 The results for the parameterized gaits are shown in
-\figref{std_error} and \tabref{results}.  The best overall gait for
+\figref{std_error} and \tabref{results}.  A total of 1217 hardware
+fitness evaluations were performed during the learning of
+parameterized gaits, with the following distribution by learning
+method: 200 random, 234 uniform, 284 Gaussian, 174 gradient, 172
+simplex, 153 linear regression.  The number of runs varies because
+each run plateaued at its own pace. The best overall gait for
 the parameterized methods was found by linear regression, which also
 had the highest average performance. The Nelder-Mead simplex also
 performed quite well on average.  The other local search methods did not
@@ -171,9 +176,10 @@ Evolved Neural Network              &        &          \\
 
 
 \acmFig{std_error}{1}{Average results ($\pm $ SE) for each of the
-  parameterized learning methods.  Linear regression found the fastest
-  overall gait and had the highest average, followed by Nelder-Mead
-  simplex. Other methods did not outperform a random strategy.}
+  parameterized learning methods, computed over three separately
+  initialized runs.  Linear regression found the fastest overall gait
+  and had the highest average, followed by Nelder-Mead simplex. Other
+  methods did not outperform a random strategy.}
 
 
 
@@ -181,7 +187,9 @@ Evolved Neural Network              &        &          \\
 \subsection{HyperNEAT Gaits}
 
 The results for the gaits evolved by HyperNEAT are shown in
-\figref{hnResults} and \tabref{results}.  Overall the HyperNEAT gaits
+\figref{hnResults} and \tabref{results}.  A total of 540 evaluations
+were performed for HyperNEAT, 180 in each of three runs.
+Overall the HyperNEAT gaits
 were the fastest by far, beating all the parameterized models when
 comparing either average or best gaits.  We believe that this is
 because HyperNEAT was allowed to explore a much richer space of
@@ -195,18 +203,29 @@ complex (containing multiple frequencies and repeating patterns across
 time) and regular, in that patterns of multiple motors are
 coordinated.
 
-The evaluation of the gaits produced by HyperNEAT was more noisy than for the parameterized gaits, which made learning difficult. For example, we tested an example HyperNEAT generation-champion gait 11 times and found that its mean performance was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many effective HyperNEAT gaits were not preserved across generations because if performance in one trial was poor, the genome was unlikely to be selected for. We believe the slope of the HyperNEAT learning curve would be steeper if the noise in the evaluations could be reduced.
+The evaluation of the gaits produced by HyperNEAT was more noisy than
+for the parameterized gaits, which made learning difficult. For
+example, we tested an example HyperNEAT generation-champion gait 11
+times and found that its mean performance was 26 body lengths per
+minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many
+effective HyperNEAT gaits were not preserved across generations
+because if performance in one trial was poor, the genome was unlikely
+to be selected for. The HyperNEAT learning curve would be smoother if
+the noise in the evaluations could be reduced or more than one
+evaluation per individual could be afforded.
 
-\acmFig{hnResults}{.8}{Average fitness ($\pm $ SE) of the highest
+\acmFig{hnResults}{1}{Average fitness ($\pm $ SE) of the highest
   performing individual in the population for each generation of
   HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits
   were halved if the gait overly stressed the motors (see text),
   meaning that HyperNEAT's true performance without this penalty would
-  be much higher.}
+  be much higher.  Each generation involved nine evaluations, one for
+  each of the nine individuals, so the total evaluations per HyperNEAT
+  run was 180.}
 
 %\acmFig{neat_110115_211410_00000_002_filt}{1}{Caption here...???}
 
-\acmFig{neat_110115_211410_00000_002_filt_zoom}{.8}{Example of one
+\acmFig{neat_110115_211410_00000_002_filt_zoom}{1}{Example of one
   high-performance gait produced by HyperNEAT showing
   commands for each of nine motors.  Note the complexity of the motion
   pattern. Such patterns were not possible with the parameterized

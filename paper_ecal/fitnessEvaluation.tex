@@ -31,7 +31,7 @@
 % Finite sized window kinda hurt stuff.
 
 
-\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{.7}{A Nintendo Wii
+\acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
   remote provided the location of the robot by tracking the infrared
   LED mounted on the robot's antenna.  The LED position was measured
   in pixels and transmitted from the Wii remote to the robot via
@@ -40,11 +40,11 @@
 To track the position of the robot and thus determine gait fitness, we
 mounted a Nintendo Wii remote on the ceiling and an infrared LED on
 top of the robot (\figref{wiiMote_crop.jpg}).  The Wii remote contains
-an IR camera that tracks and reports the position of IR sources.  The resolution of the camera was 1024 by
-768 pixels with view angles of about 40$^\circ$ by 30$^\circ$, which
-produced a resolution of 1.7mm per pixel when mounted at a height of
-2.63m.  At this height, the viewable window on the floor was
-approximately 175 x 120 cm.
+an IR camera that tracks and reports the position of IR sources.  The
+resolution of the camera was 1024 by 768 pixels with view angles of
+about 40$^\circ$ by 30$^\circ$, which produced a resolution of 1.7mm
+per pixel when mounted at a height of 2.63m.  At this height, the
+viewable window on the floor was approximately 175 x 120 cm.
 
 A separate tracking server, written in Python, ran on the robot and
 interfaced with the Wii remote via bluetooth using the \code{CWiid}
@@ -55,7 +55,23 @@ beginning and end of each run.
 
 As mentioned earlier, the metric for evaluating gaits was their
 average speed, which was measured as the Euclidian distance the robot
-moved during a 12-second run. For the manual and parameterized gaits, the fitness was this value. The HyperNEAT gaits stressed the motors more than the other gaits, so to encourage gaits that did not tax the motors we penalized gaits that caused the servos to stop responding. The penalty was to set the fitness to half of the distance the robot actually traveled. We tested whether the servos were responding after each gait by commanding them to specific positions and checking whether they actually moved to those positions. This test had the additional benefit of rewarding those gaits that did not flip the robot into a position where it could not move its legs, which HyperNEAT also did more than the other learning methods. Because the fitness of HyperNEAT gaits were often halved, in results we compare actual distance traveled in addition to fitness for the best gaits produced by each class of gait-generating algorithms. 
+moved during a 12-second run. For the manual and parameterized gaits,
+the fitness was this value. The HyperNEAT gaits stressed the motors
+more than the other gaits, so to encourage gaits that did not tax the
+motors we penalized gaits that caused the servos to stop
+responding. When the servos stopped responding they could, in nearly
+all cases, be restarted by cycling power, though over the course of
+this study we did have to replace four servos that were damaged.
+The penalty was to set the fitness to half of the distance
+the robot actually traveled. We tested whether the servos were
+responding after each gait by commanding them to specific positions
+and checking whether they actually moved to those positions. This test
+had the additional benefit of rewarding those gaits that did not flip
+the robot into a position where it could not move its legs, which
+HyperNEAT also did more than the other learning methods. Because the
+fitness of HyperNEAT gaits were often halved, in results we compare
+actual distance traveled in addition to fitness for the best gaits
+produced by each class of gait-generating algorithms.
 
 Since only a single point on the robot --- the IR LED --- was measured
 for the purposes of computing fitness, it was important that the
