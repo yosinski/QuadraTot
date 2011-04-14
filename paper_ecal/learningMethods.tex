@@ -1,4 +1,4 @@
-We have chosen to implement two classes of algorithms to produce
+We implemented two classes of algorithms to produce
 the motion-generating function $g(t)$ (described earlier).  The
 first method uses a family of parameterized gaits, described in this
 section and the next. The second method, HyperNEAT, evolves a non-parametric gait
@@ -46,11 +46,12 @@ amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
 motors by $m_O$, multiplies the waves for all front motors by $m_F$,
 and multiplies the waves for all right motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
-appropriate fixed constants so that the base position (when the sine
+appropriate fixed constants ($C_O = 40$ for outer
+motors, $C_I = 800$ for inner motors, and $C_C = 512$ for the center hip motor) so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
 \figref{robot_whitebg.jpg}).  In this motion model, the ninth
 (center) motor is kept at a neutral position.  Thus, the commanded
-position for all motors, as a vector function of time, is:
+position for each motor (numbered in \figref{topdown2.jpg}), as a vector function of time, are produced by the following nine functions (listed in the order):
 
 \[
 \vec{g}(t) =
@@ -67,22 +68,13 @@ position for all motors, as a vector function of time, is:
 \end{array} } \right]
 \]
 
-\noindent Here the fixed constants that determine the crouched
-position are $C_I = 800$ for inner motors, $C_O = 40$ for outer
-motors, and $C_C = 512$ for the center hip motor.  The nine functions (in order)
-correspond to the nine motors listed in
-\figref{topdown2.jpg}.
-
-
-
 \subsection{Learning Methods for Parameterized Gaits}
 \seclabel{learningMethods}
 
-Using the SineModel5 parameterized motion model described in the
-previous section, along with the allowable ranges for each of the five
-parameters (shown in \tabref{parameters}), the task becomes how to
-choose the combination of five parameters that results in the fastest
-motion, per the chosen evaluation methods described earlier.
+Given the SineModel5 parameterized motion model (see previous section) and the allowable ranges for its five
+parameters (\tabref{parameters}), the task is discovering
+values for the five parameters that result in fast 
+gaits.
 
 If we choose a value for the five dimensional parameter
 $\vec{\theta}$, then a given physical trial gives us one measurement
@@ -96,13 +88,8 @@ roughly equivalent to the size of the measurement.
 We test the ability of different \emph{learning algorithms} to choose the next value of $\vec{\theta}$ to try, given a list of the
 $\vec{\theta}$ values already evaluated and their fitness measurements $f(\vec{\theta})$.
 
-We evaluated a total of six different
-learning algorithms for the parameterized motion models.  All methods
-needed a way of picking a $\vec{\theta}$ for the first trial of each run.  This could be done by selecting a random starting vector within the
-allowable domain.  However, to most directly compare learning methods
-by their ability to improve on the initially chosen $\vec{\theta}$, we
-decided to evaluate the different methods by starting them at the same three
-initial $\vec{\theta}$ vectors in the three runs. 
+We evaluated the following six different
+learning algorithms for the parameterized motion models: 
 
 %All employed a simple random sampling method for
 %requirement (1); that is, all methods picked their initial
@@ -110,8 +97,6 @@ initial $\vec{\theta}$ vectors in the three runs.
 %parameter ranges. \edit{make sure this is true. Isn't really, should say that we started with A, B, C}.  Thus, the
 %differences in the algorithms was how they selected new $\vec{\theta}$
 %values to try from their past experience.
-
-The six learning algorithms for the parameterized motion models are as follows:
 
 
 
@@ -142,17 +127,15 @@ The six learning algorithms for the parameterized motion models are as follows:
 %\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
 
 
-\emph{Random}: This method randomly generates parameter vectors in the allowable range for every trial.  This strategy was used only
-  as baseline for comparison.
+\emph{Random}: This method randomly generates parameter vectors in the allowable range for every trial.  This strategy serves as as baseline for comparison.
 
 \emph{Uniform random hill climbing}: This method always starts
-  with the current best gait, and then chooses next $\vec{\theta}$ by
+  with the current best gait, and then chooses the next $\vec{\theta}$ by
   randomly choosing one parameter to adjust and replacing it with a
   new value chosen with uniform probability in the allowable range for
   that parameter. This new point is evaluated, and if it results in a
   longer distance walked than the previous best gait, it is saved as
-  the new best gait. The process is then repeated, always starting
-  with the best gait.
+  the new best gait. The process is then repeated.
 
 \emph{Gaussian random hill climbing}: This method works
   similarly to Uniform random hill climbing, except the next
@@ -170,7 +153,7 @@ The six learning algorithms for the parameterized motion models are as follows:
   first generating $n$ parameter vectors near the initial vector by
   perturbing each dimension of each vector randomly by either
   $-\epsilon$, $0$, or $\epsilon$. Then each vector is run on the
-  robot, and for each dimension we group the results into three
+  robot, and for each dimension we segment the results into three
   groups: $-\epsilon$, $0$, and $\epsilon$.  The gradient along this
   dimension is then estimated as the average score for the $\epsilon$
   group minus the average score for the $-\epsilon$ group. Finally,
@@ -217,10 +200,9 @@ The six learning algorithms for the parameterized motion models are as follows:
   to minimize the sum of squared errors. The step size is the same as in
   \emph{N-dimensional policy gradient ascent}.
 
-
-Each of the six learning methods was run on 3 different initial
-parameter vectors ($\vec{\theta}_A$,
-$\vec{\theta}_B$, and $\vec{\theta}_C$) in order to fairly compare the algorithms. Three runs were performed per learning method. Runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of
+Three runs were performed per learning method. To most directly compare learning methods, we
+evaluated the different methods by starting each of their three runs, respectively, with the same three randomly-chosen initial parameter vectors~($\vec{\theta}_A$,
+$\vec{\theta}_B$, and $\vec{\theta}_C$). Runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of
 a run.
 
 %\item \emph{SVM regression}: Similarly to linear regression, this

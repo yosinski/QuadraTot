@@ -33,7 +33,7 @@
 
 \acmFigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
   remote provided the location of the robot by tracking the infrared
-  LED mounted on the robot's antenna.  The LED position was measured
+  LED mounted on the robot's antenna.  The position was measured
   in pixels and transmitted from the Wii remote to the robot via
   bluetooth.}
 
@@ -46,15 +46,14 @@ about 40$^\circ$ by 30$^\circ$, which produced a resolution of 1.7mm
 per pixel when mounted at a height of 2.63m.  At this height, the
 viewable window on the floor was approximately 175 x 120 cm.
 
-A separate tracking server, written in Python, ran on the robot and
+A separate Python tracking server ran on the robot and
 interfaced with the Wii remote via bluetooth using the \code{CWiid}
-library \citep{cwiid}.  Our fitness testing code communicated with this
+library \citep{cwiid}.  Our fitness-testing code communicated with this
 server via a socket connection and requested position updates at the
 beginning and end of each run.
 
 
-As mentioned earlier, the metric for evaluating gaits was their
-average speed, which was measured as the Euclidian distance the robot
+As mentioned earlier, the metric for evaluating gaits was the Euclidian distance the robot
 moved during a 12-second run. For the manual and parameterized gaits,
 the fitness was this value. The HyperNEAT gaits stressed the motors
 more than the other gaits, so to encourage gaits that did not tax the
@@ -105,20 +104,17 @@ position.
 
 The only human intervention required during most learning trials was
 to occasionally move the robot back into the viewable area of the Wii
-remote whenever it wandered outside this window.  Initially this was a rare
+remote whenever it left this window.  Initially this was a rare
 occurrence, as the gaits did not typically produce motion as large as
 the size of the window (roughly 175 x 120 cm).  However, as gaits
 improved, particularly when using HyperNEAT, the robot began to walk
 out of the measurement area a non-negligible fraction of the time.
 Whenever it did so, we would discard the trial and repeat it until the
-gait was entirely within the window.
-
-While this process guaranteed that we always obtained a measurement
-for a given gait before proceeding, it also biased the measurements
+gait finished within the window. While this process guaranteed that we always obtained a measurement
+for a given gait before proceeding, it also biased some measurements
 downward.  Because the performance of the robot on a given gait varied
 from trial to trial, a successful measurement was more likely to be
 obtained when the gait happened to perform poorly.  This phenomenon
-was negligible at first, but became significantly more pronounced when
-evaluating several gaits that produced motion across nearly the entire
-area.  HyperNEAT gaits were especially likely to require additional trials, meaning that the reported performance for HyperNEAT is worse than it would have been otherwise. For future studies we will likely use a 2x2 array of Wii
-remotes to double the length and width of the measurement arena.
+was negligible at first, but became more pronounced as gaits began traversing the entire
+area.  HyperNEAT gaits were especially likely to require additional trials, meaning that the reported performance for HyperNEAT is worse than it would have been otherwise. For future studies we will use a $2\times2$ array of Wii
+remotes to double the size of the measurement arena.

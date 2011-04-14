@@ -17,7 +17,7 @@
   flat pose with the hip joint centered. (c,d,e) Various views of a
   pose in which the hip joint is rotated.}
 
-The quadruped robot used in this study was assembled from parts
+The quadruped robot in this study was assembled from off-the-shelf components and parts
 printed on the Objet Connex 500 3-D Printing System. It weighs 1.88 kg
 with the on-board computer and measures approximately 38 centimeters
 from leg to opposite leg in the crouch position depicted in
@@ -42,16 +42,13 @@ we chose not to offload any computation.
 All gait generation, learning, and fitness
 evaluation code, except HyperNEAT, was written in Python and is
 available on our website \citep{quadratotWeb}.  HyperNEAT is written in
-C++.  We controlled the servos with the \code{pydynamixel} library
+C++.  We controlled the servos with the Pydynamixel library
 \citep{pydynamixel}, sending commanded positions at 40Hz.  The robot
 connected to a wireless network on boot, which enabled us to control
 it via SSH.
 
 
-To run a gait on the robot, one needed only to provide a \emph{gait
-  function} --- any Python function that accepts a single input, time
-starting at 0, and outputs a list of nine commanded positions, one for
-each servo.  To safeguard against limb collision with the robot body,
+Robot gaits are executed via a Python \emph{gait function} that takes time (starting at 0) as a single input and outputs a list of nine commanded positions (one for each servo).  To safeguard against limb collision with the robot body,
 the robot control code cropped the commands to a safe range.  This
 range was [150,~770] for the inner leg servos, [30,~680] for the outer
 leg servos, and [392,~623] for the center hip servo.

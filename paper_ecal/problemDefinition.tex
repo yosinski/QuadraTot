@@ -28,13 +28,10 @@
 
 
 The gait learning problem aims to find a \emph{gait} that maximizes
-some performance metric.
-
-Mathematically, we define a gait as a function that specifies
+some performance metric. Mathematically, we define a gait as a function that specifies
 a vector of commanded motor positions for a robot over time.
 %Using this definition, we require one function per motor.
-We can write gaits without feedback --- also called open-loop or
-feedforward gaits --- as
+We can write gaits without feedback --- also called open-loop gaits --- as
 
 \be
 \vec{x} = g(t)
@@ -54,7 +51,7 @@ function depends only on time.
 %
 %\noindent for some measurement vector $\vec{z}$.
 
-It follows that feedforward gaits are deterministic, producing the
+It follows that open-loop gaits are deterministic, producing the
 same command pattern each time they are run.  While the commanded
 positions will be the same from trial to trial, the actual robot
 motion and measured fitness will vary due to the noisiness of trials
@@ -69,7 +66,7 @@ HyperNEAT.  An interesting extension would be to allow closed-loop gaits that de
 on the measured servo positions, loads, voltage drops, or other
 quantities.
 
-The ultimate goal was to design gaits that were as fast as possible,
-so to optimize for speed, our performance metric was displacement over
-a period of motion lasting approximately 12 seconds. Details of
-exactly how this displacement was measured are given below.
+The ultimate goal was to design gaits that were as fast as possible.
+Our performance metric was thus displacement over
+the evaluation period of 12 seconds. Details of
+how this displacement was measured are given below.
