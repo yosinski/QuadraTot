@@ -1,8 +1,8 @@
 \section{Conclusion and Future Work}
 \seclabel{conclusion}
 
-We have presented an array of approaches to optimizing a fast quadrupedal
-gait.  We implemented and tested six learning
+We have presented an array of approaches for optimizing a quadrupedal
+gaits for speed.  We implemented and tested six learning
 strategies for parameterized gaits and compared them to gaits produced by neural networks
 evolved with the HyperNEAT generative encoding.
 
@@ -15,6 +15,6 @@ methods did not outperform random search.  One reason the randomly-generated Sin
 
 HyperNEAT produced higher-performing gaits than all of the parameterized
 methods. Its best-performing gait traveled 45.7 body lengths per minute, which is nearly 9 times the speed of the hand-coded gait.  This could be because HyperNEAT tends to generate coordinated gaits~\citep{clune2011performance, clune2009evolving}, allowing it to
-take advantage of the symmetries of the problem, but can also explore a much larger space of possibilities than the
+take advantage of the symmetries of the problem. HyperNEAT can also explore a much larger space of possibilities than the
 more restrictive 5-dimensional parameterized space.  HyperNEAT gaits tended to produce more complex sequences of motor commands, with different frequencies and degrees of coordination, whereas the
 parameterized gaits were restricted to scaling single-frequency sine waves and could only produce certain types of motor regularities. 

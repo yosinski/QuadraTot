@@ -175,7 +175,7 @@ Evolved Neural Network              &        &          \\
 
 
 
-\acmFig{std_error}{1}{Average results ($\pm $ SE) for each of the
+\acmFig{std_error}{1}{Average results ($\pm $ SE) for the
   parameterized learning methods, computed over three separately
   initialized runs.  Linear regression found the fastest overall gait
   and had the highest average, followed by Nelder-Mead simplex. Other
@@ -188,7 +188,7 @@ Evolved Neural Network              &        &          \\
 
 The results for the gaits evolved by HyperNEAT are shown in
 \figref{hnResults} and \tabref{results}.  A total of 540 evaluations
-were performed for HyperNEAT, 180 in each of three runs.
+were performed for HyperNEAT (180 in each of three runs).
 Overall the HyperNEAT gaits
 were the fastest by far, beating all the parameterized models when
 comparing either average or best gaits.  We believe that this is
@@ -209,8 +209,7 @@ example, we tested an example HyperNEAT generation-champion gait 11
 times and found that its mean performance was 26 body lengths per
 minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many
 effective HyperNEAT gaits were not preserved across generations
-because if performance in one trial was poor, the genome was unlikely
-to be selected for. The HyperNEAT learning curve would be smoother if
+because a single poor-performing trial could prevent their selection. The HyperNEAT learning curve would be smoother if
 the noise in the evaluations could be reduced or more than one
 evaluation per individual could be afforded.
 
@@ -219,9 +218,7 @@ evaluation per individual could be afforded.
   HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits
   were halved if the gait overly stressed the motors (see text),
   meaning that HyperNEAT's true performance without this penalty would
-  be much higher.  Each generation involved nine evaluations, one for
-  each of the nine individuals, so the total evaluations per HyperNEAT
-  run was 180.}
+  be even higher.}
 
 %\acmFig{neat_110115_211410_00000_002_filt}{1}{Caption here...???}
 
@@ -229,5 +226,5 @@ evaluation per individual could be afforded.
   high-performance gait produced by HyperNEAT showing
   commands for each of nine motors.  Note the complexity of the motion
   pattern. Such patterns were not possible with the parameterized
-  SineModel5, nor would they likely be contrived by a human designing
+  SineModel5, nor would they likely result from a human designing
   a different low-dimensional parameterized motion model.}

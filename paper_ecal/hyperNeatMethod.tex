@@ -35,11 +35,11 @@ determine the weight of each ANN link.
   for each connection layer as shown.  Figure from
   \cite{clune2011performance}.}
 
-HyperNEAT is capable of exploiting the geometry of a problem because
-the link values between nodes in the final ANN phenotype are a
+HyperNEAT can exploit the geometry of a problem because
+the link values between nodes in the ANN phenotype are a
 function of the geometric positions of those nodes~\citep{stanley2009hypercube, clune2009sensitivity,
-  clune2011performance}. In the case of quadruped locomotion, this
-property has previously been shown to help HyperNEAT produce gaits with front-back, left-right,
+  clune2011performance}. For quadruped locomotion, this
+property has been shown to help HyperNEAT produce gaits with front-back, left-right,
 and four-way symmetries~\citep{clune2009evolving,
   clune2011performance}.
   
@@ -64,11 +64,11 @@ in~\citep{stanley2002evolving}.
   
 The ANN configuration follows previous studies that evolved quadruped
 gaits with HyperNEAT in simulation~\citep{clune2011performance,
-  clune2009evolving}, but was adapted to accommodate the physical robot used in this paper. Specifically, the ANN has a fixed topology (i.e. the number of nodes does not evolve) that consists of three $3 \times 4$
+  clune2009evolving}, but was adapted to accommodate the physical robot in this paper. Specifically, the ANN has a fixed topology (i.e. the number of nodes does not evolve) that consists of three $3 \times 4$
 Cartesian grids of nodes forming input, hidden, and output
 layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
 could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
-substrate were the current \emph{commanded} angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
+substrate were the angles \emph{requested} in the previous time step for each of the 9 joints of the robot (recall that gaits are open-loop, so actual joint angles are unknown) and a sine and cosine wave (to facilitate the
 production of periodic behaviors).  The sine and cosine waves had a period of about half a second.
 
 While measured angles could have been used as input instead of
@@ -92,9 +92,8 @@ obtain the actual gait $g(t)$.  This solution worked well and did not restrict t
 
 \acmFig{SpiderANN.jpg}{.7}{ANN configuration for HyperNEAT Runs. The
   first two columns of each row of the input layer receive information
-  about a single leg (the current angle of its two joints). The final
-  column provides a sine and cosine wave to enable periodic movements
-  and the angle of the center joint. Evolution determines the function
+  about a single leg (the angles requested in the previous time step for its two joints). The final
+  column provides the previously requested angle of the center joint and, to enable periodic movements, a sine and cosine wave. Evolution determines the function
   of the hidden-layer nodes. The nodes in the output layer specify new
   joint angles for each respective joint. The unlabeled nodes in the
   input and output layers are ignored. Figure adapted from
