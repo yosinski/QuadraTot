@@ -15,7 +15,7 @@ def getLogPosString(wiiTrack):
     if pos is None:
         return '-1 -1'
     else:
-        return ' '.join(pos)
+        return ' '.join([str(x) for x in pos])
 
 
 
@@ -95,7 +95,7 @@ class RunManager:
         else:
             return distance_walked
             
-    def run_function_and_log(self, motionFunction, runSeconds, timeScale = 1, logFileName = None):
+    def run_function_and_log(self, motionFunction, runSeconds, timeScale = 1, logFilename = None):
         '''
         Runs the robot with the given motion function from 0 to
         runSeconds, logging time and position to logFileName
@@ -115,7 +115,7 @@ class RunManager:
             self.manual_reset('Shimmy failed.  Fix and push enter to retry.')
             raise Exception
 
-        ff = open(logFileName, 'a')
+        ff = open(logFilename, 'a')
 
         try:
             self.robot.run(motionFunction, runSeconds = runSeconds, resetFirst = False,

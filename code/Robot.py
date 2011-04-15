@@ -197,7 +197,7 @@ class Robot():
         self.currentPos = self.readCurrentPosition()
 
         if logFile:
-            print >>logFile, '# time, goal(9 pos)'
+            print >>logFile, '# time, goal(9 pos), .........'
 
         # Reset the robot position, if desired
         if resetFirst:
@@ -259,7 +259,7 @@ class Robot():
                 extraInfo = ''
                 if extraLogInfoFn:
                     extraInfo = extraLogInfoFn()
-                print >>logFile, self.time, goal, ' '.join(ac.position for ac in self.actuators), extraInfo
+                print >>logFile, self.time, ' '.join([str(x) for x in goal]), ' '.join(str(ac.current_position) for ac in self.actuators), extraInfo
             sleep(self.sleep)
             self.updateClock()
 

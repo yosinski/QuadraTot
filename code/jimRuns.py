@@ -28,7 +28,7 @@ def main():
             print 'Using SineModel5 with params: ', sineModel5Params
             
             motionFunction = lambda time: SineModel5().model(time,
-                                                             parameters = currentState)
+                                                             parameters = sineModel5Params)
         elif len(sys.argv) > 2 and sys.argv[1] == '-neatFiltFile':
             raise Exception('not yet')
             filtFile = sys.argv[2]
@@ -43,13 +43,13 @@ def main():
 
     runman = RunManager()
     
-    for ii in range(10):
+    for ii in range(1):
         print
         print 'Iteration', ii
-        try:
-            runman.run_function_and_log(motionFunction, runSeconds = 10, timeScale = 1, logFilename = 'loggy.txt')
-        except:
-            print '*** Something failed, skipping'
+        runman.run_function_and_log(motionFunction, runSeconds = 10, timeScale = 1, logFilename = 'loggy.txt')
+        #try:
+        #except:
+        #    print '*** Something failed, skipping'
 
 
 
