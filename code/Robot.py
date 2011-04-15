@@ -33,7 +33,7 @@ class Robot():
     ''''''
 
     def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
-                 loud = False):
+                 loud = False, skipInit = False):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -64,7 +64,8 @@ class Robot():
         # Default baud rate of the USB2Dynamixel device.
         self.baudRate = 1000000
 
-        self.initServos()
+        if not skipInit:
+            self.initServos()
 
 
     def initServos(self):
@@ -116,6 +117,8 @@ class Robot():
             actuator.torque_enable = True
             actuator.torque_limit = 1000
             actuator.max_torque = 1000
+            actuator.ccw_compliance_margin = 3
+            actuator.cw_compliance_margin  = 3
 
         self.net.synchronize()
             
