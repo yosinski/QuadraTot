@@ -47,11 +47,17 @@ connected to a wireless network on boot, which enabled us to control
 it via SSH.
 
 
-Robot gaits are executed via a Python \emph{gait function} that takes time (starting at 0) as a single input and outputs a list of nine commanded positions (one for each servo).  To safeguard against limb collision with the robot body,
-the robot control code cropped the commands to a safe range.  This
-range was [150,~770] for the inner leg servos, [30,~680] for the outer
-leg servos, and [392,~623] for the center hip servo.
+Robot gaits are defined by a Python \emph{gait function} that takes
+time (starting at 0) as a single input and outputs a list of nine
+commanded positions (one for each servo).  To safeguard against limb
+collision with the robot body, the control code cropped the commands
+to a safe range.  This range was [-85$^{\circ}$, +60$^{\circ}$] for
+the inner leg servos, [-113$^{\circ}$, +39$^{\circ}$] for the outer
+leg servos, and [-28$^{\circ}$, +28$^{\circ}$] for the center hip
+servo.
 
+%This range was [150,~770] for the inner leg servos, [30,~680] for the outer
+%leg servos, and [392,~623] for the center hip servo.
 
 %The robot was set up to run when given any giat 
 
