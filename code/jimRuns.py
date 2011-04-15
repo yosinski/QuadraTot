@@ -7,8 +7,11 @@ from Motion import scaleTime
 
 
 
-USAGE = '''
-'''
+USAGE = '''Usage:
+./jimRuns.py <gait type> <gait specifier>
+
+Example:
+  ./jimRuns.py -SineModel5 "400 2.0936276321011063 0.40692057680126537 0.70168527110547441 0.29694496659796576"'''
 
 
 
@@ -44,7 +47,7 @@ def main():
         print
         print 'Iteration', ii
         try:
-            runman.run_function_and_log(motionFunctionScaled, 10, 'loggy.txt')
+            runman.run_function_and_log(motionFunction, runSeconds = 10, timeScale = 1, logFilename = 'loggy.txt')
         except:
             print '*** Something failed, skipping'
 

@@ -8,6 +8,17 @@ from Neighbor import Neighbor
 from util import prettyVec
 from wii.WiiTrackClient import WiiTrackClient
 
+
+
+def getLogPosString(wiiTrack):
+    pos = wiiTrack.getPosition()
+    if pos is None:
+        return '-1 -1'
+    else:
+        return ' '.join(pos)
+
+
+
 class RunManager:
     '''Manage runs..'''
 
@@ -84,7 +95,7 @@ class RunManager:
         else:
             return distance_walked
             
-    def run_function_and_log(self, motionFunction, runSeconds, logFileName):
+    def run_function_and_log(self, motionFunction, runSeconds, timeScale = 1, logFileName = None):
         '''
         Runs the robot with the given motion function from 0 to
         runSeconds, logging time and position to logFileName
@@ -104,14 +115,19 @@ class RunManager:
             self.manual_reset('Shimmy failed.  Fix and push enter to retry.')
             raise Exception
 
+        ff = open(logFileName, 'a')
+
         try:
             self.robot.run(motionFunction, runSeconds = runSeconds, resetFirst = False,
-                           interpBegin = 1, interpEnd = 2)
+                           interpBegin = 1, interpEnd = 2, logFile = ff,
+                           extraLogInfoFn = lambda: getLogPosString(wiiTrack))
         except RobotFailure as ee:
+            ff.close()
             print ee
             override = self.manual_reset('Robot run failure.  Fix something and push enter to retry.')
             raise Exception
-
+        ff.close()
+        
         endPos = wiiTrack.getPosition()
         if endPos is None:
             # Robot walked out of sensor view

@@ -6,7 +6,7 @@ from copy import copy
 from numpy import array
 
 import dynamixel
-from Motion import lInterp
+from Motion import lInterp, scaleTime
 
 '''
 Much inspiration taken from http://code.google.com/p/pydynamixel/
@@ -127,7 +127,8 @@ class Robot():
 
         
     def run(self, motionFunction, runSeconds = 10, resetFirst = True,
-            interpBegin = 0, interpEnd = 0):
+            interpBegin = 0, interpEnd = 0, timeScale = 1, logFile = None,
+            extraLogInfoFn = None):
         '''Run the robot with a given motion generating function.
 
         Positional arguments:
@@ -158,20 +159,29 @@ class Robot():
                       current position to that specified by
                       motionFunction.  This should probably be used
                       for motion models which do not return POS_READY
-                      at time 0.  Default: None
+                      at time 0.  Affected by timeScale. Default: None
 
         interpEnd -- Same as interpBegin, but at the end of motion.
                       If interpEnd is not None, interpolation is
                       performed from final commanded position to
-                      POS_READY, over the given number of seconds.
-                      Default: None
+                      POS_READY, over the given number of
+                      seconds. Affected by timeScale.  Default: None
+                      
+        timeScale -- Factor by which time should be scaled during this
+                      run, higher is slower. Default: 1
+                      
+        logFile -- File to log time/positions to, should already be
+                      opened. Default: None
+
+        extraLogInfoFn -- Function to call and append info to every
+                      line the log file. Should return a
+                      string. Default: None
         '''
 
         #net, actuators = initialize()
 
         #def run(self, motionFunction, runSeconds = 10, resetFirst = True
         #    interpBegin = 0, interpEnd = 0):
-
 
         if self.loud:
             print 'Starting motion.'
@@ -186,6 +196,9 @@ class Robot():
         self.resetClock()
         self.currentPos = self.readCurrentPosition()
 
+        if logFile:
+            print >>logFile, '# time, goal(9 pos)'
+
         # Reset the robot position, if desired
         if resetFirst:
             self.interpMove(self.readCurrentPosition(), POS_FLAT, 3)
@@ -197,17 +210,26 @@ class Robot():
         # Begin with a segment smoothly interpolated between the
         # current position and the motion model.
         if interpBegin is not None:
-            self.interpMove(self.currentPos, motionFunction, interpBegin)
+            self.interpMove(self.currentPos,
+                            scaleTime(motionFunction, timeScale),
+                            interpBegin * timeScale,
+                            logFile, extraLogInfoFn)
             self.currentPos = motionFunction(self.time)
 
         # Main motion segment
-        self.interpMove(motionFunction, motionFunction, runSeconds)
+        self.interpMove(scaleTime(motionFunction, timeScale),
+                        scaleTime(motionFunction, timeScale),
+                        runSeconds * timeScale,
+                        logFile, extraLogInfoFn)
         self.currentPos = motionFunction(self.time)
 
         # End with a segment smoothly interpolated between the
         # motion model and a ready position.
         if interpEnd is not None:
-            self.interpMove(motionFunction, POS_READY, interpEnd)
+            self.interpMove(scaleTime(motionFunction, timeScale),
+                            POS_READY,
+                            interpEnd * timeScale,
+                            logFile, extraLogInfoFn)
 
         failures = self.pingAll()
         if failures:
@@ -218,7 +240,7 @@ class Robot():
                 raise RobotFailure('Servos %s may have died during run.' % repr(failures))
 
         
-    def interpMove(self, start, end, seconds):
+    def interpMove(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
         '''Moves between start and end over seconds seconds.  start
         and end may be functions of the time.'''
 
@@ -233,6 +255,11 @@ class Robot():
             goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
 
             self.commandPosition(goal)
+            if logFile:
+                extraInfo = ''
+                if extraLogInfoFn:
+                    extraInfo = extraLogInfoFn()
+                print >>logFile, self.time, goal, ' '.join(ac.position for ac in self.actuators), extraInfo
             sleep(self.sleep)
             self.updateClock()
 
