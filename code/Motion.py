@@ -26,6 +26,11 @@ def lInterp(time, theDomain, val1, val2):
 
 
 
+def scaleTime(function, scale):
+    return lambda time: function(time * scale)
+
+
+
 def positionIt(time):
     # Make the outer arm go up and down, limited range until we figure
     # out range of robot. Starts out lying flat.
