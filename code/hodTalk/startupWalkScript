@@ -2,6 +2,13 @@
 
 # This should be called on system boot
 
+
+############################
+# Comment out this next line to enable this script
+exit 0
+############################
+
+
 # Absolute path to this script. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f $0)
 # Absolute path this script is in. /home/user/bin
