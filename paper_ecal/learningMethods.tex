@@ -1,8 +1,11 @@
-We implemented two classes of algorithms to produce
-the motion-generating function $g(t)$ (described earlier).  The
-first method uses a family of parameterized gaits, described in this
-section and the next. The second method, HyperNEAT, evolves a non-parametric gait
-controlled by neural networks and is described last.
+%We implemented two classes of algorithms to produce the
+%motion-generating function $g(t)$ (described earlier).  The first
+%method uses a family of parameterized gaits, described in this section
+%and the next. The second method, HyperNEAT, evolves a non-parametric
+%gait controlled by neural networks and is described last.
+
+
+We now describe the gait-generating algorithm classes.
 
 \subsection{Parameterized Gaits}
 \seclabel{motionModel}
@@ -16,7 +19,7 @@ reasonable early success, settled on one particular parametrization, which we ca
 %\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
 \newcommand{\amp}{\ensuremath{\alpha}}
 
-\begin{table}[h!]
+\begin{table}[b]
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -129,13 +132,13 @@ learning algorithms for the parameterized motion models:
 
 \emph{Random}: This method randomly generates parameter vectors in the allowable range for every trial.  This strategy serves as as baseline for comparison.
 
-\emph{Uniform random hill climbing}: This method always starts
-  with the current best gait, and then chooses the next $\vec{\theta}$ by
+\emph{Uniform random hill climbing}: This method repeatedly starts
+  with the current best gait and then selects the next $\vec{\theta}$ by
   randomly choosing one parameter to adjust and replacing it with a
   new value chosen with uniform probability in the allowable range for
   that parameter. This new point is evaluated, and if it results in a
   longer distance walked than the previous best gait, it is saved as
-  the new best gait. The process is then repeated.
+  the new best gait.
 
 \emph{Gaussian random hill climbing}: This method works
   similarly to Uniform random hill climbing, except the next

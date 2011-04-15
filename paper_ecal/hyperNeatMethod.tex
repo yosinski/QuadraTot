@@ -28,8 +28,8 @@ determine the weight of each ANN link.
 
 \acmFig{hyperneatExplanation.png}{1}{HyperNEAT produces ANNs from
   CPPNs. ANN weights are specified as a function of the geometric
-  coordinates of the source node and the target node for each
-  connection. The coordinates of these nodes and a constant bias are
+  coordinates of each connection's source and target nodes.
+ These coordinates and a constant bias are
   iteratively passed to the CPPN to determine each connection
   weight. The CPPN has two output values, which specify the weights
   for each connection layer as shown.  Figure from
@@ -62,6 +62,15 @@ intelligent crossover while avoiding the need for expensive
 topological analysis. A full explanation of NEAT can be found
 in~\citep{stanley2002evolving}.
   
+\acmFig{SpiderANN.jpg}{.7}{ANN configuration for HyperNEAT runs. The
+  first two columns of each row of the input layer receive information
+  about a single leg (the angles requested in the previous time step for its two joints). The final
+  column provides the previously requested angle of the center joint and, to enable periodic movements, a sine and cosine wave. Evolution determines the function
+  of the hidden-layer nodes. The nodes in the output layer specify new
+  joint angles for each respective joint. The unlabeled nodes in the
+  input and output layers are ignored. Figure adapted from
+  \cite{clune2011performance}.}\label{hyperneatLayout}
+
 The ANN configuration follows previous studies that evolved quadruped
 gaits with HyperNEAT in simulation~\citep{clune2011performance,
   clune2009evolving}, but was adapted to accommodate the physical robot in this paper. Specifically, the ANN has a fixed topology (i.e. the number of nodes does not evolve) that consists of three $3 \times 4$
@@ -71,11 +80,11 @@ could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set wei
 substrate were the angles \emph{requested} in the previous time step for each of the 9 joints of the robot (recall that gaits are open-loop, so actual joint angles are unknown) and a sine and cosine wave (to facilitate the
 production of periodic behaviors).  The sine and cosine waves had a period of about half a second.
 
-While measured angles could have been used as input instead of
-commanded angles, this may have given HyperNEAT gaits an unfair
-advantage by making them closed-loop. Thus, we restricted inputs to
-the commanded angles only, which allowed us to produce completely
-deterministic gaits using HyperNEAT.
+%While measured angles could have been used as input instead of
+%commanded angles, this may have given HyperNEAT gaits an unfair
+%advantage by making them closed-loop. Thus, we restricted inputs to
+%the commanded angles only, which allowed us to produce completely
+%deterministic gaits using HyperNEAT.
 
 The outputs of the substrate at each time step were nine numbers in
 the range $[-1,1]$, which were scaled according to the allowable
@@ -89,15 +98,6 @@ positions from HyperNEAT ANN's and averaged over four commands at a time to
 obtain the actual gait $g(t)$.  This solution worked well and did not restrict the expressiveness of HyperNEAT.
 %\editbox{are we mentioning that we gave HyperNEAT the center joint
 %  here or earlier?}
-
-\acmFig{SpiderANN.jpg}{.7}{ANN configuration for HyperNEAT Runs. The
-  first two columns of each row of the input layer receive information
-  about a single leg (the angles requested in the previous time step for its two joints). The final
-  column provides the previously requested angle of the center joint and, to enable periodic movements, a sine and cosine wave. Evolution determines the function
-  of the hidden-layer nodes. The nodes in the output layer specify new
-  joint angles for each respective joint. The unlabeled nodes in the
-  input and output layers are ignored. Figure adapted from
-  \cite{clune2011performance}.}\label{hyperneatLayout}
 
 As with the parameterized methods, three runs of HyperNEAT
 were performed. Runs lasted 20 generations and the population size was 9 (which allowed a bare minimum of diversity within and between NEAT species).  These numbers are small, but were necessarily
