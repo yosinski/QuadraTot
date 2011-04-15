@@ -84,21 +84,11 @@ class RunManager:
         else:
             return distance_walked
             
-    def run_function_and_log(self, function, runSeconds, logFileName):
+    def run_function_and_log(self, motionFunction, runSeconds, logFileName):
         '''
-        Runs the robot with currentState parameters and returns the
-        distance walked.  If currentState is a function, calls that
-        function instead of passing to a motion model.
+        Runs the robot with the given motion function from 0 to
+        runSeconds, logging time and position to logFileName
         '''
-
-        if hasattr(currentState, '__call__'):
-            # is a function
-            motionModel = currentState
-        else:
-            # is a parameter vector
-            model = SineModel5()
-            motionModel = lambda time: model.model(time,
-                                                   parameters = currentState)
 
         # Reset before measuring
         self.robot.readyPosition()
@@ -107,52 +97,37 @@ class RunManager:
         beginPos = wiiTrack.getPosition()
         if beginPos is None:
             # Robot walked out of sensor view
-            self.manual_reset('Robot has walked outisde sensor view.  Please place back in center and push enter to continue.')
-            print 'Retrying last run'
-            return self.run_robot(currentState)
+            self.manual_reset('Robot has walked outisde sensor view.  Please place back in center and push enter to retry.')
+            raise Exception
 
         if not self.robot.shimmy():
-            self.manual_reset('Shimmy failed.  Fix and restart.')
-            return self.run_robot(currentState)
+            self.manual_reset('Shimmy failed.  Fix and push enter to retry.')
+            raise Exception
 
         try:
-            self.robot.run(motionModel, runSeconds = 9, resetFirst = False,
+            self.robot.run(motionFunction, runSeconds = runSeconds, resetFirst = False,
                            interpBegin = 1, interpEnd = 2)
         except RobotFailure as ee:
             print ee
-            override = self.manual_reset('Robot run failure.  Fix something and push enter to continue, or enter a fitness to manually enter it.')
-#            print 'Retrying last run'
-#            return self.run_robot(currentState)
-            try:
-                manualDist = float(override)
-                return manualDist
-            except ValueError:
-                print 'Retrying last run'
-                return self.run_robot(currentState)
-            
+            override = self.manual_reset('Robot run failure.  Fix something and push enter to retry.')
+            raise Exception
 
         endPos = wiiTrack.getPosition()
         if endPos is None:
             # Robot walked out of sensor view
-            override = self.manual_reset('Robot has walked outisde sensor view.  Please place back in center\nand push enter to retry or enter manual fitness override to skip.')
-            try:
-                manualDist = float(override)
-                return manualDist
-            except ValueError:
-                print 'Retrying last run'
-                return self.run_robot(currentState)
+            override = self.manual_reset('Robot has ended outisde sensor view.  Please place back in center\nand push enter to retry.')
+            raise Exception
 
         distance_walked = self.calculate_distance(beginPos, endPos)
-        #print '        walked %.2f' % distance_walked
+        print 'Total Distance: %.2f' % distance_walked
 
         if not self.robot.shimmy():
-            ret = distance_walked / 2.0
-            print 'Shimmy failed, returning %.2f instead of %.2f' % (ret, distance_walked)
-            self.manual_reset('Shimmy failed at end, reset robot if necessary and push enter to continue.')
-            return ret
-        else:
-            return distance_walked
-            
+            letter = None
+            while not letter in ('r', 'k'):
+                letter = self.manual_reset('Shimmy failed at end of run, retry or keep [r/k]?')
+            if letter == 'r':
+                raise Exception
+    
     def log_start(self, extra=None):
         logFile = open('log.txt', 'a')
         logFile.write('\n# RunManager log started at %s\n' % datetime.now().ctime())

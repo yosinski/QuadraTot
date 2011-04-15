@@ -27,7 +27,8 @@ def lInterp(time, theDomain, val1, val2):
 
 
 def scaleTime(function, scale):
-    return lambda time: function(time * scale)
+    fscale = float(scale)
+    return lambda time: function(time * fscale)
 
 
 
