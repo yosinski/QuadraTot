@@ -8,76 +8,78 @@
 
 
 
-\subsection{Exploration of Parameterized Gait Space}
+%\subsection{Exploration of Parameterized Gait Space}
+%
+%Before optimizing the chosen family of parameterized gaits
+%(\secref{motionModel}) with learning methods, we performed an
+%experiment to explore the five dimensions of the SineModel5 parameter
+%space. Specifically, we selected a random parameter vector that
+%resulted in some motion, but not an exceptional gait. We then varied
+%each of the five parameters individually and measured performance,
+%repeating each measurement twice to get a rough estimate of the
+%measurement noise at each point.  The results of this exploration,
+%shown in \figref{explore_dim_1}, reveal that some dimensions ($\amp$,
+%$\tau$, $m_F$) are fairly smooth and exhibit global structure across
+%the allowable parameter range, while others ($m_O$, $m_R$) exhibit
+%more complex behavior.  In addition, it gives a rough indication that
+%measurement noise is often significant and is more likely to be large
+%for gaits that move more.  Of course, this is only a slice in each
+%dimension through a single point, and slices through a different point
+%could reveal different behavior.  The common point at the
+%intersection of all slices is shown as a red triangle in
+%each plot of \figref{explore_dim_1}.
+%
+%
+%%\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
+%%  vs. dimension 1.  The circle is a common point in
+%%  \figref{explore_dim_1} through \figref{explore_dim_5}}
+%%\acmFig{explore_dim_2}{1}{Fitness mean and standard deviation
+%%  vs. dimension 2.  The circle is a common point in
+%%  \figref{explore_dim_1} through \figref{explore_dim_5}}
+%%\acmFig{explore_dim_3}{1}{Fitness mean and standard deviation
+%%  vs. dimension 3.  The circle is a common point in
+%%  \figref{explore_dim_1} through \figref{explore_dim_5}}
+%%\acmFig{explore_dim_4}{1}{Fitness mean and standard deviation
+%%  vs. dimension 4.  The circle is a common point in
+%%  \figref{explore_dim_1} through \figref{explore_dim_5}}
+%%\acmFig{explore_dim_5}{1}{Fitness mean and standard deviation
+%%  vs. dimension 5.  The circle is a common point in
+%%  \figref{explore_dim_1} through \figref{explore_dim_5}}
+%
+%\acmFiggggg{explore_dim_1}{explore_dim_2}{explore_dim_3}{explore_dim_4}{explore_dim_5}{1}{.53}{Fitness
+%  mean and standard deviation when each parameter dimension is varied
+%  independently.  The red triangle in each plot represents the same point in the 5-dimensional parameter space.}
 
-Before optimizing the chosen family of parameterized gaits
-(\secref{motionModel}) with learning methods, we performed an
-experiment to explore the five dimensions of the SineModel5 parameter
-space. Specifically, we selected a random parameter vector that
-resulted in some motion, but not an exceptional gait. We then varied
-each of the five parameters individually and measured performance,
-repeating each measurement twice to get a rough estimate of the
-measurement noise at each point.  The results of this exploration,
-shown in \figref{explore_dim_1}, reveal that some dimensions ($\amp$,
-$\tau$, $m_F$) are fairly smooth and exhibit global structure across
-the allowable parameter range, while others ($m_O$, $m_R$) exhibit
-more complex behavior.  In addition, it gives a rough indication that
-measurement noise is often significant and is more likely to be large
-for gaits that move more.  Of course, this is only a slice in each
-dimension through a single point, and slices through a different point
-could reveal different behavior.  The common point at the
-intersection of all slices is shown as a red triangle in
-each plot of \figref{explore_dim_1}.
 
 
-%\acmFig{explore_dim_1}{1}{Fitness mean and standard deviation
-%  vs. dimension 1.  The circle is a common point in
-%  \figref{explore_dim_1} through \figref{explore_dim_5}}
-%\acmFig{explore_dim_2}{1}{Fitness mean and standard deviation
-%  vs. dimension 2.  The circle is a common point in
-%  \figref{explore_dim_1} through \figref{explore_dim_5}}
-%\acmFig{explore_dim_3}{1}{Fitness mean and standard deviation
-%  vs. dimension 3.  The circle is a common point in
-%  \figref{explore_dim_1} through \figref{explore_dim_5}}
-%\acmFig{explore_dim_4}{1}{Fitness mean and standard deviation
-%  vs. dimension 4.  The circle is a common point in
-%  \figref{explore_dim_1} through \figref{explore_dim_5}}
-%\acmFig{explore_dim_5}{1}{Fitness mean and standard deviation
-%  vs. dimension 5.  The circle is a common point in
-%  \figref{explore_dim_1} through \figref{explore_dim_5}}
-
-\acmFiggggg{explore_dim_1}{explore_dim_2}{explore_dim_3}{explore_dim_4}{explore_dim_5}{1}{.53}{Fitness
-  mean and standard deviation when each parameter dimension is varied
-  independently.  The red triangle in each plot represents the same point in the 5-dimensional parameter space.}
-
-
-
-\subsection{Learning Methods for Parameterized Gaits}
+%\subsection{Learning Methods for Parameterized Gaits}
 
 % Outline
 % - beat hand gait
 % - no learning strategy outperformed another by that much
 % - real world noise yay
 
-The results for the parameterized gaits are shown in
-\figref{std_error} and \tabref{results}.  The best overall gait for
+The results for all gaits are shown in
+\tabref{results}.  The best overall gait for
 the parameterized methods was found by linear regression, which also
 had the highest average performance. The Nelder-Mead simplex also
-performed quite well on average.  The other local search methods did not
+performed well.  The other local search methods did not
 outperform random search; however, all methods did manage to explore
-enough of the parameter space to significantly improve on the previous
-hand-coded gait in at least one of the three runs.  No single strategy
-consistently beat the others: for the first trial Linear Regression
-produced the fastest gait at 27.58 body lengths/minute, for the second
-a random gait actually won with 17.26, and for the
-third trial the Nelder-Mead simplex method attained the fastest gait
-with 14.83.
-
-One reason the randomly-generated SineModel5 gaits were so effective
-may have been due to the SineModel5's bias toward regular, symmetric
-gaits.  This may have allowed the random strategy --- focusing on
-exploration --- to be competitive with the more directed strategies
-that exploit information from past evaluations.
+enough of the parameter space to improve on the previous
+hand-coded gait in at least one of the three runs.
+% No single strategy
+%consistently beat the others.
+%: for the first trial Linear Regression
+%produced the fastest gait at 27.58 body lengths/minute, for the second
+%a random gait actually won with 17.26, and for the
+%third trial the Nelder-Mead simplex method attained the fastest gait
+%with 14.83.
+%
+%One reason the randomly-generated SineModel5 gaits were so effective
+%may have been due to the SineModel5's bias toward regular, symmetric
+%gaits.  This may have allowed the random strategy --- focusing on
+%exploration --- to be competitive with the more directed strategies
+%that exploit information from past evaluations.
 
 
 
@@ -136,79 +138,62 @@ that exploit information from past evaluations.
 % \end{center}
 % \end{table*}
 
-%%%%%%% NEW TABLE
-\begin{table}
-\begin{center}
-\begin{tabular}{|r|c|c|c||c|}
-\hline
-                                         & Average & Std. Dev. \\
-\hline                                    
-\hline                                    
-Previous hand-coded gait                 & 5.16   &   --     \\
-\hline
-Random search                            & 9.40   &   6.83   \\
-\hline
-Uniform Random Hill Climbing             & 7.83   &   4.56   \\
-\hline
-Gaussian Random Hill Climbing            & 10.03  &   6.00   \\
-\hline
-Policy Gradient Descent                  & 6.32   &   7.39   \\
-\hline
-Nelder-Mead simplex                      & 12.32  &   3.35   \\
-\hline
-Linear Regression                        & 14.01  &  12.88   \\
-\hline
-Evolved Neural Network              &        &          \\
-(HyperNEAT)                              & 29.26  &   6.37   \\
-\hline
-\end{tabular}
-\caption{The average and standard deviation of the best gaits found
-  for each algorithm during each of three runs, in body lengths per
-  minute.}  \tablabel{results}
-\end{center}
-\end{table}
 
 
-
-\acmFig{std_error}{1}{Average results ($\pm $ SE) for each of the
-  parameterized learning methods.  Linear regression found the fastest
-  overall gait and had the highest average, followed by Nelder-Mead
-  simplex. Other methods did not outperform a random strategy.}
+%\acmFig{std_error}{1}{Average results ($\pm $ SE) for each of the
+%  parameterized learning methods.  Linear regression found the fastest
+%  overall gait and had the highest average, followed by Nelder-Mead
+%  simplex. Other methods did not outperform a random strategy.}
 
 
 
 
-\subsection{HyperNEAT Gaits}
+%\subsection{HyperNEAT Gaits}
 
-The results for the gaits evolved by HyperNEAT are shown in
-\figref{hnResults} and \tabref{results}.  Overall the HyperNEAT gaits
+%The results for the gaits evolved by HyperNEAT are shown in
+%\figref{hnResults} and \tabref{results}.  
+
+Overall the HyperNEAT gaits
 were the fastest by far, beating all the parameterized models when
 comparing either average or best gaits.  We believe that this is
 because HyperNEAT was allowed to explore a much richer space of
 motions, but did so while still utilizing symmetries when
 advantageous.  The single best gait found during this study had a
-speed of 45.72 body lengths / minute, 66\% better than the best
-non-HyperNEAT gait and 8.9 times faster than the hand-coded gait.
-\figref{neat_110115_211410_00000_002_filt_zoom} shows a typical
-HyperNEAT gait that had high fitness.  The pattern of motion is both
-complex (containing multiple frequencies and repeating patterns across
-time) and regular, in that patterns of multiple motors are
-coordinated.
+speed of 45.72 body lengths/minute, 
+%66\% better than the best
+%non-HyperNEAT gait and 
+8.9 times faster than the hand-coded gait.
 
-The evaluation of the gaits produced by HyperNEAT was more noisy than for the parameterized gaits, which made learning difficult. For example, we tested an example HyperNEAT generation-champion gait 11 times and found that its mean performance was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38 and a min of 3.  Many effective HyperNEAT gaits were not preserved across generations because if performance in one trial was poor, the genome was unlikely to be selected for. We believe the slope of the HyperNEAT learning curve would be steeper if the noise in the evaluations could be reduced.
+%\figref{neat_110115_211410_00000_002_filt_zoom} shows a typical
+%HyperNEAT gait that had high fitness.  The pattern of motion is both
+%complex (containing multiple frequencies and repeating patterns across
+%time) and regular, in that patterns of multiple motors are
+%coordinated.
 
-\acmFig{hnResults}{.8}{Average fitness ($\pm $ SE) of the highest
+The evaluation of the higher-performing HyperNEAT gaits was more noisy than
+for the parameterized gaits, which made learning difficult
+(\figref{hnResults}). For example, we tested an example HyperNEAT
+generation-champion gait 11 times and found that its mean performance
+was 26 body lengths per minute ($\pm$ 13 SD), but it had a max of 38
+and a min of 3.  Many effective HyperNEAT gaits were not preserved
+across generations because if performance in one trial was poor, the
+genome was unlikely to be selected for.
+%We believe the slope of the HyperNEAT learning
+%curve would be steeper if the noise in the evaluations could be
+%reduced.
+
+\acmFig{hnResults}{.86}{Average fitness ($\pm $ SE) of the highest
   performing individual in the population for each generation of
   HyperNEAT runs. The fitness of many high-performing HyperNEAT gaits
-  were halved if the gait overly stressed the motors (see text),
-  meaning that HyperNEAT's true performance without this penalty would
+  were halved if the gait overly stressed the motors,
+  so the true performance without this penalty would
   be much higher.}
 
 %\acmFig{neat_110115_211410_00000_002_filt}{1}{Caption here...???}
 
-\acmFig{neat_110115_211410_00000_002_filt_zoom}{.8}{Example of one
-  high-performance gait produced by HyperNEAT showing
-  commands for each of nine motors.  Note the complexity of the motion
-  pattern. Such patterns were not possible with the parameterized
-  SineModel5, nor would they likely be contrived by a human designing
-  a different low-dimensional parameterized motion model.}
+%\acmFig{neat_110115_211410_00000_002_filt_zoom}{.8}{Example of one
+%  high-performance gait produced by HyperNEAT showing
+%  commands for each of nine motors.  Note the complexity of the motion
+%  pattern. Such patterns were not possible with the parameterized
+%  SineModel5, nor would they likely be contrived by a human designing
+%  a different low-dimensional parameterized motion model.}

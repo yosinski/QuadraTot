@@ -1,115 +1,116 @@
 \subsection{Parameterized Gaits}
 \seclabel{motionModel}
 
-We have chosen to implement two classes of algorithms to automatically create the motion-generating function $g(t)$ (described in
-\secref{problemDefinition}).  The first method uses a family of
-parameterized gaits, described in this section and the next. The
-second method evolves a non-parametric gait controlled by neural networks, and is detailed in
-\secref{hyperNeatMethod}.
+%We have chosen to implement two classes of algorithms to automatically
+%create the motion-generating function $g(t)$.  The first method uses a
+%family of parameterized gaits, described in this section. The second
+%method evolves a non-parametric gait controlled by neural networks,
+%and is detailed in \secref{hyperNeatMethod}.
 
 By a \emph{parameterized gait}, we mean a gait produced by a
-parameterized function $g(t; \vec{\theta})$. Fixing the parameter
-$\vec{\theta}$ yields a deterministic motion function over time.  We
-tried several parametrizations on the robot and, upon obtaining
-reasonable early success, settled on one particular parametrization, which we call  \emph{SineModel5}. Its root pattern is a sine wave and it has five parameters (\tabref{params}).
+parameterized function $g(t; \vec{\theta})$.
+%Fixing the parameter
+%$\vec{\theta}$ yields a deterministic motion function over time. We
+%tried several parametrizations on the robot and, upon obtaining
+%reasonable early success,
+After some experimentation, we settled on one particular family of
+gaits consisting of a sine wave root pattern and five parameters:
+amplitude, period, and multipliers for front, left, and inner
+motors.
 
 %\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
-\newcommand{\amp}{\ensuremath{\alpha}}
+%\newcommand{\amp}{\ensuremath{\alpha}}
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{|c|c|c|}
-\hline
-Parameter    & Description               & Range \\
-\hline
-\hline
-\amp         & Amplitude                 & [0, 400] \\
-\hline
-$\tau$       & Period                    & [.5, 8] \\
-\hline
-$m_O$        & Outer-motor multiplier    & [-2, 2] \\
-\hline
-$m_F$        & Front-motor multiplier    & [-1, 1] \\
-\hline
-$m_R$        & Right-motor multiplier    & [-1, 1] \\
-\hline
-\end{tabular}
-\caption{The \emph{SineModel5} motion model parameters.}
-\tablabel{parameters}
-\label{tab:params}
-\end{center}
-\end{table}
+%\begin{table}[h!]
+%\begin{center}
+%\begin{tabular}{|c|c|c|}
+%\hline
+%Parameter    & Description               & Range \\
+%\hline
+%\hline
+%\amp         & Amplitude                 & [0, 400] \\
+%\hline
+%$\tau$       & Period                    & [.5, 8] \\
+%\hline
+%$m_O$        & Outer-motor multiplier    & [-2, 2] \\
+%\hline
+%$m_F$        & Front-motor multiplier    & [-1, 1] \\
+%\hline
+%$m_R$        & Right-motor multiplier    & [-1, 1] \\
+%\hline
+%\end{tabular}
+%\caption{The \emph{SineModel5} motion model parameters.}
+%\tablabel{parameters}
+%\label{tab:params}
+%\end{center}
+%\end{table}
 
-Intuitively, SineModel5 starts with 8 identical sine waves of
-amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
-motors by $m_O$, multiplies the waves for all front motors by $m_F$,
-and multiplies the waves for all right motors by $m_R$.  To obtain the
-actual motor position commands, these waves are offset by
-appropriate fixed constants so that the base position (when the sine
-waves are at 0) is approximately a crouch (the position shown in
-\figref{robot_close.jpg}).  In this motion model, the ninth
-(center) motor is kept at a neutral position.  Thus, the commanded
-position for all motors, as a vector function of time, is:
+%Intuitively, SineModel5 starts with 8 identical sine waves of
+%amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
+%motors by $m_O$, multiplies the waves for all front motors by $m_F$,
+%and multiplies the waves for all right motors by $m_R$.  To obtain the
+%actual motor position commands, these waves are offset by
+%appropriate fixed constants so that the base position (when the sine
+%waves are at 0) is approximately a crouch (the position shown in
+%\figref{robot_close.jpg}).  In this motion model, the ninth
+%(center) motor is kept at a neutral position.  Thus,
 
-\[
-\vec{g}(t) =
-\left[ {\begin{array}{c@{ }l@{ }l}
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
-\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
-0                              & \                                  & + C_C \\ % 8
-\end{array} } \right]
-\]
+%The commanded
+%position for all motors, as a vector function of time, is:
+%
+%\[
+%\vec{g}(t) =
+%\left[ {\begin{array}{c@{ }l@{ }l}
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
+%\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
+%\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
+%0                              & \                                  & + C_C \\ % 8
+%\end{array} } \right]
+%\]
 
-\noindent Here the fixed constants that determine the crouched
-position are $C_I = 800$ for inner motors, $C_O = 40$ for outer
-motors, and $C_C = 512$ for the center hip motor.  The nine functions (in order)
-correspond to the nine motors listed in
-\figref{topdown.png}.
+%\noindent Here the fixed constants that determine the crouched
+%position are $C_I = 800$ for inner motors, $C_O = 40$ for outer
+%motors, and $C_C = 512$ for the center hip motor.  The nine functions (in order)
+%correspond to the nine motors listed in
+%\figref{topdown.png}.
 
 
 
-\subsection{Learning Methods for Parameterized Gaits}
+%\subsection{Learning Methods for Parameterized Gaits}
 \seclabel{learningMethods}
 
-Using the SineModel5 parameterized motion model described in the
-previous section, along with the allowable ranges for each of the five
-parameters (shown in \tabref{parameters}), the task becomes how to
-choose the combination of five parameters that results in the fastest
-motion, per the evaluation methods in \secref{fitnessEvaluation}.
+%Using the SineModel5 parameterized motion model described in the
+%previous section, along with the allowable ranges for each of the five
+%parameters (shown in \tabref{parameters}), the task becomes how to
+%choose the combination of five parameters that results in the fastest
+%motion, per the evaluation methods in \secref{fitnessEvaluation}.
+%
+%If we choose a value for the five dimensional parameter
+%$\vec{\theta}$, then a given physical trial gives us one measurement
+%of the fitness $f(\vec{\theta})$ of that parameter vector.  Two
+%things make learning difficult.  First, each evaluation of
+%$f(\vec{\theta})$ is expensive, taking 15-20 seconds on
+%average.  Second, the fitness returned by such evaluations has proved
+%to be very noisy, with the standard deviation of the noise often being
+%roughly equivalent to the size of the measurement.
+%
+%We test the ability of different \emph{learning algorithms} to choose the next value of $\vec{\theta}$ to try, given a list of the
+%$\vec{\theta}$ values already evaluated and their fitness measurements $f(\vec{\theta})$.
 
-If we choose a value for the five dimensional parameter
-$\vec{\theta}$, then a given physical trial gives us one measurement
-of the fitness $f(\vec{\theta})$ of that parameter vector.  Two
-things make learning difficult.  First, each evaluation of
-$f(\vec{\theta})$ is expensive, taking 15-20 seconds on
-average.  Second, the fitness returned by such evaluations has proved
-to be very noisy, with the standard deviation of the noise often being
-roughly equivalent to the size of the measurement.
-
-We test the ability of different \emph{learning algorithms} to choose the next value of $\vec{\theta}$ to try, given a list of the
-$\vec{\theta}$ values already evaluated and their fitness measurements $f(\vec{\theta})$.
-
-We evaluated a total of six different
-learning algorithms for the parameterized motion models.  All methods
-needed a way of picking a $\vec{\theta}$ for the first trial of each run.  This could be done by selecting a random starting vector within the
-allowable domain.  However, to most directly compare learning methods
-by their ability to improve on the initially chosen $\vec{\theta}$, we
-decided to evaluate the different methods by starting them at the same three
-initial $\vec{\theta}$ vectors in the three runs. 
-
+We evaluated a total of six different learning algorithms for the
+parameterized motion models.  All methods were started at the same
+three initial $\vec{\theta}$ vectors in the three runs.
 %All employed a simple random sampling method for
 %requirement (1); that is, all methods picked their initial
 %$\vec{\theta}$ value via uniform random sampling within the allowed
 %parameter ranges. \edit{make sure this is true. Isn't really, should say that we started with A, B, C}.  Thus, the
 %differences in the algorithms was how they selected new $\vec{\theta}$
 %values to try from their past experience.
-
 The six learning algorithms for the parameterized motion models are as follows:
 
 
@@ -141,44 +142,20 @@ The six learning algorithms for the parameterized motion models are as follows:
 %\edit{JMC:Bullets=narrower column=wasted space. subsubsection instead?}
 
 
-\emph{Random}: This method randomly generates parameter vectors in the allowable range for every trial.  This strategy was used only
-  as baseline for comparison.
+\emph{Random}: This baseline method randomly generates parameter vectors in the
+allowable range for every trial.
 
-\emph{Uniform random hill climbing}: This method always starts
-  with the current best gait, and then chooses next $\vec{\theta}$ by
+\emph{Uniform random hill climbing}: This method chooses the next $\vec{\theta}$ by
   randomly choosing one parameter to adjust and replacing it with a
-  new value chosen with uniform probability in the allowable range for
-  that parameter. This new point is evaluated, and if it results in a
-  longer distance walked than the previous best gait, it is saved as
-  the new best gait. The process is then repeated, always starting
-  with the best gait.
+  new value chosen with uniform probability in the allowable range.
 
-\emph{Gaussian random hill climbing}: This method works
-  similarly to Uniform random hill climbing, except the next
+\emph{Gaussian random hill climbing}: Same as Uniform random hill climbing, except the next
   $\vec{\theta}$ is generated by adding random Gaussian noise to the
-  current best gait.  This results in all parameters being changed at
-  once, but the resulting vector is always fairly close to the
-  previous best gait.  We used independently selected noise in each
-  dimension, scaled such that the standard deviation of the noise was
-  5\% of the range of that dimension.
+  current best gait.
 
 \emph{N-dimensional policy gradient ascent}: We implemented Kohl
   and Stone's \cite{kohl} method for local gradient ascent for gait
-  learning with noisy fitness evaluations. This strategy explicitly
-  estimates the gradient of the objective function. It does this by
-  first generating $n$ parameter vectors near the initial vector by
-  perturbing each dimension of each vector randomly by either
-  $-\epsilon$, $0$, or $\epsilon$. Then each vector is run on the
-  robot, and for each dimension we group the results into three
-  groups: $-\epsilon$, $0$, and $\epsilon$.  The gradient along this
-  dimension is then estimated as the average score for the $\epsilon$
-  group minus the average score for the $-\epsilon$ group. Finally,
-  the method creates the next $\vec{\theta}$ by changing all
-  parameters by a fixed-size step in the direction of the gradient.
-  For this study we used values of $\epsilon$ equal to 5\% of the
-  allowable range in each dimension (ranges listed in
-  \tabref{parameters}), and a step size scaled such that if all dimensions
-  were in the range [0,~1], the norm of the step size would be 0.1.
+  learning with noisy fitness evaluations.
 
 %\item \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
 %  method \cite{nm} creates an initial simplex with $d+1$ vertices,
@@ -201,26 +178,19 @@ The six learning algorithms for the parameterized motion models are as follows:
 %  than the reflected point, the entire simplex is shrunk \cite{nm}.
 
 \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
-  method \cite{nm} creates an initial simplex with $d+1$ vertices,
-  where $d$ is the dimension of the parameter space. It then tests the
-  fitness of each vertex, and, in general, it reflects the worst point
-  over the centroid in an attempt to improve it.  Several additional
-  rules are used to prevent cycles and local minima \cite{nm}.
+  method is a standard learning algorithm; see \cite{nm} for details.
 
-\emph{Linear regression}: To initialize, this method chooses and
-  evaluates five random parameter vectors. It then fits a linear model
-  from parameter vector to fitness. In a loop, the method chooses and
-  evaluates a new parameter vector generated by taking a fixed-size
-  step in the direction of the gradient for each parameter, and fits a
-  new linear model to all vectors evaluated so far, choosing the model
-  to minimize the sum of squared errors. The step size is the same as in
-  \emph{N-dimensional policy gradient ascent}.
+\emph{Linear regression}: This method fits a linear model from
+parameter vector to fitness and predicts the most promising direction
+for further evaluation.
 
+%Each of the six learning methods was run on 3 different initial
+%parameter vectors.
 
-Each of the six learning methods was run on 3 different initial
-parameter vectors ($\vec{\theta}_A$,
-$\vec{\theta}_B$, and $\vec{\theta}_C$) in order to fairly compare the algorithms. Three runs were performed per learning method. Runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of
-a run.
+% in order to fairly compare the algorithms. Three
+%runs were performed per learning method. Runs continued until the
+%performance plateaued, which we defined as when there was no
+%improvement during the last third of a run.
 
 %\item \emph{SVM regression}: Similarly to linear regression, this
 %  model starts with several random vectors, but this time they are

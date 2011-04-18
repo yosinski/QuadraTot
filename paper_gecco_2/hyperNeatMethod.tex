@@ -1,105 +1,108 @@
 \subsection{HyperNEAT Gait Generation \& Learning}
 \seclabel{hyperNeatMethod}
     
-HyperNEAT is an indirect encoding for evolving artificial neural
-networks (ANNs) that is inspired by the way natural organisms
-develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
-Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
-which is a genome that encodes an ANN
-phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed
-graph, where the nodes in the graph are mathematical functions, such as sine or
-Gaussian. The nature of these functions can facilitate the evolution
-of properties such as symmetry (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
-function)~\cite{stanley2009hypercube, stanley2007compositional}. The
-signal on each link in the CPPN is multiplied by that link's weight,
-which can magnify or diminish its effect.
-  
-A CPPN is queried once for each link in the ANN phenotype to determine
-that link's weight~(\figref{hyperneatExplanation.png}). The inputs to the CPPN are the Cartesian
-coordinates of both the source (e.g.\ $x = 2$, $y = 4$) and target
-(e.g.\ $x = 3$, $y = 5$) nodes of a link and a constant bias
-value. The CPPN takes these five values as inputs and produces two output values. The first output value
-determines the weight of the link between the associated input
-(source) and hidden layer (target) nodes, and the second output value
-determines the weight of the link between the associated hidden
-(source) and output (target) layer nodes. All pairwise combinations of
-source and target nodes are iteratively passed as inputs to a CPPN to
-determine the weight of each ANN link.
+%HyperNEAT is an indirect encoding for evolving artificial neural
+%networks (ANNs) that is inspired by the way natural organisms
+%develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
+%Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
+%which is a genome that encodes an ANN
+%phenotype~\cite{stanley2009hypercube}.
+%Each CPPN is itself a directed
+%graph, where the nodes in the graph are mathematical functions, such as sine or
+%Gaussian. The nature of these functions can facilitate the evolution
+%of properties such as symmetry (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
+%function)~\cite{stanley2009hypercube, stanley2007compositional}. The
+%signal on each link in the CPPN is multiplied by that link's weight,
+%which can magnify or diminish its effect.  
+%A CPPN is queried once for each link in the ANN phenotype to determine
+%that link's weight. The inputs to the CPPN are the Cartesian
+%coordinates of both the source (e.g.\ $x = 2$, $y = 4$) and target
+%(e.g.\ $x = 3$, $y = 5$) nodes of a link and a constant bias
+%value. The CPPN takes these five values as inputs and produces two output values. The first output value
+%determines the weight of the link between the associated input
+%(source) and hidden layer (target) nodes, and the second output value
+%determines the weight of the link between the associated hidden
+%(source) and output (target) layer nodes. All pairwise combinations of
+%source and target nodes are iteratively passed as inputs to a CPPN to
+%determine the weight of each ANN link.
 
-\acmFig{hyperneatExplanation.png}{.8}{HyperNEAT produces ANNs from
-  CPPNs. ANN weights are specified as a function of the geometric
-  coordinates of the source node and the target node for each
-  connection. The coordinates of these nodes and a constant bias are
-  iteratively passed to the CPPN to determine each connection
-  weight. The CPPN has two output values, which specify the weights
-  for each connection layer as shown.}
+%\acmFig{hyperneatExplanation.png}{.8}{HyperNEAT produces ANNs from
+%  CPPNs. ANN weights are specified as a function of the geometric
+%  coordinates of the source node and the target node for each
+%  connection. The coordinates of these nodes and a constant bias are
+%  iteratively passed to the CPPN to determine each connection
+%  weight. The CPPN has two output values, which specify the weights
+%  for each connection layer as shown.}
 
-HyperNEAT is capable of exploiting the geometry of a problem because
-the link values between nodes in the final ANN phenotype are a
-function of the geometric positions of those nodes~\cite{stanley2009hypercube, clune2009sensitivity,
-  clune2011performance}. In the case of quadruped locomotion, this
-property has previously been shown to help HyperNEAT produce gaits with front-back, left-right,
-and four-way symmetries~\cite{clune2009evolving,
-  clune2011performance}.
+%HyperNEAT is capable of exploiting the geometry of a problem because
+%the link values between nodes in the final ANN phenotype are a
+%function of the geometric positions of those nodes~\cite{stanley2009hypercube, clune2009sensitivity,
+%  clune2011performance}. In the case of quadruped locomotion, this
+%property has previously been shown to help HyperNEAT produce gaits with front-back, left-right,
+%and four-way symmetries~\cite{clune2009evolving,
+%  clune2011performance}.
+%  
+%The evolution of the population of CPPNs occurs according to the
+%principles of the NeuroEvolution of Augmenting Topologies (NEAT)
+%algorithm~\cite{stanley2002evolving}, which was originally designed to
+%evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their
+%structural similarity to ANNs. For example, mutations can add a node,
+%and thus a function, to a CPPN graph, or change its link weights. The
+%NEAT algorithm is unique in three main
+%ways~\cite{stanley2002evolving}. Initially, it starts with small
+%genomes that encode simple networks and slowly complexifies them via
+%mutations that add nodes and links to the network, enabling the
+%algorithm to evolve the topology of an ANN in addition to its
+%weights. Secondly, NEAT has a fitness-sharing mechanism that preserves
+%diversity in the system and gives time for new innovations to be tuned
+%by evolution before competing them against more adapted
+%rivals. Finally, NEAT tracks historical information to perform
+%intelligent crossover while avoiding the need for expensive
+%topological analysis. A full explanation of NEAT can be found
+%in~\cite{stanley2002evolving}.
   
-The evolution of the population of CPPNs occurs according to the
-principles of the NeuroEvolution of Augmenting Topologies (NEAT)
-algorithm~\cite{stanley2002evolving}, which was originally designed to
-evolve ANNs. NEAT can be fruitfully applied to CPPNs because of their
-structural similarity to ANNs. For example, mutations can add a node,
-and thus a function, to a CPPN graph, or change its link weights. The
-NEAT algorithm is unique in three main
-ways~\cite{stanley2002evolving}. Initially, it starts with small
-genomes that encode simple networks and slowly complexifies them via
-mutations that add nodes and links to the network, enabling the
-algorithm to evolve the topology of an ANN in addition to its
-weights. Secondly, NEAT has a fitness-sharing mechanism that preserves
-diversity in the system and gives time for new innovations to be tuned
-by evolution before competing them against more adapted
-rivals. Finally, NEAT tracks historical information to perform
-intelligent crossover while avoiding the need for expensive
-topological analysis. A full explanation of NEAT can be found
-in~\cite{stanley2002evolving}.
-  
-The ANN configuration follows previous studies that evolved quadruped
-gaits with HyperNEAT in simulation~\cite{clune2011performance,
-  clune2009evolving}, but was adapted to accommodate the physical robot used in this paper. Specifically, the ANNs consists of three $3 \times 4$
-Cartesian grids of nodes forming input, hidden, and output
-layers (\figref{SpiderANN.jpg}). Adjacent layers were allowed to be completely connected, meaning that there
-could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection). The inputs to the
-substrate were the current angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
+The ANN configuration follows previous studies that evolved 
+gaits with HyperNEAT in simulation~\cite{clune2009evolving}.
+%, but was adapted to accommodate the physical
+%robot used in this paper.
+%Specifically, the ANNs consists of three $3 \times 4$
+%Cartesian grids of nodes forming input, hidden, and output
+%layers. Adjacent layers were allowed to be completely connected, meaning that there
+%could be $(3 \times 4)^2= 288$ links in each ANN (although evolution can set weights to 0, functionally eliminating the connection).
+The inputs to the ANN
+substrate were the current \emph{commanded} angles of each of the 9 joints of the robot and a sine and cosine wave (to facilitate the
 production of periodic behaviors). The sine and cosine waves had a period of about half a second.
 
-The outputs of the substrate at each time step were nine numbers in
-the range $[-1,1]$, which were scaled according to the allowable
-ranges for each of the nine motors and then commanded
-the positions for each motor.  Occasionally HyperNEAT would produce networks that
-exhibited rapid oscillatory behaviors, switching from extreme negative to extreme positive numbers each time step.  This resulted in motor
-commands to alternate extremes every 25ms (given the command rate of
-40Hz), which tended to damage and overheat the motors.  To ameliorate
-this problem, we requested four times as many commanded
-positions from HyperNEAT ANN's and averaged over four commands at a time to
-obtain the actual gait $g(t)$.  This solution worked well and did not restrict the expressiveness of HyperNEAT.
+%The outputs of the substrate at each time step were nine numbers in
+%the range $[-1,1]$, which were scaled according to the allowable
+%ranges for each of the nine motors and then commanded
+%the positions for each motor.  Occasionally HyperNEAT would produce networks that
+%exhibited rapid oscillatory behaviors, switching from extreme negative to extreme positive numbers each time step.  This resulted in motor
+%commands to alternate extremes every 25ms (given the command rate of
+%40Hz), which tended to damage and overheat the motors.  To ameliorate
+%this problem, we requested four times as many commanded
+%positions from HyperNEAT ANN's and averaged over four commands at a time to
+%obtain the actual gait $g(t)$.  This solution worked well and did not restrict the expressiveness of HyperNEAT.
 
 %\editbox{are we mentioning that we gave HyperNEAT the center joint
 %  here or earlier?}
 
-\acmFig{SpiderANN.jpg}{.7}{ANN configuration for HyperNEAT Runs. The
-  first two columns of each row of the input layer receive information
-  about a single leg (the current angle of its two joints). The final
-  column provides a sine and cosine wave to enable periodic movements
-  and the angle of the center joint. Evolution determines the function
-  of the hidden-layer nodes. The nodes in the output layer specify new
-  joint angles for each respective joint. The unlabeled nodes in the
-  input and output layers are ignored.}\label{hyperneatLayout}
+%\acmFig{SpiderANN.jpg}{.7}{ANN configuration for HyperNEAT Runs. The
+%  first two columns of each row of the input layer receive information
+%  about a single leg (the current angle of its two joints). The final
+%  column provides a sine and cosine wave to enable periodic movements
+%  and the angle of the center joint. Evolution determines the function
+%  of the hidden-layer nodes. The nodes in the output layer specify new
+%  joint angles for each respective joint. The unlabeled nodes in the
+%  input and output layers are ignored.}\label{hyperneatLayout}
 
 As with the parameterized methods, three runs of HyperNEAT
 were performed. The population size for HyperNEAT was 9 and runs
 lasted 20 generations. These numbers are small, but were necessarily
 constrained given how much time it took to conduct evolution directly
-on a real robot. The remaining parameters were identical to Clune et
-al.~\cite{clune2011performance}.
-  
+on a real robot.
+%The remaining parameters were identical to Clune et
+%al.~\cite{clune2011performance}.
 
 % Preliminary HyperNEAT runs were promising and resulted in several
 % interesting gaits.

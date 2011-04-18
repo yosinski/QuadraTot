@@ -59,12 +59,22 @@
 \graphicspath{{../figures/}}
 
 
-
+\usepackage{setspace}
+%\singlespacing
+%\onehalfspacing
+%\doublespacing
+\setstretch{.95}
 
 \begin{document}
+
+\conferenceinfo{GECCO'11,} {July 12--16, 2011, Dublin, Ireland.}
+\CopyrightYear{2011}
+\crdata{978-1-4503-0690-4/11/07}
+\clubpenalty=10000
+\widowpenalty = 10000
 %
 % --- Author Metadata here ---
-\conferenceinfo{GECCO}{2011 Dublin, Ireland}
+%\conferenceinfo{GECCO}{2011 Dublin, Ireland}
 %\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
@@ -72,7 +82,7 @@
 %\title{A comparison of gait learning methods on a quadruped robot}
 %\title{Seven gait learning methods on a quadruped robot}
 %\title{Generating gaits for physical quadruped robots: evolved neural networks vs. local parameterized search. \\Round one: neuroevolution.}
-\title{Generating gaits for physical quadruped robots: evolved neural networks vs. local parameterized search}
+\title{Generating Gaits for Physical Quadruped Robots: Evolved Neural Networks Vs. Local Parameterized Search}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -233,24 +243,24 @@ Sarah Nguyen\\
 % Section 1
 \input{introduction}
 \input{relatedWork}
-\input{paperOutline}
+%\input{paperOutline}
 
 % Section 2
-\input{problemDefinition}
+%\input{problemDefinition}
 
 % Section 3
-\section{Experimental Setup}
-	\seclabel{experimentalSetup}
-	
-	An important aspect of this study was to evaluate gait generation and
-	learning algorithms in the noisy, unforgiving real world, instead of
-	using a simulator.  In this section we give details of the hardware
-	setup we used: \secref{platformDetails} discusses the robotic
-	platform, and \secref{fitnessEvaluation} describes the tracking system
-	we used to measure each gait's fitness.
-	
-	\input{platformDetails}
-	\input{fitnessEvaluation}
+%\section{Experimental Setup}
+\seclabel{experimentalSetup}
+
+%An important aspect of this study was to evaluate gait generation and
+%learning algorithms in the noisy, unforgiving real world, instead of
+%using a simulator.  In this section we give details of the hardware
+%setup we used: \secref{platformDetails} discusses the robotic
+%platform, and \secref{fitnessEvaluation} describes the tracking system
+%we used to measure each gait's fitness.
+
+%\input{platformDetails}
+\input{fitnessEvaluation}
 
 
 
