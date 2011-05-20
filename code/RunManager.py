@@ -7,15 +7,16 @@ from SineModel import SineModel5
 from Neighbor import Neighbor
 from util import prettyVec
 from wii.WiiTrackClient import WiiTrackClient
+from wii.WiiTrackFastClient import WiiTrackFastClient
 
 
 
 def getLogPosString(wiiTrack):
-    pos = wiiTrack.getPosition()
+    position,age = wiiTrack.getPosAge()
     if pos is None:
-        return '-1 -1'
+        return '-1 -1 %f' % age
     else:
-        return ' '.join([str(x) for x in pos])
+        return ' '.join([str(x) for x in pos + [age]])
 
 
 
@@ -104,7 +105,7 @@ class RunManager:
         # Reset before measuring
         self.robot.readyPosition()
 
-        wiiTrack = WiiTrackClient("localhost", 8080)
+        wiiTrack = WiiTrackFastClient("localhost", 8080)
         beginPos = wiiTrack.getPosition()
         if beginPos is None:
             # Robot walked out of sensor view

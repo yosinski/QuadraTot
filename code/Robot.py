@@ -197,7 +197,7 @@ class Robot():
         self.currentPos = self.readCurrentPosition()
 
         if logFile:
-            print >>logFile, '# time, servo goal positions (9), servo actual positions (9), robot location (x, y)'
+            print >>logFile, '# time, servo goal positions (9), servo actual positions (9), robot location (x, y, age)'
 
         # Reset the robot position, if desired
         if resetFirst:
@@ -254,12 +254,12 @@ class Robot():
             posE =   end(self.time) if isinstance(end,   FunctionType) else end
             goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
 
-            self.commandPosition(goal)
+            cmdPos = self.commandPosition(goal)
             if logFile:
                 extraInfo = ''
                 if extraLogInfoFn:
                     extraInfo = extraLogInfoFn()
-                print >>logFile, self.time, ' '.join([str(x) for x in goal]), ' '.join(str(ac.current_position) for ac in self.actuators), extraInfo
+                print >>logFile, self.time, ' '.join([str(x) for x in cmdPos]), ' '.join(str(ac.current_position) for ac in self.actuators), extraInfo
             sleep(self.sleep)
             self.updateClock()
 
@@ -351,6 +351,8 @@ class Robot():
         for ii,actuator in enumerate(self.actuators):
             actuator.goal_position = goalPosition[ii]
         self.net.synchronize()
+        return goalPosition
+    
 
     def cropPosition(self, position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
