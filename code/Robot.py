@@ -197,7 +197,7 @@ class Robot():
         self.currentPos = self.readCurrentPosition()
 
         if logFile:
-            print >>logFile, '# time, goal(9 pos), .........'
+            print >>logFile, '# time, servo goal positions (9), servo actual positions (9), robot location (x, y)'
 
         # Reset the robot position, if desired
         if resetFirst:
