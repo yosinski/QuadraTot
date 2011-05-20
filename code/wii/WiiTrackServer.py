@@ -54,6 +54,7 @@ class ServerThread (threading.Thread):
         threading.Thread.__init__(self)
         self.port     = port
         self.fakeMode = fakeMode
+        self.pushConn = None
         self._stop = threading.Event()
 
     def stop(self):
@@ -92,25 +93,57 @@ class ServerThread (threading.Thread):
                 #conn.send(datetime.now().ctime())
                 #conn.send(repr(wiimote.state))
 
-                if self.fakeMode:
-                    st = 'P:%04d:%04d' % (random.uniform(0,1023), random.uniform(0,766))
-                else:
-                    if not ('ir_src' in wiimote.state):
-                        st = 'E:No wiimote state?'
-                    elif wiimote.state['ir_src'][0] is None:
-                        st = 'E:No targets'
-                    elif wiimote.state['ir_src'][2] is not None:
-                        st = 'E:More than one target'
+                if data == '-':
+                    if self.fakeMode:
+                        st = 'P:%04d:%04d' % (random.uniform(0,1023), random.uniform(0,766))
                     else:
-                        xy = wiimote.state['ir_src'][0]['pos']
-                        st = 'P:%04d:%04d:' % (xy[0], xy[1])
-                send = pad(st)
-                conn.send(send)
-                print 'Sent%s: "%s"' % (' FAKE DATA' if self.fakeMode else '', send)
+                        if not ('ir_src' in wiimote.state):
+                            st = 'E:No wiimote state?'
+                        elif wiimote.state['ir_src'][0] is None:
+                            st = 'E:No targets'
+                        elif wiimote.state['ir_src'][2] is not None:
+                            st = 'E:More than one target'
+                        else:
+                            xy = wiimote.state['ir_src'][0]['pos']
+                            st = 'P:%04d:%04d:' % (xy[0], xy[1])
+                    send = pad(st)
+                    conn.send(send)
+                    print 'Sent%s: "%s"' % (' FAKE DATA' if self.fakeMode else '', send)
+                elif data == 's':
+                    self.pushConn = conn
+                else:
+                    print 'Error: do not know what to do with "%s"' % data
+                    continue
         if conn:
             conn.close()
         s.close()
         print 'Server thread done.'
+
+    def pushCallback(self, wiimote):
+        '''Called whenever wiimote state is updated'''
+        #print 'got push!'
+        if self.pushConn is not None:
+            #print 'have pushConn'
+            if not ('ir_src' in wiimote.state):
+                st = 'E:No wiimote state?'
+            elif wiimote.state['ir_src'][0] is None:
+                st = 'E:No targets'
+            elif wiimote.state['ir_src'][2] is not None:
+                st = 'E:More than one target'
+            else:
+                xy = wiimote.state['ir_src'][0]['pos']
+                st = 'P:%04d:%04d:' % (xy[0], xy[1])
+            send = pad(st)
+            try:
+                self.pushConn.send(send)
+                #print 'Sent%s: "%s"' % (' FAKE DATA' if self.fakeMode else '', send)
+            except socket.error:
+                print 'Socket error (connection lost?), dropping pushConn'
+                self.pushConn = None
+            
+        else:
+            #print 'self.pushConn is None, skipping push'
+            pass
 
 
 
@@ -209,11 +242,12 @@ def main():
                 #rpt_mode ^= cwiid.RPT_STATUS
                 wiimote.rpt_mode = rpt_mode
             if trackOn:
-                if not fakeMode:
-                    wiimote.mesg_callback = track_callback
-                    wiimote.enable(cwiid.FLAG_MESG_IFC)
                 serverThread = ServerThread(port, fakeMode)
+                serverThread.daemon = True
                 serverThread.start()
+                if not fakeMode:
+                    wiimote.mesg_callback = lambda mesg_list,time : track_callback(mesg_list, time, serverThread.pushCallback)
+                    wiimote.enable(cwiid.FLAG_MESG_IFC)
             else:
                 serverThread.stop()
                 print 'Waiting for server thread to quit...',
@@ -372,7 +406,8 @@ def callback(mesg_list, time):
 
 
 
-def track_callback(mesg_list, time):
+def track_callback(mesg_list, time, other_callback):
+    #print 'got something, time is', time
     for mesg in mesg_list:
         if mesg[0] ==  cwiid.MESG_ERROR:
             print "Error message received"
@@ -383,6 +418,7 @@ def track_callback(mesg_list, time):
             #print 'Unknown Report'
             pass
     #print 'state is ', wiimote.state
+    other_callback(wiimote)
 
 
 
