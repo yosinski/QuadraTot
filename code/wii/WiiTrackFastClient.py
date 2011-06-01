@@ -42,6 +42,8 @@ class WiiTrackFastClient(object):
 
     def getPosition(self):
         position,updateTime = self.posTime
+        if updateTime is None:
+            return None
         td = datetime.now() - updateTime
         age = float(td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
         if age > .5:

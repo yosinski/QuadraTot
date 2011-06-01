@@ -121,7 +121,14 @@ class Robot():
             actuator.cw_compliance_margin  = 3
 
         self.net.synchronize()
-            
+
+        #print 'options are:'
+        #for op in dir(self.actuators[0]):
+        #    print '  ', op
+        #for ac in self.actuators:
+        #    print 'Voltage at', ac, 'is', ac.current_voltage, 'load is', ac.current_load
+        #    ac.read_all()
+
         self.currentPos = None
         self.resetClock()
 
@@ -197,7 +204,8 @@ class Robot():
         self.currentPos = self.readCurrentPosition()
 
         if logFile:
-            print >>logFile, '# time, servo goal positions (9), servo actual positions (9), robot location (x, y, age)'
+            #print >>logFile, '# time, servo goal positions (9), servo actual positions (9), robot location (x, y, age)'
+            print >>logFile, '# time, servo goal positions (9), robot location (x, y, age)'
 
         # Reset the robot position, if desired
         if resetFirst:
@@ -248,8 +256,12 @@ class Robot():
         
         timeStart = self.time
         timeEnd   = self.time + seconds
-        
+
+        ii = 0
+        tlast = self.time
         while self.time < timeEnd:
+            #print 'time:', self.time
+            ii += 1
             posS = start(self.time) if isinstance(start, FunctionType) else start
             posE =   end(self.time) if isinstance(end,   FunctionType) else end
             goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
@@ -259,9 +271,26 @@ class Robot():
                 extraInfo = ''
                 if extraLogInfoFn:
                     extraInfo = extraLogInfoFn()
-                print >>logFile, self.time, ' '.join([str(x) for x in cmdPos]), ' '.join(str(ac.current_position) for ac in self.actuators), extraInfo
-            sleep(self.sleep)
+                print >>logFile, self.time, ' '.join([str(x) for x in cmdPos]),
+                #print >>logFile, ' '.join(str(ac.current_position) for ac in self.actuators),
+                print >>logFile, extraInfo
+
+            #volts = ['%d: %s' % (ii,ac.current_voltage) for ii,ac in enumerate(self.actuators)]
+            #print ' '.join(volts)
+
+            #[ac.read_all() for ac in self.actuators]
+            #positions = ['%d: %s' % (ii,ac.cache[dynamixel.defs.REGISTER['CurrentPosition']]) for ii,ac in enumerate(self.actuators)]
+            #print ' '.join(positions)
+                
+            #sleep(self.sleep)
+            #sleep(float(1)/100)
             self.updateClock()
+            secElapsed = self.time - tlast
+            tosleep = self.sleep - secElapsed
+            if tosleep > 0:
+                sleep(tosleep)
+            self.updateClock()
+            tlast = self.time
 
         
 #

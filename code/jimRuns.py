@@ -22,7 +22,9 @@ def usage():
 
 
 def main():
-    if len(sys.argv) > 1:
+    MIN_ARGS = 4
+    
+    if len(sys.argv) >= MIN_ARGS:
         if len(sys.argv) > 2 and sys.argv[1] == '-SineModel5':
             sineModel5Params = [eval(xx) for xx in sys.argv[2].split()]
             print 'Using SineModel5 with params: ', sineModel5Params
@@ -35,18 +37,26 @@ def main():
             currentState = None
         else:
             usage()
+
+        runName = sys.argv[3]
+
+        if len(sys.argv) > 4:
+            timeScale = float(sys.argv[4])
+        else:
+            timeScale = 1
     else:
         usage()
 
-    timeScale = 1
     motionFunctionScaled = scaleTime(motionFunction, timeScale)
 
     runman = RunManager()
+
+    print 'Run name is:', runName
     
     for ii in range(1):
         print
         print 'Iteration', ii
-        runman.run_function_and_log(motionFunction, runSeconds = 10, timeScale = 1, logFilename = 'loggy.txt')
+        runman.run_function_and_log(motionFunctionScaled, runSeconds = 10, timeScale = 1, logFilename = 'log_%s.txt' % runName)
         #try:
         #except:
         #    print '*** Something failed, skipping'

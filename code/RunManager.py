@@ -2,6 +2,7 @@ import math, pdb, sys
 import random
 from datetime import datetime
 from copy import copy
+from time import sleep
 from Robot import Robot, RobotFailure
 from SineModel import SineModel5
 from Neighbor import Neighbor
@@ -13,10 +14,10 @@ from wii.WiiTrackFastClient import WiiTrackFastClient
 
 def getLogPosString(wiiTrack):
     position,age = wiiTrack.getPosAge()
-    if pos is None:
+    if position is None:
         return '-1 -1 %f' % age
     else:
-        return ' '.join([str(x) for x in pos + [age]])
+        return ' '.join([str(x) for x in position + [age]])
 
 
 
@@ -106,6 +107,7 @@ class RunManager:
         self.robot.readyPosition()
 
         wiiTrack = WiiTrackFastClient("localhost", 8080)
+        sleep(.5)
         beginPos = wiiTrack.getPosition()
         if beginPos is None:
             # Robot walked out of sensor view
@@ -113,8 +115,10 @@ class RunManager:
             raise Exception
 
         if not self.robot.shimmy():
-            self.manual_reset('Shimmy failed.  Fix and push enter to retry.')
-            raise Exception
+            print 'Shimmy failed :('
+            #self.manual_reset('Shimmy failed.  Fix and push enter to retry.')
+            #####HACK !!!!!!
+            #raise Exception
 
         ff = open(logFilename, 'a')
 
@@ -138,12 +142,12 @@ class RunManager:
         distance_walked = self.calculate_distance(beginPos, endPos)
         print 'Total Distance: %.2f' % distance_walked
 
-        if not self.robot.shimmy():
-            letter = None
-            while not letter in ('r', 'k'):
-                letter = self.manual_reset('Shimmy failed at end of run, retry or keep [r/k]?')
-            if letter == 'r':
-                raise Exception
+        #if not self.robot.shimmy():
+        #    letter = None
+        #    while not letter in ('r', 'k'):
+        #        letter = self.manual_reset('Shimmy failed at end of run, retry or keep [r/k]?')
+        #    if letter == 'r':
+        #        raise Exception
     
     def log_start(self, extra=None):
         logFile = open('log.txt', 'a')
