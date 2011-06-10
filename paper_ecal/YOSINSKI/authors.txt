@@ -1,0 +1,6 @@
+Jason Yosinski yosinski@cs.cornell.edu*
+Jeff Clune jeffclune@cornell.edu
+Diana Hidalgo djh283@cornell.edu
+Sarah Nguyen smn64@cornell.edu
+Juan Cristobal Zagal jczagal@ing.uchile.cl
+Hod Lipson hod.lipson@cornell.edu
