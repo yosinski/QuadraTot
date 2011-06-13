@@ -35,9 +35,8 @@ cable.
 
 All of the computation for gait learning, fitness evaluation, and
 robot control was performed on the compact, on-board CompuLab Fit-PC2,
-running Ubuntu Linux 10.10. 
-The most computationally expensive portion of code was HyperNEAT, which took
-less than one second to run (not including physical evaluation). Thus,
+running Ubuntu Linux 10.10. The slowest portion of code was HyperNEAT, which took
+less than one second per generation to run (excluding physical evaluations). Thus,
 we chose not to offload any computation.
 All gait generation, learning, and fitness
 evaluation code, except HyperNEAT, was written in Python and is
