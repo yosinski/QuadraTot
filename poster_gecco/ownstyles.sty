@@ -1,0 +1,149 @@
+% Short commands
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\andd}{\wedge}
+\newcommand{\orr}{\vee}
+\def\naive{na\"{\i}ve}
+\def\Naive{Na\"{\i}ve}
+\def\naively{na\"{\i}vely}
+\def\Naively{Na\"{\i}vely}
+\newcommand{\ta}{\hspace*{2em}}     % like a tab?
+
+% Refs and labels
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\seclabel}[1]{\label{sec:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+\newcommand{\tablabel}[1]{\label{tab:#1}}
+\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+
+% figgy - Simple centered figure
+\newcommand{\figgy}[2]{
+\begin{center}
+\vspace*{0.2cm}
+\includegraphics[width=#2\textwidth]{#1}
+\end{center}
+}
+
+% figvarp - More full featured figure
+\newcommand{\figvarp}[5][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\textwidth]{#2}
+
+  \caption[#5]{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+\newcommand{\acmFig}[4][0]{
+  \begin{figure}[tb]
+  \centering
+  \hspace*{#1\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFigg}[5][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#4\linewidth}
+  \includegraphics[width=#4\linewidth]{#2}
+  \includegraphics[width=#4\linewidth]{#3}
+  \caption{#5}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFiggggg}[9][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#7\linewidth}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#2}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#3}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#4}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#5}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#6}
+  \caption{#9}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFigDouble}[4][0]{
+  \begin{figure*}
+  \centering
+  \hspace*{#1\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure*}
+}
+
+% codebox
+%\definecolor{codecolor}{rgb}{0.87,0.87,0.87}
+%\definecolor{codecolor}{rgb}{0.7,0.7,0.7}
+\definecolor{codecolor}{rgb}{0.9,0.9,0.9}
+\makeatletter\newenvironment{codeboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{codecolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\codebox}[1]{ \begin{codeboxx} \texttt{#1} \end{codeboxx} \newline}
+
+% edit boxes
+\definecolor{editcolor}{rgb}{1,0.87,0.87}
+\makeatletter\newenvironment{editboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{editcolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\editbox}[1]{ \begin{editboxx} \textbf{\textit{Edit:}} \\ #1 \end{editboxx} \newline}
+\newcommand{\edit}[1]{ \fcolorbox{black}{editcolor}{\textbf{\textit{Edit:}} #1}}
+
+
+
+
+
+%\newcommand{\capt}[1]{\textit{\captionfont #1}}
+\newcommand{\capt}[1]{\begin{minipage}{.9\linewidth}\begin{center}  \textit{\captionfont #1}  \end{center}\end{minipage}}
+        
+\newcommand{\pfig}[3]{
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}
+    \capt{#3}
+  \end{center}
+}
+\newcommand{\pfigg}[4]{
+  \begin{center}
+    \includegraphics[width=#3\linewidth]{#1}
+    \includegraphics[width=#3\linewidth]{#2}
+    \capt{#4}
+  \end{center}
+}
+
+\newcommand{\pwfig}[4][l]{
+    \begin{wrapfigure}{#1}{#3\textwidth}
+      \vspace{-14pt}
+      \begin{center}
+        \includegraphics[width=1.0\linewidth]{#2}
+      \end{center}
+      \vspace{-7pt}
+      \capt{#4}
+    \end{wrapfigure}
+}
+
+\newcommand{\pwfigg}[5][l]{
+    \begin{wrapfigure}{#1}{#4\textwidth}
+      \vspace{-14pt}
+      \begin{center}
+        \includegraphics[width=1.0\linewidth]{#2}
+        \includegraphics[width=1.0\linewidth]{#3}
+      \end{center}
+      \vspace{-7pt}
+      \capt{#5}
+    \end{wrapfigure}
+}

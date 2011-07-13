@@ -1,0 +1,468 @@
+\documentclass[portrait,final]{baposter}
+
+\usepackage{times}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{ownstyles}
+\usepackage{bm}
+
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{multicol}
+
+\usepackage{pgfbaselayers}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\usepackage{helvet}
+%\usepackage{bookman}
+\usepackage{palatino}
+
+\newcommand{\captionfont}{\footnotesize}
+
+\renewcommand\refname{}
+%\renewcommand\bibname{New Title2}
+
+\selectcolormodel{cmyk}
+
+\graphicspath{{../figures/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Some math symbols used in the text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Format 
+\newcommand{\Matrix}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+\newcommand{\Vector}[1]{\Matrix{#1}}
+\newcommand*{\SET}[1]  {\ensuremath{\mathcal{#1}}}
+\newcommand*{\MAT}[1]  {\ensuremath{\mathbf{#1}}}
+\newcommand*{\VEC}[1]  {\ensuremath{\bm{#1}}}
+\newcommand*{\CONST}[1]{\ensuremath{\mathit{#1}}}
+\newcommand*{\norm}[1]{\mathopen\| #1 \mathclose\|}% use instead of $\|x\|$
+\newcommand*{\abs}[1]{\mathopen| #1 \mathclose|}% use instead of $\|x\|$
+\newcommand*{\absLR}[1]{\left| #1 \right|}% use instead of $\|x\|$
+
+\def\norm#1{\mathopen\| #1 \mathclose\|}% use instead of $\|x\|$
+\newcommand{\normLR}[1]{\left\| #1 \right\|}% use instead of $\|x\|$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Multicol Settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\columnsep}{0.7em}
+\setlength{\columnseprule}{0mm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save space in lists. Use this after the opening of the list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{1pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Here starts the poster
+%%%---------------------------------------------------------------------------
+%%% Format it to your taste with the options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\typeout{Poster Starts}
+\background{
+  \begin{tikzpicture}[remember picture,overlay]%
+    \draw (current page.north west)+(-2em,-0em) node[anchor=north west] {\hspace{-2em}\includegraphics[height=1.1\textheight]{silhouettes_background}};
+  \end{tikzpicture}%
+}
+\definecolor{silver}{cmyk}{0,0,0,0.3}
+\definecolor{blue1}{cmyk}{0.3,0.05,0.05,0.0}
+\definecolor{darkblue1}{cmyk}{1.0,0.5,0.5,0.0}
+\definecolor{black}{cmyk}{0,0,0.0,1.0}
+\definecolor{darkYellow}{cmyk}{0,0,1.0,0.5}
+\definecolor{darkSilver}{cmyk}{0,0,0,0.1}
+
+\definecolor{lightorange}{rgb}{1.0, 0.9, 0.8}
+\definecolor{lighteryellow}{cmyk}{0,0,0.1,0.0}
+\definecolor{lightestyellow}{cmyk}{0,0,0.05,0.0}
+\begin{poster}{
+  columns = 3,
+  % Show grid to help with alignment
+  grid=no,
+  % Column spacing
+  colspacing=1em,
+  % Color style
+  bgColorOne=white,
+  bgColorTwo=white,
+  borderColor=darkblue1,
+  headerColorOne=blue1,
+  headerColorTwo=darkblue1,
+  headerFontColor=black,
+  boxColorOne=white,
+  boxColorTwo=white,
+  % Format of textbox
+  textborder=roundedleft,
+  % Format of text header
+  eyecatcher=no,
+  headerborder=open,
+  headerheight=0.09\textheight,
+  headershape=roundedright,
+  headershade=plain,
+  headerfont=\normalsize\textsf, %Sans Serif
+  boxshade=plain,
+%  background=shade-tb,
+  background=plain,
+  linewidth=2pt
+  }
+  % Eye Catcher
+  {} % No eye catcher for this poster. If an eye catcher is present, the title is centered between eye-catcher and logo.
+  % Title
+  {\sf %Sans Serif
+  %\bf% Serif
+  \vspace{0em}{\huge Generating Gaits for Physical Quadruped Robots:} \\{\LARGE Evolved Neural Networks Vs. Local Parameterized Search}}
+  % Authors
+  {\sf %Sans Serif
+  % Serif
+  \vspace{.3em}\\{\normalsize Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal, Hod Lipson}\\\hspace{0.3em}
+  \code{\footnotesize \{jy495, jeffclune, djh283, smn64\}@cornell.edu, jczagal@ing.uchile.cl, hod.lipson@cornell.edu}\hspace{3em}
+  }
+  % University logo
+  {{\begin{minipage}{.25\textwidth}
+    \hfill
+    \includegraphics[height=5.0em]{cornellLogo}
+  \end{minipage}}
+  }
+
+  \tikzstyle{light shaded}=[top color=baposterBGtwo!30!white,bottom color=baposterBGone!30!white,shading=axis,shading angle=30]
+
+  % Width of left inset image
+     \newlength{\leftimgwidth}
+     \setlength{\leftimgwidth}{0.78em+8.0em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Now define the boxes that make up the poster
+%%%---------------------------------------------------------------------------
+%%% Each box has a name and can be placed absolutely or relatively.
+%%% The only inconvenience is that you can only specify a relative position 
+%%% towards an already declared box. So if you have a box attached to the 
+%%% bottom, one to the top and a third one which should be in between, you 
+%%% have to specify the top and bottom boxes before you specify the middle 
+%%% box.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % A coloured circle useful as a bullet with an adjustably strong filling
+    \newcommand{\colouredcircle}[1]{%
+      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=baposterBGone!80!black!#1!white,line width=0.03em] (0,0) circle(0.18em);}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Abstract}{name=abstract,column=0,row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \input{abstract}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Platform}{name=platform,column=0,below=abstract}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %\pwfig[l]{robot_whitebg.jpg}{.5}{The quadruped robot for which
+    %  gaits were evolved. The translucent parts were produced by a 3D
+    %  printer. Videos of the gaits can be viewed at
+    %  http://bit.ly/geccogait}
+    %
+    %\pwfig[r]{topdown2.jpg}{.3}{(a) Top-down perspective of the robot
+    %  with the nine joints and associated servos labeled. (b) The
+    %  robot in a flat pose with the hip joint centered. (c,d,e)
+    %  Various views of a pose in which the hip joint is rotated.}
+    
+    \pfigg{robot_whitebg.jpg}{topdown2.jpg}{.49}{The 3D printed quadruped robot. Videos of the gaits can be viewed at
+      http://bit.ly/geccogait}
+
+The quadruped robot in this study was assembled from off-the-shelf components and parts
+printed on the Objet Connex 500 3-D Printing System. It weighs 1.88 kg
+with the on-board computer and measures approximately 38 centimeters
+from leg to opposite leg in the crouch position depicted above.
+The robot is actuated by 9 AX-12+
+Dynamixel servos: one inner joint and one outer joint servo in each of
+the four legs, and one servo at the center ``hip'' joint.  This final
+unique servo allows the two halves of the robot to rotate with respect
+to each other.
+
+All of the computation for gait learning, fitness evaluation, and
+robot control was performed on the compact, on-board CompuLab Fit-PC2,
+running Ubuntu Linux 10.10.
+All gait generation, learning, and fitness
+evaluation code, except HyperNEAT, was written in Python and is
+available on our website (http://bit.ly/geccogait).
+
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Experimental Setup}{name=experimentalSetup,column=1}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\pfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
+%  remote provided the location of the robot by tracking the infrared
+%  LED mounted on the robot's antenna.  The position was measured
+%  in pixels and transmitted from the Wii remote to the robot via
+%  bluetooth.}
+
+\pwfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{.6}{A Nintendo Wii
+  remote tracked an IR LED on the robot, transmitting the (x,y)
+  location via bluetooth.}
+
+%To track the position of the robot and thus determine gait fitness, we
+%mounted a Nintendo Wii remote on the ceiling and an infrared LED on
+%top of the robot.  The Wii remote contains
+%an IR camera that tracks and reports the position of IR sources.
+The
+resolution of the camera was 1024 by 768 pixels with view angles of
+about 40$^\circ$ by 30$^\circ$, which produced a resolution of 1.7mm
+per pixel when mounted at a height of 2.63m.  At this height, the
+viewable window on the floor was approximately 175 x 120 cm.
+
+\pwfig[r]{linearInterp}{.6}{Motion was interpolated linearly between a
+  stationary pose and the commanded gait $g(t)$.}
+
+\vspace{.5em}
+
+The fitness was the Euclidian distance the robot
+moved during a 12-second run on flat terrain.
+The HyperNEAT gaits stressed the motors
+more than the other gaits, so to encourage gaits that did not tax the
+motors, we penalized gaits that caused the servos to stop
+responding by a factor of 1/2.
+
+The robot was always measured while in the \emph{ready} position
+(shown in the first figure) to ensure fair fitness measurements. As
+shown below the instantaneous robot limb configuration during the
+first and last portions of the evaluation was an interpolation between
+the initial ready position and $g(t)$; during the rest of the
+evaluation, the robot followed the commanded gait exactly.
+
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Parameterized Gaits}{name=parameterizedGaits,column=1,span=1,below=experimentalSetup}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Parameterized gaits were produced by the following gait function $g(t; \vec{\theta})$:
+
+%\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
+\newcommand{\amp}{\ensuremath{\alpha}}
+
+{
+\footnotesize
+\[
+\vec{g}(t) =
+\left[ {\begin{array}{c@{ }c@{ }c@{ }l@{ }l}
+\amp \cdot \sin(2\pi t / \tau) & \             & \ \cdot \ m_F & \            & + C_I \\ % 0
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \ \cdot \ m_F & \            & + C_O \\ % 1
+\amp \cdot \sin(2\pi t / \tau) & \             & \             & \            & + C_I \\ % 2
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \             & \            & + C_O \\ % 3
+\amp \cdot \sin(2\pi t / \tau) & \             & \             & \ \cdot \ m_R  & + C_I \\ % 4
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \             & \ \cdot \ m_R  & + C_O \\ % 5
+\amp \cdot \sin(2\pi t / \tau) & \             & \ \cdot \ m_F & \ \cdot \ m_R  & + C_I \\ % 6
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \ \cdot \ m_F & \ \cdot \ m_R  & + C_O \\ % 7
+0                              & \             & \             & \            & + C_C \\ % 8
+\end{array} } \right]
+\]
+}
+
+\noindent with parameters in the following ranges:
+
+{
+\footnotesize
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameters        &                           &       \\
+in $\vec{\theta}$ & Description               & Range \\
+\hline
+\hline
+\amp         & Amplitude                 & [0, 400] \\
+\hline
+$\tau$       & Period                    & [.5, 8] \\
+\hline
+$m_O$        & Outer-motor multiplier    & [-2, 2] \\
+\hline
+$m_F$        & Front-motor multiplier    & [-1, 1] \\
+\hline
+$m_R$        & Right-motor multiplier    & [-1, 1] \\
+\hline
+\end{tabular}
+\tablabel{parameters}
+\label{tab:params}
+\end{center}
+}
+
+Intuitively, SineModel5 starts with 8 identical sine waves of
+amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
+motors by $m_O$, multiplies the waves for all front motors by $m_F$,
+and multiplies the waves for all right motors by $m_R$.  To obtain the
+actual motor position commands, these waves are offset by
+fixed constants ($C_O = 40$ for outer
+motors, $C_I = 800$ for inner motors, and $C_C = 512$ for the center hip motor) so that the base position (when the sine
+waves are at 0) is approximately a crouch.
+To keep the size of the model search space as
+small as possible, we decided to keep the ninth (center) motor at a fixed neutral
+position.
+
+\vspace{.5em}
+
+The \textbf{learning methods} used to search the parameterized gait
+space were: \textbf{Random}, \textbf{Uniform random hill climbing},
+\textbf{Gaussian random hill climbing}, \textbf{N-dimensional policy
+  gradient ascent}, \textbf{Nelder-Mead simplex method}, \textbf{Linear
+  regression}, and \textbf{SVM regression}.
+
+
+  }
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{HyperNEAT Gaits}{name=hyperneatGaits,column=1,span=1}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Gaits generated via HyperNEAT were compared to the parameterized gaits.
+
+\pfig{hyperneatExplanation.png}{1}{HyperNEAT produces ANNs from
+  CPPNs \cite{clune2011performance}.}
+
+HyperNEAT is an indirect encoding for evolving artificial neural
+networks (ANNs) that is inspired by the way natural organisms
+develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
+Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
+which is a genome that encodes an ANN
+\pwfig{SpiderANN.jpg}{.6}{The ANN configuration used to generate gaits
+  \cite{clune2011performance}.}\label{hyperneatLayout}
+phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed
+graph, where the nodes in the graph are mathematical functions, such as sine or
+Gaussian. The nature of these functions can facilitate the evolution
+of properties such as symmetry (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
+function)~\cite{stanley2009hypercube, stanley2007compositional}.
+
+For quadruped locomotion, HyperNEAT has previously produced gaits with
+front-back, left-right, and four-way
+symmetries~\cite{clune2009evolving, clune2011performance}.
+    
+\pfig{neat_110115_211410_00000_002_filt_zoom}{1}{Joint angles for a
+  high-performance HyperNEAT gait.}
+
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Results}{name=results,column=2,span=1,row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+
+    By training on data collected in the lab, we were able to predict
+    quadrotor drift quite accurately.  The below images show the
+    actual versus predicted drift, including the directly predicted
+    derivatives as well as the inferred (integrated) position.
+
+    %\begin{multicols}{2}
+        
+      %\begin{center}
+      %  \includegraphics[width=0.9\linewidth]{dec17_1_DataLog-1292574599_07_int}
+      %\end{center}
+
+    %\end{multicols}\vspace{-1em}
+
+
+    %%%%%%%%%%%%%%%%%%%%%%
+    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
+
+    Drift predictions under normal conditions, trained on data
+    collected in similar conditions.
+    \vspace{-.7em}
+
+    \begin{multicols}{3}
+      
+      \begin{tabular}{ccc}
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        &
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        &
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        \\
+
+        \capt{Predicted versus actual x drift at each timestep in
+          pixels per second.} & \capt{Predicted versus actual y drift
+          at each timestep in pixels per second.} & \capt{Actual
+          position versus position inferred from integrated
+          predictions}
+      \end{tabular}\\
+      
+    \end{multicols}\vspace{-1em}
+
+    
+    %%%%%%%%%%%%%%%%%%%%%%
+    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
+    
+    Predictions under artificially windy conditions, trained on data
+    collected under normal conditions as well as windy conditions.
+    \vspace{-.7em}
+
+    \begin{multicols}{3}
+      
+      \begin{tabular}{ccc}
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        &
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        &
+        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
+        \\
+
+        \capt{Predicted vs. actual x drift} & \capt{Predicted
+          vs. actual y drift} & \capt{Integrated position}
+      \end{tabular}\\
+      
+      \end{multicols}\vspace{-1em}
+
+
+    %%%%%%%%%%%%%%%%%%%%%%
+    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
+
+    Although our algorithm was able to accurately predict drift, we
+    are still working on getting the prediction code to be fast enough
+    to control the quadrotor in live flight.  The SVM regression code
+    runs quickly, but we're currently facing difficulties with delays
+    due to I/O as well as a suboptimal configuration.\\
+
+
+  }%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Conclusion}{name=conclusion,column=2,span=1,below=results}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    We are making strong progress towards predicting and removing
+    quadrotor drift.  The drift is predicted fairly accurately via a
+    60 dimensional sensor data vector from the quadrotor, and we hope
+    to soon demonstrate a controller enhanced by the predicted drift. \vspace{.5em}
+  }%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Abbreviated References}{name=references,column=0,above=bottom}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \vspace{-1em}
+
+    \footnotesize
+    \bibliography{references.bib}
+    \bibliographystyle{is-plain}
+  }%
+\end{poster}%
+%
+\end{document}
