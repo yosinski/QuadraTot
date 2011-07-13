@@ -362,9 +362,7 @@ of each is in the paper.
     develop~\cite{stanley2009hypercube}. It evolves Compositional
     Pattern Producing Networks
     (CPPNs)~\cite{stanley2007compositional}, each of which is a genome
-    that encodes an ANN \pwfig{SpiderANN.jpg}{.7}{The ANN
-      configuration used to generate gaits
-      \cite{clune2011performance}.}\label{hyperneatLayout}
+    that encodes an ANN 
     phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a
     directed graph, where the nodes in the graph are mathematical
     functions, such as sine or Gaussian. The nature of these functions
@@ -372,6 +370,9 @@ of each is in the paper.
     (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
     function)~\cite{stanley2009hypercube, stanley2007compositional}.
 
+    \pfig{SpiderANN.jpg}{.8}{ANN
+      configuration to generate gaits
+      \cite{clune2011performance}.}\label{hyperneatLayout}
     For quadruped locomotion, HyperNEAT has previously produced gaits
     with front-back, left-right, and four-way
     symmetries~\cite{clune2009evolving, clune2011performance}.
@@ -421,14 +422,19 @@ Evaluation of HyperNEAT gaits was very noisy, which made learning
 difficult. We tested one gait 11 times and found performance of 26
 $\pm$ 13 body lengths/minute, with a max of 38 and a min of 3.
 
-%Many effective HyperNEAT gaits were not preserved across generations
-%because a single poor-performing trial could prevent their
-%selection. The HyperNEAT learning curve would be smoother if the noise
-%in the evaluations could be reduced or more than one evaluation per
-%individual could be afforded.
+\vspace{.5em}
 
-\pfig{hnResults}{.8}{Average fitness ($\pm $ SE) of the highest
+Many effective HyperNEAT gaits were not preserved across generations
+because a single poor-performing trial could prevent their
+selection. The HyperNEAT learning curve would be smoother if the noise
+in the evaluations could be reduced or more than one evaluation per
+individual could be afforded.
+
+\pfig{hnResults}{1}{Average fitness ($\pm $ SE) of the highest
   performing individual at each generation.}
+
+\textbf{Overall}
+\vspace{.5em}
 
 
 {\scriptsize
@@ -456,6 +462,7 @@ Evolved Neural Network              &        &          \\
 (HyperNEAT)                              & 29.26  &   6.37   \\
 \hline
 \end{tabular}
+\vspace{.5em}\\
 \capt{Average and SD of the best gaits found
   during each of three runs, in body
   lengths/minute.}  \tablabel{results}
@@ -472,8 +479,10 @@ Evolved Neural Network              &        &          \\
     \vspace{-1em}
 
     \scriptsize
+
     \bibliography{references.bib}
-    \bibliographystyle{is-plain}
+    %\bibliographystyle{is-plain}
+    \bibliographystyle{plain}
   }%
 \end{poster}%
 %
