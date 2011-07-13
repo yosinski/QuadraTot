@@ -198,7 +198,7 @@
     % It weighs 1.88 kg with the on-board computer and measures 38
     % centimeters from leg to opposite leg in the crouch position
     % depicted above.
-    The robot is actuated by 9 AX-12+ Dynamixel servos: 8 for the legs and one at the center ``hip'' joint.
+    The robot is actuated by nine AX-12+ Dynamixel servos: eight for the legs and one at the center ``hip'' joint.
     %This final unique servo allows
     %the two halves of the robot to rotate with respect to each other.
 
@@ -224,7 +224,7 @@
 %  in pixels and transmitted from the Wii remote to the robot via
 %  bluetooth.}
 
-\pfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
+\pfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{\\A Nintendo Wii
   remote tracked an IR LED on the robot, transmitting the (x,y)
   location via bluetooth.}
 
@@ -246,19 +246,19 @@ viewable window on the floor was approximately 175 x 120 cm.
   \headerbox{Fitness Evaluation}{name=fitnessEvaluation,column=1}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The fitness was the Euclidian distance the robot moved during a
-12-second run on flat terrain.  To encourage gaits that did not tax
-the motors, we penalized gaits that caused the servos to stop
-responding by a factor of 1/2.
+    Gait fitness was the Euclidian distance the robot moved during a
+    12-second run on flat terrain.  To encourage gaits that did not
+    tax the motors, we penalized gaits that caused the servos to stop
+    responding by a factor of 1/2.
 
-\pfig{linearInterp}{1}{Motion was interpolated linearly between a
-  stationary pose and the gait $g(t)$.}
+    \pfig{linearInterp}{1}{Motion was interpolated linearly between a
+      stationary pose and the gait $g(t)$.}
 
-The robot was always measured while in the \emph{ready} position
-to ensure fair fitness measurements. As
-shown above the instantaneous robot limb configuration during the
-first and last portions of the evaluation was an interpolation between
-the initial ready position and $g(t)$.
+    The robot was always measured while in the \emph{ready} position
+    to ensure fair fitness measurements. As shown above, the
+    instantaneous robot limb configuration during the first and last
+    portions of the evaluation was an interpolation between the
+    initial ready position and $g(t)$.
 
   }
 
@@ -377,7 +377,7 @@ of each is in the paper.
     with front-back, left-right, and four-way
     symmetries~\cite{clune2009evolving, clune2011performance}.
     
-    \pfig{neat_110115_211410_00000_002_filt_zoom}{1}{Joint angles for
+    \pfig{neat_110115_211410_00000_002_filt_zoom}{1}{Joint angles over time for
       a high-performance HyperNEAT gait.}
 
   }
@@ -393,7 +393,7 @@ of each is in the paper.
 
 \noindent A total of 1217 hardware fitness evaluations were performed to learn
 parameterized gaits in three separate runs (200 random, 234 uniform, 284 Gaussian, 174
-gradient, 172 simplex, 153 linear regression). The SVM-modeled method
+gradient, 172 simplex, 153 linear regression). The SVM-based self-modeling method
 was never successful.
 
 %One reason the randomly-generated SineModel5 gaits were so effective
@@ -419,8 +419,8 @@ the best non-HyperNEAT gait and 8.9 times faster than the hand-coded
 gait.
 
 Evaluation of HyperNEAT gaits was very noisy, which made learning
-difficult. We tested one gait 11 times and found performance of 26
-$\pm$ 13 body lengths/minute, with a max of 38 and a min of 3.
+difficult. For example, we tested one gait 11 times and found an average performance of 26
+ body lengths/minute, $\pm$13 std. dev., with a max of 38 and a min of 3.
 
 \vspace{.5em}
 
@@ -433,7 +433,7 @@ individual could be afforded.
 \pfig{hnResults}{1}{Average fitness ($\pm $ SE) of the highest
   performing individual at each generation.}
 
-\textbf{Overall}
+\textbf{Summary of Results}
 \vspace{.5em}
 
 
