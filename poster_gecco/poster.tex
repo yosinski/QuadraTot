@@ -25,8 +25,7 @@
 
 \newcommand{\captionfont}{\footnotesize}
 
-\renewcommand\refname{}
-%\renewcommand\bibname{New Title2}
+\renewcommand\refname{}   % get rid of ``References'' title
 
 \selectcolormodel{cmyk}
 
@@ -94,7 +93,7 @@
 \definecolor{lighteryellow}{cmyk}{0,0,0.1,0.0}
 \definecolor{lightestyellow}{cmyk}{0,0,0.05,0.0}
 \begin{poster}{
-  columns = 3,
+  columns = 4,
   % Show grid to help with alignment
   grid=no,
   % Column spacing
@@ -113,7 +112,7 @@
   % Format of text header
   eyecatcher=no,
   headerborder=open,
-  headerheight=0.09\textheight,
+  headerheight=0.075\textheight,
   headershape=roundedright,
   headershade=plain,
   headerfont=\normalsize\textsf, %Sans Serif
@@ -127,12 +126,12 @@
   % Title
   {\sf %Sans Serif
   %\bf% Serif
-  \vspace{0em}{\huge Generating Gaits for Physical Quadruped Robots:} \\{\LARGE Evolved Neural Networks Vs. Local Parameterized Search}}
+  \vspace{.4em}{\huge Generating Gaits for Physical Quadruped Robots:} \\{\LARGE Evolved Neural Networks Vs. Local Parameterized Search}\vspace{.3em}}
   % Authors
   {\sf %Sans Serif
   % Serif
-  \vspace{.3em}\\{\normalsize Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal, Hod Lipson}\\\hspace{0.3em}
-  \code{\footnotesize \{jy495, jeffclune, djh283, smn64\}@cornell.edu, jczagal@ing.uchile.cl, hod.lipson@cornell.edu}\hspace{3em}
+  \vspace{-.25em}{\normalsize Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal, Hod Lipson}\\\hspace{0.3em}
+  \code{\footnotesize yosinski@cs.cornell.edu}\hspace{3em}
   }
   % University logo
   {{\begin{minipage}{.25\textwidth}
@@ -168,12 +167,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Abstract}{name=abstract,column=0,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {\small
     \input{abstract}
+    }
+    \vspace{.5em}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Platform}{name=platform,column=0,below=abstract}{
+  \headerbox{Platform and Experimental Setup}{name=platform,column=0,below=abstract,above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \small
 
     %\pwfig[l]{robot_whitebg.jpg}{.5}{The quadruped robot for which
     %  gaits were evolved. The translucent parts were produced by a 3D
@@ -188,27 +192,29 @@
     \pfigg{robot_whitebg.jpg}{topdown2.jpg}{.49}{The 3D printed quadruped robot. Videos of the gaits can be viewed at
       http://bit.ly/geccogait}
 
-The quadruped robot in this study was assembled from off-the-shelf components and parts
-printed on the Objet Connex 500 3-D Printing System. It weighs 1.88 kg
-with the on-board computer and measures approximately 38 centimeters
-from leg to opposite leg in the crouch position depicted above.
-The robot is actuated by 9 AX-12+
-Dynamixel servos: one inner joint and one outer joint servo in each of
-the four legs, and one servo at the center ``hip'' joint.  This final
-unique servo allows the two halves of the robot to rotate with respect
-to each other.
+    The quadruped robot was assembled from off-the-shelf
+    components and parts printed on the Objet Connex 500 3-D Printing
+    System.
+    % It weighs 1.88 kg with the on-board computer and measures 38
+    % centimeters from leg to opposite leg in the crouch position
+    % depicted above.
+    The robot is actuated by 9 AX-12+ Dynamixel servos: 8 for the legs and one at the center ``hip'' joint.
+    %This final unique servo allows
+    %the two halves of the robot to rotate with respect to each other.
 
-All of the computation for gait learning, fitness evaluation, and
-robot control was performed on the compact, on-board CompuLab Fit-PC2,
-running Ubuntu Linux 10.10.
-All gait generation, learning, and fitness
-evaluation code, except HyperNEAT, was written in Python and is
-available on our website (http://bit.ly/geccogait).
+    \vspace{.5em}
 
-  }
+    All computation for gait learning, fitness evaluation, and
+    robot control was performed on the compact, on-board CompuLab
+    Fit-PC2, running Ubuntu Linux 10.10.  All gait generation,
+    learning, and fitness evaluation code, except HyperNEAT, was
+    written in Python and is available on our website
+    (http://bit.ly/geccogait).
 
+%  }
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Experimental Setup}{name=experimentalSetup,column=1}{
+%  \headerbox{Experimental Setup}{name=experimentalSetup,column=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -218,7 +224,7 @@ available on our website (http://bit.ly/geccogait).
 %  in pixels and transmitted from the Wii remote to the robot via
 %  bluetooth.}
 
-\pwfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{.6}{A Nintendo Wii
+\pfigg{wiiMote_crop.jpg}{robot_led_crop.jpg}{1}{A Nintendo Wii
   remote tracked an IR LED on the robot, transmitting the (x,y)
   location via bluetooth.}
 
@@ -232,37 +238,42 @@ about 40$^\circ$ by 30$^\circ$, which produced a resolution of 1.7mm
 per pixel when mounted at a height of 2.63m.  At this height, the
 viewable window on the floor was approximately 175 x 120 cm.
 
-\pwfig[r]{linearInterp}{.6}{Motion was interpolated linearly between a
-  stationary pose and the commanded gait $g(t)$.}
+    \vspace{.5em}
 
-\vspace{.5em}
+}
 
-The fitness was the Euclidian distance the robot
-moved during a 12-second run on flat terrain.
-The HyperNEAT gaits stressed the motors
-more than the other gaits, so to encourage gaits that did not tax the
-motors, we penalized gaits that caused the servos to stop
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Fitness Evaluation}{name=fitnessEvaluation,column=1}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The fitness was the Euclidian distance the robot moved during a
+12-second run on flat terrain.  To encourage gaits that did not tax
+the motors, we penalized gaits that caused the servos to stop
 responding by a factor of 1/2.
 
+\pfig{linearInterp}{1}{Motion was interpolated linearly between a
+  stationary pose and the gait $g(t)$.}
+
 The robot was always measured while in the \emph{ready} position
-(shown in the first figure) to ensure fair fitness measurements. As
-shown below the instantaneous robot limb configuration during the
+to ensure fair fitness measurements. As
+shown above the instantaneous robot limb configuration during the
 first and last portions of the evaluation was an interpolation between
-the initial ready position and $g(t)$; during the rest of the
-evaluation, the robot followed the commanded gait exactly.
+the initial ready position and $g(t)$.
 
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Parameterized Gaits}{name=parameterizedGaits,column=1,span=1,below=experimentalSetup}{
+  \headerbox{Parameterized Gaits}{name=parameterizedGaits,column=1,span=1,below=fitnessEvaluation,above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Parameterized gaits were produced by the following gait function $g(t; \vec{\theta})$:
 
 %\newcommand{\amp}{\ensuremath{\mathrm{amp}}}
 \newcommand{\amp}{\ensuremath{\alpha}}
 
+\vspace{-.75em}
+
 {
-\footnotesize
+\tiny
 \[
 \vec{g}(t) =
 \left[ {\begin{array}{c@{ }c@{ }c@{ }l@{ }l}
@@ -279,10 +290,14 @@ Parameterized gaits were produced by the following gait function $g(t; \vec{\the
 \]
 }
 
-\noindent with parameters in the following ranges:
+\vspace{-.75em}
+
+\noindent with parameters in the ranges:
+
+\vspace{-.75em}
 
 {
-\footnotesize
+\scriptsize
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -294,11 +309,11 @@ in $\vec{\theta}$ & Description               & Range \\
 \hline
 $\tau$       & Period                    & [.5, 8] \\
 \hline
-$m_O$        & Outer-motor multiplier    & [-2, 2] \\
+$m_O$        & Outer multiplier    & [-2, 2] \\
 \hline
-$m_F$        & Front-motor multiplier    & [-1, 1] \\
+$m_F$        & Front multiplier    & [-1, 1] \\
 \hline
-$m_R$        & Right-motor multiplier    & [-1, 1] \\
+$m_R$        & Right multiplier    & [-1, 1] \\
 \hline
 \end{tabular}
 \tablabel{parameters}
@@ -306,10 +321,10 @@ $m_R$        & Right-motor multiplier    & [-1, 1] \\
 \end{center}
 }
 
-Intuitively, SineModel5 starts with 8 identical sine waves of
-amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
-motors by $m_O$, multiplies the waves for all front motors by $m_F$,
-and multiplies the waves for all right motors by $m_R$.  To obtain the
+Intuitively, we start with 8 identical sine waves of
+amplitude $\amp$ and period $\tau$, multiply the waves for all outer
+motors by $m_O$, multiply the waves for all front motors by $m_F$,
+and multiply the waves for all right motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
 fixed constants ($C_O = 40$ for outer
 motors, $C_I = 800$ for inner motors, and $C_C = 512$ for the center hip motor) so that the base position (when the sine
@@ -323,143 +338,140 @@ position.
 The \textbf{learning methods} used to search the parameterized gait
 space were: \textbf{Random}, \textbf{Uniform random hill climbing},
 \textbf{Gaussian random hill climbing}, \textbf{N-dimensional policy
-  gradient ascent}, \textbf{Nelder-Mead simplex method}, \textbf{Linear
-  regression}, and \textbf{SVM regression}.
-
-
-  }
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{HyperNEAT Gaits}{name=hyperneatGaits,column=1,span=1}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Gaits generated via HyperNEAT were compared to the parameterized gaits.
-
-\pfig{hyperneatExplanation.png}{1}{HyperNEAT produces ANNs from
-  CPPNs \cite{clune2011performance}.}
-
-HyperNEAT is an indirect encoding for evolving artificial neural
-networks (ANNs) that is inspired by the way natural organisms
-develop~\cite{stanley2009hypercube}. It evolves Compositional Pattern
-Producing Networks (CPPNs)~\cite{stanley2007compositional}, each of
-which is a genome that encodes an ANN
-\pwfig{SpiderANN.jpg}{.6}{The ANN configuration used to generate gaits
-  \cite{clune2011performance}.}\label{hyperneatLayout}
-phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a directed
-graph, where the nodes in the graph are mathematical functions, such as sine or
-Gaussian. The nature of these functions can facilitate the evolution
-of properties such as symmetry (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
-function)~\cite{stanley2009hypercube, stanley2007compositional}.
-
-For quadruped locomotion, HyperNEAT has previously produced gaits with
-front-back, left-right, and four-way
-symmetries~\cite{clune2009evolving, clune2011performance}.
-    
-\pfig{neat_110115_211410_00000_002_filt_zoom}{1}{Joint angles for a
-  high-performance HyperNEAT gait.}
+  gradient ascent}, \textbf{Nelder-Mead simplex method},
+\textbf{Linear regression}, and \textbf{SVM regression}. A discussion
+of each is in the paper.
 
   }
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Results}{name=results,column=2,span=1,row=0}{
+  \headerbox{HyperNEAT Gaits}{name=hyperneatGaits,column=2,span=1}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \small
+
+    Gaits generated via HyperNEAT were compared to the parameterized gaits.
+
+    \pfig{hyperneatExplanation.png}{1}{HyperNEAT produces ANNs from
+      CPPNs \cite{clune2011performance}.}
+
+    HyperNEAT is an indirect encoding for evolving artificial neural
+    networks (ANNs) that is inspired by the way natural organisms
+    develop~\cite{stanley2009hypercube}. It evolves Compositional
+    Pattern Producing Networks
+    (CPPNs)~\cite{stanley2007compositional}, each of which is a genome
+    that encodes an ANN \pwfig{SpiderANN.jpg}{.7}{The ANN
+      configuration used to generate gaits
+      \cite{clune2011performance}.}\label{hyperneatLayout}
+    phenotype~\cite{stanley2009hypercube}. Each CPPN is itself a
+    directed graph, where the nodes in the graph are mathematical
+    functions, such as sine or Gaussian. The nature of these functions
+    can facilitate the evolution of properties such as symmetry
+    (e.g.\ a Gaussian function) and repetition (e.g.\ a sine
+    function)~\cite{stanley2009hypercube, stanley2007compositional}.
+
+    For quadruped locomotion, HyperNEAT has previously produced gaits
+    with front-back, left-right, and four-way
+    symmetries~\cite{clune2009evolving, clune2011performance}.
+    
+    \pfig{neat_110115_211410_00000_002_filt_zoom}{1}{Joint angles for
+      a high-performance HyperNEAT gait.}
+
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Results}{name=results,column=3,span=1,row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\small
+\textbf{Parameterized Gaits}
+\vspace{.5em}
+
+\noindent A total of 1217 hardware fitness evaluations were performed to learn
+parameterized gaits in three separate runs (200 random, 234 uniform, 284 Gaussian, 174
+gradient, 172 simplex, 153 linear regression). The SVM-modeled method
+was never successful.
+
+%One reason the randomly-generated SineModel5 gaits were so effective
+%may have been due to the SineModel5's bias toward regular, symmetric
+%gaits.  This may have allowed the random strategy --- focusing on
+%exploration --- to be competitive with the more directed strategies
+%that exploit information from past evaluations.
     
 
-    By training on data collected in the lab, we were able to predict
-    quadrotor drift quite accurately.  The below images show the
-    actual versus predicted drift, including the directly predicted
-    derivatives as well as the inferred (integrated) position.
-
-    %\begin{multicols}{2}
-        
-      %\begin{center}
-      %  \includegraphics[width=0.9\linewidth]{dec17_1_DataLog-1292574599_07_int}
-      %\end{center}
-
-    %\end{multicols}\vspace{-1em}
+\pfig{std_error}{1}{Average results ($\pm $ SE) for parameterized
+  learning methods over three runs.  Linear regression found the
+  fastest overall gait, followed by
+  Nelder-Mead simplex.}
 
 
-    %%%%%%%%%%%%%%%%%%%%%%
-    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
+\textbf{HyperNEAT Gaits}
+\vspace{.5em}
 
-    Drift predictions under normal conditions, trained on data
-    collected in similar conditions.
-    \vspace{-.7em}
+\noindent A total of 540 evaluations were performed for HyperNEAT, whose gaits
+were the faster by far than the parameterized models.  The single best
+gait found had a speed of 45.72 body lengths/minute, 66\% better than
+the best non-HyperNEAT gait and 8.9 times faster than the hand-coded
+gait.
 
-    \begin{multicols}{3}
-      
-      \begin{tabular}{ccc}
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        &
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        &
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        \\
+Evaluation of HyperNEAT gaits was very noisy, which made learning
+difficult. We tested one gait 11 times and found performance of 26
+$\pm$ 13 body lengths/minute, with a max of 38 and a min of 3.
 
-        \capt{Predicted versus actual x drift at each timestep in
-          pixels per second.} & \capt{Predicted versus actual y drift
-          at each timestep in pixels per second.} & \capt{Actual
-          position versus position inferred from integrated
-          predictions}
-      \end{tabular}\\
-      
-    \end{multicols}\vspace{-1em}
+%Many effective HyperNEAT gaits were not preserved across generations
+%because a single poor-performing trial could prevent their
+%selection. The HyperNEAT learning curve would be smoother if the noise
+%in the evaluations could be reduced or more than one evaluation per
+%individual could be afforded.
 
-    
-    %%%%%%%%%%%%%%%%%%%%%%
-    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
-    
-    Predictions under artificially windy conditions, trained on data
-    collected under normal conditions as well as windy conditions.
-    \vspace{-.7em}
-
-    \begin{multicols}{3}
-      
-      \begin{tabular}{ccc}
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        &
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        &
-        \includegraphics[width=.9\linewidth]{robot_whitebg.jpg}
-        \\
-
-        \capt{Predicted vs. actual x drift} & \capt{Predicted
-          vs. actual y drift} & \capt{Integrated position}
-      \end{tabular}\\
-      
-      \end{multicols}\vspace{-1em}
+\pfig{hnResults}{.8}{Average fitness ($\pm $ SE) of the highest
+  performing individual at each generation.}
 
 
-    %%%%%%%%%%%%%%%%%%%%%%
-    \mbox{\hspace{0.3\linewidth}\rule{0.4\linewidth}{1pt}\hspace{0.3\linewidth}}\\
-
-    Although our algorithm was able to accurately predict drift, we
-    are still working on getting the prediction code to be fast enough
-    to control the quadrotor in live flight.  The SVM regression code
-    runs quickly, but we're currently facing difficulties with delays
-    due to I/O as well as a suboptimal configuration.\\
-
+{\scriptsize
+\begin{center}
+\begin{tabular}{|r|c|c|c||c|}
+\hline
+                                         & Avg & SD \\
+\hline                                    
+\hline                                    
+Previous hand-coded gait                 & 5.16   &   --     \\
+\hline
+Random search                            & 9.40   &   6.83   \\
+\hline
+Uniform Hill Climbing             & 7.83   &   4.56   \\
+\hline
+Gaussian Hill Climbing            & 10.03  &   6.00   \\
+\hline
+Policy Gradient Descent                  & 6.32   &   7.39   \\
+\hline
+Nelder-Mead simplex                      & 12.32  &   3.35   \\
+\hline
+Linear Regression                        & 14.01  &  12.88   \\
+\hline
+Evolved Neural Network              &        &          \\
+(HyperNEAT)                              & 29.26  &   6.37   \\
+\hline
+\end{tabular}
+\capt{Average and SD of the best gaits found
+  during each of three runs, in body
+  lengths/minute.}  \tablabel{results}
+\end{center}
+}
 
   }%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Conclusion}{name=conclusion,column=2,span=1,below=results}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    We are making strong progress towards predicting and removing
-    quadrotor drift.  The drift is predicted fairly accurately via a
-    60 dimensional sensor data vector from the quadrotor, and we hope
-    to soon demonstrate a controller enhanced by the predicted drift. \vspace{.5em}
-  }%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Abbreviated References}{name=references,column=0,above=bottom}{
+  \headerbox{Abbreviated References}{name=references,column=2,below=hyperneatGaits,above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     \vspace{-1em}
 
-    \footnotesize
+    \scriptsize
     \bibliography{references.bib}
     \bibliographystyle{is-plain}
   }%
