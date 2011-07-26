@@ -5,7 +5,7 @@
 
 ############################
 # Comment out this next line to enable this script
-exit 0
+# exit 0
 ############################
 
 
@@ -20,3 +20,6 @@ echo "got here 1" >> /home/team/log
 
 # Run as team
 sudo -u team $SCRIPTPATH/startupWalkScriptInner
+
+# Run as root
+sudo -u root $SCRIPTPATH/startupWalkScriptInnerIfconfig

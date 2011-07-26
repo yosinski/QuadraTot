@@ -1,0 +1,14 @@
+#! /bin/sh
+
+# Absolute path to this script. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
+
+echo "got here 12" >> /home/team/log
+
+screen -d -m -S ifcon
+screen -S ifcon -X zombie qr
+screen -S ifcon -X screen /sbin/ifconfig eth0 up 10.1.1.2
+
+echo "got here 13" >> /home/team/log

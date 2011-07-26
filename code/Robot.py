@@ -281,6 +281,7 @@ class Robot():
             #[ac.read_all() for ac in self.actuators]
             #positions = ['%d: %s' % (ii,ac.cache[dynamixel.defs.REGISTER['CurrentPosition']]) for ii,ac in enumerate(self.actuators)]
             #print ' '.join(positions)
+            #print ''.join(['x' if ac.led else ' ' for ac in self.actuators])
                 
             #sleep(self.sleep)
             #sleep(float(1)/100)
@@ -345,9 +346,16 @@ class Robot():
         timeDiff  = datetime.now() - self.time0
         self.time = timeDiff.seconds + timeDiff.microseconds/1e6
 
-    def readyPosition(self):
-        self.commandPosition(POS_READY)
-        sleep(2)
+    def readyPosition(self, persist = False):
+        if persist:
+            self.resetClock()
+            while self.time < 2.0:
+                self.commandPosition(POS_READY)
+                sleep(.1)
+                self.updateClock()
+        else:
+            self.commandPosition(POS_READY)
+            sleep(2)
 
     def commandPosition(self, position, crop = True, cropWarning = False):
         '''Command the given position
@@ -380,6 +388,13 @@ class Robot():
         for ii,actuator in enumerate(self.actuators):
             actuator.goal_position = goalPosition[ii]
         self.net.synchronize()
+
+        #[ac.read_all() for ac in self.actuators]
+        #positions = ['%d: %s' % (ii,ac.cache[dynamixel.defs.REGISTER['CurrentPosition']]) for ii,ac in enumerate(self.actuators)]
+        #print ' '.join(positions)
+        #print ''.join(['x' if ac.led else ' ' for ac in self.actuators]) + '  ' ,
+        #print ' '.join(['%.1f' % ac.current_voltage for ac in self.actuators])
+
         return goalPosition
     
 
