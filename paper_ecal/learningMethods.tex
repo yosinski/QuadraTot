@@ -5,7 +5,7 @@
 %gait controlled by neural networks and is described last.
 
 
-We now describe the gait-generating algorithm classes.
+We now describe the classes of gait-generating algorithms.
 
 \subsection{Parameterized Gaits}
 \seclabel{motionModel}
@@ -49,25 +49,28 @@ amplitude $\amp$ and period $\tau$, multiplies the waves for all outer
 motors by $m_O$, multiplies the waves for all front motors by $m_F$,
 and multiplies the waves for all right motors by $m_R$.  To obtain the
 actual motor position commands, these waves are offset by
-appropriate fixed constants ($C_O = 40$ for outer
+fixed constants ($C_O = 40$ for outer
 motors, $C_I = 800$ for inner motors, and $C_C = 512$ for the center hip motor) so that the base position (when the sine
 waves are at 0) is approximately a crouch (the position shown in
-\figref{robot_whitebg.jpg}).  In this motion model, the ninth
-(center) motor is kept at a neutral position.  Thus, the commanded
-position for each motor (numbered in \figref{topdown2.jpg}), as a vector function of time, are produced by the following nine functions (listed in the order):
+\figref{robot_whitebg.jpg}).
+To keep the size of the model search space as
+small as possible, we decided to keep the ninth (center) motor at a fixed neutral
+position.
+Thus, the commanded position for each motor as a vector function of
+time is as follows (numbered as in \figref{topdown2.jpg}):
 
 \[
 \vec{g}(t) =
-\left[ {\begin{array}{c@{ }l@{ }l}
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F            & + C_I \\ % 0
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F            & + C_O \\ % 1
-\amp \cdot \sin(2\pi t / \tau) & \                                  & + C_I \\ % 2
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O                      & + C_O \\ % 3
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \                     m_R  & + C_I \\ % 4
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O           \cdot m_R  & + C_O \\ % 5
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \           m_F \cdot m_R  & + C_I \\ % 6
-\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O \cdot m_F \cdot m_R  & + C_O \\ % 7
-0                              & \                                  & + C_C \\ % 8
+\left[ {\begin{array}{c@{ }c@{ }c@{ }l@{ }l}
+\amp \cdot \sin(2\pi t / \tau) & \             & \ \cdot \ m_F & \            & + C_I \\ % 0
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \ \cdot \ m_F & \            & + C_O \\ % 1
+\amp \cdot \sin(2\pi t / \tau) & \             & \             & \            & + C_I \\ % 2
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \             & \            & + C_O \\ % 3
+\amp \cdot \sin(2\pi t / \tau) & \             & \             & \ \cdot \ m_R  & + C_I \\ % 4
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \             & \ \cdot \ m_R  & + C_O \\ % 5
+\amp \cdot \sin(2\pi t / \tau) & \             & \ \cdot \ m_F & \ \cdot \ m_R  & + C_I \\ % 6
+\amp \cdot \sin(2\pi t / \tau) & \ \cdot \ m_O & \ \cdot \ m_F & \ \cdot \ m_R  & + C_O \\ % 7
+0                              & \             & \             & \            & + C_C \\ % 8
 \end{array} } \right]
 \]
 
@@ -188,11 +191,11 @@ learning algorithms for the parameterized motion models:
 %  than the reflected point, the entire simplex is shrunk \citep{nm}.
 
 \emph{Nelder-Mead simplex method}: The Nelder-Mead simplex
-  method \citep{nm} creates an initial simplex with $d+1$ vertices,
-  where $d$ is the dimension of the parameter space. It then tests the
-  fitness of each vertex, and, in general, it reflects the worst point
-  over the centroid in an attempt to improve it.  Several additional
-  rules are used to prevent cycles and local minima \citep{nm}.
+  method creates an initial simplex with $d+1$ vertices
+  for a $d$ dimensional parameter space. It then tests the
+  fitness of each vertex and, in general, it reflects the worst point
+  over the simplex's centroid in an attempt to improve it.  Several additional
+  rules are used to prevent cycles and local minima; see \cite{nm} for more information.
 
 \emph{Linear regression}: To initialize, this method chooses and
   evaluates five random parameter vectors. It then fits a linear model

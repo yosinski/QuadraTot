@@ -1,0 +1,149 @@
+> ----------------------- REVIEW 1 ---------------------
+> PAPER: 152
+> TITLE: Evolving Robot Gaits in Hardware: the HyperNEAT Generative Encoding Vs. Parameter Optimization
+> AUTHORS: Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal and Hod Lipson
+>
+> OVERALL RATING: 3 (strong accept)
+> REVIEWER'S CONFIDENCE: 3 (high)
+> Novelty: 4 (good)
+> Quality of introduction: 4 (good)
+> Quality of state of the art description: 4 (good)
+> Quality of method description: 5 (excellent)
+> Quality of results description: 5 (excellent)
+> [Article only] Has the capacity to produce an important Alife journal  publication (after extension): 3 (maybe)
+> [Abstract only] Did the authors properly refer to the prior publication: 1 (yes)
+> Presentation form: 3 (oral)
+>
+> This paper compares the performance of six different parameter optimization algorithms and the well-known evolutionary-method HyperNEAT for the automatic design of gaits for a physically-implemented robot. Positively surprisingly, all the computation, including the optimization algorithms, is executed in the robot itself.
+>
+> The authors should notice that the web link to the supplemental videos and algorithms provided in the text does not work.
+
+Fixed link to point to intended materials.
+
+>
+> It would be interesting to know the fitness of the hand-designed and hand-parameterized gait.
+
+Fitness of the hand-designed gait is shown in Table 2.
+
+>
+> I miss a discussion of why the hardware platform chosen for gait evaluation produces so noisy results and what could be improved in this respect. Would more precise servos help to minimize this noise?
+
+Not likely; the "noise" is as much from subtle variations in the environment as from imprecise servos.
+
+> As a suggestion for future work, in order to minimize human intervention and optimization times, it may be possible to record the robot position by an integrated GPS device. This would allow running multiple fitness evaluations without human intervention, given a big enough space for the robot to move autonomously.
+
+Noted, though the noise of a GPS system would be a couple orders of magnitude too large for us to effectively evaluate fitness.
+
+>
+> In short, the paper neatly presents an attractive study of several algorithms for physical-fitness optimization with interesting results. I recommend the acceptance of this paper for oral presentation.
+>
+>
+>
+> Specific comments:
+>
+> p3, left, 1st paragraph: “HyperNEAT, but even this took less than one second to run on the on-board computer”. I guess that a complete evolution of a gait took more than one second, since the evaluation part is physically implemented. Does the 1 second value in the text refer to the reproduction and selection part of the algorithm? Please, specify.
+
+Noted and fixed.
+
+>
+> p3, left, 4th paragraph: “we linearly interpolated the motion of the robot between the ready position and the commanded gait”. It is not clear if the interpolation is done to just calculate the fitness or to affect the robot gait configuration. I guess it is the later, but it would be clearer to state this fact with something like “during the first and last seconds of an evaluation, the instant gait configuration of the robot is the interpolation between the initial ready position and g(t)…”
+
+Noted and fixed.
+
+>
+>
+> ----------------------- REVIEW 2 ---------------------
+> PAPER: 152
+> TITLE: Evolving Robot Gaits in Hardware: the HyperNEAT Generative Encoding Vs. Parameter Optimization
+> AUTHORS: Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal and Hod Lipson
+>
+> OVERALL RATING: 2 (accept)
+> REVIEWER'S CONFIDENCE: 3 (high)
+> Novelty: 4 (good)
+> Quality of introduction: 5 (excellent)
+> Quality of state of the art description: 3 (fair)
+> Quality of method description: 4 (good)
+> Quality of results description: 5 (excellent)
+> [Article only] Has the capacity to produce an important Alife journal  publication (after extension): 3 (maybe)
+> [Abstract only] Did the authors properly refer to the prior publication: 1 (yes)
+> Presentation form: 3 (oral)
+>
+> This paper is interesting in that it evolves robot gaits completely on board a physical robot using a setup that should be fairly easily reproducable.  It is also of interest that HyperNEAT which has previously been used to evolve gaits for simulated robots is here successfuly employed to evolve gaits entirely on a physical robot.  The paper is generally well written.
+>
+> Some comments:
+>
+> The url given for the videos of evolved gaits and for the source code:  http://bit.ly/ecalgait is a redirect to http://creativemachines.cornell.edu, and I am unable to find the videos related to this paper on that website, and so I am unable to view these videos or look at the source code.  It would be very useful to be able to view these videos, so a corrected url should be included.
+
+Noted and fixed.
+
+>
+> Why did the parameterized gaits not move the center hip motor at all?  I found it curious that this joint was included (and could be actuated by the HyperNEAT controllers) but was not used at all with the paremeterized gaits.  Does this not put those gaits at a disadvantage?
+
+It may put them at a disadvantage by limiting the size of the search space, but a smaller search space richer with effective gaits will perform better. Text to this effect added to the Parameterized Gaits section.
+
+>
+> The description of the Nelder-Mead simplex method is incredibly vague.  Yes, a reference is provided for reading more about this method, but it would be helpful if some more space was devoted to giving a better description of that method in this paper.
+
+Somewhat more added; further discussion is outside the scope of the paper.
+
+>
+> It seems that the HyperNEAT setup was for the most part copied from Clune's previous work.  A few questions about this:  all parameters except for max generations and population size were kept the same as in Clune's work, however with these smaller population sizes those parameters may not be appropriate (especially those relating to speciation).  The authors do not seem to consider this.  Some justification for why the same parameters will still work with these smaller population sizes would be helpful.  Additionally recent work has demonstrated that a seperate output for the presence/absence of connections is useful in addition to the output that determines connection weights, was this considered at all?
+
+More complete description added. Separate output for presence/absence of connections was not used or considered (fairly recent work, still unpublished).
+
+>
+> There appears to be large differences in the performance of any single gait.  Obviously this is one of the challenges when evolving on real, noisy, hardware.  Because of this it is difficult to judge how well any single gait will perform in future evaluations.  In extending this work with combining physical and simulated evaluations it would be useful to select for robustness to noise as opposed to the ability to perform really well by chance which is what is done here.
+
+Noted.
+
+>
+> Minor points:
+> In the introduction it is stated that "An additional motivation is to test whether gaits evolved in simulaiton tranfer to reality well,"  but this is never tested here as all gaits are evolved on the real robots.
+
+Very good point, confusing text reworded.
+
+>
+> Why was the gait interpolated between command gai and stationary pose for 1 second at the beginning, but 2 seconds at the end?  Why not use the same amount of time at either end?  A sentence motivating this design decision would be helpful.
+
+Noted.
+
+>
+> On page 4 it is stated "For future studies we will use a 2 x 2 array of Wii remotes to double the size of the measurment arena."  Wouldn't using a 2 x 2 array quadruple the size of the arena not double it?
+
+Reworded.
+
+>
+>
+> ----------------------- REVIEW 3 ---------------------
+> PAPER: 152
+> TITLE: Evolving Robot Gaits in Hardware: the HyperNEAT Generative Encoding Vs. Parameter Optimization
+> AUTHORS: Jason Yosinski, Jeff Clune, Diana Hidalgo, Sarah Nguyen, Juan Cristobal Zagal and Hod Lipson
+>
+> OVERALL RATING: 3 (strong accept)
+> REVIEWER'S CONFIDENCE: 3 (high)
+> Novelty: 4 (good)
+> Quality of introduction: 4 (good)
+> Quality of state of the art description: 4 (good)
+> Quality of method description: 4 (good)
+> Quality of results description: 4 (good)
+> [Article only] Has the capacity to produce an important Alife journal  publication (after extension): 3 (maybe)
+> [Abstract only] Did the authors properly refer to the prior publication: 1 (yes)
+> Presentation form: 3 (oral)
+>
+> This work deals with evolving gait on a real robot with HyperNEAT approach. This is the well written paper and is worth to be accepted. There are several open questions, which can be addressed in the final version of the paper:
+>
+> 1) Can motor-feedback sensors be used in the gait generation? Can they improve the ANN-based control?
+
+Noted and discussed
+
+> 2) How it would improve the fitness evaluation, when IR LED would be installed on each of the legs?
+
+Doubtful, unless the fitness metric (distance walked) was used.
+
+> 3) It would make sense to compare this approach with rhythmic gain generator based on CPGs, which used analytical approaches for gait generation.
+
+This study does use a CPG for the parameterized motion models.
+
+> 4) What is the number of trials (see discussion on the page 8)?
+
+Number added to page 8 discussion.

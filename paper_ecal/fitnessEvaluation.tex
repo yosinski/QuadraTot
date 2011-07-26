@@ -85,11 +85,16 @@ in a longer run, which is why we did not want to reward this behavior).
 In order to measure the start and end position in the same pose, and to ensure fair fitness evaluations with as little noise as possible, we
 linearly interpolated the motion of the robot between the ready
 position and the commanded gait, $g(t)$.  As shown in
-\figref{linearInterp}, motion for the first second was interpolated
-between the ready position and $g(t)$, for the next nine seconds the
-robot moved exactly as specified by $g(t)$, and for the final two
-seconds its motion was interpolated smoothly back to the ready
-position.
+%\figref{linearInterp}, motion for the first second was interpolated
+%between the ready position and $g(t)$, for the next nine seconds the
+%robot moved exactly as specified by $g(t)$, and for the final two
+%seconds its motion was interpolated smoothly back to the ready
+%position.
+\figref{linearInterp}, the instantaneous robot limb configuration
+during the first and last portions of the evaluation was an
+interpolation between the initial ready position and $g(t)$;
+during the rest of the evaluation, the robot followed the commanded
+gait exactly.
 
 \acmFig{linearInterp}{1}{Motion was interpolated linearly between a
   stationary pose and the commanded gait $g(t)$ for one second at the
@@ -115,5 +120,7 @@ downward.  Because the performance of the robot on a given gait varied
 from trial to trial, a successful measurement was more likely to be
 obtained when the gait happened to perform poorly.  This phenomenon
 was negligible at first, but became more pronounced as gaits began traversing the entire
-area.  HyperNEAT gaits were especially likely to require additional trials, meaning that the reported performance for HyperNEAT is worse than it would have been otherwise. For future studies we will use a $2\times2$ array of Wii
-remotes to double the size of the measurement arena.
+area.  HyperNEAT gaits were especially likely to require additional
+trials, meaning that the reported performance for HyperNEAT is worse
+than it would have been otherwise. Future studies could employ an
+array of Wii remotes to increase the size of the measurement arena.
