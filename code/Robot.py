@@ -392,8 +392,8 @@ class Robot():
         #[ac.read_all() for ac in self.actuators]
         #positions = ['%d: %s' % (ii,ac.cache[dynamixel.defs.REGISTER['CurrentPosition']]) for ii,ac in enumerate(self.actuators)]
         #print ' '.join(positions)
-        #print ''.join(['x' if ac.led else ' ' for ac in self.actuators]) + '  ' ,
-        #print ' '.join(['%.1f' % ac.current_voltage for ac in self.actuators])
+        print ''.join(['x' if ac.led else ' ' for ac in self.actuators]) + '  ' ,
+        print ' '.join(['%.1f' % ac.current_voltage for ac in self.actuators])
 
         return goalPosition
     
