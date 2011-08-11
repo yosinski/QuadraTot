@@ -1,0 +1,68 @@
+\subsection{Platform Details}
+\seclabel{platformDetails}
+
+
+
+%\seclabel{implement}
+
+% Describe how you implemented your system and how you structured it. 
+% This should give an overview of the system, not a detailed 
+% documentation of the code. The documentation of the code is part of 
+% the code you hand in. You might want to comment on high-level design 
+% decisions that you made. Also explain how you obtained your
+% data and any pre-processing you did to it.
+
+\acmFig{topdown2.jpg}{1}{(a) Top-down perspective of the robot with
+  the nine joints and associated servos labeled. (b) The robot in a
+  flat pose with the hip joint centered. (c,d,e) Various views of a
+  pose in which the hip joint is rotated.}
+
+The quadruped robot in this study was assembled from off-the-shelf components and parts
+printed on the Objet Connex 500 3-D Printing System. It weighs 1.88 kg
+with the on-board computer and measures approximately 38 centimeters
+from leg to opposite leg in the crouch position depicted in
+\figref{robot_whitebg.jpg}. The robot is actuated by 9 AX-12+
+Dynamixel servos: one inner joint and one outer joint servo in each of
+the four legs, and one servo at the center ``hip'' joint.  This final
+unique servo allows the two halves of the robot to rotate with respect
+to each other. \figref{topdown2.jpg} shows this unique motion, as well
+as the positions and numerical designations of all nine servos.  Each
+servo could be commanded to a position in the range [0,~1023],
+corresponding to a physical range [-120$^{\circ}$,~+120$^{\circ}$].
+The computer and servos can be powered by two on-board batteries, but
+for the tests presented in this paper power was provided by a tethered
+cable.
+
+All of the computation for gait learning, fitness evaluation, and
+robot control was performed on the compact, on-board CompuLab Fit-PC2,
+running Ubuntu Linux 10.10. The slowest portion of code was HyperNEAT, which took
+less than one second per generation to run (excluding physical evaluations). Thus,
+we chose not to offload any computation.
+All gait generation, learning, and fitness
+evaluation code, except HyperNEAT, was written in Python and is
+available on our website (http://bit.ly/ecalgait).  HyperNEAT is written in
+C++.  We controlled the servos with the Pydynamixel library, sending commanded positions at 40Hz.  The robot
+connected to a wireless network on boot, which enabled us to control
+it via SSH.
+
+
+Robot gaits are defined by a Python \emph{gait function} that takes
+time (starting at 0) as a single input and outputs a list of nine
+commanded positions (one for each servo).  To safeguard against limb
+collision with the robot body, the control code cropped the commands
+to a safe range.  This range was [-85$^{\circ}$, +60$^{\circ}$] for
+the inner leg servos, [-113$^{\circ}$, +39$^{\circ}$] for the outer
+leg servos, and [-28$^{\circ}$, +28$^{\circ}$] for the center hip
+servo.
+
+%This range was [150,~770] for the inner leg servos, [30,~680] for the outer
+%leg servos, and [392,~623] for the center hip servo.
+
+%The robot was set up to run when given any giat 
+
+%is run using a given motion model, including, if desired, 
+%smooth interpolation over time for the beginning and end of the run. 
+
+%The servos are prevented from being commanded to a point outside their
+%normal range (0 - 1023) as well as beyond points where limbs would collide
+

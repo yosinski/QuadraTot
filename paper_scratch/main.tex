@@ -1,0 +1,82 @@
+%
+% Paper for ECAL conference, formatted per alifexi.sty
+% JBY 4/6/11
+%
+
+
+
+\documentclass[letterpaper]{article}
+\usepackage{natbib,alifexi}   %% The order is important
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{color}
+%\usepackage{ulem}
+\usepackage{ownstyles}
+%\usepackage{hyperref}
+
+\graphicspath{{../figures/}}
+
+
+
+\title{Evolving Robot Gaits in Hardware: the HyperNEAT Generative Encoding Vs. Parameter Optimization}
+%\title{Generating gaits for physical quadruped robots: evolved neural networks vs. local parameterized search}
+%\title{Using HyperNEAT vs. Parameter Optimization to Create Quadruped Robot Gaits}
+\author {Jason Yosinski$^{1}$,
+Jeff Clune$^{1}$,
+Diana Hidalgo$^{1}$,
+Sarah Nguyen$^{1}$,
+Juan Cristobal Zagal$^{2}$,
+\and Hod Lipson$^{1}$\\
+\mbox{} \\
+$^1$ Cornell University, 239 Upson Hall, Ithaca, NY  14853, USA\\
+$^2$ University of Chile, Beauchef 850, Santiago 8370448, Chile\\
+\code{yosinski@cs.cornell.edu}}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 1
+\input{introduction}
+\input{relatedWork}
+%\input{paperOutline}
+
+% Section 2
+\input{problemDefinition}
+
+% Section 3
+\input{experimentalSetup}
+\input{platformDetails}
+\input{fitnessEvaluation}
+
+% Section 4
+\section{Gait Generation and Learning}
+\seclabel{gaitGenLearn}
+\input{learningMethods}
+\input{hyperNeatMethod}
+
+% Section 5
+\input{results}
+
+% Section 6
+\input{conclusion}
+\input{futureWork}
+
+% Section 7
+\input{acknowledgments}
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\footnotesize
+\bibliography{references.bib}
+\bibliographystyle{apalike}
+
+\end{document}
