@@ -7,7 +7,7 @@ Just walks.
 import sys
 from SineModel import SineModel5
 from RunManager import RunManager
-from Robot import *
+from RobotQuadratot import *
 from Strategy import *
 
 
@@ -36,7 +36,7 @@ def main():
     timeScale = .3
     motionFunctionScaled = scaleTime(motionFunction, timeScale)
 
-    robot = Robot()
+    robot = RobotQuadratot()
     robot.run(motionFunction, runSeconds = 8, resetFirst = False,
               interpBegin = 2, interpEnd = 2)
 

@@ -21,7 +21,7 @@ individually.  More complex collisions are still possible given
 certain vectors of motor position.
 '''
 
-from RobotConstants import *
+from ConstantsQuadratot import *
 
 
 class RobotFailure(Exception):
@@ -29,7 +29,7 @@ class RobotFailure(Exception):
 
 
 
-class Robot():
+class RobotQuadratot():
     ''''''
 
     def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
@@ -59,7 +59,7 @@ class Robot():
 
         #if self.nServos != 9:
         #    pass
-        #    #raise Exception('Unfortunately, the Robot class currently assumes 9 servos.')
+        #    #raise Exception('Unfortunately, the RobotQuadratot class currently assumes 9 servos.')
 
         # Default baud rate of the USB2Dynamixel device.
         self.baudRate = 1000000

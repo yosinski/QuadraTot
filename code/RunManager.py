@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 from copy import copy
 from time import sleep
-from Robot import Robot, RobotFailure
+from RobotQuadratot import RobotQuadratot, RobotFailure
 from SineModel import SineModel5
 from Neighbor import Neighbor
 from util import prettyVec
@@ -25,7 +25,7 @@ class RunManager:
     '''Manage runs..'''
 
     def __init__(self):
-        self.robot = Robot(commandRate = 40, loud = False)
+        self.robot = RobotQuadratot(commandRate = 40, loud = False)
         self.statesSoFar = set()  # Keeps track of the states tested so far
         
     def run_robot(self, currentState):

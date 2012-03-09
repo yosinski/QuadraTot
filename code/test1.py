@@ -6,7 +6,7 @@ import pdb
 
 from Motion import positionIt
 from RobotParams import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, MIN_CENTER, MAX_CENTER
-from Robot import initialize
+from RobotQuadratot import initialize
 
 
 

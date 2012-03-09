@@ -6,7 +6,7 @@ import sys
 import pdb
 from numpy import array, hstack, vstack, linspace, flatnonzero
 
-from RobotConstants import *
+from ConstantsQuadratot import *
 from Motion import *
 from util import matInterp, writeArray
 

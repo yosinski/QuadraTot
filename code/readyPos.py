@@ -2,9 +2,9 @@
 
 
 
-from Robot import *
+from RobotQuadratot import *
 
-rr = Robot()
+rr = RobotQuadratot()
 
 #rr.readyPosition()
 rr.readyPosition(persist = True)

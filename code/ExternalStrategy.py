@@ -6,7 +6,7 @@ from time import sleep
 from datetime import datetime
 import os
 
-from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
+from RobotQuadratot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
 from Strategy import Strategy, OneStepStrategy
 from util import matInterp, prettyVec, writeArray
 from SineModel import SineModel5

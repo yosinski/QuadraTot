@@ -2,7 +2,7 @@
 
 import sys
 
-from Robot import *
+from RobotQuadratot import *
 from dynamixel import defs
 
 
@@ -25,7 +25,7 @@ def main():
     idNew = int(sys.argv[1])
 
     print 'Scanning dynamixel network, could take a little while...'
-    rr = Robot(silentNetFail = True)
+    rr = RobotQuadratot(silentNetFail = True)
 
     if len(rr.actuators) != 1:
         raise Exception('Expected to find a single servo on the network, but found %d (%s)'
