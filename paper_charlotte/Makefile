@@ -8,5 +8,8 @@ all: ${TARGETS}
 	pdflatex $<
 	pdflatex $<
 
+skim: ${TARGETS}
+	skimreload ${TARGETS}
+
 clean:
 	rm -f *.aux *.log *~ *.dvi *.out *.bbl *.blg *.lot *.lof *.toc ${TARGETS}
