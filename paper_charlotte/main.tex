@@ -1,7 +1,7 @@
 \documentclass[letterpaper]{article}
 \usepackage{natbib,alife13}
 
-\title{QuadraRex: An Open-Source Quadruped Platform for Evolutionary Robotics}
+\title{Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics}
 \author{Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski \and Hod Lipson \\
 \mbox{}\\
 Cornell University, 239 Upson Hall, Ithaca, NY 14853 \\
@@ -13,7 +13,7 @@ Cornell University, 239 Upson Hall, Ithaca, NY 14853 \\
 \maketitle
 
 \begin{abstract}
-We report on a new open-source quadruped robotic platform, QuadraRex,
+We report on a new open-source quadruped robotic platform, Aracna,
 for evolutionary robotics experiments. The robot comprises four legs
 with two joints each, for a total of eight kinematic degrees of
 freedom. Four-bar linkage mechanisms in each leg drive the pitch of
@@ -31,7 +31,7 @@ robotics algorithms.
 \section{Introduction}
 
 We address the need for a low-cost platform with non-intuitive walking
-kinematics to explore evolutionary robotics. QuadraRex is the third
+kinematics to explore evolutionary robotics. Aracna is the third
 evolutionary learning quadruped robot developed by the Creative
 Machines Lab \citep{HL, JY}. A common feature among the quadruped
 robots is two actuators that drive the flexion/extension of a knee and
@@ -39,13 +39,13 @@ hip joint around parallel axes in each leg. The original Creative
 Machines Lab quadruped robot favored starfish-like movements
 \citep{HL}. The second quadruped robot, QuadraTot \citep{JY},
 developed spider-like movements, but was limited by its weight. When
-creating the QuadraRex, we designed the hardware to compliment fast
+creating the Aracna, we designed the hardware to compliment fast
 spider-like movements.
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=.45\textwidth]{fig1.jpg}
-\caption{QuadraRex: an open-sourced quadruped robot platform. All
+\caption{Aracna: an open-sourced quadruped robot platform. All
   instructions and downloads are publicly available at
   http://creativemachines.cornell.edu/quadrarex \citep{WEB}.}
 \label{fig1}
@@ -74,7 +74,7 @@ spider-like movements.
 %\end{center}
 %\end{figure}
 
-The hardware of QuadraRex evolved from the previous Creative Machines
+The hardware of Aracna evolved from the previous Creative Machines
 Lab quadruped robots. We kept the same two degree of freedom pitch
 joint scheme but decreased the weight and constrained the movement of
 the joints to create faster spider-like movement. To prevent
@@ -97,7 +97,7 @@ single LiPo 11.1V battery to power 8 Dynamixel AX-18 servo motors and
 an ArbotiX microcontroller. The main processing occurs on an external
 computer, which allows the robot to have cheaper and lighter
 components on-board. We use the space in the center of the body to
-house the battery to reduce material weight and cost. QuadraRex weighs
+house the battery to reduce material weight and cost. Aracna weighs
 less than 1 kg.
 
 \begin{figure}[t]
@@ -167,7 +167,7 @@ Cables, Connectors, Misc & \$27.78\\
 \end{tabular}
 }
 \vskip 0.25cm
-\caption{Estimated total cost. A specifiic parts list is on our website \citep{WEB}.}
+\caption{Estimated total cost. A specific parts list is on our website \citep{WEB}.}
 \end{table}
 
 
@@ -180,6 +180,6 @@ Emerging Frontiers in Research and Innovation (grant number 0735953).
 
 \footnotesize
 \bibliographystyle{apalike}
-\bibliography{QuadraRex}
+\bibliography{references}
 \end{document}
 
