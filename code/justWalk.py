@@ -23,8 +23,8 @@ def main():
         motionFunction = lambda time: SineModel5().model(time,
                                                          parameters = sineModel5Params)
     else:
-        #filtFile = 'out/hyperneatTo20gens_101/neat_110115_175446_00014_008_filt'
-        filtFile = 'out/hyperneatTo20gens_101/neat_110115_175446_00004_007_filt'
+        #filtFile = '../results/hyperneatTo20gens_101/neat_110115_175446_00014_008_filt'
+        filtFile = '../results/hyperneatTo20gens_101/neat_110115_175446_00004_007_filt'
         strategy = FileStrategy(filtFile = filtFile)
         motionFunction, logInfo = strategy.getNext()
     
