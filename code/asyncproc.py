@@ -159,9 +159,13 @@ class Process(object):
 	    self.__stderr_thread.setDaemon(True)
 	    self.__stderr_thread.start()
 
-    def __del__(self, __killer=os.kill, __sigkill=signal.SIGKILL):
-	if self.__exitstatus is None:
-	    __killer(self.pid(), __sigkill)
+	#XXX: I modified this code...the first if statement was different
+	#def __del__(self, __killer=os.kill, __sigkill=signal.SIGKILL):
+    def __del__(self, __killer=os.kill, __sigkill=None):
+		if __sigkill is not None:
+			sigkill = signal.SIGKILL
+		if self.__exitstatus is None:
+			__killer(self.pid(), __sigkill)
 
     def pid(self):
 	"""Return the process id of the process.
@@ -196,7 +200,7 @@ class Process(object):
 	"""
 	if self.__exitstatus is not None:
 	    return self.__exitstatus
-	pid,exitstatus = os.waitpid(self.pid(), flags)
+	pid, exitstatus = os.waitpid(self.pid(), flags)
 	if pid == 0:
 	    return None
 	if os.WIFEXITED(exitstatus) or os.WIFSIGNALED(exitstatus):
@@ -307,14 +311,14 @@ class Process(object):
 	errdata = "".join(self.__collected_errdata)
 	del self.__collected_errdata[:]
 	self.__lock.release()
-	return outdata,errdata
+	return outdata, errdata
 
     def _peek(self):
 	self.__lock.acquire()
 	output = "".join(self.__collected_outdata)
 	error = "".join(self.__collected_errdata)
 	self.__lock.release()
-	return output,error
+	return output, error
 
     def write(self, data):
 	"""Send data to a process's standard input.

@@ -2,21 +2,21 @@
 
 # WARNING: These are all fake!
 
-MIN_INNER = 150
-MAX_INNER = 770
-MIN_OUTER = 30
+MIN_INNER = 0
+MAX_INNER = 1023
+MIN_OUTER = 0
 #MAX_OUTER = 940
 #MAX_OUTER = 800 # changing because Robot hits antenna
-MAX_OUTER = 680  # changing because screws still interfere
+MAX_OUTER = 1023  # changing because screws still interfere
 
-POS_FLAT      = [512] * 9
-POS_READY     = [770,  40] * 4 + [512]
-POS_HALFSTAND = [700, 100] * 4 + [512]
-POS_STAND     = [512, 150] * 4 + [512]
+POS_FLAT      = [512] * 8
+POS_READY     = [770,  40] * 4
+POS_HALFSTAND = [700, 100] * 4
+POS_STAND     = [512, 150] * 4
 
-POS_CHECK_1   = [770, 200] * 4 + [512]
-POS_CHECK_2   = [670, 300] * 4 + [512]
-POS_CHECK_3   = [670, 300] * 4 + [512-70]
+POS_CHECK_1   = [770, 200] * 4
+POS_CHECK_2   = [670, 300] * 4
+POS_CHECK_3   = [670, 300] * 4
 
 
 

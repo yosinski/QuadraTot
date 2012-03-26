@@ -9,7 +9,7 @@
 
 from random import choice
 from numpy import array, random, ones, zeros, sin, vstack, hstack, argmax, diag, linalg, dot, exp
-from sg import sg           # Import shogun
+#from sg import sg           # Import shogun
 import string, os
 import pickle
 import pdb
