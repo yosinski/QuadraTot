@@ -129,7 +129,7 @@ class RobotRex(RobotQuadratot):
         return out
     
     '''Rewrite for compatibility with old code'''
-    def interpMove(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
+    def myInterpMove(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
         '''Moves between start and end over seconds seconds.  start
         and end may be functions of the current time.'''
         
@@ -168,7 +168,7 @@ class RobotRex(RobotQuadratot):
     def cropPosition(self, position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
         
-        Requires a vector of length 9 to be sure the IDs are in the
+        Requires a vector of length 8 to be sure the IDs are in the
         assumed order.'''
 
         if len(position) != self.nServos:
