@@ -78,7 +78,7 @@ class RobotRex(RobotQuadratot):
             self.commandPosition(POS_READY)
             sleep(2)
     
-    def commandPosition(self, position, crop = True, cropWarning = False, interp = True):
+    def commandPosition(self, position, crop = True, cropWarning = False, allAtOnce = True):
         '''Set Rex to the given postion as quickly as possible.
 
         commandPosition will command the robot to move its servos to
@@ -108,7 +108,7 @@ class RobotRex(RobotQuadratot):
             posstr = ', '.join(['%4d' % xx for xx in goalPosition])
             print '%.2fs -> %s' % (self.time, posstr)
         
-        if interp:
+        if allAtOnce:
             self.port.execute(253, 7, [18])
             # download the pose
             self.port.execute(253, 8, [0] + self.__extract(position))
