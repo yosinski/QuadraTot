@@ -21,7 +21,7 @@ from MotionHandler import MotionFunction
 class RobotRex(RobotQuadratot):
     ''''''
 
-    def __init__(self, nServos, portName="", loud = False):
+    def __init__(self, nServos, portName=""):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -37,7 +37,8 @@ class RobotRex(RobotQuadratot):
                    in Hertz.  Default: 40.
         '''
         
-        self.loud = loud
+        RobotQuadratot.__init__(self, commandRate=40, skipInit=True)
+        
         self.nServos = nServos
         
         #Find a valid port.
@@ -78,7 +79,7 @@ class RobotRex(RobotQuadratot):
             self.commandPosition(POS_READY)
             sleep(2)
     
-    def commandPosition(self, position, crop = True, cropWarning = False, interp = True):
+    def commandPosition(self, position, crop = True, cropWarning = False, allAtOnce = True):
         '''Set Rex to the given postion as quickly as possible.
 
         commandPosition will command the robot to move its servos to
@@ -91,8 +92,8 @@ class RobotRex(RobotQuadratot):
         Keyword arguments:
         cropWarning -- Whether or not to print a warning if the
                        positions are cropped.  Default: False.
-        interp -- Whether or not to move the servos using smooth interpolated
-                  movements. If false, one servo is adjusted at a time.
+        allAtOnce -- Whether or not to move the servos using smooth interpolated
+                     movements. If false, one servo is adjusted at a time.
         '''
         
         if len(position) != self.nServos:
@@ -108,7 +109,7 @@ class RobotRex(RobotQuadratot):
             posstr = ', '.join(['%4d' % xx for xx in goalPosition])
             print '%.2fs -> %s' % (self.time, posstr)
         
-        if interp:
+        if allAtOnce:
             self.port.execute(253, 7, [18])
             # download the pose
             self.port.execute(253, 8, [0] + self.__extract(position))
@@ -125,13 +126,14 @@ class RobotRex(RobotQuadratot):
         """ extract x%256,x>>8 for every x in li """
         out = list()
         for i in li:
-            out = out + [i%256,i>>8]
+            ii = int(i)
+            out = out + [ii%256,ii>>8]
         return out
     
     '''Rewrite for compatibility with old code'''
     def myInterpMove(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
         '''Moves between start and end over seconds seconds.  start
-        and end may be functions of the current time.'''
+        and end are position vectors.'''
         
         seconds *= 1000
         dt = int(seconds)
@@ -213,15 +215,19 @@ class RobotRex(RobotQuadratot):
 
 if __name__ == "__main__":
     robot = RobotRex(8, "COM6")
-    pos0 = [0,0,0,0,800,800,800,800]
+    pos0 = [0] * 8
     pos1 = [1023] * 8
+    pos2 = [0,0,0,0,800,800,800,800]
     
-    robot.commandPosition(pos0)
-    sleep(2)
-    print robot.readCurrentPosition()
-    sleep(.5)
-    print "About to interpMove"
     robot.interpMove(pos0, pos1, 10)
-    sleep(3)
     print robot.readCurrentPosition()
     robot.relax()
+#    robot.commandPosition(pos0)
+#    sleep(2)
+#    print robot.readCurrentPosition()
+#    sleep(.5)
+#    print "About to interpMove"
+#    robot.interpMove(pos0, pos1, 10)
+#    sleep(3)
+#    print robot.readCurrentPosition()
+#    robot.relax()
