@@ -288,8 +288,8 @@ class RobotQuadratot():
             self.updateClock()
             secElapsed = self.time - tlast
             tosleep = self.sleep - secElapsed
-            if tosleep > 0:
-                sleep(tosleep)
+            #if tosleep > 0:
+                #sleep(tosleep)
             self.updateClock()
             tlast = self.time
 

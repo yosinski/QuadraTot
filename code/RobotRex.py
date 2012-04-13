@@ -1,7 +1,7 @@
 #Notes: I'm going to want to make a new RunManager for Rex
 
-
-
+import math
+from math import *
 from datetime import datetime
 from time import sleep
 from types import FunctionType
@@ -15,13 +15,13 @@ from driver import Driver
 
 from RobotQuadratot import *
 from ConstantsRex import *
-from MotionHandler import MotionFunction
+from MotionHandler import SmoothMotionFunction
 
 
 class RobotRex(RobotQuadratot):
     ''''''
 
-    def __init__(self, nServos, portName=""):
+    def __init__(self, nServos, portName="", commandRate = 40):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -37,8 +37,8 @@ class RobotRex(RobotQuadratot):
                    in Hertz.  Default: 40.
         '''
         
-        RobotQuadratot.__init__(self, commandRate=40, skipInit=True)
-        
+        RobotQuadratot.__init__(self, commandRate, skipInit=True)
+        self.commandsSent = 0
         self.nServos = nServos
         
         #Find a valid port.
@@ -95,7 +95,7 @@ class RobotRex(RobotQuadratot):
         allAtOnce -- Whether or not to move the servos using smooth interpolated
                      movements. If false, one servo is adjusted at a time.
         '''
-        
+                
         if len(position) != self.nServos:
             raise Exception('Expected postion vector of length %d, got %s instead'
                             % (self.nServos, repr(position)))
@@ -110,16 +110,23 @@ class RobotRex(RobotQuadratot):
             print '%.2fs -> %s' % (self.time, posstr)
         
         if allAtOnce:
-            self.port.execute(253, 7, [18])
-            # download the pose
+            #print "started"
+            self.port.execute(253, 7, [18]) #This one isn't too fast either
+            #print "1"
+            #FIXME
+            # download the pose...this step is slow!!!
             self.port.execute(253, 8, [0] + self.__extract(position))
-            self.port.execute(253, 9, [0, 244,1,255,0,0])
+            #print "2"
+            self.port.execute(253, 9, [0, 40,0,255,0,0])
+            #print "3"
             self.port.execute(253, 10, list())
+            #print "made move"
         else:
             for servo in range(self.nServos):
                 pos = position[servo]
                 self.port.setReg(servo+1, P_GOAL_POSITION_L, [pos%256, pos>>8])
         
+        self.commandsSent += 1
         return goalPosition
     
     def __extract(self, li):
@@ -131,7 +138,7 @@ class RobotRex(RobotQuadratot):
         return out
     
     '''Rewrite for compatibility with old code'''
-    def myInterpMove(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
+    def __commandPositionWithTime(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
         '''Moves between start and end over seconds seconds.  start
         and end are position vectors.'''
         
@@ -165,6 +172,49 @@ class RobotRex(RobotQuadratot):
         # send sequence and play            
         self.port.execute(253, 9, tranDL)
         self.port.execute(253, 10, list())
+    
+    def commandFunction(self, smoothFnct, loop=False):
+        '''Executes motions determined by the given motion function
+        smoothFnct --- a SmoothMotionFunction instance
+        loop --- if true, the function will execute in a cycle'''
+        
+        fnct = smoothFnct.motionFnct
+        times = smoothFnct.times
+        
+        dt = int(times[1] - times[0]) * 1000 # delta-T
+        
+        poseDL = dict()     # key = pose name, val = index, download them after we build a transition list
+        tranDL = list()     # list of bytes to download
+        
+        #Set up the first pose
+        poseDL[0] = 0
+        tranDL.append(poseDL[0])
+        tranDL.append(244)
+        tranDL.append(1)
+        for i in range(1,len(times)):#TODO: start at 1?
+            poseDL[i] = len(poseDL.keys())          # get ix for pose
+            # create transition values to download
+            tranDL.append(poseDL[i])                # ix of pose
+            tranDL.append(dt%256)                   # time is an int (16-bytes)
+            tranDL.append(dt>>8)
+        tranDL.append(255)      # notice to stop
+        tranDL.append(0)        # time is irrelevant on stop    
+        tranDL.append(0)
+        # set pose size -- IMPORTANT!
+        self.port.execute(253, 7, [18])
+        # send poses
+        print "Sending poses: " + str(len(poseDL.keys()))
+        for p in poseDL.keys():
+            self.port.execute(253, 8, [poseDL[p]] + self.__extract(fnct[p]))
+        # send sequence and play
+        print "Sending sequences"
+        self.port.execute(253, 9, tranDL)
+        # run or loop?
+        print "Running or looping?"
+        if loop: #TODO: Figure out if the 'if' or 'else' is the loop one.
+            self.port.execute(253,11,list())
+        else:
+            self.port.execute(253, 10, list())
     
     '''Rewrite if desired'''
     def cropPosition(self, position, cropWarning = False):
@@ -214,13 +264,33 @@ class RobotRex(RobotQuadratot):
             self.port.setReg(servo+1,P_TORQUE_ENABLE, [0,])   
 
 if __name__ == "__main__":
-    robot = RobotRex(8, "COM6")
+    robot = RobotRex(8, "COM6", commandRate = 40)
     pos0 = [0] * 8
     pos1 = [1023] * 8
     pos2 = [0,0,0,0,800,800,800,800]
     
-    robot.interpMove(pos0, pos1, 10)
-    print robot.readCurrentPosition()
+    pi = math.pi
+    
+    dur = 4.0
+    start = lambda t: (abs(200.0*sin(pi*t)),0.0,
+                       abs(1024.0/dur*t*sin(pi*t)), 500.0,
+                       t*1024.0/dur, (1-t/dur)*1024.0,
+                       1024.0*(t/dur)**3,450.0)
+    end = lambda t: ([512.0] * 8)
+    myFunction = SmoothMotionFunction(start,end,dur,10,8)
+    
+    robot.commandPosition(pos2)
+    
+#    print "starting function"
+#    robot.interpMove(start,end,4)
+#    print "Commands sent: " + str(robot.commandsSent)
+    print "starting position"
+    robot.interpMove(pos0, pos1, 2)
+    print "Commands sent: " + str(robot.commandsSent)
+    
+    #robot.commandFunction(myFunction)
+#    sleep(1)
+    print "relaxing"
     robot.relax()
 #    robot.commandPosition(pos0)
 #    sleep(2)

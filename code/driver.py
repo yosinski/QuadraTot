@@ -43,13 +43,15 @@ class Driver:
     def execute(self, index, ins, params):
         """ Send an instruction to a device. """
         self.ser.flushInput()
+        self.ser.flushOutput()
         length = 2 + len(params)
         checksum = 255 - ((index + length + ins + sum(params))%256)
-        self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
+        res = self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
         for val in params:
-            self.ser.write(chr(val))
-        self.ser.write(chr(checksum))
-        return self.getPacket(0)
+            res += self.ser.write(chr(val))
+        res += self.ser.write(chr(checksum))
+        #print "bytes sent: " + str(res)
+        return self.getPacket(0) #TODO: uncomment this line, get rid of res = ...
 
     def setReg(self, index, regstart, values):
         """ Set the value of registers. Should be called as such:
@@ -62,7 +64,7 @@ class Driver:
         # need a positive byte
         d = self.ser.read()
         if d == '': 
-            #print "Fail Read"
+            print "Fail Read"
             return None
 
         # now process our byte
@@ -109,7 +111,7 @@ class Driver:
             checksum = id + leng + error + sum(params) + ord(d)
             #print "Checksum computed: " + str(checksum)
             if checksum % 256 != 255:
-                #print "Checksum ERROR"
+                print "Checksum ERROR"
                 return None
             return params
         # fail
