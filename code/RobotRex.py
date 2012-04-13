@@ -5,6 +5,7 @@
 
 
 import math
+import pdb
 from math import *
 from datetime import datetime
 from time import sleep
@@ -22,10 +23,11 @@ from ConstantsRex import *
 from MotionHandler import SmoothMotionFunction
 
 
+
 class RobotRex(RobotQuadratot):
     ''''''
 
-    def __init__(self, nServos, portName=None, commandRate = 40):
+    def __init__(self, nServos, portName=None, commandRate = 40, loud = False):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -41,7 +43,7 @@ class RobotRex(RobotQuadratot):
                    in Hertz.  Default: 40.
         '''
         
-        RobotQuadratot.__init__(self, commandRate, skipInit=True)
+        RobotQuadratot.__init__(self, commandRate, skipInit=True, loud=loud)
         self.commandsSent = 0
         self.nServos = nServos
         
@@ -118,16 +120,30 @@ class RobotRex(RobotQuadratot):
         
         if allAtOnce:
             #print "started"
+            
+            self.tic()
             self.port.execute(253, 7, [18]) #This one isn't too fast either
+            self.toc()
+
+            
             #print "1"
             #FIXME
             # download the pose...this step is slow!!!
+            self.tic()
             self.port.execute(253, 8, [0] + self.__extract(position))
+            self.toc()
+
+            self.tic()
             self.port.execute(253, 9, [0, 244,1,255,0,0])
+            self.toc()
             #print "2"
+            self.tic()
             self.port.execute(253, 9, [0, 40,0,255,0,0])
+            self.toc()
             #print "3"
+            self.tic()
             self.port.execute(253, 10, list())
+            self.toc()
             #print "made move"
         else:
             for servo in range(self.nServos):
@@ -272,7 +288,7 @@ class RobotRex(RobotQuadratot):
             self.port.setReg(servo+1,P_TORQUE_ENABLE, [0,])   
 
 if __name__ == "__main__":
-    robot = RobotRex(8, commandRate = 40)
+    robot = RobotRex(8, commandRate = 40, loud = True)
     pos0 = [0] * 8
     pos1 = [1023] * 8
     pos2 = [0,0,0,0,800,800,800,800]
@@ -288,14 +304,17 @@ if __name__ == "__main__":
     myFunction = SmoothMotionFunction(start,end,dur,10,8)
     
     robot.commandPosition(pos2)
-    
+    sleep(2)
+
 #    print "starting function"
 #    robot.interpMove(start,end,4)
 #    print "Commands sent: " + str(robot.commandsSent)
     print "starting position"
-    robot.interpMove(pos0, pos1, 2)
+    robot.interpMove(pos2, pos1, 2)
     print "Commands sent: " + str(robot.commandsSent)
-    
+
+    pdb.set_trace()
+
     #robot.commandFunction(myFunction)
 #    sleep(1)
     print "relaxing"

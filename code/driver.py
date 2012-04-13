@@ -43,7 +43,7 @@ class Driver:
     def execute(self, index, ins, params):
         """ Send an instruction to a device. """
         self.ser.flushInput()
-        self.ser.flushOutput()
+        #self.ser.flushOutput()
         length = 2 + len(params)
         checksum = 255 - ((index + length + ins + sum(params))%256)
         res = self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
@@ -51,7 +51,10 @@ class Driver:
             res += self.ser.write(chr(val))
         res += self.ser.write(chr(checksum))
         #print "bytes sent: " + str(res)
-        return self.getPacket(0) #TODO: uncomment this line, get rid of res = ...
+        start = time.time()
+        ret = self.getPacket(0) #TODO: uncomment this line, get rid of res = ...
+        print '   driver:', time.time() - start
+        return ret
 
     def setReg(self, index, regstart, values):
         """ Set the value of registers. Should be called as such:
@@ -61,9 +64,12 @@ class Driver:
 
     def getPacket(self, mode, id=-1, leng=-1, error=-1, params = None):
         """ Read a return packet, iterative attempt """
+        print '      driver:getPacket(mode=%s, id=%s, leng=%s, error=%s, params=%s' % (repr(mode), repr(id), repr(leng), repr(error), repr(params)), time.time()
         # need a positive byte
+        print '        driver:getPacket 0', time.time()
         d = self.ser.read()
-        if d == '': 
+        print '        driver:getPacket 1', time.time()
+        if d == '':
             print "Fail Read"
             return None
 
