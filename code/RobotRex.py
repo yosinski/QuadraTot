@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 #Notes: I'm going to want to make a new RunManager for Rex
 
 
@@ -23,7 +25,7 @@ from MotionHandler import SmoothMotionFunction
 class RobotRex(RobotQuadratot):
     ''''''
 
-    def __init__(self, nServos, portName="", commandRate = 40):
+    def __init__(self, nServos, portName=None, commandRate = 40):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -45,13 +47,16 @@ class RobotRex(RobotQuadratot):
         
         #Find a valid port.
         if os.name == "posix":
-            possibilities = ['/dev/ttyUSB0', '/dev/ttyUSB1']
+            possibilities = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/cu.usbserial-A800KDV8']
             for pos in possibilities:
                 if os.path.exists(pos):
                     portName = pos
             if portName is None:
                 raise Exception('Could not find any of %s' % repr(possibilities))
+            self.port = Driver(portName, 38400, True)
         else:
+            if portName is None:
+                portName = 'COM6'
             self.port = Driver(portName, 38400, True)
 #For some reason, this code gets caught trying to load COM3 instead of COM6.
 #My PC usually links to COM6. Just let the user choose the port for now.
@@ -267,7 +272,7 @@ class RobotRex(RobotQuadratot):
             self.port.setReg(servo+1,P_TORQUE_ENABLE, [0,])   
 
 if __name__ == "__main__":
-    robot = RobotRex(8, "COM6", commandRate = 40)
+    robot = RobotRex(8, commandRate = 40)
     pos0 = [0] * 8
     pos1 = [1023] * 8
     pos2 = [0,0,0,0,800,800,800,800]
