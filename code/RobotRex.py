@@ -1,5 +1,7 @@
 #Notes: I'm going to want to make a new RunManager for Rex
 
+
+
 import math
 from math import *
 from datetime import datetime
@@ -116,6 +118,7 @@ class RobotRex(RobotQuadratot):
             #FIXME
             # download the pose...this step is slow!!!
             self.port.execute(253, 8, [0] + self.__extract(position))
+            self.port.execute(253, 9, [0, 244,1,255,0,0])
             #print "2"
             self.port.execute(253, 9, [0, 40,0,255,0,0])
             #print "3"
@@ -300,4 +303,13 @@ if __name__ == "__main__":
 #    robot.interpMove(pos0, pos1, 10)
 #    sleep(3)
 #    print robot.readCurrentPosition()
+    robot.commandPosition(pos0)
+    sleep(2)
+    print robot.readCurrentPosition()
+    sleep(.5)
+    print "About to interpMove"
+    robot.interpMove(pos0, pos1, 10)
+    sleep(3)
+    print robot.readCurrentPosition()
+    robot.relax()
 #    robot.relax()
