@@ -18,7 +18,7 @@ class WiiTrackFastClient(object):
 
     def __init__(self, host, port, showImage = False):
         self.host      = host
-        self.port      = port
+        self.port      = int(port)
         self.showImage = showImage
 
         self._listenThread = threading.Thread(
