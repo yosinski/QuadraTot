@@ -33,8 +33,8 @@ def main():
     #runman = RunManager()
     #runman.do_many_runs(strategy, SineModel5.typicalRanges)
 
-    timeScale = .3
-    motionFunctionScaled = scaleTime(motionFunction, timeScale)
+    #timeScale = .3
+    #motionFunctionScaled = scaleTime(motionFunction, timeScale)
 
     robot = Robot()
     robot.run(motionFunction, runSeconds = 8, resetFirst = False,
