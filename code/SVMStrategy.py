@@ -9,7 +9,11 @@
 
 from random import choice
 from numpy import array, random, ones, zeros, sin, vstack, hstack, argmax, diag, linalg, dot, exp
-from sg import sg           # Import shogun
+try:
+    from sg import sg           # Import shogun
+except ImportError:
+    print 'Error: You must install Shogun to use SVMStrategy'
+    raise
 import string, os
 import pickle
 import pdb
