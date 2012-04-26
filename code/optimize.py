@@ -16,7 +16,7 @@ import sys, pickle
 from SineModel import SineModel5
 from RunManager import RunManager
 from Strategy import *
-from SVMStrategy import SVMLearningStrategy
+#from SVMStrategy import SVMLearningStrategy
 from ExternalStrategy import NEATStrategy
 from util import randUniformPoint
 
@@ -53,11 +53,11 @@ def doRun():
         strategy
     except:
         #strategy = UniformStrategy(currentState, SineModel5.typicalRanges)
-        strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
+        #strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
         #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
-        #strategy = RandomStrategy(currentState, SineModel5.typicalRanges)
+        strategy = RandomStrategy(currentState, SineModel5.typicalRanges)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
         #strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
         #strategy = FileStrategy(filtFile = filtFile)
