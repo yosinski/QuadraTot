@@ -90,6 +90,9 @@ def readArray(ff):
     
     for ii,line in enumerate(ff):
         #print 'line', ii, 'is', line
+        line = line.strip()
+        if len(line) == 0 or line[0] == '#':
+            continue
         nums = [float(xx) for xx in line.split()]
         if ii == 0:
             ll = len(nums)
