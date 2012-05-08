@@ -1,0 +1,40 @@
+import sys, pickle
+from SineModel import SineModel5
+import simrun
+from SimExternalStrategy import NEATStrategy
+from util import randUniformPoint
+
+
+def SimOptimize():
+    sim = simrun.simrun()
+    
+    neatFile = None
+    if len(sys.argv) > 1:
+        if (len(sys.argv) > 2 and sys.argv[1] == '-neat'):
+            neatFile = sys.argv[2]
+            currentState = None
+        else:
+            currentState = [eval(xx) for xx in sys.argv[1].split()]
+    else:
+        currentState = randUniformPoint(SineModel5.typicalRanges)
+        print currentState
+
+    try:
+        strategy
+    except:
+        strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)
+    print 'NEATStrategy'
+
+def main(limit = 10):
+    sim = simrun.simrun()
+    if limit is None:
+        limit = 10000
+    
+    for ii in xrange(limit):
+        SimOptimize()
+        sim.getDist()
+#        print currentState
+        print sim.getDist()
+
+if __name__ == '__main__':
+    main()
