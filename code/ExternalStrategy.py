@@ -6,7 +6,7 @@ from time import sleep
 from datetime import datetime
 import os
 
-from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
+from RobotConstants import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
 from Strategy import Strategy, OneStepStrategy
 from util import matInterp, prettyVec, writeArray
 from SineModel import SineModel5
@@ -32,7 +32,6 @@ class NEATStrategy(OneStepStrategy):
         
         self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/Hypercube_NEAT'
         self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/spiderJointAngles.txt'
-        #self.motionFile = 'spiderJointAngles.txt'
         self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/fitness'
         self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/SpiderRobotExperiment.dat'
 
@@ -40,7 +39,7 @@ class NEATStrategy(OneStepStrategy):
         self.junkPoints      = 1000
         # How many lines to expect from HyperNEAT file
         self.expectedLines   = self.junkPoints + 12 * 40 * self.avgPoints
-        #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
+  #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
         self.motorColumns    = [0,1,4,5,2,3,6,7,8]         # Order of motors in HyperNEAT file
         self.generationSize  = 9
         self.initNeatFile    = kwargs.get('initNeatFile', None)   # Pop file to start with, None for restart
