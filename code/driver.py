@@ -43,6 +43,7 @@ class Driver:
     def execute(self, index, ins, params):
         """ Send an instruction to a device. """
         self.ser.flushInput()
+        self.ser.flushOutput()
         length = 2 + len(params)
         checksum = 255 - ((index + length + ins + sum(params))%256)
         self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
@@ -133,9 +134,12 @@ class Driver:
 
     def getPacket(self, mode, id=-1, leng=-1, error=-1, params = None):
         """ Read a return packet, iterative attempt """
+        print '      driver:getPacket(mode=%s, id=%s, leng=%s, error=%s, params=%s' % (repr(mode), repr(id), repr(leng), repr(error), repr(params)), time.time()
         # need a positive byte
+        print '        driver:getPacket 0', time.time()
         d = self.ser.read()
-        if d == '': 
+        print '        driver:getPacket 1', time.time()
+        if d == '':
             #TODO: Uncomment me
             print "Fail Read"
             return None

@@ -1,8 +1,11 @@
+#! /usr/bin/env python
+
 #Notes: I'm going to want to make a new RunManager for Rex
 
 
 
 import math
+import pdb
 from math import *
 from datetime import *
 from time import sleep
@@ -18,6 +21,7 @@ from driver import Driver
 from RobotQuadratot import *
 from ConstantsRex import *
 from MotionHandler import SmoothMotionFunction
+
 
 
 class RobotRex(RobotQuadratot):
@@ -45,13 +49,16 @@ class RobotRex(RobotQuadratot):
         
         #Find a valid port.
         if os.name == "posix":
-            possibilities = ['/dev/ttyUSB0', '/dev/ttyUSB1']
+            possibilities = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/cu.usbserial-A800KDV8']
             for pos in possibilities:
                 if os.path.exists(pos):
                     portName = pos
             if portName is None:
                 raise Exception('Could not find any of %s' % repr(possibilities))
+            self.port = Driver(portName, 38400, True)
         else:
+            if portName is None:
+                portName = 'COM6'
             self.port = Driver(portName, 38400, True)
 #For some reason, this code gets caught trying to load COM3 instead of COM6.
 #My PC usually links to COM6. Just let the user choose the port for now.
@@ -114,16 +121,30 @@ class RobotRex(RobotQuadratot):
         
         '''if allAtOnce:
             #print "started"
+            
+            self.tic()
             self.port.execute(253, 7, [18]) #This one isn't too fast either
+            self.toc()
+
+            
             #print "1"
             #FIXME
             # download the pose...this step is slow!!!
+            self.tic()
             self.port.execute(253, 8, [0] + self.__extract(position))
+            self.toc()
+
+            self.tic()
             self.port.execute(253, 9, [0, 244,1,255,0,0])
+            self.toc()
             #print "2"
+            self.tic()
             self.port.execute(253, 9, [0, 40,0,255,0,0])
+            self.toc()
             #print "3"
+            self.tic()
             self.port.execute(253, 10, list())
+            self.toc()
             #print "made move"
             '''
         if allAtOnce:
@@ -350,7 +371,8 @@ if __name__ == "__main__":
                     abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
                     abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
                     abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)))
-    
+    sleep(2)
+
 #    print "sending first"
 #    robot.interpMove2(pos0,pos0,2)
 #    print "sent first"
@@ -365,7 +387,9 @@ if __name__ == "__main__":
     print "starting position"
     robot.interpMove2(f1,f1,dur)
     print "Commands sent: " + str(robot.commandsSent)
-    
+
+    pdb.set_trace()
+
     #robot.commandFunction(myFunction)
 #    sleep(1)
 #    print "relaxing"
