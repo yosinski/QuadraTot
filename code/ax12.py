@@ -87,3 +87,7 @@ AX_ACTION = 5
 AX_RESET = 6
 AX_SYNC_WRITE = 131
 
+
+
+'''My additions for Aracana'''
+COMMAND_OVER_TIME = 20

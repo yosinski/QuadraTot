@@ -43,15 +43,87 @@ class Driver:
     def execute(self, index, ins, params):
         """ Send an instruction to a device. """
         self.ser.flushInput()
-        self.ser.flushOutput()
         length = 2 + len(params)
         checksum = 255 - ((index + length + ins + sum(params))%256)
-        res = self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
+        self.ser.write(chr(0xFF)+chr(0xFF)+chr(index)+chr(length)+chr(ins))
+        for val in params:
+            self.ser.write(chr(val))
+        self.ser.write(chr(checksum))
+        return self.getPacket(0)
+        
+    def execute2(self, ins, params):
+        """ Send an instruction to a device. """
+        self.ser.flushInput()
+        #self.ser.flushOutput()
+        length = len(params)
+        checksum = (ins + sum(params) + length) % 256
+        #checksum = 255 - ((index + length + ins + sum(params))%256)
+        res = self.ser.write(chr(0xFF)+chr(length)+chr(ins))
         for val in params:
             res += self.ser.write(chr(val))
         res += self.ser.write(chr(checksum))
         #print "bytes sent: " + str(res)
-        return self.getPacket(0) #TODO: uncomment this line, get rid of res = ...
+        #return self.getPacket2(0) #TODO: uncomment this line, get rid of res = ...
+    
+    def getPacket2(self, mode, id=-1, leng=-1, error=-1, params = None):
+        """ Read a return packet, iterative attempt """
+        # need a positive byte
+        d = self.ser.read()
+        if d == '': 
+            #TODO: Uncomment me
+            print "Fail Read"
+            return None
+
+        # now process our byte
+        if mode == 0:           # get our first 0xFF
+            if ord(d) == 0xff:   
+                print "Oxff found"
+                return self.getPacket2(1)
+            else:
+                print "Oxff NOT found 1, restart: " + str(ord(d))
+                return self.getPacket2(0)
+        elif mode == 1:         # get our second 0xFF
+            if ord(d) == 0xff:
+                print "Oxff found"
+                return self.getPacket2(2)
+            else:
+                print "Oxff NOT found 2, restart: " + str(ord(d))
+                return self.getPacket2(0)
+        elif mode == 2:         # get id
+            if d != 0xff:
+                print "ID found: " + str(ord(d))
+                return self.getPacket2(3, ord(d))
+            else:              
+                print "0xff is not ID, restart"
+                return self.getPacket2(0)
+        elif mode == 3:         # get length
+            print "Length found: " + str(ord(d))
+            return self.getPacket2(4, id, ord(d))
+        elif mode == 4:         # read error    
+            print "Error level found: " + str(ord(d))
+            self.error = ord(d)
+            if leng == 2:
+                return self.getPacket2(6, id, leng, ord(d), list())
+            else:
+                return self.getPacket2(5, id, leng, ord(d), list())
+        elif mode == 5:         # read params
+            print "Parameter found: " + str(ord(d))
+            params.append(ord(d))
+            if len(params) + 2 == leng:
+                return self.getPacket2(6, id, leng, error, params)
+            else:
+                return self.getPacket2(5, id, leng, error, params)
+        elif mode == 6:         # read checksum
+            print "Checksum found: " + str(ord(d))
+            checksum = id + leng + error + sum(params)
+            print "Checksum computed: " + str(checksum)
+            if checksum % 256 != ord(d):
+                print "Checksum ERROR"
+                return None
+            #print params
+            return params
+        # fail
+        return None
 
     def setReg(self, index, regstart, values):
         """ Set the value of registers. Should be called as such:
@@ -64,52 +136,53 @@ class Driver:
         # need a positive byte
         d = self.ser.read()
         if d == '': 
+            #TODO: Uncomment me
             print "Fail Read"
             return None
 
         # now process our byte
         if mode == 0:           # get our first 0xFF
             if ord(d) == 0xff:   
-                #print "Oxff found"
+                print "Oxff found"
                 return self.getPacket(1)
             else:
-                #print "Oxff NOT found, restart: " + str(ord(d))
+                print "Oxff NOT found 1, restart: " + str(ord(d))
                 return self.getPacket(0)
         elif mode == 1:         # get our second 0xFF
             if ord(d) == 0xff:
-                #print "Oxff found"
+                print "Oxff found"
                 return self.getPacket(2)
             else:
-                #print "Oxff NOT found, restart: " + str(ord(d))
+                print "Oxff NOT found 2, restart: " + str(ord(d))
                 return self.getPacket(0)
         elif mode == 2:         # get id
             if d != 0xff:
-                #print "ID found: " + str(ord(d))
+                print "ID found: " + str(ord(d))
                 return self.getPacket(3, ord(d))
             else:              
-                #print "0xff is not ID, restart"
+                print "0xff is not ID, restart"
                 return self.getPacket(0)
         elif mode == 3:         # get length
-            #print "Length found: " + str(ord(d))
+            print "Length found: " + str(ord(d))
             return self.getPacket(4, id, ord(d))
         elif mode == 4:         # read error    
-            #print "Error level found: " + str(ord(d))
+            print "Error level found: " + str(ord(d))
             self.error = ord(d)
             if leng == 2:
                 return self.getPacket(6, id, leng, ord(d), list())
             else:
                 return self.getPacket(5, id, leng, ord(d), list())
         elif mode == 5:         # read params
-            #print "Parameter found: " + str(ord(d))
+            print "Parameter found: " + str(ord(d))
             params.append(ord(d))
             if len(params) + 2 == leng:
                 return self.getPacket(6, id, leng, error, params)
             else:
                 return self.getPacket(5, id, leng, error, params)
         elif mode == 6:         # read checksum
-            #print "Checksum found: " + str(ord(d))
+            print "Checksum found: " + str(ord(d))
             checksum = id + leng + error + sum(params) + ord(d)
-            #print "Checksum computed: " + str(checksum)
+            print "Checksum computed: " + str(checksum)
             if checksum % 256 != 255:
                 print "Checksum ERROR"
                 return None

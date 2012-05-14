@@ -4,7 +4,7 @@
 
 import math
 from math import *
-from datetime import datetime
+from datetime import *
 from time import sleep
 from types import FunctionType
 from copy import copy
@@ -23,7 +23,7 @@ from MotionHandler import SmoothMotionFunction
 class RobotRex(RobotQuadratot):
     ''''''
 
-    def __init__(self, nServos, portName="", commandRate = 40):
+    def __init__(self, nServos, portName="", cmdRate=40):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -39,7 +39,7 @@ class RobotRex(RobotQuadratot):
                    in Hertz.  Default: 40.
         '''
         
-        RobotQuadratot.__init__(self, commandRate, skipInit=True)
+        RobotQuadratot.__init__(self, commandRate=cmdRate, skipInit=True)
         self.commandsSent = 0
         self.nServos = nServos
         
@@ -102,6 +102,7 @@ class RobotRex(RobotQuadratot):
             raise Exception('Expected postion vector of length %d, got %s instead'
                             % (self.nServos, repr(position)))
         
+        goalPosition = None
         if crop:
             goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
         else:
@@ -111,7 +112,7 @@ class RobotRex(RobotQuadratot):
             posstr = ', '.join(['%4d' % xx for xx in goalPosition])
             print '%.2fs -> %s' % (self.time, posstr)
         
-        if allAtOnce:
+        '''if allAtOnce:
             #print "started"
             self.port.execute(253, 7, [18]) #This one isn't too fast either
             #print "1"
@@ -124,6 +125,14 @@ class RobotRex(RobotQuadratot):
             #print "3"
             self.port.execute(253, 10, list())
             #print "made move"
+            '''
+        if allAtOnce:
+            params = [0] * 16
+            for i in range(self.nServos):
+                params[i*2] = goalPosition[i] >> 8
+                params[i*2+1] = goalPosition[i] & 0xff
+            self.port.execute(253,132, params)
+                
         else:
             for servo in range(self.nServos):
                 pos = position[servo]
@@ -175,6 +184,62 @@ class RobotRex(RobotQuadratot):
         # send sequence and play            
         self.port.execute(253, 9, tranDL)
         self.port.execute(253, 10, list())
+        
+    def interpMove2(self, start, end, seconds):
+        '''Performs the same function as interpMove() in RobotQuadratot but uses
+        the new interface that I wrote up for Aracna.
+            start -- a postion vector/function
+            end -- a position vector/function
+            seconds -- the duration the two functions should be interpolated over'''
+        self.updateClock()
+        
+        timeStart = self.time
+        timeEnd   = self.time + seconds
+        
+        print timeStart
+        print timeEnd
+
+        while self.time < timeEnd:
+            #print 'time:', self.time
+            self.updateClock()
+            posS = start(self.time) if isinstance(start, FunctionType) else start
+            posE =   end(self.time) if isinstance(end,   FunctionType) else end
+            goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
+            
+            #print goal
+            
+            #write out the command to the robot
+            self.commandOverTime(goal, int(self.sleep * 1000))
+    
+    def commandOverTime(self, pos, dur):
+        '''Writes out a packet to the robot to execute the commandOverTime
+        function. Stalls after the command is sent to prevent overflowing the
+        buffer on the robot.
+            pos -- a position vector. Values are in the range [0,270]
+            dur -- the duration (in milliseconds) of the transition'''
+        dur1 = dur >> 8
+        dur2 = dur & 0x00ff
+        
+        posArr = [0] * (self.nServos * 2)
+        for i in range(self.nServos):
+            posArr[2 * i] = int(pos[i]) >> 8
+            posArr[2*i+1] = int(pos[i]) & 0x00ff
+        
+        startTime = datetime.now()
+        
+        #print "sending command" + str(datetime.now())
+        newPos = self.port.execute2(COMMAND_OVER_TIME, [dur1, dur2] + posArr)
+        
+        #Calculate the real position vector and print it out
+        if newPos is not None:
+            realPos = [0] * 8
+            for i in range(self.nServos): realPos[i] = (newPos[i*2] << 8) + (newPos[i*2+1])
+            print realPos
+        
+        endTime = startTime + timedelta(0,self.sleep)
+        while datetime.now() < endTime: sleep(self.sleep/20)
+            
+        
     
     def commandFunction(self, smoothFnct, loop=False):
         '''Executes motions determined by the given motion function
@@ -267,34 +332,44 @@ class RobotRex(RobotQuadratot):
             self.port.setReg(servo+1,P_TORQUE_ENABLE, [0,])   
 
 if __name__ == "__main__":
-    robot = RobotRex(8, "COM6", commandRate = 40)
+    robot = RobotRex(8, "COM7", cmdRate = 14)
     pos0 = [0] * 8
-    pos1 = [1023] * 8
-    pos2 = [0,0,0,0,800,800,800,800]
+    pos1 = [270] * 8
+    pos2 = [0,0,0,0,270,270,270,270]
     
     pi = math.pi
     
-    dur = 4.0
+    dur = 100.0
     start = lambda t: (abs(200.0*sin(pi*t)),0.0,
-                       abs(1024.0/dur*t*sin(pi*t)), 500.0,
-                       t*1024.0/dur, (1-t/dur)*1024.0,
-                       1024.0*(t/dur)**3,450.0)
-    end = lambda t: ([512.0] * 8)
-    myFunction = SmoothMotionFunction(start,end,dur,10,8)
+                       abs(270.0/dur*t*sin(pi*t)), 125.0,
+                       t*270.0/dur, (1-t/dur)*270.0,
+                       270.0*(t/dur)**3,25.0)
+    end = lambda t: ([135.0] * 8)
     
-    robot.commandPosition(pos2)
+    f1 = lambda t: (abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
+                    abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
+                    abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
+                    abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)))
     
+#    print "sending first"
+#    robot.interpMove2(pos0,pos0,2)
+#    print "sent first"
+#    sleep(3)
+#    print "sending second"
+#    robot.commandPosition(pos1)
+#    print "sent second"
 #    print "starting function"
 #    robot.interpMove(start,end,4)
 #    print "Commands sent: " + str(robot.commandsSent)
+    print robot.sleep
     print "starting position"
-    robot.interpMove(pos0, pos1, 2)
+    robot.interpMove2(f1,f1,dur)
     print "Commands sent: " + str(robot.commandsSent)
     
     #robot.commandFunction(myFunction)
 #    sleep(1)
-    print "relaxing"
-    robot.relax()
+#    print "relaxing"
+#    robot.relax()
 #    robot.commandPosition(pos0)
 #    sleep(2)
 #    print robot.readCurrentPosition()
@@ -303,13 +378,4 @@ if __name__ == "__main__":
 #    robot.interpMove(pos0, pos1, 10)
 #    sleep(3)
 #    print robot.readCurrentPosition()
-    robot.commandPosition(pos0)
-    sleep(2)
-    print robot.readCurrentPosition()
-    sleep(.5)
-    print "About to interpMove"
-    robot.interpMove(pos0, pos1, 10)
-    sleep(3)
-    print robot.readCurrentPosition()
-    robot.relax()
 #    robot.relax()

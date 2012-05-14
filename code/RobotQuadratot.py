@@ -265,7 +265,7 @@ class RobotQuadratot():
             posS = start(self.time) if isinstance(start, FunctionType) else start
             posE =   end(self.time) if isinstance(end,   FunctionType) else end
             goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
-
+            print goal
             cmdPos = self.commandPosition(goal)
             if logFile:
                 extraInfo = ''
