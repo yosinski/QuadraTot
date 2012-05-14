@@ -6,6 +6,6 @@
 *.bbl
 *.blg
 *.log
-
-
-/code/Aracna/obj
+*.o
+*.gch
+code/Aracna/obj
