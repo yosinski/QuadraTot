@@ -24,19 +24,6 @@ certain vectors of motor position.
 from ConstantsQuadratot import *
 
 
-
-import inspect
-def fileLine():
-    """Returns the current line number in our program."""
-    #print dir(inspect.currentframe().f_back.f_back)
-    #print inspect.currentframe().f_back.f_back.f_code.co_filename
-
-    return inspect.currentframe().f_back.f_back.f_code.co_filename, inspect.currentframe().f_back.f_back.f_lineno
-    #return inspect.getouterframes( inspect.currentframe() )[1].f_back.f_lineno
-
-
-
-
 class RobotFailure(Exception):
     pass
 
@@ -273,12 +260,12 @@ class RobotQuadratot():
         ii = 0
         tlast = self.time
         while self.time < timeEnd:
-            print 'time:', self.time
+            #print 'time:', self.time
             ii += 1
             posS = start(self.time) if isinstance(start, FunctionType) else start
             posE =   end(self.time) if isinstance(end,   FunctionType) else end
             goal = lInterp(self.time, [timeStart, timeEnd], posS, posE)
-            print goal
+
             cmdPos = self.commandPosition(goal)
             if logFile:
                 extraInfo = ''
@@ -358,14 +345,6 @@ class RobotQuadratot():
         '''Updates the Robots clock to the current time'''
         timeDiff  = datetime.now() - self.time0
         self.time = timeDiff.seconds + timeDiff.microseconds/1e6
-
-    def tic(self):
-        self.updateClock()
-        self.tictime = self.time
-
-    def toc(self):
-        self.updateClock()
-        print 'Elapsed (%s:%s):' % fileLine(), self.time - self.tictime
 
     def readyPosition(self, persist = False):
         if persist:
