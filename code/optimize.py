@@ -53,13 +53,13 @@ def doRun():
         strategy
     except:
         #strategy = UniformStrategy(currentState, SineModel5.typicalRanges)
-        strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
+        #strategy = GaussianStrategy(currentState, SineModel5.typicalRanges)
         #strategy = GradientSampleStrategy(currentState)
         #strategy = LinearRegressionStrategy(currentState)
         #strategy = SimplexStrategy(currentState, SineModel5.typicalRanges)
         #strategy = RandomStrategy(currentState, SineModel5.typicalRanges)
         #strategy = SVMLearningStrategy(currentState, SineModel5.typicalRanges)
-        #strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
+        strategy = NEATStrategy(currentState, SineModel5.typicalRanges, neatFile = neatFile)   # these args aren't used
         #strategy = FileStrategy(filtFile = filtFile)
         
     #runman.do_many_runs(currentState, lambda state: Neighbor.gaussian(SineModel5.typicalRanges, state))

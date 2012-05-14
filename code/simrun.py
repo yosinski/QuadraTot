@@ -14,28 +14,40 @@ class simrun:
         self.filename = "output.txt"
  
     def runSim(self, gaitFunction):
+
+        os.remove('/home/sean/quadratot/code/input.txt')
+        
         ff = file('input.txt', "w")
         timeMax = 12.0
-        timeDiv = 1.0/12.0
-        divs = timeMax/timeDiv
+        timeDiv = 1.0/60.0
+        divs = int(timeMax/timeDiv)
         t = 0.0
 
-        for i in xrange(0,limit): 
-            gait = gaitFunction(t)
-            t = t+div
+        for i in xrange(0,divs):
+            gait = gaitFunction[0](t)
+            length = len(gait)
+            t = t+timeDiv
             if t == timeMax:
-                file.write(str(t) + ' ' + str(gait))
+                ff.write(str(t) + ' ')
+
+                for ii in xrange(0, length):
+                    ff.write(str(gait[ii]) + ' ')
+
             else:
-                file.write(str(t) + ' ' + str(gait) + '\n')
-            
-            
-        os.system('./physXsimulator -i input.txt -o output.txt')
+                ff.write(str(t) + ' ')
+                for ii in xrange(0,length):
+                    ff.write(str(gait[ii]) + ' ')
+                ff.write('\n')
+                           
+        ff.close()    
+        os.system('./crossSim -i input.txt -o output.txt -n')
         dist = self.getDist()      
-                
+        return dist
+    
     def getDist(self):
 
-	outputRaw= file(self.filename,"r")
-	outputData = [line.split() for line in outputRaw]
+        outputRaw= file(self.filename,"r")
+        outputData = [line.split() for line in outputRaw]
         outputColLen = len(outputData)-1
         outputRowLen = len(outputData[1])-1
         posBeg = [outputData[1][outputRowLen-2], outputData[1][outputRowLen-1], outputData[1][outputRowLen]]
@@ -43,9 +55,9 @@ class simrun:
 
         # finds the distance the robot travelled using x and y '
         xdist = float(posEnd[0])-float(posBeg[0])
-        ydist = float(posEnd[1])-float(posBeg[1])
+        zdist = float(posEnd[2])-float(posBeg[2])
 #        zdist = float(self.posEnd[2])-float(self.posBeg[2])
-        return math.sqrt(math.pow(xdist,2)+math.pow(ydist,2))
+        return math.sqrt(math.pow(xdist,2)+math.pow(zdist,2))
 
     def cropPosition(self, position, cropWarning = False):
         # crops the given positions to their apropriate min/max values.
