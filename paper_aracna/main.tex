@@ -2,32 +2,30 @@
 \usepackage{natbib,alife13}
 
 \title{Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics}
-\author{Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski \and Hod Lipson \\
+\author{Sara Lohmann, Eric Gold, Jason Yosinski, Jeremy Blum \and Hod Lipson \\
 \mbox{}\\
 Cornell University, 239 Upson Hall, Ithaca, NY 14853 \\
 \texttt{sml253@cornell.edu}}
+
 
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We report on a new open-source quadruped robotic platform, Aracna,
-developed at Cornell's Creative Machines Lab for robotics
-experiments. The robot comprises four legs with two joints each for a
-total of eight kinematic degrees of freedom. Four-bar linkage
-mechanisms in each leg drive the pitch of the knee joint and the hip
-joint remotely, allowing the motors to remain in the robot center,
-which reduces the inertia of each leg. Due to these non-conventional
-kinematics, the robot requires non-intuitive movements for locomotion
-and provides an interesting challenge for gait learning
-algorithms. Aracna is a low-cost, accessible robotic platform for
-testing in the real world.
+We describe a new, quadruped robot platform, Aracna,
+which requires non-intuitive motor commands in order to locomote and thus provides an interesting challenge for gait learning algorithms, such as those frequently developed in the Evolutionary Computation and Artificial Life communities. Aracna is an open-source hardware project composed of off-the-shelf and 3D-printed parts, enabling other research teams to modify its design according to their scientific needs. Aracna was designed to avoid the Achilles Heel of a previous quadruped robot platform, whose legs were so heavy that the motors could not reliably execute the commands sent to them. Aracna minimizes leg inertia to avoid this problem by having all motors located in the body core instead of on the legs.  Specifically, each of the four legs has two joints separately controlled by separate four-bar linkage
+mechanisms that drive the pitch of the hip joint and knee joint remotely from motors in the robot's core. 
+%The eight kinematic degrees of freedom in Aracna are controlled by its eight servos. 
+This novel design causes unconventional kinematics, however, creating an opportunity for gait-learning algorithms, which excel in counter-intuitive design spaces where human engineers tend to underperform.  Because it is low-cost, flexible, kinematically interesting, and and improvement over a previous design, Aracna provides a useful new hardware platform for testing algorithms that automatically generate robotic behaviors. 
 \end{abstract}
 
 
 
 \section{Introduction}
+
+There is a long history in the Artificial Life and Evolutionary Robotics community of automatically generating behaviors for robots~\citep{nolfi2000evolutionary, pfeifer2007body, sims1994evolving, hornby2005autonomous, lipson2000automatic}. Much work has focused on evolving gaits for legged  
+
 
 We address the need for a low-cost platform with non-intuitive walking
 kinematics to explore evolutionary robotics. Aracna is the third
