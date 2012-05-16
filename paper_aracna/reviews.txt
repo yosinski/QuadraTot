@@ -1,0 +1,157 @@
+
+
+---------- Forwarded message ----------
+From: Alife 13 <alife13@easychair.org>
+Date: Mon, Apr 23, 2012 at 12:38 AM
+Subject: Alife 13 notification for paper 183
+To: Sara Lohmann <sml253@cornell.edu>
+
+
+Dear Sara:
+
+On behalf of the organizing committee of the 13th Artificial Life conference, I am pleased to let you know
+that your submission [bi - PAPER] Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics was chosen for an oral presentation. This is a significant achievement: we
+had only 56 speaking slots to give out, and submissions were very competitive.
+
+If your submission was a full paper, this paper will be published in the Proceedings of the conference as
+long as you address any significant review comments, should there be any. If your submission was an
+extended abstract, this abstract will appear in the Proceedings. Note that the promise to publish your
+contribution is contingent on at least one author registering for the conference to give the presentation.
+
+With best regards,
+Chris Adami
+Program Committee Chair
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 183
+TITLE: [bi - PAPER] Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics
+AUTHORS: Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski and Hod Lipson
+
+OVERALL RATING: 3 (Approve / optional revisions)
+Scholarly Contribution: 2 (Incremental Advancement)
+Technical Quality: 4 (Minor technical concerns)
+Presentation Quality: 5 (Eloquent Writing and Clear Figures)
+Relevance to Conference: 5 (Strong Artificial Life Focus)
+
+Please fill out the following four sections.
+
+BRIEF SUMMARY OF SUBMISSION:
+
+       This is a very short (2 page) submission describing an open-source platform for evolutionary robotics. Building on the authors' previous efforts, they here present a quadruped robot with 8 kinematic degrees of freedom.  This is meant to be a low-cost challenge for gait-learning algorithms.
+
+STRENGTHS:
+
+       Expertise of investigators in making a highly-usable, important platform for investigation in this field; the system described is low-cost and they will make all of the information available to allow others to reproduce the robot as needed.
+
+WEAKNESSES:
+
+       Not a "weakness" per se, but it should be noted that no actual data are provided in this paper - this is description of a tool for experiments, and no data are shown as to how it performs (or does not perform) using existing learning algorithms, or how it may be different in practice from available other systems.
+
+DETAILED COMMENTS:
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 183
+TITLE: [bi - PAPER] Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics
+AUTHORS: Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski and Hod Lipson
+
+OVERALL RATING: 3 (Approve / optional revisions)
+Scholarly Contribution: 3 (- PLEASE CHOOSE ANOTHER OPTION -)
+Technical Quality: 5 (Appropriate tools; good statistics; proper use of controls)
+Presentation Quality: 5 (Eloquent Writing and Clear Figures)
+Relevance to Conference: 4 (Major Artificial Life Component)
+
+Please fill out the following four sections.
+
+BRIEF SUMMARY OF SUBMISSION:
+
+The paper [extended abstract?] describes a new quadruped robot designed to
+have spider-like motion and to overcome the problems encountered in prior
+iterations of robots from the same lab.
+
+STRENGTHS:
+
+The robot seems to be well-thought through and takes advantage of new
+technologies like 3d printers. It is relatively inexpensive although it
+requires assembly. The potential of an evolved spider-like motion seems
+interesting. If there were a simulator available I would be tempted to
+try and evolve behaviors for it.
+
+WEAKNESSES:
+
+There is little presented on what the robot has been programmed to do so
+far. Also, because the robot is intended for EC purposes, a natural question
+is if a simulator is being developed or how difficult it would be for someone
+else to develop one. Without a simulator, the *amount* of evolution would
+be limited by real time constraints and might be painstaking to conduct.
+Are there any plans to assemble or sell such robots to help other labs
+without access to 3d printers or the technical know-how to build them?
+
+DETAILED COMMENTS:
+
+There is not much to say about the paper that was not mentioned above -- a
+question for the authors is if this is intended to be an extended abstract
+and not a full paper? It is marked as a paper on easychair but seems as
+substansive as an abstract and fits 2-pages so well as if it were a
+constraint.
+
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 183
+TITLE: [bi - PAPER] Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics
+AUTHORS: Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski and Hod Lipson
+
+OVERALL RATING: 2 (Approve / revisions required)
+Scholarly Contribution: 2 (Incremental Advancement)
+Technical Quality: 2 (Requires technical improvements)
+Presentation Quality: 4 (Generally Understandable)
+Relevance to Conference: 5 (Strong Artificial Life Focus)
+
+Please fill out the following four sections.
+
+BRIEF SUMMARY OF SUBMISSION:
+This paper presents Aracna: a new open source quadratic robotic platform. The robot has eight kinematic degrees of freedom. Four-bar linkage mechanisms in each leg drive the pitch of the knee joint and the hip remotely. This allows the motor to remain in the robot center, which should be able to reduce the inertia of each leg. Based on the design, the authors argue that the platform: (1) will require non-intuitive movement (2) provides an interesting challenge for gait learning algorithms (3) able to complement fast spider like movements.
+
+
+STRENGTHS:
+It is a nice piece of work. The basic idea is interesting, while the design and the components of the robot are explained quite thoroughly.
+
+WEAKNESSES:
+ However, I am particularly concern about the claimed benefits of using the platform in the first place. While the platform is indeed low cost, there are some benefits mentioned at the beginning of the paper which to me remain as assumptions. The authors should explain them more thoroughly, or demonstrate at least some preliminary result to convince the reader about the claimed benefits of using the platform.
+Based on the current progress, I believe the contribution of the paper is good, while it requires major revision.
+
+
+DETAILED COMMENTS:
+
+
+----------------------- REVIEW 4 ---------------------
+PAPER: 183
+TITLE: [bi - PAPER] Aracna: An Open-Source Quadruped Platform for Evolutionary Robotics
+AUTHORS: Sara Lohmann, Eric Gold, Jeremy Blum, Jason Yosinski and Hod Lipson
+
+OVERALL RATING: 3 (Approve / optional revisions)
+Scholarly Contribution: 4 (Substantive Advancement)
+Technical Quality: 5 (Appropriate tools; good statistics; proper use of controls)
+Presentation Quality: 5 (Eloquent Writing and Clear Figures)
+Relevance to Conference: 4 (Major Artificial Life Component)
+
+Please fill out the following four sections.
+
+BRIEF SUMMARY OF SUBMISSION:
+
+
+STRENGTHS:
+
+This is a very well-written abstract: clear and to the point. It describes a new robot that may be of interest to some ALife delegates, but not a majority. This is nicely-done work, mostly incremental in technology, but the methodology is valuable. No doubt this robot will be useful to the authors' work, and the strategy of publishing all the details necessary to replicate the robot is excellent. It would be great to see a robot like this one catch on as a standard platform. This group has the pedigree to pull that off, if enough people are interested.
+
+I have rated this paper highly for its community contribution, and I'd like to see it discussed at the conference.
+
+WEAKNESSES:
+
+
+
+DETAILED COMMENTS:
+
+
+
