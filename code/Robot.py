@@ -1,4 +1,5 @@
 import os
+import pdb
 from datetime import datetime
 from time import sleep
 from types import FunctionType
@@ -33,7 +34,7 @@ class Robot():
     ''''''
 
     def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
-                 loud = False, skipInit = False, cropMethod = 'square'):
+                 loud = False, skipInit = False, cropMethod = 'smart'):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -431,18 +432,23 @@ class Robot():
         return ret
 	
     def project(self,threshold, a1, a2):
-        if threshold - MIN_INNER < MIN_OUTER:
-                raise Exception('threshold too small to execute!')
-	
-        m1 = a1 - (a1+a2-780)/2
-        m2 = a2 - (a1+a2-780)/2
-        if m2 < MIN_OUTER:
-                return m1, MIN_OUTER
-        if m1 < MIN_INNER:
-                return MIN_INNER, m2
-        return m1,m2
+        #if threshold - MIN_INNER < MIN_OUTER:
+        #        raise Exception('threshold too small to execute!')
+	    #
+        #m1 = a1 - (a1+a2-780)/2
+        #m2 = a2 - (a1+a2-780)/2
+        #if m2 < MIN_OUTER:
+        #        return m1, MIN_OUTER
+        #if m1 < MIN_INNER:
+        #        return MIN_INNER, m2
+        #return m1,m2
+        if a1 + a2 < threshold:
+            delta = (threshold-a1-a2)/2
+            a1 += delta
+            a2 += delta
+        return a1, a2
 
-    def cropPositionSmart(self, position, cropWarning = False):
+    def cropPositionSmart(self, position, cropWarning = True):
         '''Crops the given positions to their appropriate values.
         Requires a vector of length 9 to be sure the IDs are in the
         assumed order.'''
@@ -452,10 +458,11 @@ class Robot():
 
         ret = self.cropPositionSquare(position)
         for ii in [0, 2, 4, 6]:
-            duple =self.project(THRESH, ret[ii], ret[ii+1])
+            duple =self.project(DIAG_CROP_THRESH, ret[ii], ret[ii+1])
             ret[ii] = int(duple[0])
-	    ret[ii+1] = int(duple[1])
+            ret[ii+1] = int(duple[1])
 
+        cropWarning = True
         if cropWarning and ret != position:
             print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
 
