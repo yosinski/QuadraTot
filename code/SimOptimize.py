@@ -12,8 +12,9 @@ def SimOptimize():
     trial = 0
     for ii in range(10000):
         nextGait = strategy.getNext()
-        # Run the gait
-        dist = sim.runSim(nextGait)
+        # Run the gait 
+        thisIdentifier = '%s_%05d_%03d' % (strategy.identifier, strategy.genId, strategy.orgId)
+        dist = sim.runSim(nextGait, '%s_gait' % thisIdentifier)
         strategy.updateResults(dist)
         trial += 1
         print 'Trial', trial, 'moved', dist

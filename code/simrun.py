@@ -1,6 +1,7 @@
 import math, pdb, sys
 import random
 import os
+import shutil
 import string
 from datetime import datetime
 from copy import copy
@@ -13,9 +14,12 @@ class simrun:
     def __init__(self):
         self.filename = "output.txt"
  
-    def runSim(self, gaitFunction):
+    def runSim(self, gaitFunction, filename):
 
-        os.remove('/home/sean/quadratot/code/input.txt')
+        try:
+            os.remove('/home/sean/simtest/input.txt')
+        except:
+            pass
         
         ff = file('input.txt', "w")
         timeMax = 12.0
@@ -41,7 +45,9 @@ class simrun:
                            
         ff.close()    
         os.system('./crossSim -i input.txt -o output.txt -n')
+        #os.system('./crossSim -i input.txt -o output.txt')
         dist = self.getDist()      
+        shutil.move('/home/sean/simtest/input.txt', '/home/sean/simtest/%s' % filename)
         return dist
     
     def getDist(self):
