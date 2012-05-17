@@ -11,7 +11,7 @@ MAX_OUTER = 680  # changing because screws still interfere
 MIN_CENTER = 512 - 120
 MAX_CENTER = 512 + 120
 NORM_CENTER = 512
-
+DIAG_CROP_THRESH = 730
 POS_FLAT      = [512] * 9
 POS_READY     = [770,  40] * 4 + [512]
 POS_HALFSTAND = [700, 100] * 4 + [512]

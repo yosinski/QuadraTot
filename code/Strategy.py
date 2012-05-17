@@ -690,6 +690,41 @@ class FileStrategy(OneStepStrategy):
 
 
 
+class TimedFileStrategy(OneStepStrategy):
+    '''
+    Loads commanded positions from a file with times in the first column.
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super(TimedFileStrategy, self).__init__([], [])
+
+        self.posFile = kwargs.get('posFile', None)
+
+        if self.posFile is None:
+            raise Exception('Need a posFile')
+
+        ff = open(self.posFile)
+        self.timesAndPositions = readArray(ff)
+        ff.close()
+
+        self.times = self.timesAndPositions[:,0]
+        self.positions = self.timesAndPositions[:,1:]
+
+        self.separateLogInfo = True
+        
+        self.counter = 0
+
+    def _getNext(self):
+        '''just return function of time, same every time'''
+
+        ident = 'file__%s__%d' % (self.posFile, self.counter)
+        self.counter += 1
+
+        print 'returning', lambda time: matInterp(time, self.times, self.positions), ident
+        return lambda time: matInterp(time, self.times, self.positions), ident
+
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

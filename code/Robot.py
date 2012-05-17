@@ -1,4 +1,5 @@
 import os
+import pdb
 from datetime import datetime
 from time import sleep
 from types import FunctionType
@@ -33,7 +34,7 @@ class Robot():
     ''''''
 
     def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
-                 loud = False, skipInit = False):
+                 loud = False, skipInit = False, cropMethod = 'smart'):
         '''Initialize the robot.
         
         Keyword arguments:
@@ -47,6 +48,8 @@ class Robot():
 
         commandRate -- Rate at which the motors should be commanded,
                    in Hertz.  Default: 40.
+
+        cropMethod -- 'square' or 'smart'
         '''
 
         # The number of Dynamixels on the bus.
@@ -56,6 +59,10 @@ class Robot():
 
         self.sleep = 1. / float(commandRate)
         self.loud  = loud
+        self.cropMethod = cropMethod
+
+        if self.cropMethod not in ('square', 'smart'):
+            raise Exception('unknown cropMethod')
 
         #if self.nServos != 9:
         #    pass
@@ -122,12 +129,10 @@ class Robot():
 
         self.net.synchronize()
 
-        #print 'options are:'
-        #for op in dir(self.actuators[0]):
-        #    print '  ', op
-        #for ac in self.actuators:
-        #    print 'Voltage at', ac, 'is', ac.current_voltage, 'load is', ac.current_load
-        #    ac.read_all()
+        if self.loud:
+            for ac in self.actuators:
+                print 'Voltage at', ac, 'is', ac.current_voltage, 'load is', ac.current_load
+                ac.read_all()
 
         self.currentPos = None
         self.resetClock()
@@ -274,6 +279,9 @@ class Robot():
                 print >>logFile, self.time, ' '.join([str(x) for x in cmdPos]),
                 #print >>logFile, ' '.join(str(ac.current_position) for ac in self.actuators),
                 print >>logFile, extraInfo
+            else:
+                if extraLogInfoFn:
+                    extraLogInfoFn()
 
             #volts = ['%d: %s' % (ii,ac.current_voltage) for ii,ac in enumerate(self.actuators)]
             #print ' '.join(volts)
@@ -377,7 +385,12 @@ class Robot():
                             % (self.nServos, repr(position)))
 
         if crop:
-            goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
+            if self.cropMethod == 'square':
+                goalPosition = self.cropPositionSquare([int(xx) for xx in position], cropWarning)
+            elif self.cropMethod == 'smart':
+                goalPosition = self.cropPositionSmart([int(xx) for xx in position], cropWarning)
+            else:
+                raise Exception('unknown cropMethod')
         else:
             goalPosition = [int(xx) for xx in position]
 
@@ -392,20 +405,20 @@ class Robot():
         #[ac.read_all() for ac in self.actuators]
         #positions = ['%d: %s' % (ii,ac.cache[dynamixel.defs.REGISTER['CurrentPosition']]) for ii,ac in enumerate(self.actuators)]
         #print ' '.join(positions)
-        print ''.join(['x' if ac.led else ' ' for ac in self.actuators]) + '  ' ,
-        print ' '.join(['%.1f' % ac.current_voltage for ac in self.actuators])
+        #print ''.join(['x' if ac.led else ' ' for ac in self.actuators]) + '  ' ,
+        #print ' '.join(['%.1f' % ac.current_voltage for ac in self.actuators])
 
         return goalPosition
     
 
-    def cropPosition(self, position, cropWarning = False):
+    def cropPositionSquare(self, position, cropWarning = False):
         '''Crops the given positions to their appropriate min/max values.
         
         Requires a vector of length 9 to be sure the IDs are in the
         assumed order.'''
 
         if len(position) != self.nServos:
-            raise Exception('cropPosition expects a vector of length %d' % self.nServos)
+            raise Exception('cropPositionSquare expects a vector of length %d' % self.nServos)
 
         ret = copy(position)
         for ii in [0, 2, 4, 6]:
@@ -416,6 +429,43 @@ class Robot():
         if cropWarning and ret != position:
             print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
             
+        return ret
+	
+    def project(self,threshold, a1, a2):
+        #if threshold - MIN_INNER < MIN_OUTER:
+        #        raise Exception('threshold too small to execute!')
+	    #
+        #m1 = a1 - (a1+a2-780)/2
+        #m2 = a2 - (a1+a2-780)/2
+        #if m2 < MIN_OUTER:
+        #        return m1, MIN_OUTER
+        #if m1 < MIN_INNER:
+        #        return MIN_INNER, m2
+        #return m1,m2
+        if a1 + a2 < threshold:
+            delta = (threshold-a1-a2)/2
+            a1 += delta
+            a2 += delta
+        return a1, a2
+
+    def cropPositionSmart(self, position, cropWarning = True):
+        '''Crops the given positions to their appropriate values.
+        Requires a vector of length 9 to be sure the IDs are in the
+        assumed order.'''
+
+        if len(position) != self.nServos:
+            raise Exception('cropPositionSmart expects a vector of length %d' % self.nServos)
+
+        ret = self.cropPositionSquare(position)
+        for ii in [0, 2, 4, 6]:
+            duple =self.project(DIAG_CROP_THRESH, ret[ii], ret[ii+1])
+            ret[ii] = int(duple[0])
+            ret[ii+1] = int(duple[1])
+
+        cropWarning = True
+        if cropWarning and ret != position:
+            print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
+
         return ret
 
     def readCurrentPosition(self):
@@ -450,6 +500,7 @@ class Robot():
         sleep(.8)
 
         success = True
+        #success &= self.checkMove(POS_READY,   POS_READY)
         success &= self.checkMove(POS_READY,   POS_CHECK_1)
         success &= self.checkMove(POS_CHECK_1, POS_CHECK_2)
         success &= self.checkMove(POS_CHECK_2, POS_CHECK_3)

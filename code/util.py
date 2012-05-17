@@ -87,16 +87,21 @@ def writeArray(ff, arr):
 
 def readArray(ff):
     '''Read array from file object ff in writeArray format.'''
-    
+
+    linesSeen = 0
     for ii,line in enumerate(ff):
         #print 'line', ii, 'is', line
+        line = line.strip()
+        if len(line) == 0 or line[0] == '#':
+            continue
         nums = [float(xx) for xx in line.split()]
-        if ii == 0:
-            ll = len(nums)
+        if linesSeen == 0:
+            firstLineSize = len(nums)
             ret = array(nums)
         else:
-            if len(nums) != ll:
+            if len(nums) != firstLineSize:
                 raise Exception('Row %s contained unexpected number of fields' % line)
             ret = vstack((ret, array(nums)))
+        linesSeen += 1
 
     return ret
