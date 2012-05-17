@@ -5,8 +5,10 @@ from numpy import array, ix_, vstack, linspace, hstack, ones, mean
 from time import sleep
 from datetime import datetime
 import os
+import sys
+import pdb
 
-from Robot import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
+from RobotConstants import MIN_INNER, MAX_INNER, MIN_OUTER, MAX_OUTER, NORM_CENTER, MIN_CENTER, MAX_CENTER
 from Strategy import Strategy, OneStepStrategy
 from util import matInterp, prettyVec, writeArray
 from SineModel import SineModel5
@@ -30,23 +32,27 @@ class NEATStrategy(OneStepStrategy):
         #self.identifier = ''.join([random.choice('abcdef1234567890') for x in range(8)])
         self.identifier = now.strftime('neat_%y%m%d_%H%M%S')
         
-        self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/Hypercube_NEAT'
-        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/spiderJointAngles.txt'
-        #self.motionFile = 'spiderJointAngles.txt'
-        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/fitness'
-        self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/SpiderRobotExperiment.dat'
+#        self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/Hypercube_NEAT'
+        self.executable = '/home/sean/hyperneat/HyperNEAT_v2_5/out/Hypercube_NEAT'
+#        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/spiderJointAngles.txt'
+        self.motionFile = '/home/sean/quadratot/code/spiderJointAngles.txt'
+#        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/fitness'
+        self.fitnessFile = '/home/sean/quadratot/code/fitness'
+#        self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/SpiderRobotExperiment.dat'
+        self.datFile    = '/home/sean/hyperneat/HyperNEAT_v2_5/out/SpiderRobotExperiment.dat'
 
         self.avgPoints       = 4                         # Average over this many points
         self.junkPoints      = 1000
         # How many lines to expect from HyperNEAT file
         self.expectedLines   = self.junkPoints + 12 * 40 * self.avgPoints
-        #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
+        
+  #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
         self.motorColumns    = [0,1,4,5,2,3,6,7,8]         # Order of motors in HyperNEAT file
-        self.generationSize  = 9
+        self.generationSize  = 10
         self.initNeatFile    = kwargs.get('initNeatFile', None)   # Pop file to start with, None for restart
         self.prefix          = 'delme'
-        self.nextNeatFile    = '%s_pop.xml' % self.prefix
-
+#        self.nextNeatFile    = '%s_pop.xml' % self.prefix
+        self.nextNeatFile    = '/home/sean/quadratot/code/delme_pop.xml'
         self.separateLogInfo = True
         
         #self.proc = sp.Popen((self.executable,
@@ -54,13 +60,20 @@ class NEATStrategy(OneStepStrategy):
         #                     stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE)
         #os.system('%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
 
-        self.spawnProc = False
-
+        self.spawnProc = True
+        
         if self.spawnProc:
             if self.initNeatFile is None:
+                hnout = open('hyperneat.out', 'w')
+                hnerr = open('hyperneat.err', 'w')
                 self.proc = Process((self.executable,
                                      '-O', self.prefix, '-R', '102', '-I',
-                                     self.datFile))
+                                     self.datFile),
+                                    #stdout = sys.stdout,
+                                    #stderr = sys.stderr,
+                                    stdout = hnout,
+                                    stderr = hnerr,
+                                    )
             else:
                 print 'Starting with neatfile', self.initNeatFile
                 self.proc = Process((self.executable,
@@ -78,6 +91,7 @@ class NEATStrategy(OneStepStrategy):
             print 'Waiting for %s to exit...' % self.executable,
             code = self.proc.wait()
             print 'done.'
+            print code
 
 
     def _getNext(self):
@@ -93,10 +107,15 @@ class NEATStrategy(OneStepStrategy):
         #print stdout
         #print 'STDERR:'
         #print stderr
-
         if self.orgId == self.generationSize:
-            print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
-            raw_input()
+#            print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
+            print 'Restarting process after %d runs' % self.generationSize
+
+            print 'waiting for exit code...'
+            code = self.proc.wait()
+            print 'got exit code: %d' % code
+
+#            raw_input()
             #sleep(10)
             if self.spawnProc:
                 print 'Continuing with neatfile', self.nextNeatFile
@@ -128,7 +147,6 @@ class NEATStrategy(OneStepStrategy):
                 print 'File does not exist yet'
                 sleep(1)
                 continue
-
             lines = ff.readlines()
             nLines = len(lines)
             if nLines < self.expectedLines:
@@ -137,7 +155,6 @@ class NEATStrategy(OneStepStrategy):
                 sleep(.5)
                 continue
             break
-
         self.orgId += 1
 
         for ii,line in enumerate(lines[self.junkPoints:]):
@@ -154,10 +171,10 @@ class NEATStrategy(OneStepStrategy):
         #print 'First few lines of rawPositions are:'
         #for ii in range(10):
         #    print prettyVec(rawPositions[ii,:], prec=2)
-        
+
         # Average over every self.avgPoints
-        for ii in range(self.expectedLines/self.avgPoints):
-            temp = mean(rawPositions[ii:(ii+self.avgPoints),:], 0)
+        for ii in range((self.expectedLines-self.junkPoints)/self.avgPoints):
+            temp = mean(rawPositions[ii*self.avgPoints:(ii+1)*self.avgPoints,:], 0)
             if ii == 0:
                 positions = temp
             else:
@@ -208,7 +225,6 @@ class NEATStrategy(OneStepStrategy):
 
         This communicates back to the running subprocess.
         '''
-
         dist = float(dist)
 
         # MAKE SURE TO CALL super().updateResults!
@@ -255,7 +271,8 @@ class NEATStrategy(OneStepStrategy):
                 #print 'Got stderr:'
                 #print out
                 pass
-
+        print 'last run'
+        
     def logHeader(self):
         return '# NEATStrategy starting, identifier %s\n' % self.identifier
 
