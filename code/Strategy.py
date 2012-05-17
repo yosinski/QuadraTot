@@ -660,11 +660,6 @@ class FileStrategy(OneStepStrategy):
 
         self.filtFile = kwargs.get('filtFile', None)
 
-        self.junkPoints      = 1000
-        # How many lines to expect from HyperNEAT file
-        self.expectedLines   = self.junkPoints + 12 * 40
-
-
         if self.filtFile is None:
             raise Exception('Need a filtFile')
 
