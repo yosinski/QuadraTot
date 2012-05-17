@@ -35,9 +35,9 @@ class NEATStrategy(OneStepStrategy):
 #        self.executable = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/Hypercube_NEAT'
         self.executable = '/home/sean/hyperneat/HyperNEAT_v2_5/out/Hypercube_NEAT'
 #        self.motionFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/spiderJointAngles.txt'
-        self.motionFile = '/home/sean/quadratot/code/spiderJointAngles.txt'
+        self.motionFile = '/home/sean/simtest/spiderJointAngles.txt'
 #        self.fitnessFile = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/fitness'
-        self.fitnessFile = '/home/sean/quadratot/code/fitness'
+        self.fitnessFile = '/home/sean/simtest/fitness'
 #        self.datFile    = '/home/team/s/h2_synced/HyperNEAT_v2_5/out/hyperneatTo20gens_102/SpiderRobotExperiment.dat'
         self.datFile    = '/home/sean/hyperneat/HyperNEAT_v2_5/out/SpiderRobotExperiment.dat'
 
@@ -48,15 +48,14 @@ class NEATStrategy(OneStepStrategy):
         
   #self.motorColumns    = [0,1,4,5,2,3,6,7]         # Order of motors in HyperNEAT file
         self.motorColumns    = [0,1,4,5,2,3,6,7,8]         # Order of motors in HyperNEAT file
-        self.generationSize  = 10
+        self.generationSize  = 200
         self.initNeatFile    = kwargs.get('initNeatFile', None)   # Pop file to start with, None for restart
         self.prefix          = 'delme'
 #        self.nextNeatFile    = '%s_pop.xml' % self.prefix
-        self.nextNeatFile    = '/home/sean/quadratot/code/delme_pop.xml'
+        self.nextNeatFile    = '/home/sean/simtest/delme_pop.xml'
         self.separateLogInfo = True
-        
-        #self.proc = sp.Popen((self.executable,
-        #                      '-O', 'delme', '-R', '102', '-I', self.datFile),
+        self.restartHN = kwargs.get('restartHN', True)
+
         #                     stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE)
         #os.system('%s -O delme -R 102 -I %s' % (self.executable, self.datFile))
 
@@ -108,20 +107,21 @@ class NEATStrategy(OneStepStrategy):
         #print 'STDERR:'
         #print stderr
         if self.orgId == self.generationSize:
-#            print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
-            print 'Restarting process after %d runs' % self.generationSize
+            #            print 'Restarting process after %d runs, push enter when ready...' % self.generationSize
+            if self.restartHN:
+                print 'Restarting process after %d runs' % self.generationSize
 
-            print 'waiting for exit code...'
-            code = self.proc.wait()
-            print 'got exit code: %d' % code
+                print 'waiting for exit code...'
+                code = self.proc.wait()
+                print 'got exit code: %d' % code
 
-#            raw_input()
-            #sleep(10)
-            if self.spawnProc:
-                print 'Continuing with neatfile', self.nextNeatFile
-                self.proc = Process((self.executable,
-                                     '-O', self.prefix, '-R', '102', '-I',
-                                     self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
+    #            raw_input()
+                #sleep(10)
+                if self.spawnProc:
+                    print 'Continuing with neatfile', self.nextNeatFile
+                    self.proc = Process((self.executable,
+                                         '-O', self.prefix, '-R', '102', '-I',
+                                         self.datFile, '-X', self.nextNeatFile, '-XG', '1'))
             self.genId += 1
             self.orgId = 0
 
@@ -146,7 +146,10 @@ class NEATStrategy(OneStepStrategy):
             except IOError:
                 print 'File does not exist yet'
                 sleep(1)
-                continue
+                if self.proc.wait(os.WNOHANG) is None:
+                    continue
+                else:
+                    raise Exception('HN died')
             lines = ff.readlines()
             nLines = len(lines)
             if nLines < self.expectedLines:
@@ -271,7 +274,6 @@ class NEATStrategy(OneStepStrategy):
                 #print 'Got stderr:'
                 #print out
                 pass
-        print 'last run'
         
     def logHeader(self):
         return '# NEATStrategy starting, identifier %s\n' % self.identifier

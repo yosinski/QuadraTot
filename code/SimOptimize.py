@@ -6,7 +6,7 @@ from util import randUniformPoint
 
 
 def SimOptimize():
-    strategy = NEATStrategy(SineModel5.typicalRanges)
+    strategy = NEATStrategy(SineModel5.typicalRanges,restartHN = False)
     print 'NEATStrategy'
     sim = simrun()
     trial = 0
