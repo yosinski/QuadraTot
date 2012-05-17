@@ -24,13 +24,30 @@ This novel design causes unconventional kinematics, however, creating an opportu
 
 \section{Introduction}
 
-There is a long history in the Artificial Life and Evolutionary Robotics community of automatically generating behaviors for robots~\citep{nolfi2000evolutionary, pfeifer2007body, sims1994evolving, hornby2005autonomous, lipson2000automatic}. Much work has focused on evolving gaits for legged  
+There is a long history in the Artificial Life and Evolutionary Robotics community of automatically generating behaviors for robots~\citep{nolfi2000evolutionary, pfeifer2007body, sims1994evolving, hornby2005autonomous, lipson2000automatic}. Much work has focused on evolving gaits for legged robots~\citep{clune2009evolving, clune2011performance, hornby2005autonomous, hornby2003generative, kodjabachian1998evolution, Koos2012, bongard2006resilient, yosinski2011gaits, gallagher1996application}. While some of this previous work involved evolution directly on a physical robot~\citep{yosinski2011gaits, zykov2004evolving}, more often a gait was evolved in simulation and then transferred to the physical robot~\citep{lipson2006evolutionary, Koos2012, hornby2005autonomous, bongard2006resilient}. Many of these studies report that evolutionary algorithms produced gaits that outperformed those designed by a human engineer~\citep{yosinski2011gaits, hornby2005autonomous}, which is not surprising given that evolutionary algorithms routinely create solutions that are superior to manually created solutions~\citep{koza2003genetic}. 
+
+\begin{figure}[t]
+\begin{center}
+%\includegraphics[width=.45\textwidth]{fig1.jpg}
+\includegraphics[width=\columnwidth]{fig1.jpg}
+\caption{Aracna: an open-sourced quadruped robot platform. All
+  instructions and downloads are publicly available at
+  http://creativemachines.cornell.edu/aracna .}
+\label{fig1}
+\end{center}
+\end{figure}
+
+The results just mentioned suggest that evolutionary algorithms are a promising approach for generating gaits and other behaviors for physical robots. Despite this promise, the field remains small, partly because robots are expensive and they are difficult to modify. Access to cheap, customizable robots could increase the number of researchers able to participate in the field. Moreover, in nearly all of the papers mentioned previously, the robots were custom-made, preventing teams at other universities from reproducing the results of other groups and or testing new algorithms on a robotic platform used in a previous study. That, in turn, slows the progress of science because it is difficult to interpret whether the variance in results between different studies was due to the algorithms used or the robotic platform those algorithms were tested on.  
+
+Some robot platforms are emerging, but they tend to be wheeled robots without complex kinematics, such as the ePuck~\citep{mondada2009puck}. Wheeled robots are interesting testbeds for many robotic behaviors, but they do not allow gait evolution and are unable to traverse rugged terrains. Legged robotic platforms exist, but they tend to be extremely expensive, such as the Aldebaran Nao, which costs more than \$10,000 USD. Another drawback to these commercial platforms is that it is hard, if not impossible, to modify the hardware design because they are not open-source hardware projects, and complex manufacturing tools would be required to manufacture new parts. 
 
 
-We address the need for a low-cost platform with non-intuitive walking
-kinematics to explore evolutionary robotics. Aracna is the third
-evolutionary learning quadruped robot developed by the Creative
-Machines Lab \citep{HL, JY}. A common feature among the quadruped
+
+In this paper we address these needs by introducing \emph{Aracna}, a low-cost, easily customizable robot platform with non-intuitive walking
+kinematics~(Figure 1). Aracna is the third quadruped robot developed for evolutionary learning algorithms by the Creative Machines Lab at Cornell University~\citep{HL, JY}. 
+
+
+A common feature among the quadruped
 robots is two actuators that drive the flexion/extension of a knee and
 hip joint around parallel axes in each leg. The original Creative
 Machines Lab quadruped robot favored starfish-like movements
@@ -39,15 +56,6 @@ developed spider-like movements but was found to be limited by its
 weight \citep{JY}. When creating the Aracna, we designed the hardware to
 complement fast spider-like movements.
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=.45\textwidth]{fig1.jpg}
-\caption{Aracna: an open-sourced quadruped robot platform. All
-  instructions and downloads are publicly available at
-  http://creativemachines.cornell.edu/aracna .}
-\label{fig1}
-\end{center}
-\end{figure}
 
 
 
@@ -104,7 +112,7 @@ battery to reduce material weight and cost. Aracna weighs 1.03 kg.
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[width=.37\textwidth]{fig5.jpg}
+\includegraphics[width=\columnwidth]{fig5.jpg}
 \caption{Rendered CAD model of Aracna.}
 \label{fi52}
 \end{center}
