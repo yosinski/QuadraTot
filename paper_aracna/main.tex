@@ -39,22 +39,15 @@ There is a long history in the Artificial Life and Evolutionary Robotics communi
 
 The results just mentioned suggest that evolutionary algorithms are a promising approach for generating gaits and other behaviors for physical robots. Despite this promise, the field remains small, partly because robots are expensive and they are difficult to modify. Access to cheap, customizable robots could increase the number of researchers able to participate in the field. Moreover, in nearly all of the papers mentioned previously, the robots were custom-made, preventing teams at other universities from reproducing the results of other groups and or testing new algorithms on a robotic platform used in a previous study. That, in turn, slows the progress of science because it is difficult to interpret whether the variance in results between different studies was due to the algorithms used or the robotic platform those algorithms were tested on.  
 
-Some robot platforms are emerging, but they tend to be wheeled robots without complex kinematics, such as the ePuck~\citep{mondada2009puck}. Wheeled robots are interesting testbeds for many robotic behaviors, but they do not allow gait evolution and are unable to traverse rugged terrains. Legged robotic platforms exist, but they tend to be extremely expensive, such as the Aldebaran Nao, which costs more than \$10,000 USD. Another drawback to these commercial platforms is that it is hard, if not impossible, to modify the hardware design because they are not open-source hardware projects, and complex manufacturing tools would be required to manufacture new parts. 
+Some robot platforms are emerging, but they tend to be wheeled robots without complex kinematics, such as the ePuck~\citep{mondada2009puck}. Wheeled robots are interesting testbeds for many robotic behaviors, but they do not allow gait evolution and are unable to traverse rugged terrains. Legged robotic platforms exist, but they tend to be extremely expensive, such as the Aldebaran Nao, which costs more than \$10,000 USD. Another drawback to these commercial platforms is that it is hard, if not impossible, to modify the hardware design because they are not open-source hardware projects, and do not take advantage of off-the-shelf components and 3D printing, meaning that complex manufacturing tools are required to manufacture newly designed parts. 
 
-
-
-In this paper we address these needs by introducing \emph{Aracna}, a low-cost, easily customizable robot platform with non-intuitive walking
-kinematics~(Figure 1). Aracna is the third quadruped robot developed for evolutionary learning algorithms by the Creative Machines Lab at Cornell University~\citep{HL, JY}. 
-
-
-A common feature among the quadruped
-robots is two actuators that drive the flexion/extension of a knee and
-hip joint around parallel axes in each leg. The original Creative
-Machines Lab quadruped robot favored starfish-like movements
-\citep{HL}. The second quadruped robot --- QuadraTot ---
-developed spider-like movements but was found to be limited by its
-weight \citep{JY}. When creating the Aracna, we designed the hardware to
-complement fast spider-like movements.
+In this paper we address these needs by introducing \emph{Aracna}, a low-cost, open-source hardware, easily customizable robot platform with non-intuitive walking
+kinematics~(Figure 1). Aracna is the third quadruped robot developed for evolutionary learning algorithms by the Creative Machines Lab at Cornell University~\citep{HL, JY}. Like the previous QuadraTot robot design~\citep{yosinski2011gaits}, the body of Aracna is 3D printed, and the STL files are available online
+%TODO: INSERT LINK
+, meaning that other teams can easily customize the body's design. As in the previous two designs, each leg has a hip and knee joint controlled by two actuators. The original Creative
+Machines Lab quadruped robot favored starfish-like movements~\citep{HL}. The second quadruped robot --- QuadraTot ---
+developed spider-like movements, but was found to be limited by its
+weight, such that the motors would overheat and timeout when trying to execute many commands~\citep{JY, Glette2012Evolution}. We designed Aracna to be able to produce fast, spider-like movements, yet be lightweight enough that the motors would not overheat. We also designed Aracna to be inexpensive: as described below, its overall price is under \$1,500  USD. In the following sections we describe the Aracna platform in more detail. 
 
 
 
