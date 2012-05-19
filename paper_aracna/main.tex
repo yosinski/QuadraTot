@@ -57,7 +57,7 @@ weight, such that the motors would overheat and timeout when trying to execute m
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=\columnwidth]{fig5.jpg}
-\caption{Rendered CAD model of Aracna.}
+\caption{A rendered CAD model of Aracna. Note the lack of heavy servos on the legs themselves, which are instead controlled via four-bar linkages by servos in the robot's core.}
 \label{cadModelOfRobot}
 \end{center}
 \end{figure}
@@ -81,7 +81,8 @@ prevent starfish-like movements and instead encourage a walking gait with the ro
 
 Another change was to reduce the both the overall weight of the robot and the weight of each leg. Two previous studies that used the QuadraTot robot report that the motors quickly wore out and could not reliably execute the commands sent to them, likely because of both the overall weight of the QuadraTot and the fact that housing servos on the legs made them heavy~\citep{bongard2006resilient, yosinski2011gaits}. The weight of the robot's core was reduced in a number of ways. 
 
-Initially, we eliminated the QuadraTot's fit-PC, an onboard Linux computer weighing 370g, and replaced it with an ArbotiX microcontroller that weights only 47g. As a result, the main processing occurs on an external computer and commands are sent to Aracna wirelessly. This change, of course, comes of the cost of the robot being truly autonomous. 
+Initially, we eliminated the QuadraTot's fit-PC, an onboard Linux computer weighing 370g, and replaced it with an on-board ArbotiX microcontroller that weights only 47g. As a result, the main processing occurs on an external computer and commands are sent to Aracna wirelessly. This change, of course, comes of the cost of the robot being truly autonomous. Wireless communication between the external control computer
+and the ArbotiX  microcontroller occurs over wireless XBee.
 
 A second means of eliminating weight involved switching to a lighter battery. The QuadraTot had two 12V lithium-ion battery packs that weighted 140g each for a total of 280g. Aracna has a single lithium-polymer 11.1V battery that weighs SARA-TO-INSERT-WEIGHT. INSERT SENTENCE ON THE COST OF USING THE SMALLER BATTERY.   
 
@@ -95,34 +96,7 @@ configuration allows the servo motors to be contained in the robot core, reducin
 
 Combined, these changes to minimize weight led to a SARA-TO-INSERT percent reduction in weight of the robot. The QuadraTot weighs 1.88kg whereas Aracna weighs SARA-TO-INSERTkg
 
-A final change was to upgrade the power of the servo motors in order to increase the ability of the robot to strike whichever configurations are specified by the learning algorithms. Specifically, we upgraded from Dynamixel AX 12+ motors to AX-18 motors, which provide INSERT-SENTENCE-ON-DIFFERENCE-IN-SERVO-POWER.
-
-\section{3D Printed Body}
-
-The body of Arcana takes advantage of 3D printing technology, also known as additive manufacturing, which generates physical objects from digital designs by building them up layer by layer~\citep{gibson2009additive, lipson2010factory}. The use of 3D printing means that other Aracna users can easily make copies of Aracna, either by having access to a 3D printer or via online 3D printing services such as Shapeways.com. Either option requires the 3D design files in the STereoLithography (STL) format, which we are publishing in the online support material for this paper~\citep{WEB}. Moreover, to catalyze innovation in this open-source hardware project, we are also providing the source files for the SolidWorks computer-aided-design program, because it is easier to modify a design with the original source files than with STL files. It should thus be easy for future Aracna users to improve or alter the design and quickly obtain a physical instantiation of the design. Importantly, the use of 3D printing eliminates the need to know how to machine parts, allowing many more researchers to participate in using physical robot morphologies that they design themselves. These ideas are in line with a broader trend toward enabling non-technical users to design and manufacture physical objects~\citep{clune2011objects, clune2011endless, lipson2010factory}.
-
-An initial version of Aracna was designed to be printed in one piece~(Figure~\ref{notYetCleanedOnePieceRobot}). However, if one part of the robot became damaged, an entire new robot had to be reprinted, which took over 26 hours and cost roughly \$410 USD on an Object Connex500 printer. To make repairing the robot easier, cheaper, and quicker, Aracna was redesigned to be modular. It consists of INSERT pieces--four legs and the core--that can be separately 3D printed~(Figure~REFERENCE FIGURES OF THE NEW DESIGN PRINTED). Printing a leg takes INSERT hours and costs INSERT. Printing the core takes INSERT hours and costs INSERT. All INSERT Aracna pieces can still be printed as one print job, with an overall time of INSERT and cost of INSERT. These figures are based on Aracna's use of  approximately INSERT g of rigid material and INSERT g of support
-material, and current material costs of 4.5g per USD and 8g per USD for rigid and support material, respectively. This cost estimate is variable depending on
-the type of material used. Table~\ref{tab:cost} outlines the total estimated cost of Aracna, which is just under \$1500, including its off-the-shelf electronic components. 
-
-\section{Specifications}
-
-\begin{figure}[htb]
-\begin{center}
-\includegraphics[width=.37\textwidth]{fig2.jpg}
-\caption{Robot printed as one piece with support material intact.}
-\label{notYetCleanedOnePieceRobot}
-\end{center}
-\end{figure}
-
-
-\section{Control}
-
-The four-bar
-mechanisms also satisfied the design goal of making a robot that had
-non-traditional movements. There is not a one-to-one mapping between the servo output and the movement of the joint that servo controls. Figure INSERT displays the resulting joint angle as a function of the angle the servo is commanded to. 	
-
-
+A final change was to upgrade the power of the servo motors in order to increase the ability of the robot to strike whichever configurations are specified by the learning algorithms. Specifically, we upgraded from Dynamixel AX 12+ motors to AX-18A motors, which have a higher stall torque (1.8Nm vs. 1.5Nm at 12V), a higher stall current (2.2A vs 1.5A), and a higher no load speed (97 vs. 59 RPM).
 
 
 \begin{figure}[t]
@@ -138,23 +112,23 @@ non-traditional movements. There is not a one-to-one mapping between the servo o
 \end{figure}
 
 
+\section{3D Printed Body}
 
-% 1034g
+The body of Arcana takes advantage of 3D printing technology, also known as additive manufacturing, which generates physical objects from digital designs by building them up layer by layer~\citep{gibson2009additive, lipson2010factory}. The use of 3D printing means that other Aracna users can easily make copies of Aracna, either by having access to a 3D printer or via online 3D printing services such as Shapeways.com. Either option requires the 3D design files in the stereolithography (STL) format, which we are publishing in the online support material for this paper~\citep{WEB}. Moreover, to catalyze innovation in this open-source hardware project, we are also providing the source files for the SolidWorks computer-aided-design program, because it is easier to modify a design with the original source files than with STL files. It should thus be easy for future Aracna users to improve or alter the design and quickly obtain a physical instantiation of the design. Importantly, the use of 3D printing eliminates the need to know how to machine parts, allowing many more researchers to participate in using physical robot morphologies that they design themselves. These ideas are in line with a broader trend toward enabling non-technical users to design and manufacture physical objects~\citep{clune2011objects, clune2011endless, lipson2010factory}.
+
+An initial version of Aracna was designed to be printed in one piece~(Figure~\ref{notYetCleanedOnePieceRobot}). However, if one part of the robot became damaged, an entire new robot had to be reprinted, which took over 26 hours and cost roughly \$410 USD on an Object Connex500 printer. To make repairing the robot easier, cheaper, and quicker, Aracna was redesigned to be modular. It consists of INSERT pieces--four legs and the core--that can be separately 3D printed~(Figure~REFERENCE FIGURES OF THE NEW DESIGN PRINTED). Printing a leg takes INSERT hours and costs INSERT. Printing the core takes INSERT hours and costs INSERT. All INSERT Aracna pieces can still be printed as one print job, with an overall time of INSERT and cost of INSERT. These figures are based on Aracna's use of  approximately INSERT g of rigid material and INSERT g of support
+material, and current material costs of 4.5g per USD and 8g per USD for rigid and support material, respectively. This cost estimate is variable depending on
+the type of material used. Table~\ref{tab:cost} outlines the total estimated cost of Aracna, which is just under \$1500, including its off-the-shelf electronic components. 
 
 
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=.37\textwidth]{fig2.jpg}
+\caption{A draft version of Aracna that was printed in one piece. This non-modular design proved expensive to maintain if part of the robot was damaged, and was replaced in a later version with a modular design. This image is of the printed body with support material still present.}
+\label{notYetCleanedOnePieceRobot}
+\end{center}
+\end{figure}
 
-
-\section{Software}
-
-The software is open-sourced Python based on the
-code developed for the QuadraTot platform \citep{yosinski2011gaits}. All code is
-available on the project website \citep{WEB}. We use an infrared light
-emitting diode (LED) on the robot along with an external Nintendo Wii
-remote to provide feedback of the distance traveled. The robot
-receives feedback from the Wii remote and internal servo sensors and
-then processes the information to send the next command to
-the servos. The communication between the external control computer
-and the ArbotiX on-board microcontroller occurs over wireless XBee.
 
 \begin{table}[h]
 \center{
@@ -179,11 +153,36 @@ Cables, Connectors, Misc & \$28\\
 \end{table}
 
 
+\section{Control}
+
+In addition to reducing the weight of the legs, the four-bar
+mechanisms also satisfied the design goal of making a robot that had
+non-traditional movements. Unusual kinematics make for a more effective evolutionary robotics test platform, since evolutionary algorithms are most helpful in domains that humans find hard to program solutions for. The reason Aracna's kinematics are counter-intuitive is because there is a complicated mapping between each servo's output and the movement of the joint controlled by that servo~(Figure~INSERTjointAnglesAsAFunctionOfServoPositions). INSERT-OTHER-REASONS-THE-KINEMATICS-ARE-STRANGE. 
+
+The range of motion for the hip joint is INSERT degrees and that of the knee joint is INSERT degrees~(Figure~INSERT). The range of the knee joint technically depends on the position of the hip joint, but the effect is slight enough (less than INSERT) degrees, that it can be effectively ignored. 
+
+There are two different ways to encode movements for Aracna, increasing its flexibility as a testing platform. The first method is to specify a sequence of positions over time for all eight servos. In this method the joint angles would be determined as shown in Figure~INSERTjointAnglesAsAFunctionOfServoPositions). The second method is to set the speed of each servo (and possibly its initial position). This method is possible because with the four bar mechanism a servo constantly rotating in one direction will move the joint back and forth between its minimum and maximum opening angle. This latter method provides a much smaller search space and would encourage regular gaits, which have been shown to be beneficial when evolving gaits for legged robots~\citep{clune2011performance, hornby2005autonomous}. 
+
+
+\section{Software}
+
+The software, which is also open-source and freely available~\citep{WEB}, is written in Python and based on the
+code developed for the QuadraTot platform~\citep{yosinski2011gaits}. The software translates a series of requested joint angles from the learning algorithm into servo movements. Additionally, it returns information to the learning algorithm, such as the distance traveled or the specific trajectory the robot took, so the learning algorithm can assess the quality of the gait. To provide this information, an infrared light
+emitting diode (LED) was placed on the robot and a Nintendo Wii
+remote was attached overhead. The software uses the combination of the two to ascertain the X, Y position of the robot. The software is interoperable with any gait or behavior learning algorithm.  
+
+\section{Example Gaits}
+
+Evolutionary algorithms work best when they have a gradient to follow, instead of searching for a needle in a haystack. To get a sense of how randomly-generated gaits would perform, we randomly chose a few parameters....INSERT DESCRIPTION OF WHAT YOU DID, HOW IT WORKED, AND A LINK TO THE VIDEO. 
+
+\section{Conclusion}
+
+I think we should wait until the rest of the paper is fleshed out before writing this. 
 
 \section{Acknowledgements}
 
 This work was supported by the National Science Foundation's Office of
-Emerging Frontiers in Research and Innovation (grant number 0735953).
+Emerging Frontiers in Research and Innovation (grant number 0735953) and an NSF Postdoctoral Research Fellowship in Biology to Jeff Clune (DBI-1003220).
 
 
 \footnotesize
