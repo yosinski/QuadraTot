@@ -47,6 +47,37 @@
   \end{figure}
 }
 
+
+
+% figp - Standard figure
+\newcommand{\figp}[4][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+
+  \caption{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% figp - Standard figure, 2 wide
+\newcommand{\figgp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+  \includegraphics[width=#5\linewidth]{#4}
+
+  \caption{#6}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+
+
 \newcommand{\acmFig}[4][0]{
   \begin{figure}[tb]
   \centering
