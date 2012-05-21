@@ -9,10 +9,7 @@ from math import *
 from datetime import *
 from time import sleep
 from types import FunctionType
-from copy import copy
-from numpy import array
-
-from Motion import lInterp, scaleTime
+from numpy import array, interp
 
 from ax12 import *
 from driver import Driver
@@ -21,6 +18,11 @@ from RobotQuadratot import *
 from ConstantsRex import *
 
 
+def lInterp(time, theDomain, val1, val2):
+    ret = []
+    for ii in range(len(val1)):
+        ret.append(interp([time], theDomain, [val1[ii], val2[ii]])[0])
+    return ret
 
 class RobotRex(RobotQuadratot):
     ''''''
@@ -57,19 +59,11 @@ class RobotRex(RobotQuadratot):
         else:
             if portName is None:
                 portName = 'COM6'
-            self.port = Driver(portName, 38400, True)
-#For some reason, this code gets caught trying to load COM3 instead of COM6.
-#My PC usually links to COM6. Just let the user choose the port for now.
-#            for i in range(12):
-#                portName = "COM" + str(i)
-#                try:
-#                    self.port = Driver(portName, 38400, True)
-#                    break
-#                except:
-#                    if self.loud: print portName + " not found"
+            #self.port = Driver(portName, 38400, True)
+            self.port = None
         
-        if self.port is None:
-            raise Exception("Failed  to open any Serial/COM port")
+#        if self.port is None:
+#            raise Exception("Failed  to open any Serial/COM port")
 
         self.currentPos = None
         self.resetClock()
@@ -86,80 +80,6 @@ class RobotRex(RobotQuadratot):
             self.commandPosition(POS_READY)
             sleep(2)
     
-    def commandPosition(self, position, crop = True, cropWarning = False, allAtOnce = True):
-        '''Set Rex to the given postion as quickly as possible.
-
-        commandPosition will command the robot to move its servos to
-        the given position vector.  This vector is cropped to
-        the physical limits of the robot and converted to an integer.
-
-        Positional arguments:
-        position -- A length 8 vector of desired positions.
-
-        Keyword arguments:
-        cropWarning -- Whether or not to print a warning if the
-                       positions are cropped.  Default: False.
-        allAtOnce -- Whether or not to move the servos using smooth interpolated
-                     movements. If false, one servo is adjusted at a time.
-        '''
-                
-        if len(position) != self.nServos:
-            raise Exception('Expected postion vector of length %d, got %s instead'
-                            % (self.nServos, repr(position)))
-        
-        goalPosition = None
-        if crop:
-            goalPosition = self.cropPosition([int(xx) for xx in position], cropWarning)
-        else:
-            goalPosition = [int(xx) for xx in position]
-
-        if self.loud:
-            posstr = ', '.join(['%4d' % xx for xx in goalPosition])
-            print '%.2fs -> %s' % (self.time, posstr)
-        
-        '''if allAtOnce:
-            #print "started"
-            
-            self.tic()
-            self.port.execute(253, 7, [18]) #This one isn't too fast either
-            self.toc()
-
-            
-            #print "1"
-            #FIXME
-            # download the pose...this step is slow!!!
-            self.tic()
-            self.port.execute(253, 8, [0] + self.__extract(position))
-            self.toc()
-
-            self.tic()
-            self.port.execute(253, 9, [0, 244,1,255,0,0])
-            self.toc()
-            #print "2"
-            self.tic()
-            self.port.execute(253, 9, [0, 40,0,255,0,0])
-            self.toc()
-            #print "3"
-            self.tic()
-            self.port.execute(253, 10, list())
-            self.toc()
-            #print "made move"
-            '''
-        if allAtOnce:
-            params = [0] * 16
-            for i in range(self.nServos):
-                params[i*2] = goalPosition[i] >> 8
-                params[i*2+1] = goalPosition[i] & 0xff
-            self.port.execute(253,132, params)
-                
-        else:
-            for servo in range(self.nServos):
-                pos = position[servo]
-                self.port.setReg(servo+1, P_GOAL_POSITION_L, [pos%256, pos>>8])
-        
-        self.commandsSent += 1
-        return goalPosition
-    
     def __extract(self, li):
         """ extract x%256,x>>8 for every x in li """
         out = list()
@@ -167,42 +87,6 @@ class RobotRex(RobotQuadratot):
             ii = int(i)
             out = out + [ii%256,ii>>8]
         return out
-    
-    '''Rewrite for compatibility with old code'''
-    def __commandPositionWithTime(self, start, end, seconds, logFile=None, extraLogInfoFn=None):
-        '''Moves between start and end over seconds seconds.  start
-        and end are position vectors.'''
-        
-        seconds *= 1000
-        dt = int(seconds)
-        
-        poseDL = dict()     # key = pose name, val = index, download them after we build a transition list
-        tranDL = list()     # list of bytes to download
-        
-        poseDL[0] = 0 #start
-        poseDL[1] = 1 #end
-
-        # create transition values to download
-        tranDL.append(poseDL[0])                # ix of pose
-        tranDL.append(244)                   # time is an int (16-bytes)
-        tranDL.append(1)
-        
-        tranDL.append(poseDL[1])
-        tranDL.append(dt % 256)
-        tranDL.append(dt >> 8)
-        
-        tranDL.append(255)      # notice to stop
-        tranDL.append(0)        # time is irrelevant on stop    
-        tranDL.append(0)
-        
-        self.port.execute(253, 7, [18])
-        # send poses
-        self.port.execute(253, 8, [0] + self.__extract(start))
-        self.port.execute(253, 8, [1] + self.__extract(end))#should [1] be [0]?
-        print "Sending sequence: " + str(tranDL)
-        # send sequence and play            
-        self.port.execute(253, 9, tranDL)
-        self.port.execute(253, 10, list())
         
     def interpMove2(self, start, end, seconds):
         '''Performs the same function as interpMove() in RobotQuadratot but uses
@@ -257,93 +141,6 @@ class RobotRex(RobotQuadratot):
         
         endTime = startTime + timedelta(0,self.sleep)
         while datetime.now() < endTime: sleep(self.sleep/20)
-            
-        
-    
-    def commandFunction(self, smoothFnct, loop=False):
-        '''Executes motions determined by the given motion function
-        smoothFnct --- a SmoothMotionFunction instance
-        loop --- if true, the function will execute in a cycle'''
-        
-        fnct = smoothFnct.motionFnct
-        times = smoothFnct.times
-        
-        dt = int(times[1] - times[0]) * 1000 # delta-T
-        
-        poseDL = dict()     # key = pose name, val = index, download them after we build a transition list
-        tranDL = list()     # list of bytes to download
-        
-        #Set up the first pose
-        poseDL[0] = 0
-        tranDL.append(poseDL[0])
-        tranDL.append(244)
-        tranDL.append(1)
-        for i in range(1,len(times)):#TODO: start at 1?
-            poseDL[i] = len(poseDL.keys())          # get ix for pose
-            # create transition values to download
-            tranDL.append(poseDL[i])                # ix of pose
-            tranDL.append(dt%256)                   # time is an int (16-bytes)
-            tranDL.append(dt>>8)
-        tranDL.append(255)      # notice to stop
-        tranDL.append(0)        # time is irrelevant on stop    
-        tranDL.append(0)
-        # set pose size -- IMPORTANT!
-        self.port.execute(253, 7, [18])
-        # send poses
-        print "Sending poses: " + str(len(poseDL.keys()))
-        for p in poseDL.keys():
-            self.port.execute(253, 8, [poseDL[p]] + self.__extract(fnct[p]))
-        # send sequence and play
-        print "Sending sequences"
-        self.port.execute(253, 9, tranDL)
-        # run or loop?
-        print "Running or looping?"
-        if loop: #TODO: Figure out if the 'if' or 'else' is the loop one.
-            self.port.execute(253,11,list())
-        else:
-            self.port.execute(253, 10, list())
-    
-    '''Rewrite if desired'''
-    def cropPosition(self, position, cropWarning = False):
-        '''Crops the given positions to their appropriate min/max values.
-        
-        Requires a vector of length 8 to be sure the IDs are in the
-        assumed order.'''
-
-        if len(position) != self.nServos:
-            raise Exception('cropPosition expects a vector of length %d' % self.nServos)
-
-        ret = copy(position)
-        for ii in [0, 2, 4, 6]:
-            ret[ii]   = max(MIN_INNER, min(MAX_INNER, ret[ii]))
-            ret[ii+1] = max(MIN_OUTER, min(MAX_OUTER, ret[ii+1]))
-
-        if cropWarning and ret != position:
-            print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
-            
-        return ret
-    
-    def readCurrentPosition(self):
-        '''Reads in the position vector of the servos. Will fail if the servos
-        are receiving a command from interpMove()'''
-        ret = []
-        for servo in range(self.nServos):
-            pos = self.port.getReg(servo+1,P_PRESENT_POSITION_L, 2)
-            try:
-                ret.append(str(pos[0] + (pos[1]<<8)))
-            except TypeError:
-                print "Failed to read the servos"
-                return None
-        return ret
-    
-    '''Rewrite if desired???'''
-    def pingAll(self):
-        failures = []
-        for ii in self.actuatorIds:
-            result = self.net.ping(ii)
-            if result is False:
-                failures.append(ii)
-        return failures
     
     def relax(self):
         '''Relaxes servos. Use when we are done with a motion sequence.'''
