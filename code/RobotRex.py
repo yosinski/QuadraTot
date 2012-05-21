@@ -5,7 +5,6 @@
 
 
 import math
-import pdb
 from math import *
 from datetime import *
 from time import sleep
@@ -20,7 +19,6 @@ from driver import Driver
 
 from RobotQuadratot import *
 from ConstantsRex import *
-from MotionHandler import SmoothMotionFunction
 
 
 
@@ -354,18 +352,9 @@ class RobotRex(RobotQuadratot):
 
 if __name__ == "__main__":
     robot = RobotRex(8, "COM6", cmdRate = 14)
-    pos0 = [0] * 8
-    pos1 = [270] * 8
-    pos2 = [0,0,0,0,270,270,270,270]
-    
     pi = math.pi
     
     dur = 100.0
-    start = lambda t: (abs(200.0*sin(pi*t)),0.0,
-                       abs(270.0/dur*t*sin(pi*t)), 125.0,
-                       t*270.0/dur, (1-t/dur)*270.0,
-                       270.0*(t/dur)**3,25.0)
-    end = lambda t: ([135.0] * 8)
     
     f1 = lambda t: (abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
                     abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)),
@@ -373,33 +362,4 @@ if __name__ == "__main__":
                     abs(270.0*sin(10*pi*t/dur)),abs(270.0*sin(10*pi*t/dur)))
     sleep(2)
 
-#    print "sending first"
-#    robot.interpMove2(pos0,pos0,2)
-#    print "sent first"
-#    sleep(3)
-#    print "sending second"
-#    robot.commandPosition(pos1)
-#    print "sent second"
-#    print "starting function"
-#    robot.interpMove(start,end,4)
-#    print "Commands sent: " + str(robot.commandsSent)
-    print robot.sleep
-    print "starting position"
     robot.interpMove2(f1,f1,dur)
-    print "Commands sent: " + str(robot.commandsSent)
-
-    pdb.set_trace()
-
-    #robot.commandFunction(myFunction)
-#    sleep(1)
-#    print "relaxing"
-#    robot.relax()
-#    robot.commandPosition(pos0)
-#    sleep(2)
-#    print robot.readCurrentPosition()
-#    sleep(.5)
-#    print "About to interpMove"
-#    robot.interpMove(pos0, pos1, 10)
-#    sleep(3)
-#    print robot.readCurrentPosition()
-#    robot.relax()
