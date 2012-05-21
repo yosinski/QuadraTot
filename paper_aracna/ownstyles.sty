@@ -62,7 +62,20 @@
   \end{figure}
 }
 
-% figp - Standard figure, 2 wide
+% figsp - Standard figure, starred (span column)
+\newcommand{\figsp}[4][thp]{
+  \begin{figure*}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+
+  \caption{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure*}
+}
+
+% figgp - Standard figure, 2 wide
 \newcommand{\figgp}[6][thp]{
   \begin{figure}[#1]
   \begin{center}
@@ -74,6 +87,40 @@
   \label{fig:#2}
   \end{center}
   \end{figure}
+}
+
+% fiGGp - Standard figure, 2 row
+\newcommand{\fiGGp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  {#3}
+
+  {#4}
+
+  \caption{#5}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% figrow - One row of a fiGGp
+\newcommand{\figrow}[4]{
+  \includegraphics[width=#2\linewidth]{#1}
+  \includegraphics[width=#4\linewidth]{#3}
+}
+
+
+
+% figrow - One row of a fiGGp, top aligned with fixed height
+\newcommand{\figrowT}[5]{
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#3\linewidth]{#2}
+  \end{minipage}}
+  \hfill
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#5\linewidth]{#4}
+  \end{minipage}}
 }
 
 
