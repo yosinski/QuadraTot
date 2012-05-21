@@ -200,7 +200,7 @@ In addition to reducing the weight of the legs, the four-bar
 mechanisms also satisfied the design goal of making a robot that had
 non-traditional movements. Unusual kinematics make for a more effective evolutionary robotics test platform, since evolutionary algorithms are most helpful in domains that humans find hard to program solutions for. The reason Aracna's kinematics are counter-intuitive is because there is a complicated mapping between each servo's output and the movement of the joint controlled by that servo~(Figure~INSERTjointAnglesAsAFunctionOfServoPositions). INSERT-OTHER-REASONS-THE-KINEMATICS-ARE-STRANGE. 
 
-The range of motion for the hip joint is INSERT degrees and that of the knee joint is INSERT degrees~(Figure~INSERT). The range of the knee joint technically depends on the position of the hip joint, but the effect is slight enough (less than INSERT) degrees, that it can be effectively ignored. 
+The range of motion for the hip joint is 21 degrees and that of the knee joint is 40 degrees~(Figure~INSERT). 
 
 There are two different ways to encode movements for Aracna, increasing its flexibility as a testing platform. The first method is to specify a sequence of positions over time for all eight servos. In this method the joint angles would be determined as shown in Figure~INSERTjointAnglesAsAFunctionOfServoPositions). The second method is to set the speed of each servo (and possibly its initial position). This method is possible because with the four bar mechanism a servo constantly rotating in one direction will move the joint back and forth between its minimum and maximum opening angle. This latter method provides a much smaller search space and would encourage regular gaits, which have been shown to be beneficial when evolving gaits for legged robots~\citep{clune2011performance, hornby2005autonomous}.
 
@@ -223,9 +223,7 @@ Evolutionary algorithms work best when they have a gradient to follow, instead o
 
 \section{Conclusion}
 
-I think we should wait until the rest of the paper is fleshed out before writing this.
-
-
+Aracna is a relatively low-cost open source platform for evolutionary robotics. The complex kinematics along with the open source nature of the robot will provide an interesting and challenging universal platform for comparing walking gait algorithms. The updated platform is modular, allowing for low-cost replacement parts and varied leg designs. Future work can include modifying a single leg to have different linkage lengths, or to replace a kinematic joint with a compliant, or flexible, joint. This platform enables testing an experimantal leg such as this without having to print a complete robot. Aracna will enable mutiple users to compare data across a single lightweight, low-cost evolutionary robotic platform.
 
 \section{Acknowledgements}
 
