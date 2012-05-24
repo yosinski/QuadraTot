@@ -3,6 +3,7 @@ import random
 import os
 import shutil
 import string
+import numpy
 from datetime import datetime
 from copy import copy
 from time import sleep
@@ -75,13 +76,13 @@ class simrun:
         return math.sqrt(math.pow(xdist,2)+math.pow(zdist,2))
 
     def freqcheck(self, data):
-	'''checks for the number of inflection points in the servo positions'''
-	pos = numpy.zeros(shape=(18,10))
-        for i in range(18):
+      	'''checks for the number of inflection points in the servo positions'''
+        pos = numpy.zeros(shape=(720,10))
+        for i in range(720):
             for ii in range(10):
-                pos[i][ii] = float(data[i][ii])
+                pos[i][ii] = float(data[i+1][ii])
         counter = 0
-        for i in range(18): # 720 lines in the data file (12 seconds at 60Hz)
+        for i in range(720): # 720 lines in the data file (12 seconds at 60Hz)
             # [time servo servo servo servo servo servo servo servo servo]
             if  (i != 0 and i != 1) and ((pos[i][1]-pos[i-1][1] > 0 and pos[i-1][1]-pos[i-2][1] < 0) or (pos[i][1]-pos[i-1][1] < 0 and pos[i-1][1]-pos[i-2][1] > 0)):
                 counter += 1
