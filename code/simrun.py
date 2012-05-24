@@ -13,14 +13,15 @@ class simrun:
 
     def __init__(self):
         self.filename = "output.txt"
- 
+        self.freq_threshold = 216 # 9 servos, 12 seconds at 2Hz
+        
     def runSim(self, gaitFunction, filename):
 
         try:
             os.remove('/home/sean/simtest/input.txt')
         except:
             pass
-        
+
         ff = file('input.txt', "w")
         timeMax = 12.0
         timeDiv = 1.0/60.0
@@ -45,15 +46,23 @@ class simrun:
                            
         ff.close()    
         os.system('./crossSim -i input.txt -o output.txt -n')
-        #os.system('./crossSim -i input.txt -o output.txt')
-        dist = self.getDist()      
+        outputData = self.getOutput()
+        dist = self.getDist(outputData)
+        counter = self.freqcheck(outputData)
+        if counter > self.freq_threshold:
+            dist = dist*0.5
+        elif counter > self.freq_threshold*0.8:
+            dist = dist*0.8
+        
         shutil.move('/home/sean/simtest/input.txt', '/home/sean/simtest/%s' % filename)
         return dist
-    
-    def getDist(self):
 
+    def getOutput(self):
         outputRaw= file(self.filename,"r")
         outputData = [line.split() for line in outputRaw]
+        return outputData
+
+    def getDist(self, outputData):
         outputColLen = len(outputData)-1
         outputRowLen = len(outputData[1])-1
         posBeg = [outputData[1][outputRowLen-2], outputData[1][outputRowLen-1], outputData[1][outputRowLen]]
@@ -64,6 +73,35 @@ class simrun:
         zdist = float(posEnd[2])-float(posBeg[2])
 #        zdist = float(self.posEnd[2])-float(self.posBeg[2])
         return math.sqrt(math.pow(xdist,2)+math.pow(zdist,2))
+
+    def freqcheck(self, data):
+	'''checks for the number of inflection points in the servo positions'''
+	pos = numpy.zeros(shape=(18,10))
+        for i in range(18):
+            for ii in range(10):
+                pos[i][ii] = float(data[i][ii])
+        counter = 0
+        for i in range(18): # 720 lines in the data file (12 seconds at 60Hz)
+            # [time servo servo servo servo servo servo servo servo servo]
+            if  (i != 0 and i != 1) and ((pos[i][1]-pos[i-1][1] > 0 and pos[i-1][1]-pos[i-2][1] < 0) or (pos[i][1]-pos[i-1][1] < 0 and pos[i-1][1]-pos[i-2][1] > 0)):
+                counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][2]-pos[i-1][2] > 0 and pos[i-1][2]-pos[i-2][2] < 0) or (pos[i][2]-pos[i-1][2] < 0 and pos[i-1][2]-pos[i-2][2] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][3]-pos[i-1][3] > 0 and pos[i-1][3]-pos[i-2][3] < 0) or (pos[i][3]-pos[i-1][3] < 0 and pos[i-1][3]-pos[i-2][3] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][4]-pos[i-1][4] > 0 and pos[i-1][4]-pos[i-2][4] < 0) or (pos[i][4]-pos[i-1][4] < 0 and pos[i-1][4]-pos[i-2][4] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][5]-pos[i-1][5] > 0 and pos[i-1][5]-pos[i-2][5] < 0) or (pos[i][5]-pos[i-1][5] < 0 and pos[i-1][5]-pos[i-2][5] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][6]-pos[i-1][6] > 0 and pos[i-1][6]-pos[i-2][6] < 0) or (pos[i][6]-pos[i-1][6] < 0 and pos[i-1][6]-pos[i-2][6] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][7]-pos[i-1][7] > 0 and pos[i-1][7]-pos[i-2][7] < 0) or (pos[i][7]-pos[i-1][7] < 0 and pos[i-1][7]-pos[i-2][7] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][8]-pos[i-1][8] > 0 and pos[i-1][8]-pos[i-2][8] < 0) or (pos[i][8]-pos[i-1][8] < 0 and pos[i-1][8]-pos[i-2][8] > 0)):
+		counter += 1
+            if  (i != 0 and i != 1) and ((pos[i][9]-pos[i-1][9] > 0 and pos[i-1][9]-pos[i-2][9] < 0) or (pos[i][9]-pos[i-1][9] < 0 and pos[i-1][9]-pos[i-2][9] > 0)):
+		counter += 1
+        return counter
 
     def cropPosition(self, position, cropWarning = False):
         # crops the given positions to their apropriate min/max values.
