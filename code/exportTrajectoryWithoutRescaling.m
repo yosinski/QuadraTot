@@ -36,10 +36,10 @@ function exportTrajectoryWithoutRescaling(policy, hFig, filepath);
   % plot the 'Exported trajectory' velocity and acceleration
   figure(hFig); clf; hold on; box on; grid on;
   clrmap = colormap(jet(policy.n_splines));
-  for si=1:policy.n_splines
-    plot(totalTime, s(si).totalPos, 'color', clrmap(si,:), 'linewidth', 2); % all cycles
-    plot(cycleTime, s(si).cyclePos, 'color', clrmap(si,:), 'linewidth', 4); % just the first cycle is thicker, to highlight it
-  end
+  %for si=1:policy.n_splines
+    %plot(totalTime, s(si).totalPos, 'color', clrmap(si,:), 'linewidth', 2); % all cycles
+    %plot(cycleTime, s(si).cyclePos, 'color', clrmap(si,:), 'linewidth', 4); % just the first cycle is thicker, to highlight it
+  %end
   
   % Generate file input.txt for the simulator
   inputData = [];

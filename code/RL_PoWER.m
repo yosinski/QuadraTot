@@ -4,11 +4,11 @@ function [Return, s_Return, param, rl] = RL_PoWER(fromKnots, toKnots, relearn, R
 disp('Starting RL...');
 %  rl_m = m; % make a copy of m
 
-hFig = figure('Name', 'Rollouts', 'position', [50, 100, 800, 600]);
-hFigResults = figure('Name', 'Results', 'position',[1000,600,800,400]); axis on; grid on; hold on;
+%hFig = figure('Name', 'Rollouts', 'position', [50, 100, 800, 600]);
+%hFigResults = figure('Name', 'Results', 'position',[1000,600,800,400]); axis on; grid on; hold on;
 hFigExported = figure('Name', 'Exported trajectory', 'position', [850, 100, 600, 400]); hold on; box on; grid on;
 
-plotRollouts(hFig, 0, 0, 0, 0);
+% plotRollouts(hFig, 0, 0, 0, 0);
 
 settings = getSettings();
 
@@ -16,7 +16,7 @@ settings = getSettings();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % number of iterations
-n_iter = 60;
+n_iter = 300;
 % number of parameters of the policy = number of spline knots here
 n_splines = 8;
 n_rfs = n_splines*(fromKnots - 1);  % because the last knot of the spline y(n) = y(1)
@@ -59,7 +59,7 @@ for si=1:n_splines
   policy(1).s(si).y = initialPos(si)*ones(1,policy(1).s(si).n); % set initial policy y values to the middle 0.5
   % now turn it into a cyclic spline
   [policy(1).s(si).pp, policy(1).s(si).x, policy(1).s(si).y, policy(1).s(si).n] = getCyclicSplinePlus6e(policy(1).s(si).x, policy(1).s(si).y);
-  plotSpline(policy(1).s(si).pp, policy(1).s(si).n, policy(1).s(si).x, policy(1).s(si).y, 'green', 3); % visualize the spline
+  % plotSpline(policy(1).s(si).pp, policy(1).s(si).n, policy(1).s(si).x, policy(1).s(si).y, 'green', 3); % visualize the spline
 end
 %pause
 
@@ -84,9 +84,11 @@ if relearn==1 % resume learning of a previous session
 else
     iter = 1;
 end
+best = 1;
+counter = 0;
 % do the iterations
 while (iter <= n_iter)
-
+    
     %if (mod(iter,100)==0)
         disp(['Iteration: ', num2str(iter)]);
     %end
@@ -112,7 +114,7 @@ while (iter <= n_iter)
     end
 
     % plot the rollout / all rollouts so far
-    plotRollouts(hFig, iter, iter, policy, n_splines);
+    % plotRollouts(hFig, iter, iter, policy, n_splines);
     filepath = [getDataPath() num2str(iter,'%03d') '/'];
     mkdir(filepath);
     exportTrajectoryWithoutRescaling(policy(iter), hFigExported, filepath);
@@ -126,20 +128,31 @@ while (iter <= n_iter)
     end
 
     if settings.useRobot
-      runRobot();  % TODO: add any robot options here
+      input('Press enter to run the robot...');
+      runRobot(filepath);  % TODO: add any robot options here
     else
       runSimulator(filepath, noGUI); % 1 for noGUI
     end
 
     % for real robot experiment
     rl(iter).traj = Load_trajectory([getDataPath() num2str(iter,'%03d') '/output.txt']);
-
+    
     % calculate the return of the current rollout
+    
  	  Return(iter) = ReturnOfRollout(rl(iter).traj);
  	  disp(['Current rollout return: ', num2str(Return(iter))]);
-     
+      disp('ratio of ')
+
+    if Return(best) < Return(iter) %get the previous best one
+        best = iter;
+        counter = 0;
+        disp(['current high is changed to iteration numbered ', best])
+    else 
+        counter = counter+1;
+    end
+    disp(['the ratio of nonimproved/total trials to present ',num2str(counter/iter)])
     % plot the results / all results so far
-    plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
+    % plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
     
     % save iteration number
     dlmwrite([getDataPath() 'iter.txt'], iter);
@@ -189,12 +202,14 @@ while (iter <= n_iter)
     policy(iter+1) = policy(iter); % copy all fields from old policy
     policy(iter+1) = paramToPolicy(param(:, iter+1), policy(iter+1));
 
-iter = iter + 1;    
+iter = iter + 1;
+
 end % iter loop
 
 iter = iter - 1;
 
 [best_reward best_iter] = max(Return)
+
 
 disp('param - before the start:');
 param(:,1)'
@@ -209,9 +224,9 @@ disp('Best return:');
 Return(best_iter)
 
 % plot the rollout / all rollouts so far
-plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
+% plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
 % plot best traj in red
-plotRollouts(hFig, iter, best_iter, policy, n_splines);
+% plotRollouts(hFig, iter, best_iter, policy, n_splines);
 
 % run the best trial again using the simulator  
 disp('Press ENTER to see the best trial...');

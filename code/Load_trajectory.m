@@ -24,7 +24,6 @@ function traj = Load_trajectory(filename) % E.g. 'data/001/output_001.txt'
   hFig = figure('Name', 'Individual axis trajectories', 'position', [1260, 200, 600, 900]); hold on; box on; grid on;
   subplot(3,1,1);
   disp('111');
-  keyboard;
   plot(traj(:,1), traj(:,2), 'linewidth', 2);
   disp('222');
   xlabel('time'); ylabel('x');

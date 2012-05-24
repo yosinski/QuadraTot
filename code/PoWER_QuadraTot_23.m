@@ -10,7 +10,7 @@ clear all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for i=1:1
-    relearn = 0;
+    relearn = 1;
     [Return, s_Return, param, rl] = RL_PoWER(4, 4, relearn);
 end
 

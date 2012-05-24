@@ -462,7 +462,6 @@ class Robot():
             ret[ii] = int(duple[0])
             ret[ii+1] = int(duple[1])
 
-        cropWarning = True
         if cropWarning and ret != position:
             print 'Warning: cropped %s to %s' % (repr(position), repr(ret))
 

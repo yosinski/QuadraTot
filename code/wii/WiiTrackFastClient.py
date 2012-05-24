@@ -72,8 +72,8 @@ class WiiTrackFastClient(object):
 
             if len(data) < 1:
                 print 'Could not contact server'
-                None
-
+                continue
+            
             if data[0] == 'E':
                 # No target, or too many targets
                 #print 'Server reported error:', data
