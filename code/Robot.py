@@ -61,7 +61,7 @@ class Robot():
         self.loud  = loud
         self.cropMethod = cropMethod
 
-        if self.cropMethod not in ('square', 'smart'):
+        if self.cropMethod not in ('square', 'smart', None):
             raise Exception('unknown cropMethod')
 
         #if self.nServos != 9:
@@ -389,6 +389,8 @@ class Robot():
                 goalPosition = self.cropPositionSquare([int(xx) for xx in position], cropWarning)
             elif self.cropMethod == 'smart':
                 goalPosition = self.cropPositionSmart([int(xx) for xx in position], cropWarning)
+            elif self.cropMethod == None:
+                goalPosition = [int(xx) for xx in position]
             else:
                 raise Exception('unknown cropMethod')
         else:
