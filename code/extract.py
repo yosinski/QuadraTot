@@ -34,6 +34,9 @@ def main():
     plt.plot(range(1,len(speeds)+1), speeds)
     plt.ylabel('SPEED')
     plt.xlabel('Trial')
+    plt.savefig('savedPlot.eps')
+    plt.savefig('savedPlot.pdf')
+    plt.savefig('savedPlot.png')
     plt.show()
 
 if __name__ == '__main__':
