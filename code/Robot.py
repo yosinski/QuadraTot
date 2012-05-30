@@ -101,16 +101,19 @@ class Robot():
 
         self.actuators   = []
         self.actuatorIds = []
-
+        self.actuatorIDsOnNetwork = []
+        
         for dyn in self.net.get_dynamixels():
-            print dyn.id,
-            self.actuatorIds.append(dyn.id)
-            self.actuators.append(self.net[dyn.id])
+            self.actuatorIDsOnNetwork.append(dyn.id)
+            if dyn.id in self.expectedIds:
+                print dyn.id,
+                self.actuatorIds.append(dyn.id)
+                self.actuators.append(self.net[dyn.id])
         print "...Done"
 
         if len(self.actuators) != self.nServos and not self.silentNetFail:
-            raise RobotFailure('Expected to find %d servos on network, but only got %d (%s)'
-                               % (self.nServos, len(self.actuators), repr(self.actuatorIds)))
+            raise RobotFailure('Expected to find servos %s on network, but only got %s (scanned from %d to %d)'
+                               % (self.expectedIds, repr(self.actuatorIDsOnNetwork), min(self.expectedIds), max(self.expectedIds)))
 
         for actuator in self.actuators:
             #actuator.moving_speed = 90
