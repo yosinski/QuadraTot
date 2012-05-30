@@ -3,7 +3,6 @@ import random
 import os
 import shutil
 import string
-import numpy
 from datetime import datetime
 from copy import copy
 from time import sleep
@@ -75,35 +74,32 @@ class simrun:
 #        zdist = float(self.posEnd[2])-float(self.posBeg[2])
         return math.sqrt(math.pow(xdist,2)+math.pow(zdist,2))
 
-    def freqcheck(self, data):
-      	'''checks for the number of inflection points in the servo positions'''
-        pos = numpy.zeros(shape=(720,10))
-        for i in range(720):
-            for ii in range(10):
-                pos[i][ii] = float(data[i+1][ii])
+    def freqcheck(pos):
+	'''checks for the number of inflection points in the servo positions'''
         counter = 0
+
         for i in range(720): # 720 lines in the data file (12 seconds at 60Hz)
             # [time servo servo servo servo servo servo servo servo servo]
-            if  (i != 0 and i != 1) and ((pos[i][1]-pos[i-1][1] > 0 and pos[i-1][1]-pos[i-2][1] < 0) or (pos[i][1]-pos[i-1][1] < 0 and pos[i-1][1]-pos[i-2][1] > 0)):
-                counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][2]-pos[i-1][2] > 0 and pos[i-1][2]-pos[i-2][2] < 0) or (pos[i][2]-pos[i-1][2] < 0 and pos[i-1][2]-pos[i-2][2] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][3]-pos[i-1][3] > 0 and pos[i-1][3]-pos[i-2][3] < 0) or (pos[i][3]-pos[i-1][3] < 0 and pos[i-1][3]-pos[i-2][3] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][4]-pos[i-1][4] > 0 and pos[i-1][4]-pos[i-2][4] < 0) or (pos[i][4]-pos[i-1][4] < 0 and pos[i-1][4]-pos[i-2][4] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][5]-pos[i-1][5] > 0 and pos[i-1][5]-pos[i-2][5] < 0) or (pos[i][5]-pos[i-1][5] < 0 and pos[i-1][5]-pos[i-2][5] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][6]-pos[i-1][6] > 0 and pos[i-1][6]-pos[i-2][6] < 0) or (pos[i][6]-pos[i-1][6] < 0 and pos[i-1][6]-pos[i-2][6] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][7]-pos[i-1][7] > 0 and pos[i-1][7]-pos[i-2][7] < 0) or (pos[i][7]-pos[i-1][7] < 0 and pos[i-1][7]-pos[i-2][7] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][8]-pos[i-1][8] > 0 and pos[i-1][8]-pos[i-2][8] < 0) or (pos[i][8]-pos[i-1][8] < 0 and pos[i-1][8]-pos[i-2][8] > 0)):
-		counter += 1
-            if  (i != 0 and i != 1) and ((pos[i][9]-pos[i-1][9] > 0 and pos[i-1][9]-pos[i-2][9] < 0) or (pos[i][9]-pos[i-1][9] < 0 and pos[i-1][9]-pos[i-2][9] > 0)):
-		counter += 1
+            if (pos[i][1]-pos[i-1][1] > 0 and pos[i-1][1]-pos[i-2][1] < 0) or (pos[i][1]-pos[i-1][1] < 0 and pos[i-1][1]-pos[i-2][1] > 0) and i != 1:
+				counter += 1
+            if (pos[i][2]-pos[i-1][2] > 0 and pos[i-1][2]-pos[i-2][2] < 0) or (pos[i][2]-pos[i-1][2] < 0 and pos[i-1][2]-pos[i-2][2] > 0) and i != 1:
+				counter += 1
+            if (pos[i][3]-pos[i-1][3] > 0 and pos[i-1][3]-pos[i-2][3] < 0) or (pos[i][1]-pos[i-1][3] < 0 and pos[i-1][3]-pos[i-2][3] > 0) and i != 1:
+				counter += 1
+            if (pos[i][4]-pos[i-1][4] > 0 and pos[i-1][4]-pos[i-2][4] < 0) or (pos[i][1]-pos[i-1][4] < 0 and pos[i-1][4]-pos[i-2][4] > 0) and i != 1:
+				counter += 1
+            if (pos[i][5]-pos[i-1][5] > 0 and pos[i-1][5]-pos[i-2][5] < 0) or (pos[i][1]-pos[i-1][5] < 0 and pos[i-1][5]-pos[i-2][5] > 0) and i != 1:
+				counter += 1
+            if (pos[i][6]-pos[i-1][6] > 0 and pos[i-1][6]-pos[i-2][6] < 0) or (pos[i][1]-pos[i-1][6] < 0 and pos[i-1][6]-pos[i-2][6] > 0) and i != 1:
+				counter += 1
+            if (pos[i][7]-pos[i-1][7] > 0 and pos[i-1][7]-pos[i-2][7] < 0) or (pos[i][1]-pos[i-1][7] < 0 and pos[i-1][7]-pos[i-2][7] > 0) and i != 1:
+				counter += 1
+            if (pos[i][8]-pos[i-1][8] > 0 and pos[i-1][8]-pos[i-2][8] < 0) or (pos[i][1]-pos[i-1][8] < 0 and pos[i-1][8]-pos[i-2][8] > 0) and i != 1:
+				counter += 1
+            if (pos[i][9]-pos[i-1][9] > 0 and pos[i-1][9]-pos[i-2][9] < 0) or (pos[i][1]-pos[i-1][9] < 0 and pos[i-1][9]-pos[i-2][9] > 0) and i != 1:
+				counter += 1
         return counter
-
+        
     def cropPosition(self, position, cropWarning = False):
         # crops the given positions to their apropriate min/max values.
         #Requires a vector of length 9 to be sure the IDs are in the assumed order.'''
