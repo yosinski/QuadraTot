@@ -1,0 +1,42 @@
+Type of submission:
+
+Demo
+
+
+
+Name/title for submission:
+
+Aracna: An Open Source 3D Printed Walking Robot
+
+
+
+The name, bio, and email address of the author(s). If more than one author, designate one as the contact person.
+
+Contact / presenting author: Jason Yosinski (yosinski@cs.cornell.edu)
+Bio: Jason Yosinski is a PhD student at the Cornell Creative Machines Lab, where he investigates Artificial Intelligence and plays with robots. Since starting grad school, he helped create the first robotic guest to be interviewed on NPR, and his work in AI has been featured in New Scientist, Slashdot, MIT’s Technology Review, Kurzweil AI, RT, and the BBC. Before coming to Cornell, Jason graduated from Caltech, worked at a statistics startup, and then spent a year developing a thriving program in Pasadena that tricks middle school students into learning math while they think they are just playing with robots.
+
+Other authors: Sara Lohmann, Eric Gold, Jeff Clune, Jeremy Blum, and Hod Lipson.
+
+Hod Lipson Bio (if needed): In 2001 Hod Lipson joined the departments of Mechanical & Aerospace Engineering and the faculty of Computing & Information Science of Cornell University in Ithaca, NY. He is also a member of the Computer Science and Computational Biology graduate fields at Cornell. Prior to this appointment, he was a postdoctoral researcher at Brandeis University's Computer Science Department and a Lecturer at MIT's Mechanical Engineering Department. He received his PhD in 1998 from the Technion - Israel Institute of Technology. Before joining academia, he spent several years as a research engineer in the mechanical, electronic and software industries.
+
+(Other bios available if needed, but I wasn't sure if you only wanted one per submission)
+
+
+
+What you intend to talk about, the topic for your poster, or a description of your demo
+
+We would like to demonstrate Aracna, a new open source, 3D printed quadruped robot platform developed at the Cornell Creative Machines Lab. During our demonstration we will show the robot performing several gaits, and also talk about how and why the robot was designed. We will also show some videos of gaits learned in our lab and, most importantly, tell people how easy it is to 3D print and assemble their own Aracna using the open-source CAD files and drivers we provide.
+
+
+
+An explanation of the importance of your submission to the open-hardware community
+
+Children learn how to walk within about the first year of their lives. This is an interesting phenomenon, and one that begs the question of whether or not we can design similar algorithms to enable robots to learn to walk by themselves! In fact, teams around the world are working on this problem, but since they each use different robotic platforms to test out their ideas, it is hard to compare results between these teams. To encourage greater collaboration between scientists, we at the Cornell Creative Machines Lab have developed Aracna, an open-source platform that anyone can use for robotic experiments.
+
+Aracna is composed of off-the-shelf and 3D-printed parts, enabling other research teams and hobbyists to copy and modify its design according to their needs. Each of the four legs has two joints controlled by separate four-bar linkage mechanisms that drive the pitch of the hip joint and knee joint. This novel design causes unconventional kinematics, creating an opportunity for gait learning algorithms, which excel in counter-intuitive design spaces where human engineers tend to underperform. We're excited about Aracna because it is a low cost, flexible, robotic testing platform available to anyone via its open-source license.
+
+
+
+A maximum of TWO photos that help explain your topic of submission (optional)
+
+(see two attached photos)
