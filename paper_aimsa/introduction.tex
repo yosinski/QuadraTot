@@ -1,7 +1,32 @@
 \section{Introduction}
 
-What the problem is...
-
 \figp{aracna_black_2}{.75}{Example figure...}
 
-General learning:Learning gaits Various learning algorithms have been tested to be effective for legged robots. Their studies tested the viability of applying RL method to legged robot gaits learning. Competitive performance has been verified on methods such as HyperNEAT (Yosinski et al, 2011) and GA(Chernova et al, 2004) and other  methods(Hornby et al., 2005; Zykov et al., 2004; T´ellez et al., 2006; Valsalam and Miikkulainen, 2008). Despite the excellent performance of these algorithms, a major part of achieving good performance relies in tuning the parameters for the evolutionary algorithms(Kormushev et al, 2006). Here we present a different way for learning gaits using RL(Hill climbing). In our experiment, it turned out this method achieved competitive performance with Problem Definition:The gait-learning problem is defined to find a gait that maximizes some specific metric. Mathematically, we define a gait as a function that specifies a vector of commanded motor positions for a robot over time. Gaits without feedback --- also called open-loop gaits --- can be defined as \be\vec{x} = g(t)\ee According to the definition, open-loop gaits are deterministic. One particular gait should behave exactly the same when it is run from trial to trial. However, the actual robot motion and fitness measured will vary due to the noisiness of the real world physics.In our trials, one gait pattern was generated and sent to the robot and executed in an open loop manner, as defined. In particular, in this paper, we chose to compare open-loop gaits generated specifically by the RL\_POWER and HyperNEAT. The particular metric used will be described later.
+Various learning algorithms have been tested to be effective for
+legged robots. Their studies tested the viability of applying RL
+method to legged robot gaits learning. Competitive performance has
+been verified on methods such as HyperNEAT (Yosinski et al, 2011) and
+GA(Chernova et al, 2004) and other methods(Hornby et al., 2005; Zykov
+et al., 2004; T´ellez et al., 2006; Valsalam and Miikkulainen,
+2008). Despite the excellent performance of these algorithms, a major
+part of achieving good performance relies in tuning the parameters for
+the evolutionary algorithms(Kormushev et al, 2006). Here we present a
+different way for learning gaits using RL(Hill climbing). In our
+experiment, it turned out this method achieved competitive performance
+with Problem Definition:The gait-learning problem is defined to find a
+gait that maximizes some specific metric. Mathematically, we define a
+gait as a function that specifies a vector of commanded motor
+positions for a robot over time. Gaits without feedback --- also
+called open-loop gaits --- can be defined as
+
+\be\vec{x} = g(t)\ee
+
+According to the definition, open-loop gaits are deterministic. One
+particular gait should behave exactly the same when it is run from
+trial to trial. However, the actual robot motion and fitness measured
+will vary due to the noisiness of the real world physics.In our
+trials, one gait pattern was generated and sent to the robot and
+executed in an open loop manner, as defined. In particular, in this
+paper, we chose to compare open-loop gaits generated specifically by
+the RL\_POWER and HyperNEAT. The particular metric used will be
+described later.
