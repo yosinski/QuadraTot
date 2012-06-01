@@ -17,9 +17,9 @@ this paper, tethered cables powered both the computer and the
 servos. It measures approximately 39.5 centimeters from leg to
 opposite leg in the crouch position showed in [pic].Our performance
 metric was the displacement over the evaluation period of 12 seconds
-for each. Same as Jason et al described in [xx], the displacement was
+for each. Same as \cite{yosinski2011evolving-robot-gaits}, the displacement was
 measured using a Wii remote that was placed on the ceiling. Different
-from the original model described in [xx], the quadruped robot was
+from the original model described in \cite{yosinski2011evolving-robot-gaits}, the quadruped robot was
 equipped with a three-infrared-LED cluster on top rather than just
 one. The reason for this setup is that when fierce gaits were
 executed, the Wii remote loses tracking of the robot position due to
@@ -33,7 +33,7 @@ fitness evaluation code talks with the Wii remote by using this client
 and updates the position from beginning to end during each run. The
 metric for evaluating gaits was the Euclidian distance the robot
 traveled during a 12-second run on flat surface. Previous work done in
-[xx] and [xx1(k)] suggested that extremely fierce are not viable in
+\cite{yosinski2011evolving-robot-gaits} and \cite{clune2009evolving-coordinated-quadruped} suggested that extremely fierce gaits are not viable in
 general. These gaits tend to either overburden the servos or flip the
 robot. Thus, RL\_POWER(?) were tested after carefully cropping out the
 extremely fierce gaits each time. (As described earlier, each leg has
@@ -41,7 +41,10 @@ two joints, inner joint j1 and outer j2. The position of one leg is
 determined by the sum of the values of j1 and j2. Extremely fierce
 gaits usually have relatively small values of g. Thus cropping works
 by mapping the wild gaits onto the boundary of a triangular space over
-the two dimensional space of j1 and j2. [pic of j1 j2 space] [g = j1 +
-  j2] caption
+the two dimensional space of j1 and j2. \figref{smartCrop}....
 
-\figp{smartCrop}{1}{caption...}
+\figp{smartCrop}{1}{$g = j1 +  j2$ caption}
+
+\figp{sixLegPositions}{1}{caption... the left two are allowed, middle
+  two are on the red border line from \figref{smartCrop}, right two
+  are disallowed.}
