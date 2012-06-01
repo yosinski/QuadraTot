@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import re
 
 def main():
-    path = '/Users/hs454/Desktop/tmp/input.txt'
+    path = 'input.txt'
     f= open(path)
     lines = f.readlines()
     t = []
