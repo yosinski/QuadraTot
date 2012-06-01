@@ -76,6 +76,9 @@ function plot_hnperf()
   plot(gg, gcMean-gcStd/sqrt(3), 'k', 'linewidth', 1);
   plot(gg, gcMean+gcStd/sqrt(3), 'k', 'linewidth', 1);
 
+  xlabel('generations');
+  ylabel('body lengths per minute');
+
   % Save fig
   print('-dpdf', 'hyperneatPerformance.pdf');
 
