@@ -5,16 +5,25 @@ import matplotlib as mpl
 mpl.use('cocoaagg') 
 import matplotlib.pyplot as plt
 import re
+import numpy as np
 
 def main():
     path = '/Users/hs454/Desktop/tmp/'
     runs = sorted(listdir (path))
     total = []
-    avg = []
+    best1_all = []
+    best2_all = []
+    best3_all = []
     avg_all=[]
+    avg=[]
+    stds=[]
+    upper=[]
+    lower=[]
     pattern = re.compile("return_[0-9]*")
     bucket = []
-    best = 0
+    best1 = 0
+    best2 = 0
+    best3 = 0
     for run in runs:
         if pattern.match(run):
             speeds=[]
@@ -27,25 +36,37 @@ def main():
             speeds=sorted(list(set(sorted(speeds))))
             total.append(speeds)
             print speeds[0]
-            max_p = speeds[-1]
-            print max_p
+
     for i in range(0,300):
-        mean = (list(total[0][i])[1]+list(total[1][i])[1]+list(total[2][i])[1])/3
+        e1 = list(total[0][i])[1]
+        e2 = list(total[1][i])[1]
+        e3 = list(total[2][i])[1]
+        if best1 < e1:
+            best1=e1
+        if best2 < e2:
+            best2=e2
+        if best3 < e3:
+            best3=e3
+        std = np.std([best1,best2,best3])
+        stds.append(std)
+        best1_all.append(best1)
+        best2_all.append(best2)
+        best3_all.append(best3)
+        mean = (best1+best2+best3)/3
         avg.append(mean)
+        upper.append(mean+std)
+        lower.append(mean-std)
         avg_all.append((mean,i))
         
-    best = 0
-    best_index=0
-    for x,ii in avg_all:
-        if best < x:
-            best = x
-            best_index = ii
-    
-    plt.plot(range(1,len(avg)+1), avg)
-    plt.ylabel('AVERAGE SPEED')
+    maxi = max([best1,best2,best3])
+    print 'global max ',maxi
+    std = np.std(avg)
+    print 'standard deviation: ', std
+    plt.plot(range(1,len(avg)+1), avg, 'b', range(1,len(avg)+1),upper,'g', range(1,len(avg)+1), lower,'r')
+    plt.ylabel('Speed(cm/sec)')
     plt.xlabel('Trial')
-    plt.annotate('global max: '+str(best), xy=(best_index,best), xytext=(best_index+15, best+0.25),arrowprops=dict(facecolor='black', shrink=0.05))
-    plt.show()
+    plt.savefig('average.pdf')
+    #plt.show()
 
 if __name__ == '__main__':
 	main();
