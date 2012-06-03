@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p
+END
+ATmegaBOOT_644.hex
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/ATmegaBOOT_644.hex
+END
+ATmegaBOOT_644P.hex
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/ATmegaBOOT_644P.hex
+END
+ATmegaBOOT.c
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/ATmegaBOOT.c
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/README.txt
+END
+ATmegaBOOT_324P.hex
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/ATmegaBOOT_324P.hex
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/bootloaders/atmega644p/Makefile
+END

@@ -1,0 +1,227 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix
+END
+new.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/new.h
+END
+wiring_private.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring_private.h
+END
+wiring.c
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring.c
+END
+Stream.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Stream.h
+END
+HardwareSerial.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/HardwareSerial.h
+END
+WString.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/WString.h
+END
+wiring.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring.h
+END
+Tone.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Tone.cpp
+END
+Arduino.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Arduino.h
+END
+USBCore.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/USBCore.h
+END
+Server.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Server.h
+END
+IPAddress.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/IPAddress.h
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/main.cpp
+END
+Printable.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Printable.h
+END
+WCharacter.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/WCharacter.h
+END
+binary.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/cores/arbotix/binary.h
+END
+new.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/new.cpp
+END
+Stream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Stream.cpp
+END
+wiring_shift.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/602/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring_shift.c
+END
+HardwareSerial.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/HardwareSerial.cpp
+END
+WString.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/WString.cpp
+END
+Print.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Print.h
+END
+USBCore.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/USBCore.cpp
+END
+HID.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/HID.cpp
+END
+WInterrupts.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/WInterrupts.c
+END
+wiring_pulse.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring_pulse.c
+END
+IPAddress.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/IPAddress.cpp
+END
+wiring_analog.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring_analog.c
+END
+WMath.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/WMath.cpp
+END
+Client.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Client.h
+END
+USBAPI.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/USBAPI.h
+END
+Platform.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Platform.h
+END
+CDC.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/CDC.cpp
+END
+Print.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Print.cpp
+END
+wiring_digital.c
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/wiring_digital.c
+END
+USBDesc.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/USBDesc.h
+END
+Udp.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/606/trunk/arbotix/hardware/arbotix/cores/arbotix/Udp.h
+END
