@@ -27,13 +27,17 @@ def main():
     for run in runs:
         if pattern.match(run):
             speeds=[]
+            speeds2=[]
             f = open(run)
             lines = f.readlines()
             for line in lines:
                 spd_tr= line.split()
                 ts= (int(spd_tr[1]),float(spd_tr[0])*(14.0/12))
                 speeds.append(ts)
+                speeds2.append(float(spd_tr[0])*(14.0/12))
             speeds=sorted(list(set(sorted(speeds))))
+            print "mean: ", np.mean(speeds2)
+            print "std: ", np.std(speeds2)
             total.append(speeds)
             print speeds[0]
 
@@ -62,6 +66,7 @@ def main():
     print 'global max ',maxi
     std = np.std(avg)
     print 'standard deviation: ', std
+    
     plt.plot(range(1,len(avg)+1), avg, 'b', range(1,len(avg)+1),upper,'g', range(1,len(avg)+1), lower,'r')
     plt.ylabel('Speed(cm/sec)')
     plt.xlabel('Trial')

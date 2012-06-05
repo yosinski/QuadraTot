@@ -1,9 +1,9 @@
-#! /usr/bin/env python-32
+#! /usr/bin/env python
 
 import pdb
 from os import listdir
 import matplotlib as mpl 
-mpl.use('cocoaagg') 
+#mpl.use('cocoaagg') 
 import matplotlib.pyplot as plt
 import re
 
@@ -40,7 +40,7 @@ def main():
     ax = plt.axis()
     plt.axis((min(t), max(t), ax[2], ax[3]))
     plt.savefig('gait.pdf')
-    #plt.show()
+    plt.show()
     
     
 if __name__ == '__main__':

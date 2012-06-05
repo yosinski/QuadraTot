@@ -1,0 +1,207 @@
+%
+% JBY: ownstyles.sty
+%
+
+
+% required imports
+\usepackage{color}
+\usepackage{xspace}
+
+
+% Short commands
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\andd}{\wedge}
+\newcommand{\orr}{\vee}
+\def\naive{na\"{\i}ve\xspace}
+\def\Naive{Na\"{\i}ve\xspace}
+\def\naively{na\"{\i}vely\xspace}
+\def\Naively{Na\"{\i}vely\xspace}
+\newcommand{\ta}{\hspace*{2em}}     % like a tab?
+
+% Refs and labels
+\newcommand{\figlabel}[1]{\label{fig:#1}}
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\seclabel}[1]{\label{sec:#1}}
+\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+\newcommand{\tablabel}[1]{\label{tab:#1}}
+\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+
+% figgy - Simple centered figure
+\newcommand{\figgy}[2]{
+\begin{center}
+\vspace*{0.2cm}
+\includegraphics[width=#2\textwidth]{#1}
+\end{center}
+}
+
+% figvarp - More full featured figure
+\newcommand{\figvarp}[5][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\textwidth]{#2}
+
+  \caption[#5]{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+
+
+% figp - Standard figure
+\newcommand{\figp}[4][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+
+  \caption{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% figsp - Standard figure, starred (span column)
+\newcommand{\figsp}[4][thp]{
+  \begin{figure*}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+
+  \caption{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure*}
+}
+
+% figgp - Standard figure, 2 wide
+\newcommand{\figgp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+  \includegraphics[width=#5\linewidth]{#4}
+
+  \caption{#6}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% fiGGp - Standard figure, 2 row
+\newcommand{\fiGGp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  {#3}
+
+  {#4}
+
+  \caption{#5}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% figrow - One row of a fiGGp
+\newcommand{\figrow}[4]{
+  \includegraphics[width=#2\linewidth]{#1}
+  \includegraphics[width=#4\linewidth]{#3}
+}
+
+
+
+% figrow - One row of a fiGGp, top aligned with fixed height
+\newcommand{\figrowT}[5]{
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#3\linewidth]{#2}
+  \end{minipage}}
+  \hfill
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#5\linewidth]{#4}
+  \end{minipage}}
+}
+
+
+
+\newcommand{\acmFig}[4][0]{
+  \begin{figure}[tb]
+  \centering
+  \hspace*{#1\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFigg}[5][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#4\linewidth}
+  \includegraphics[width=#4\linewidth]{#2}
+  \includegraphics[width=#4\linewidth]{#3}
+  \caption{#5}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFiggggg}[9][0]{
+  \begin{figure}
+  \centering
+  %\epsfig{file=#2.eps, width=#7\linewidth}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#2}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#3}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#4}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#5}
+  \includegraphics[width=#7\linewidth,height=#8\linewidth]{#6}
+  \caption{#9}
+  \label{fig:#2}
+  \end{figure}
+}
+
+\newcommand{\acmFigDouble}[4][0]{
+  \begin{figure*}
+  \centering
+  \hspace*{#1\linewidth}
+  %\epsfig{file=#2.eps, width=#3\linewidth}
+  \includegraphics[width=#3\linewidth]{#2}
+  \caption{#4}
+  \label{fig:#2}
+  \end{figure*}
+}
+
+% codebox
+%\definecolor{codecolor}{rgb}{0.87,0.87,0.87}
+%\definecolor{codecolor}{rgb}{0.7,0.7,0.7}
+\definecolor{codecolor}{rgb}{0.9,0.9,0.9}
+\makeatletter\newenvironment{codeboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{codecolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\codebox}[1]{ \begin{codeboxx} \texttt{#1} \end{codeboxx} \newline}
+
+% edit boxes
+\definecolor{editcolor}{rgb}{1,0.87,0.87}
+\makeatletter\newenvironment{editboxx}[1][.95]
+{\begin{lrbox}{\@tempboxa}\begin{minipage}{#1\linewidth}\vspace{1ex}}
+{\vspace{0ex}\end{minipage}\end{lrbox}\vspace{1ex}\fcolorbox{black}{editcolor}{\usebox{\@tempboxa}}\vspace{1ex}}
+\makeatother
+\newcommand{\editbox}[1]{ \begin{editboxx} \textbf{\textit{Edit:}} \\ #1 \end{editboxx} \newline}
+\newcommand{\edit}[1]{ \fcolorbox{black}{editcolor}{\textbf{\textit{Edit:}} #1}}
+
+% graycode
+% JBY: Modified from http://tex.stackexchange.com/questions/53941/verbatim-environment-with-background-color-pdflatex-and-tex4ht
+\usepackage{listings}
+
+\definecolor{verbgray}{gray}{0.9}
+
+\lstnewenvironment{graycode}{%
+  \lstset{backgroundcolor=\color{verbgray},
+  frame=single,
+  framerule=0pt,
+  basicstyle=\ttfamily,
+  columns=fullflexible}}{}

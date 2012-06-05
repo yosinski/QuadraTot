@@ -1,0 +1,325 @@
+\section{Introduction}
+
+% Motivate and abstractly describe the problem you are addressing and
+% how you are addressing it. What is the problem? Why is it important?
+% What is your basic approach? A short discussion of how it fits into
+% % related work in the area is also desirable. Summarize the basic
+% results and conclusions that you will present.
+
+Applications of walking robots often call for the ability to walk as
+quickly, smartly or with as little power as possible. Some groups have
+used learning methods to generate gaits optimized for some metric.
+Approaches differ in their starting assumptions, some essentially
+tweaking the parameters of a hand-tuned model others
+exploring a reasonably compact parameter space.
+Here we present a new method, RL PoWER, reinforcement learning with EM(Expectation Maximization) as it was tested effective on related robotics problems. 
+This paper shows a comparison of the two different learning methods 
+implemented, HyperNEAT and RL PoWER.  RL PoWER
+method created walks that are substantially faster than the previous
+HyperNEAT gait. I invite readers with short attention spans to view
+two videos to compare the previous gaits and the current stable gaits:
+
+\url{http://www.youtube.com/watch?v=ODoiOj9DdGg}
+
+\url{http://www.youtube.com/watch?v=LI76mQepEjc&feature=youtu.be}
+
+%The code so far consists of the robot class, optimization class,
+%parameterized model, sine model, and camera feedback.
+
+
+
+\section{Problem definition}
+% Precisely define the problem you are addressing (i.e. formally specify
+% the inputs and outputs). Elaborate on why this is an interesting and
+% important problem.
+
+I am testing and comparing two learning methods, HyperNEAT and RL PoWER
+, to design a parametrized gait for a quadruped robot from the Cornell
+Computational Synthesis Lab that maximize forward walking speed. 
+Subproblems include improving the robostness of the robot so that it 
+fails less frequently and make the measurement more reliable by minimizing the leg sliding. 
+
+\section{Implementation}
+\seclabel{implement}
+% Describe how you implemented your system and how you structured it. 
+% This should give an overview of the system, not a detailed 
+% documentation of the code. The documentation of the code is part of 
+% the code you hand in. You might want to comment on high-level design 
+% decisions that you made. Also explain how you obtained your
+% data and any pre-processing you did to it.
+\begin{itemize}
+\item \code{RL\_PoWER.m*} The RL PoWER algorithm implementation defined in matlab code. Output a gait sequence file for 9 motors. Supports restart from previously interrupted trial. 
+\item \code{runRobot.m*} Communication code for reading the generated file of motor actions and execute on robot by calling the python code. 
+\item \code{localSettings.m*} Execution settings file. 
+\item \code{load\_trajectory.m*} Load the generated gait file and do the conversion.
+\item \code{exportTrajectoryWithoutRescaling.m*} Export the spline function to actual robot gaits
+\item \code{paramToPolicy.m*} Transforming spline representation to actual robot gaits parameters.
+\item \code{policyToParam.m*} Transforming gait parameters to corresponding spline representation.
+\item \code{PoWER\_QuadraTot\_23.m*} main method for system call
+\end{itemize}
+
+\footnote{*Contributed equally by Haocheng Shen, Petar Kormushev and Jason Yosinski}
+
+
+
+\section{Method}
+\seclabel{method}
+
+% Describe in reasonable detail the algorithm you are using to address
+% this problem. A pseudo-code description of the algorithm you are
+% using is frequently useful. If it makes sense for your project,
+% trace through a concrete example, showing how your algorithm
+% processes this example. The example should be complex enough to
+% illustrate all of the important aspects of the problem but simple
+% enough to be easily understood. If possible, an intuitively
+% meaningful example is better than one with meaningless symbols.
+\subsection{Policy Representation by Splines}
+The simplest model with back-compatibility is geometric
+splines. For a given model f(x) with K knots, we can preserve the
+exact shape of the generated curve while adding extra knots to the
+original spline. Say, if we put one additional knot between every two
+consecutive knots of the original spline, we end up with a 2K - 1
+knots and a spline that has the same shape as the original one. In
+order to do this, we need to define an algorithm for evolving the
+parameterization from $K$ to $L$ knots ($L > K$), which is formulated as 
+Algorithm 1. Without loss of generality, the policy parameters are
+normalized into $[0, 1]$, and appropriately scaled/shifted as necessary
+later upon use.
+
+\begin{algorithm}
+\caption{EvolvePolicy-Spline ($P_{current}$: current policy, $L$: desired new number of parameters)}
+\label{alg_Evolve_Spline}
+\begin{algorithmic}[1]
+
+\STATE $K$ $\leftarrow$ $P_{current}.numberOfParameters$
+
+\STATE $X_{current}$ $\leftarrow$ $[0, \frac{1}{K-1}, \frac{2}{K-1}, ... , 1]$ % Knots
+\STATE $Y_{current}$ $\leftarrow$ $P_{current}.parameterValues$ % Values
+\STATE $S_{current}$ $\leftarrow$ ConstructSpline($X_{current}$, $Y_{current}$) % Spline
+%\COMMENT{ Optional: make the spline cyclic}
+
+\STATE $X_{new}$ $\leftarrow$ $[0, \frac{1}{L-1}, \frac{2}{L-1}, ... , 1]$
+\STATE $Y_{new}$ $\leftarrow$ EvaluateSplineAtKnots($S_{current}$, $X_{new}$)
+\STATE $S_{new}$ $\leftarrow$ ConstructSpline($X_{new}$, $Y_{new}$)
+%\COMMENT{ Optional: make the spline cyclic}
+
+\STATE $P_{new}.numberOfParameters$ $\leftarrow$ $L$
+\STATE $P_{new}.parameterValues$ $\leftarrow$ $S_{new}$.$Y_{new}$
+
+\STATE return $P_{new}$
+
+\end{algorithmic}
+\end{algorithm}
+
+
+For the experiment, we set 3 knots for each servo and there are 8
+servos in total. The servo in the hip is not used in
+our experiment. Previous work has verified that quadruped gaits
+perform better when they are coordinated \cite{clune2009evolving-coordinated-quadruped} \cite{clune2011on-the-performance-of-indirect-encoding}
+\cite{valsalam2008modular-neuroevolution-for-multilegged}. For each spline, we calculate its corresponding parameterized gait for one unit time cycle. Given that, then apply the same
+pattern to every cycle throughout the 12 seconds of one
+trial. Specifically, each spline(a set of 3 knots) is interpreted to its corresponding servo positions as
+following:
+\[
+\vec{g}(t) =
+\left[ {\begin{array}{c@{ }c@{ }c@{ }l@{ }l}
+R \cdot f(s1, s2, s3) & \ \          & \             & \            & + C \\ % 1
+0                              & \             & \             & \            & + C_C \\ % 8
+\end{array} } \right]
+\]
+And the meaning of its parameters are listed in \tabref{parameters}
+\begin{table}[b]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameters        &                           &       \\
+in $\vec{\theta}$ & Description               & Range \\
+\hline
+\hline
+$f(s1,s2,s3)$        & Spline function           & [0,1] \\  %subject to change
+\hline
+$R$          & Position multiplier                & [256, 768] \\
+\hline
+\end{tabular}
+\caption{The \emph{RL PoWER} motion model parameters.}
+\tablabel{parameters}
+\label{tab:params}
+\end{center}
+\end{table}
+
+
+
+
+\section{Related work}
+% Briefly explain who else worked on related problems in the past and what
+% methods they used. Explain if you are using similar methods, or if your
+% approach is different and if so - how (either is ok).
+Many attempts have been made on robot gaits learning using machine learning algorithms, producing competitive results (Chernova and Veloso, 2005; Hornby et al., 2005; Zykov et al., 2004; Clune et al., 2009a, 2011, 2009b,c; T´ellez et al., 2006; Valsalam and Miikkulainen, 2008). In fact, Jason et al. tested and compared six different algorithms for quadruped robot gait learning in their studies. HyperNEAT, a generative encoding neural network algorithm, achieved the best performance among all six methods. In Kormushev et al. (2011)'s bipedal robot energy reduction research, a reinforcment learning method was used to optimize the performance. The results from Kormushev's research showed this algorithm's poetential for walking problems. This reinforcement learning method still needs more tests for further explorations.
+
+\section{Experimental Evaluation}
+Our performance metric was the displacement over the evaluation period of 12 seconds
+for each. Same as Yosinski et al. (2011), the displacement was measured using a
+Wii remote that was placed on the ceiling. Different from the original model described
+in Yosinski et al. (2011), the quadruped robot was equipped with a three-infrared-LED
+cluster on top rather than just one. The reason for this setup is that when fierce gaits
+were executed, the Wii remote loses tracking of the robot position due to the limited
+visible angle of a single LED. These three LEDs were place tightly together to act
+as one signal emitter. Each LED was tilted outwards in order to maximize the visible
+range. A separate tracking server ran on the robot PC interacted with theWii remote via
+bluetooth by using the CWiid library. A corresponding client communicates with this
+server via socket connection. Our fitness evaluation code talks with the Wii remote by
+using this client and updates the position from beginning to end during each run. The
+metric for evaluating gaits was the Euclidian distance the robot traveled during a 12-
+second run on flat surface. Previous work done in Yosinski et al. (2011) and Clune et al.
+(2009) suggested that extremely fierce gaits are not viable in general. These gaits tend
+to either overburden the servos or flip the robot. Thus, RL PoWER were tested after
+carefully cropping out the extremely fierce gaits each time. As described earlier, each
+leg has two joints, inner joint j1 and outer j2. The position of one leg is determined by
+the sum of the values of j1 and j2. Extremely fierce gaits usually have relatively small
+values of g. As shown in Figure 3, this cropping method works by mapping the wild
+gaits onto the boundary of a quasi-triangular area in the two-dimensional space of j1
+and j2.
+
+\section{Results}
+
+\subsection{Hardware and interface Improvement}
+The robot has been verified to fail under extreme fierce motions. So, one change I made to this is preventing these actions to happen from the first hand. Thus the servo failure chance is solved for most of the time. The threshold of cropping was carefully chosen so that most gaits are maintained. 
+
+
+\subsection{Quantitative}
+The results for the gaits evolved by RL PoWER and HyperNEAT are shown in \tabref{results}. A total of 900 evaluations were performed for RL PoWER (300 for each of three runs). The reason these two algorithms have different number of tirals is that runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of a run. Overall, the RL PoWER gaits were
+faster by far, beating the HyperNEAT when comparing
+either average or best gaits.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|r|c|c|c||c|}
+\hline
+                                         & Average & Std. Dev \\
+\hline                                    
+\hline                                    
+RL PoWER                       & 7.62  &    2.1   \\
+\hline
+HyperNEAT                      & 6.28   &   1.26   \\
+\hline
+\end{tabular}
+\caption{The average and standard deviation of the best gaits found
+  for both algorithm during each of three runs, in cm/sec.}  \tablabel{results}
+\end{center}
+\end{table}
+
+\subsection{Discussion}
+% Is your hypothesis supported? What conclusions do the results support
+% about the strengths and weaknesses of your method compared to other 
+% methods? How can the results be explained in terms of the underlying 
+% properties of the algorithm and/or the data.
+Overall, the RL PoWER gaits were
+faster by far, beating the HyperNEAT when comparing
+either average or best gaits. I believe that this is because RL PoWER uses evolvable splines to represent gaits As explained earlier,  
+The single best gait found during this study had a speed of 11.09 centimeters/sec,  14.7\% better than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
+complex but more regular than the HyperNEAT, but producing higher speed. As shown in \figref{rlPattern}
+, multiple motors are more coordinated than the HyperNEAT gait. 
+\figp{rlPattern}{0.75}{The motor positions of a typical well performing gait over one cycle. It matches exactly the shape of its corresponding spline representation. This pattern shows the simplicity and power of geometric splines representations.}
+
+\figp{neat_110115_211410_00000_002_filt_zoom}{0.75}{A well performing HyperNEAT gait's pattern of motor positions}
+
+A corresponding observation from the graph on this property is that the noisiness of
+RL PoWER is higher than HyperNEAT. One reason for this is that the RL PoWER intentionally adds noise when exploring the space near the best ranked policies. Another phenomenon seen from the \figref{rlPerform} is that one run of RL PoWER's general performance largely depends on initial gaits, which is a trait of hill climbing algorithms. The larger standard deviation in RL PoWER for space exploring can be easily fixed by tuning the noise parameter. RL PoWER converges to optimality at a higher rate. This is due to the more heuristically guided reinforcement learning of RL PoWER. HyperNEAT, on the other hand, has a larger dimension to explore due to its generative encoding method. While the evolvable spline representation used by RL PoWER has lower dimensions. The convergence rate of HyperNEAT is thus lower.
+
+
+
+\section{Future work}
+% What are the major shortcomings of your current method? For each 
+% shortcoming, propose additions or enhancements that would help overcome it.
+Though 900 trials for RL PoWER and 540 trials for HyperNEAT has been used to test the applicability of RL PoWER and 
+compare the performance of the two, still, much more runs are needed to statisstically compare the two algorithms.
+
+So, here are some work that may be achieved in future
+\begin{itemize}
+\item Improve hardware connection, lower the chance of servo failure
+\item More runs and/or longer runs
+\item Tuning simulator for good approximation 
+\item Using simulation to statistically compare the algorithms on quadrupedal robots
+\end{itemize}
+
+
+
+\section{Conclusion}
+% Briefly summarize the important results and conclusions presented in 
+% the paper. What are the most important points illustrated by your 
+% work? How will your results improve future research and applications 
+% in the area?
+The previously encountered hardware problems about using QuadraTot have been solved by the newly added booties.
+The measurement reliability has been enchanced by the fixed Robot class in python, preventing extremely fierce gaits. 
+
+We have presented a new reinforcement-learning-based algorithm for
+optimizing a quadrupedal gait for linear speed. We implemented and
+tested six learning strategies for parameterized gaits and compared
+them to gaits produced by neural networks evolved with the HyperNEAT
+generative encoding. Though both methods resulted in an improvement
+over the robot’s previous \naive gaits, based on the statistics
+collected, RL PoWER has a more elegant and consistent performance.
+
+
+One guess led by this study is that for feedback oriented tasks,
+reinforcement learning methods are more fit in natural. Despite the
+complexities of HyperNEAT, a simpler algorithm on the code level,
+delivered better performance in general. Also, evolvable spline
+interpolation is shown to be simple and representationally powerful at
+the same time. Evolvable splines can serve as a general representation for various other
+learning problems.
+
+
+\section{Acknowledgments}
+% List any people not on the team who helped you with your project: Your
+% TA, other people you consulted with or had useful discussions (say in 
+% a word or two what they did), people who proofread your report, and 
+% any external code you used (libraries etc).
+\begin{itemize}
+\item Hod Lipson, Cornell Computational Synthesis Lab: adviser.
+\item Jason Yosinski, Cornell Computational Syntheis Lab: adviser
+\item Petar Kormushev, Italy Institute of Technology: inventor of RL PoWER algorithm
+\item Kyrrehg Glette, University of Oslo: collaborated on the design of anti-sliding booties.
+\end{itemize}
+
+\section{Team}
+% A table listing the names of the people who worked on the project, and who
+% did what.
+
+\begin{itemize}
+\item Haocheng Shen
+\begin{itemize}
+\item Robot platform reconstructing and improvement
+\item RL PoWER algorithm integration and testing
+\item \code{RL\_PoWER.m} and \code{runRobot.m} matlab code and python code integration for running trials on the reconstructed robot platform
+\item \code{Robot.py} classes, with new cropping method and bug fix
+\item \code{extract.py} scripts, for processing collected gait data and plotting
+\item \code{extractGait.py} scripts, for processing collected gait data and plotting
+\item Plotting and evaluating results
+\end{itemize}
+
+\item Jason Yosinski
+\begin{itemize}
+\item {RL\_PoWER}\code{exportTrajectoryWithoutRescaling.m} and \code{getDataPath.m} \code{paramToPolicy}, \code{LoadTrajectory}, and \code{PoWER\_QuadraTot.m} matlab code
+\item mentoring \& evaluating results
+\end{itemize}
+
+\item Petar Kormushev
+\begin{itemize}
+\item The inventor of combining reinforcemen learning and EM algoorithms for quadrupedal robot gait learning
+\item \code{RL\_PoWER.m}\code{exportTrajectoryWithoutRescaling.m} and \code{getDataPath.m} \code{paramToPolicy}, \code{LoadTrajectory}, and \code{PoWER\_QuadraTot.m} matlab code
+\item implementation of the original algorithm
+\end{itemize}
+
+
+\section{Appendix}
+% Describe the code files you uploaded into CMS
+\begin{itemize}
+\item Publication paper draft for AIMSA conference
+\item RL PoWER performance video online 
+\item matlab data workspace files for recording all three runs' parameters
+\item python code for processing data
+\end{itemize}
+\end{itemize}
+
+% LocalWords:  vertices
