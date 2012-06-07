@@ -64,7 +64,7 @@ class Driver:
             res += self.ser.write(chr(val))
         res += self.ser.write(chr(checksum))
         #print "bytes sent: " + str(res)
-        #return self.getPacket2(0) #TODO: uncomment this line, get rid of res = ...
+        return self.getPacket2(0) #TODO: uncomment this line, get rid of res = ...
     
     def getPacket2(self, mode, id=-1, leng=-1, error=-1, params = None):
         """ Read a return packet, iterative attempt """

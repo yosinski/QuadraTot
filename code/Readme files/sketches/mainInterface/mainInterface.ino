@@ -252,7 +252,7 @@ void loop() {
 					}
 					
 					commandOverTime(pos,dur);
-					//returnPos();
+					returnPos();
 					
 					
 				}else if(ins == AX_WRITE_DATA){
