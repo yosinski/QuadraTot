@@ -1,3 +1,50 @@
 \section{Experimental Setup}
 
-hardware details, ...
+The quadruped robot used was assembled from parts purchased online and
+parts printed by the Objet Connex 500 3-D Printing System. The robot
+actuation system consists of 5 AX-18+ Dynamixel servos and 4 AX-12+
+Dynamixel servos: one inner joint with one AX-18+ servo and one outer
+joint with AX-12+servo in each of the four legs, and one AX-18+ servo
+at the center. To avoid the formerly reported AX-18+ servos are used
+in this robot because of their stronger actuation power than that of
+AX-12+. Each servo could be set to a position in the range [0, 1023]
+by using PyDynamixel library, corresponding to a physical range [-120$^\circ$,
+  +120$^\circ$]. Also, to prevent collisions with the robot body, the control
+module filter out the commands to a safe range. This range was [-85$^\circ$,
+  +60$^\circ$] for the inner leg servos, [-113$^\circ$, +39$^\circ$] for the outer leg
+servos, and [-28$^\circ$, +28$^\circ$] for the center hip servo. In the studies of
+this paper, tethered cables powered both the computer and the
+servos. It measures approximately 39.5 centimeters from leg to
+opposite leg in the crouch position showed in \figref{quadratotWhiteBooties}. 
+
+Our performance metric was the displacement over the evaluation period of 12 seconds
+for each. Same as \cite{yosinski2011evolving-robot-gaits}, the displacement was
+measured using a Wii remote that was placed on the ceiling. Different
+from the original model described in \cite{yosinski2011evolving-robot-gaits}, the quadruped robot was
+equipped with a three-infrared-LED cluster on top rather than just
+one. The reason for this setup is that when fierce gaits were
+executed, the Wii remote loses tracking of the robot position due to
+the limited visible angle of a single LED.  These three LEDs were
+place tightly together to act as one signal emitter. Each LED was
+tilted outwards in order to maximize the visible range. A
+separate tracking server ran on the robot PC interacted with the Wii
+remote via bluetooth by using the CWiid library.  A corresponding
+client communicates with this server via socket connection. Our
+fitness evaluation code talks with the Wii remote by using this client
+and updates the position from beginning to end during each run. The
+metric for evaluating gaits was the Euclidian distance the robot
+traveled during a 12-second run on flat surface. Previous work done in
+\cite{yosinski2011evolving-robot-gaits} and \cite{clune2009evolving-coordinated-quadruped} suggested that extremely fierce gaits are not viable in
+general. These gaits tend to either overburden the servos or flip the
+robot. Thus, RL PoWER were tested after carefully cropping out the
+extremely fierce gaits each time. As described earlier, each leg has
+two joints, inner joint j1 and outer j2. The position of one leg is
+determined by the sum of the values of j1 and j2. Extremely fierce
+gaits usually have relatively small values of $g$. As shown in \figref{smartCrop}, this cropping method works
+by mapping the wild gaits onto the boundary of a quasi-triangular area in
+the two-dimensional space of j1 and j2.
+
+\figp{smartCrop}{1}{The red line is the cropping border, $g = j1 +  j2$. As shown in \figref{sixLegPositions}}
+
+\figp{sixLegPositions}{1}{The left two positions are allowed; middle
+  two positions are on the red border line from \figref{smartCrop}; right two positions are deemed as "extremely fierce", thus are disallowed.}
