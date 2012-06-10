@@ -5,10 +5,10 @@ parts printed by the Objet Connex 500 3-D Printing System. The robot
 actuation system consists of 5 AX-18+ Dynamixel servos and 4 AX-12+
 Dynamixel servos: one inner joint with one AX-18+ servo and one outer
 joint with AX-12+servo in each of the four legs, and one AX-18+ servo
-at the center. To avoid the formerly reported AX-18+ servos are used
+at the center. To avoid the formerly reported \edit{???} AX-18+ servos are used
 in this robot because of their stronger actuation power than that of
 AX-12+. Each servo could be set to a position in the range [0, 1023]
-by using PyDynamixel library, corresponding to a physical range [-120$^\circ$,
+by using pydynamixel library, corresponding to a physical range [-120$^\circ$,
   +120$^\circ$]. Also, to prevent collisions with the robot body, the control
 module filter out the commands to a safe range. This range was [-85$^\circ$,
   +60$^\circ$] for the inner leg servos, [-113$^\circ$, +39$^\circ$] for the outer leg
@@ -47,4 +47,4 @@ the two-dimensional space of j1 and j2.
 \figp{smartCrop}{1}{The red line is the cropping border, $g = j1 +  j2$. As shown in \figref{sixLegPositions}}
 
 \figp{sixLegPositions}{1}{The left two positions are allowed; middle
-  two positions are on the red border line from \figref{smartCrop}; right two positions are deemed as "extremely fierce", thus are disallowed.}
+  two positions are on the red border line from \figref{smartCrop}; right two positions are deemed as ``extremely fierce'', thus are disallowed.}

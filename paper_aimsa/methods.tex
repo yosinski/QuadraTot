@@ -2,14 +2,14 @@
 
 \subsection{Policy Representation by Splines}
 The simplest model with back-compatibility is geometric
-splines. For a given model f(x) with K knots, we can preserve the
+splines. \editbox{Too fast... add a sentence or two on what the methods are trying to do, and what back-compatibility is.} For a given model f(x) with K knots, we can preserve the
 exact shape of the generated curve while adding extra knots to the
 original spline. Say, if we put one additional knot between every two
 consecutive knots of the original spline, we end up with a 2K - 1
 knots and a spline that has the same shape as the original one. In
 order to do this, we need to define an algorithm for evolving the
 parameterization from $K$ to $L$ knots ($L > K$), which is formulated as 
-Algorithm 1 in \cite{kormushev2011bipedal-walking-energy}.  Without loss of generality, the policy parameters are
+Algorithm 1 in \cite{kormushev2011bipedal-walking-energy} \edit{reproduce that algorithm here?}.  Without loss of generality, the policy parameters are
 normalized into $[0, 1]$, and appropriately scaled/shifted as necessary
 later upon use.
 
@@ -48,13 +48,11 @@ parameterization is not practical. Future work may incorporate simulations into 
 For the experiment, we set 3 knots for each servo and there are 8
 servos in total. The servo in the hip is not used in
 our experiment. Previous work has verified that quadruped gaits
-perform better when they are coordinated \cite{clune2009evolving-coordinated-quadruped} \cite{clune2011on-the-performance-of-indirect-encoding}
-\cite{valsalam2008modular-neuroevolution-for-multilegged}. For each spline, we calculate its corresponding parameterized gait for one unit time cycle. Given that, then apply the same
+perform better when they are coordinated \cite{clune2009evolving-coordinated-quadruped, clune2011on-the-performance-of-indirect-encoding, valsalam2008modular-neuroevolution-for-multilegged}. For each spline, we calculate its corresponding parameterized gait for one unit time cycle. Given that, then apply the same
 pattern to every cycle throughout the 12 seconds of one
-trial. Specifically, each spline(a set of 3 knots) is interpreted to its corresponding servo positions as
-following:
+trial. Specifically, each spline (a set of 3 knots) is interpreted to its corresponding servo positions as shown in \eqnref{rl} and \tabref{params}.
 
-\begin{table}[b]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -69,18 +67,20 @@ $R$          & Position multiplier                & [256, 768] \\
 \end{tabular}
 \caption{The \emph{RL PoWER} motion model parameters.}
 \tablabel{parameters}
-\label{tab:params}
+\tablabel{params}
 \end{center}
 \end{table}
 
 
-\[
+\be
 \vec{g}(t) =
 \left[ {\begin{array}{c@{ }c@{ }c@{ }l@{ }l}
 R \cdot f(s1, s2, s3) & \ \          & \             & \            & + C \\ % 1
 0                              & \             & \             & \            & + C_C \\ % 8
 \end{array} } \right]
-\]
+\eqnlabel{rl}
+\ee
 
-
+\editbox{Add a new equation showing all servos (all nine) with their
+  actual values of the parameters $R$ and $C$ plugged in.}
 
