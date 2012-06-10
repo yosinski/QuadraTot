@@ -17,8 +17,8 @@ later upon use.
 
 Here we used an RL approach to change the complexity of the policy
 representation dynamically while the trial is running. In
-\cite{kormushev2011bipedal-walking-energy}'s studies on reducing energy
-consumption for bipedal robots, a mechanism that can
+earlier studies on reducing energy
+consumption for bipedal robots \citep{kormushev2011bipedal-walking-energy}, a mechanism that can
 evolve the policy parameterization was used. The method starts from a
 very simple parameterization and gradually increases its
 representational capability. The method was tested to be capable of generating
@@ -34,21 +34,21 @@ values. This original parameterization starts from 4 knots and grows up to 32 kn
 
 \cite{kober2009learning-motor-primitives} proposed a RL algorithm
 called Policy learning by Weighting Exploration with the
-Returns(PoWER), which is based on Expectation-Maximization algorithm
+Returns (RL PoWER), which is based on Expectation-Maximization algorithm
 (EM). The proposed technique for evolving the policy parameterization
-is a combination with this EM-based RL algorithm, named PoWER \cite{kober2009learning-motor-primitives}. The reason for using this is its relatively fewer parameters that need tuning. We
+is a combination with this EM-based RL algorithm, named PoWER \cite{kober2009learning-motor-primitives}. \edit{Check the prev sentence... I don't get it} The reason for using this is its relatively fewer parameters that need tuning. We
 evolved the policy parameterization only on those past trials ranked
 the highest by the importance sampling technique used by the PoWER
 algorithm. The intuition behind is that highly ranked
 parameterizations have more potential to evolve even better in the
 future. Besides, evolving all the parameterizations increases the exploring space. Since our experiment
-is done on a physical robot, explore all the variations of every
+is done on a physical robot, exploring all the variations of every
 parameterization is not practical. Future work may incorporate simulations into the studies, as illustrated in \cite{bongard2006resilient-machines-through}.
 
-For the experiment, we set 3 knots for each servo and there are 8
+For the experiment, we set the splines to have 3 knots for each servo, and there are 8
 servos in total. The servo in the hip is not used in
 our experiment. Previous work has verified that quadruped gaits
-perform better when they are coordinated \cite{clune2009evolving-coordinated-quadruped, clune2011on-the-performance-of-indirect-encoding, valsalam2008modular-neuroevolution-for-multilegged}. For each spline, we calculate its corresponding parameterized gait for one unit time cycle. Given that, then apply the same
+perform better when they are coordinated \citep{clune2009evolving-coordinated-quadruped, clune2011on-the-performance-of-indirect-encoding, valsalam2008modular-neuroevolution-for-multilegged}. For each spline, we calculate its corresponding parameterized gait for one unit time cycle \edit{how long is this?} and then apply the same
 pattern to every cycle throughout the 12 seconds of one
 trial. Specifically, each spline (a set of 3 knots) is interpreted to its corresponding servo positions as shown in \eqnref{rl} and \tabref{params}.
 

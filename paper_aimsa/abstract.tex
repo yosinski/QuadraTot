@@ -1,11 +1,37 @@
-A reinforcement learning approach which can evolve the policy parameterization dynamically during
-the learning process for quadruped robot gait \edit{???}. By gradually increasing the representational
-power of the policy parameterization, it manages to find better
-policies faster than HyperNEAT, a state-of-the-art evolutionary ANN algorithm that achieved the best performance in previous studies.
+%A reinforcement learning approach which can evolve the policy
+%parameterization dynamically during the learning process for quadruped
+%robot gait \edit{???}. By gradually increasing the representational
+%power of the policy parameterization, it manages to find better
+%policies faster than HyperNEAT, a state-of-the-art evolutionary ANN
+%algorithm that achieved the best performance in previous studies.
+%
+%Expectation-Maximization-based reinforcement learning algorithm is
+%used. The test was done on a physical quadrupedal robot
+%(QuadraTot). The results show that the evolving policy
+%parameterization combined with expectation-maximization (RL PoWER)
+%outperforms substantially the HyperNEAT, by having faster convergence
+%and higher final reward. According to the statistics collected, the RL
+%PoWER achieves 16.3\% advantage over the HyperNEAT, the best method
+%tested on QuadraTot in previous studies.
 
-Expectation-Maximization-based reinforcement learning algorithm
-is used. The test was done on a physical quadrupedal robot (QuadraTot). The results show that the evolving policy parameterization combined with expectation-maximization (RL PoWER)
-outperforms substantially the HyperNEAT, by having
-faster convergence and higher final
-reward. According to the statistics collected, the RL PoWER achieves 16.3\%
-advantage over the HyperNEAT, the best method tested on QuadraTot in previous studies.
+Legged robots are uniquely privileged over their wheeled counterparts
+in their potential to access rugged terrain. However, designing
+walking gaits by hand for legged robots is a difficult and
+time-consuming process, so we seek algorithms for learning such gaits
+automatically using real world experimentation. Numerous previous
+studies have examined a variety algorithms for learning gaits, using
+an assortment of different robots. It is often difficult to compare
+the algorithmic results from one study to the next, because the
+conditions and robots used vary. With this in mind, we have used an
+open-source, 3D printed quadruped robot called QuadraTot, so the results may be
+verified, and hopefully improved upon, by any group so
+desiring. Because many robots do not have accurate simulators, we test
+gait-learning algorithms entirely on the physical robot. Previous
+studies using the QuadraTot have compared parameterized splines, the
+HyperNEAT generative encoding, and (Kyrre's algorithm). Here we
+compare these results to an algorithm called Policy learning by
+Weighting Exploration with the Returns, or RL PoWER. We report that
+this algorithm has learned the fastest gait yet reported in the
+literature, 16.3\% faster \edit{different number than in results?} than reported for HyperNEAT and \edit{???
+compared to Kyrre's?}. In addition, the learned gaits are less taxing
+on the robot and more repeatable than previous record-breaking gaits.
