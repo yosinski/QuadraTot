@@ -1,9 +1,9 @@
 \section{Conclusion and Future Work}
 
 We have presented results from a recently introduced reinforcement-learning-based algorithm for
-optimizing a quadrupedal gait for linear speed, tested on a physical robot. \edit{Next sentence mistakenly copied?} We implemented and
-tested six learning strategies for parameterized gaits and compared
-them to gaits produced by neural networks evolved with the HyperNEAT
+optimizing a quadrupedal gait for linear speed, tested on a physical robot.  We implemented the algorithm, Policy learning by Weighting
+Exploration with the Returns (a.k.a RL PoWER), for parameterized gaits and compared
+it to gaits produced by neural networks evolved with the HyperNEAT
 generative encoding. Though both methods resulted in an improvement
 over the robot’s previous \naive gaits, based on the statistics
 collected, RL PoWER has a more elegant and consistent performance.
@@ -16,12 +16,11 @@ to the physical limitations, obtaining one solution to this is
 simulation. Because of the low cost of simulation, it would produce
 the necessary volume of trials to allow the learning methods to be
 effective, and the hardware trials would serve to continuously ground
-and refine the simulator. \cite{glette2012evolution-of-locomotion-in-a-simulated} \edit{what is this citation for?}
+and refine the simulator. 
 
 One view supported by this study is that for feedback oriented tasks,
 reinforcement learning methods are more fit and natural. Despite the
-complexities of HyperNEAT, a simpler algorithm on the code level \edit{???}
-delivered better performance in general.  Also, evolvable spline
+complexities of HyperNEAT, a structurally simpler algorithm delivered better performance in general.  Also, evolvable spline
 interpolation is shown to be simple and representationally powerful at
 the same time. Evolvable splines can serve as a general representation for various other
-learning problems.\edit{probably rewrite this last paragraph}
+learning problems.

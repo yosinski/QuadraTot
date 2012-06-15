@@ -11,16 +11,16 @@ individual in one HyperNEAT run.}
 \begin{center}
 \begin{tabular}{|r|c|c|c||c|}
 \hline
-                                         & Average & Std. Dev \\
+                                & Average & Best Single & Std. Dev \\
 \hline                                    
 \hline                                    
-RL PoWER                       & {\bf 7.62}  &    2.1   \\
+RL PoWER                       & {\bf 7.62}  & 11.05  &    2.1   \\
 \hline
-HyperNEAT                      & 6.28   &   1.26   \\
+HyperNEAT                      & 6.28   & 9.7 & 1.26   \\
 \hline
 \end{tabular}
 \caption{The average and standard deviation of the best gaits found
-  for both algorithm during each of three runs, in cm/sec. \edit{Add the best gait each algorithm found as well.}}
+  for both algorithm during each of three runs, in cm/sec.}
 \tablabel{results}
 \end{center}
 \end{table}
@@ -28,14 +28,13 @@ HyperNEAT                      & 6.28   &   1.26   \\
 
 
 We believe that this is because RL PoWER uses evolvable splines to represent gaits As explained earlier,  
-The single best gait found during this study had a speed of 11.09 centimeters/sec,  14.7\% better \edit{different number than in abstract?} than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
+The single best gait found during this study had a speed of 11.09 cm/sec,  16.3\% better than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
 complex but more regular than the HyperNEAT, but producing higher speed. As shown in \figref{rlPattern}
 , multiple motors are more coordinated than the HyperNEAT gait.
 
 \figp{rlPattern}{0.75}{The motor positions of a typical well
-  performing gait over one cycle. It matches exactly the shape of its
-  corresponding spline representation \edit{what does this sentence mean?}. This pattern shows the
-  simplicity and power of geometric splines representations \edit{how does it show this?}.}
+performing gait over one cycle. According to the spline transformation, the curves of joint positions are merely linear transformations of the spline curves. Compared with the pattern of a well-performing HyperNEAT gait, the spline representation of the parameterized gaits are simple yet powerful.}
+
 
 \figp{neat_110115_211410_00000_002_filt_zoom}{0.75}{A typical well
   performing HyperNEAT gait's pattern of motor positions, reproduced

@@ -5,7 +5,7 @@ parts printed by the Objet Connex 500 3-D Printing System. The robot
 actuation system consists of 5 AX-18+ Dynamixel servos and 4 AX-12+
 Dynamixel servos: one inner joint with one AX-18+ servo and one outer
 joint with AX-12+servo in each of the four legs, and one AX-18+ servo
-at the center. To avoid the formerly reported \edit{???} AX-18+ servos are used
+at the center. To avoid the formerly reported problem with  AX-18+ servos are used
 in this robot because of their stronger actuation power than that of
 AX-12+. Each servo could be set to a position in the range [0, 1023]
 by using pydynamixel library, corresponding roughly to a physical range [-120$^\circ$,
@@ -36,17 +36,17 @@ metric for evaluating gaits was the Euclidian distance the robot
 traveled during a 12-second run on flat surface. Previous work done in
 \cite{yosinski2011evolving-robot-gaits} and \cite{clune2009evolving-coordinated-quadruped} suggested that extremely fierce gaits are not viable in
 general. These gaits tend to either overburden the servos or flip the
-robot. \edit{Explain this next part on smart cropping better.} Thus, RL PoWER were tested after carefully cropping out the
+robot. Thus, RL PoWER were tested after carefully cropping out the
 extremely fierce gaits each time. As described earlier, each leg has
-two joints, inner joint j1 and outer j2. The position of one leg is
-determined by the sum of the values of j1 and j2. Extremely fierce
+two joints, inner joint $j1$ and outer $j2$. The position of one leg is
+determined by the sum of the values of $j1$ and $j2$, in the range of [0, 1023]. Extremely fierce
 gaits usually have relatively small values of $g$. As shown in \figref{smartCrop}, this cropping method works
-by mapping the wild gaits onto the boundary of a quasi-triangular area in
-the two-dimensional space of j1 and j2.
+by mapping the wild gaits right onto the boundary of a quasi-triangular area in
+the two-dimensional space of $j1$ and $j2$. In our experimentation, we set the threshhold to 730 to balance between gait performance and safety. However, an obvious trade-off to this method is the reduced exploratory region of the parameters. A extension would be experiments using smaller $g$, cropping less gaits, to possibly enhance the performance. 
 
-\figp{smartCrop}{1}{The red line is the cropping border, $g = j1 +  j2$. As shown in \figref{sixLegPositions} \edit{???}}
+\figp{smartCrop}{0.7}{The red line is the smart cropping border, $g = j1 +  j2$. The dashed grey lines are the physical limits of the joints. As shown in \figref{sixLegPositions}, the fierce movements are prevented by mapping these out-of-range positions to the border line as shown in the graph. The value of $g$ cannot drop below 730 otherwise $j1$ and $j2$ are projected right to the red line.  }
 
 \figp{sixLegPositions}{1}{The left two positions are allowed; middle
   two positions are on the red border line from \figref{smartCrop};
-  right two positions are deemed as ``extremely fierce'', thus are
-  disallowed.   \\\editbox{Smart crop needs to be explained somewhere, probably briefly in this caption and more extensively in the text.}}
+  right two positions are deemed as ''extremely fierce'', thus are
+  disallowed. Future work may involve studying a larger range of $g$ for increased performance.}
