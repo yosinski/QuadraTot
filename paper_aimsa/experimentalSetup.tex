@@ -42,11 +42,16 @@ two joints, inner joint $j1$ and outer $j2$. The position of one leg is
 determined by the sum of the values of $j1$ and $j2$, in the range of [0, 1023]. Extremely fierce
 gaits usually have relatively small values of $g$. As shown in \figref{smartCrop}, this cropping method works
 by mapping the wild gaits right onto the boundary of a quasi-triangular area in
-the two-dimensional space of $j1$ and $j2$. In our experimentation, we set the threshhold to 730 to balance between gait performance and safety. However, an obvious trade-off to this method is the reduced exploratory region of the parameters. A extension would be experiments using smaller $g$, cropping less gaits, to possibly enhance the performance. 
+the two-dimensional space of $j1$ and $j2$. In our experimentation, we set the threshhold to 730 to balance between gait performance and safety. However, an obvious trade-off to this method is the reduced exploratory region of the parameters. A extension would be experiments using smaller $g$, cropping less gaits, to possibly enhance the performance.
 
-\figp{smartCrop}{0.7}{The red line is the smart cropping border, $g = j1 +  j2$. The dashed grey lines are the physical limits of the joints. As shown in \figref{sixLegPositions}, the fierce movements are prevented by mapping these out-of-range positions to the border line as shown in the graph. The value of $g$ cannot drop below 730 otherwise $j1$ and $j2$ are projected right to the red line.  }
+\editbox{Much better, but I would add an intuitive explanation of what the
+  smart cropping accomplishes. Old method: crop each servo
+  individually (square). New: individual + triangular chop to prevent
+  legs going under robot.}
+
+\figp{smartCrop}{0.7}{The red line is the smart cropping border, $g = j1 +  j2$. The dashed grey lines are the physical limits of the joints. As shown in \figref{sixLegPositions}, the fierce movements are prevented by mapping these out-of-range positions to the border line as shown in the graph. The value of $g$ cannot drop below 730 otherwise $j1$ and $j2$ are projected perpendicularly to the red line.  }
 
 \figp{sixLegPositions}{1}{The left two positions are allowed; middle
   two positions are on the red border line from \figref{smartCrop};
-  right two positions are deemed as ''extremely fierce'', thus are
+  right two positions are deemed as ``extremely fierce'', thus are
   disallowed. Future work may involve studying a larger range of $g$ for increased performance.}

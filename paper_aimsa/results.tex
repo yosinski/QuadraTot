@@ -1,4 +1,5 @@
 \section{Results}
+
 The results for the gaits evolved by RL PoWER are shown in \figref{rlPerform} and \tabref{results}.The HyperNEAT performance is shown in \figref{hyperPerform}. A total of 900 evaluations were performed for RL PoWER (300 for each of three runs). The reason these two algorithms have different number of trials is that runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of a run. Overall, the RL PoWER gaits were
 faster by far, beating the HyperNEAT when comparing
 either average or best gaits.
@@ -9,14 +10,14 @@ individual in one HyperNEAT run.}
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|r|c|c|c||c|}
+\begin{tabular}{|r|c|c|c|}
 \hline
-                                & Average & Best Single & Std. Dev \\
+                                & Best Single & Average  & Std. Dev \\
 \hline                                    
 \hline                                    
-RL PoWER                       & {\bf 7.62}  & 11.05  &    2.1   \\
+RL PoWER                       & {\bf 11.05} & {\bf 7.62}   &    2.1   \\
 \hline
-HyperNEAT                      & 6.28   & 9.7 & 1.26   \\
+HyperNEAT                       & 9.7 & 6.28   & 1.26   \\
 \hline
 \end{tabular}
 \caption{The average and standard deviation of the best gaits found
@@ -25,10 +26,11 @@ HyperNEAT                      & 6.28   & 9.7 & 1.26   \\
 \end{center}
 \end{table}
 
+%\edit{Add Kyrre's results to table (one line for tested on his robot (better) and one for tested on our robot (not as good).}
 
 
 We believe that this is because RL PoWER uses evolvable splines to represent gaits As explained earlier,  
-The single best gait found during this study had a speed of 11.09 cm/sec,  16.3\% better than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
+The single best gait found during this study had a speed of 11.09 cm/sec \edit{11.05 or 11.09? See table 2},  16.3\% better than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
 complex but more regular than the HyperNEAT, but producing higher speed. As shown in \figref{rlPattern}
 , multiple motors are more coordinated than the HyperNEAT gait.
 
