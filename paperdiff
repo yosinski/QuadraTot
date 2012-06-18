@@ -2,15 +2,19 @@
 
 mkdir pdiff
 
-for file in `cd paper_gecco_8/; ls *tex`; do
-    ./texdiff paper_gecco_8/$file paper_ecal/$file pdiff/$file;
+DIR1="paper_aimsa_1"
+DIR2="paper_aimsa"
+
+cp $DIR2/*.tex pdiff/
+cp $DIR2/Makefile pdiff/
+cp $DIR2/*sty pdiff/
+cp $DIR2/*bib pdiff/
+cp $DIR2/*cls pdiff/
+
+for file in `cd $DIR1; ls *tex`; do
+    ./texdiff $DIR1/$file $DIR2/$file pdiff/$file;
 done
 
-cp paper_ecal/main.tex pdiff/
-cp paper_ecal/Makefile pdiff/
-cp paper_ecal/*sty pdiff/
-cp paper_ecal/*bib pdiff/
-cp paper_ecal/*cls pdiff/
 
 cat pdiff/main.tex | head -n 8 > pdiff/new.tex
 cat <<EOF  >> pdiff/new.tex
