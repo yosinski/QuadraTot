@@ -1,0 +1,3 @@
+[2012-06-19  3:54:41 pm] 
+Used for gaits for Discover Channel Latin America
+./justWalk.py --gait ~/results/20120516_run_1_200/140/input.txt 
