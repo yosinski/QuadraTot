@@ -3,7 +3,7 @@
 import pdb
 from os import listdir
 import matplotlib as mpl 
-mpl.use('cocoaagg') 
+#mpl.use('cocoaagg') 
 import matplotlib.pyplot as plt
 import re
 
@@ -39,7 +39,7 @@ def main():
     plt.xlabel('Time(s)')
     ax = plt.axis()
     plt.axis((min(t), max(t), ax[2], ax[3]))
-    plt.savefig('gait.pdf')
+    plt.savefig('gait2.pdf')
     #plt.show()
     
     
