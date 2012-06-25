@@ -1,0 +1,5 @@
+TODO for camera ready:
+ - put HN and RL Power on same plot
+ - fig:rlPerform: add legend, change colors
+ - Kyrre: how fast, what algorithm, where published? Add all this.
+ - Mention somewhere that we actually used 4 splines the whole time.

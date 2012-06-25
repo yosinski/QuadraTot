@@ -1,3 +1,48 @@
 \section{Results}
 
-how well it worked, plots, ...
+The results for the gaits evolved by RL PoWER are shown in \figref{rlPerform} and \tabref{results}.The HyperNEAT performance is shown in \figref{hyperPerform}. A total of 900 evaluations were performed for RL PoWER (300 for each of three runs). The reason these two algorithms have different number of trials is that runs continued until the performance plateaued, which we defined as when there was no improvement during the last third of a run. Overall, the RL PoWER gaits were
+faster by far, beating the HyperNEAT when comparing
+either average or best gaits.
+
+\figp{rlPerform}{0.95}{Average fitness ($\pm$ SE) in cm/sec of the highest performing run of RL PoWER's three runs. }
+
+\figp{hyperPerform}{0.75}{Average fitness ($\pm$ SE) in cm/sec of the highest performing
+individual in one HyperNEAT run. \edit{Make this a vector graphic, not raster (raster == blurry)}.}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|r|c|c|c|}
+\hline
+                                & Best Single & Average  & Std. Dev \\
+\hline                                    
+\hline                                    
+RL PoWER                       & {\bf 11.05} & {\bf 7.62}   &    2.1   \\
+\hline
+HyperNEAT                       & 9.7 & 6.28   & 1.26   \\
+\hline
+\end{tabular}
+\caption{The average and standard deviation of the best gaits found
+  for both algorithm during each of three runs, in cm/sec.}
+\tablabel{results}
+\end{center}
+\end{table}
+
+%\edit{Add Kyrre's results to table (one line for tested on his robot (better) and one for tested on our robot (not as good).}
+
+
+We believe that this is because RL PoWER uses evolvable splines to represent gaits As explained earlier,  
+The single best gait found during this study had a speed of 11.09 cm/sec \edit{11.05 or 11.09? See table 2},  16.3\% better than the best HyperNEAT gait. \figref{rlPattern} shows a typical RL PoWER gait that had high fitness. Compared with \figref{neat_110115_211410_00000_002_filt_zoom}, the pattern of RL PoWER's motion is less
+complex but more regular than the HyperNEAT, but producing higher speed. As shown in \figref{rlPattern}
+, multiple motors are more coordinated than the HyperNEAT gait.
+
+\figp{rlPattern}{0.75}{The motor positions of a typical well
+performing gait over one cycle. According to the spline transformation, the curves of joint positions are merely linear transformations of the spline curves. Compared with the pattern of a well-performing HyperNEAT gait, the spline representation of the parameterized gaits are simple yet powerful.}
+
+
+\figp{neat_110115_211410_00000_002_filt_zoom}{0.75}{A typical well
+  performing HyperNEAT gait's pattern of motor positions, reproduced
+  from \cite{yosinski2011evolving-robot-gaits}.}
+
+A corresponding observation from the graph on this property is that the noisiness of
+RL PoWER is higher than HyperNEAT. One reason for this is that the RL PoWER intentionally adds noise when exploring the space near the best ranked policies. Another phenomenon seen from the \figref{rlPerform} is that one run of RL PoWER's general performance largely depends on initial gaits, which is a trait of hill climbing algorithms. The larger standard deviation in RL PoWER for space exploring can be easily fixed by tuning the noise parameter. RL PoWER converges to optimality at a higher rate. This is due to the more heuristically guided reinforcement learning of RL PoWER. HyperNEAT, on the other hand, has a larger dimension to explore due to its generative encoding method. While the evolvable spline representation used by RL PoWER has lower dimensions. The convergence of HyperNEAT is thus slower.
+

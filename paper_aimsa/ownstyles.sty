@@ -2,16 +2,23 @@
 % JBY: ownstyles.sty
 %
 
+
+% required imports
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 % Short commands
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\be}{\begin{equation}}
 \newcommand{\ee}{\end{equation}}
 \newcommand{\andd}{\wedge}
 \newcommand{\orr}{\vee}
-\def\naive{na\"{\i}ve}
-\def\Naive{Na\"{\i}ve}
-\def\naively{na\"{\i}vely}
-\def\Naively{Na\"{\i}vely}
+\def\naive{na\"{\i}ve\xspace}
+\def\Naive{Na\"{\i}ve\xspace}
+\def\naively{na\"{\i}vely\xspace}
+\def\Naively{Na\"{\i}vely\xspace}
 \newcommand{\ta}{\hspace*{2em}}     % like a tab?
 
 % Refs and labels
@@ -21,6 +28,10 @@
 \newcommand{\secref}[1]{Section~\ref{sec:#1}}
 \newcommand{\tablabel}[1]{\label{tab:#1}}
 \newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+\newcommand{\eqnlabel}[1]{\label{eqn:#1}}
+\newcommand{\eqnref}[1]{Equation~\ref{eqn:#1}}
+\newcommand{\alglabel}[1]{\label{alg:#1}}
+\newcommand{\algref}[1]{Algorithm~\ref{alg:#1}}
 
 % figgy - Simple centered figure
 \newcommand{\figgy}[2]{
@@ -31,17 +42,95 @@
 }
 
 % figvarp - More full featured figure
-\newcommand{\figvarp}[4][thp]{
+\newcommand{\figvarp}[5][thp]{
   \begin{figure}[#1]
   \begin{center}
 
-  \includegraphics[width=#3\columnwidth]{#2}
+  \includegraphics[width=#3\textwidth]{#2}
+
+  \caption[#5]{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+
+
+% figp - Standard figure
+\newcommand{\figp}[4][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
 
   \caption{#4}
   \label{fig:#2}
   \end{center}
   \end{figure}
 }
+
+% figsp - Standard figure, starred (span column)
+\newcommand{\figsp}[4][thp]{
+  \begin{figure*}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+
+  \caption{#4}
+  \label{fig:#2}
+  \end{center}
+  \end{figure*}
+}
+
+% figgp - Standard figure, 2 wide
+\newcommand{\figgp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#3\linewidth]{#2}
+  \includegraphics[width=#5\linewidth]{#4}
+
+  \caption{#6}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% fiGGp - Standard figure, 2 row
+\newcommand{\fiGGp}[6][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  {#3}
+
+  {#4}
+
+  \caption{#5}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
+% figrow - One row of a fiGGp
+\newcommand{\figrow}[4]{
+  \includegraphics[width=#2\linewidth]{#1}
+  \includegraphics[width=#4\linewidth]{#3}
+}
+
+
+
+% figrow - One row of a fiGGp, top aligned with fixed height
+\newcommand{\figrowT}[5]{
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#3\linewidth]{#2}
+  \end{minipage}}
+  \hfill
+  \fbox{\begin{minipage}[t]{#1\linewidth}   % height
+    \includegraphics[width=#5\linewidth]{#4}
+  \end{minipage}}
+}
+
+
 
 \newcommand{\acmFig}[4][0]{
   \begin{figure}[tb]

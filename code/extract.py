@@ -43,7 +43,13 @@ def main():
     plt.plot(range(1,len(avg)+1), avg)
     plt.ylabel('AVERAGE SPEED')
     plt.xlabel('Trial')
-    plt.annotate('global max: '+str(best), xy=(best_index,best), xytext=(best_index+15, best+0.25),arrowprops=dict(facecolor='black', shrink=0.05))
+#<<<<<<< HEAD
+#    plt.annotate('global max: '+str(best), xy=(best_index,best), xytext=(best_index+15, best+0.25),arrowprops=dict(facecolor='black', shrink=0.05))
+#=======
+    plt.savefig('savedPlot.eps')
+    plt.savefig('savedPlot.pdf')
+    plt.savefig('savedPlot.png')
+#>>>>>>> c902a29cd9a6a1b22468af591da9955c58750c9c
     plt.show()
 
 if __name__ == '__main__':

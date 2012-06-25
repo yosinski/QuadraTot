@@ -2,11 +2,14 @@ TARGETS=main.pdf
 
 all: ${TARGETS}
 
-%.pdf : %.tex
+%.pdf: %.tex
 	pdflatex $<
 	bibtex $*
 	pdflatex $<
 	pdflatex $<
+
+quick:
+	pdflatex main
 
 skim: ${TARGETS}
 	skimreload ${TARGETS}
