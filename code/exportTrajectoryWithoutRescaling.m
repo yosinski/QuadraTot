@@ -13,17 +13,25 @@ function exportTrajectoryWithoutRescaling(policy, hFig, filepath);
 
   cycleTime = (0: dt: cycle_duration)';
   totalTime = (0: dt: total_duration)';
-
+  
+  
   % stretch the spline over the duration of one cycle
   for si=1:policy.n_splines
     s(si).XX = policy.s(si).x(1+3) : (policy.s(si).x(end-3)-policy.s(si).x(1+3))/(nbCycleSamples-1) : policy.s(si).x(end-3);
     s(si).YY = ppval(policy.s(si).pp, s(si).XX);
+    keyboard;
   end
+
+  disp('PASSED THIS POINT')
+  disp('PASSED THIS POINT')
+  disp('PASSED THIS POINT')
+  disp('PASSED THIS POINT')
   
   % rescale the trajectory y from [0,1] to stretch inside [zmin,zmax]
   posMin = 256;
   posMax = posMin + 512;
   posRange = posMax - posMin;
+
   for si=1:policy.n_splines
     % rescale
     s(si).cyclePos = s(si).YY .* posRange + posMin;
@@ -32,14 +40,14 @@ function exportTrajectoryWithoutRescaling(policy, hFig, filepath);
     s(si).totalPos = [repmat(s(si).cyclePos(1:end-1), ceil(nbCycles), 1) ; s(si).cyclePos(end)]; % the last pos in a cycle is the same as the first pos in the next cycle
     s(si).totalPos = s(si).totalPos(1:nbTotalSamples); % the last cycle will probably be interrupted before its end
   end
-  
+   
   % plot the 'Exported trajectory' velocity and acceleration
   figure(hFig); clf; hold on; box on; grid on;
   clrmap = colormap(jet(policy.n_splines));
-  %for si=1:policy.n_splines
-    %plot(totalTime, s(si).totalPos, 'color', clrmap(si,:), 'linewidth', 2); % all cycles
-    %plot(cycleTime, s(si).cyclePos, 'color', clrmap(si,:), 'linewidth', 4); % just the first cycle is thicker, to highlight it
-  %end
+ % for si=1:policy.n_splines
+  %  plot(totalTime, s(si).totalPos, 'color', clrmap(si,:), 'linewidth', 2); % all cycles
+   % plot(cycleTime, s(si).cyclePos, 'color', clrmap(si,:), 'linewidth', 4); % just the first cycle is thicker, to highlight it
+ % end
   
   % Generate file input.txt for the simulator
   inputData = [];

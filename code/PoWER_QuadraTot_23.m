@@ -3,8 +3,8 @@ function PoWER_QuadraTot_23()
 % Author: Petar Kormushev
 % April 2012
 %
-close all;
-clear all;
+%close all;
+%clear all;
 
 %% Parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

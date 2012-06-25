@@ -6,7 +6,7 @@ disp('Starting RL...');
 
 %hFig = figure('Name', 'Rollouts', 'position', [50, 100, 800, 600]);
 %hFigResults = figure('Name', 'Results', 'position',[1000,600,800,400]); axis on; grid on; hold on;
-hFigExported = figure('Name', 'Exported trajectory', 'position', [850, 100, 600, 400]); hold on; box on; grid on;
+%hFigExported = figure('Name', 'Exported trajectory', 'position', [850, 100, 600, 400]); hold on; box on; grid on;
 
 % plotRollouts(hFig, 0, 0, 0, 0);
 
@@ -59,7 +59,7 @@ for si=1:n_splines
   policy(1).s(si).y = initialPos(si)*ones(1,policy(1).s(si).n); % set initial policy y values to the middle 0.5
   % now turn it into a cyclic spline
   [policy(1).s(si).pp, policy(1).s(si).x, policy(1).s(si).y, policy(1).s(si).n] = getCyclicSplinePlus6e(policy(1).s(si).x, policy(1).s(si).y);
-  % plotSpline(policy(1).s(si).pp, policy(1).s(si).n, policy(1).s(si).x, policy(1).s(si).y, 'green', 3); % visualize the spline
+  %plotSpline(policy(1).s(si).pp, policy(1).s(si).n, policy(1).s(si).x, policy(1).s(si).y, 'green', 3); % visualize the spline
 end
 %pause
 
@@ -76,7 +76,9 @@ disp('Running PoWER algorithm...');
 if relearn==1 % resume learning of a previous session
     % load iteration number
     iter_matrix = dlmread([getDataPath() 'iter.txt']);
+    disp(['n_iter: ', n_iter])
     iter = iter_matrix(1,1);
+    disp(['iter: ', iter])
     load([getDataPath() num2str(iter,'%03d') '/workspace.mat']); % loads ALL workspace variables!!
     % iter = iter + 1; ?? no, let it repeat it, if necessary I can just reuse the previous reward
     % here make changes to parameters, if necessary, e.g. variability, etc.
@@ -93,8 +95,8 @@ while (iter <= n_iter)
         disp(['Iteration: ', num2str(iter)]);
     %end
 
-%     disp('param:');
-%     param(:,iter)'
+     disp('param:');
+     param(:,iter)'
 
     if fromKnots < toKnots
         % regularly increase the number of knots
@@ -152,7 +154,7 @@ while (iter <= n_iter)
     end
     disp(['the ratio of nonimproved/total trials to present ',num2str(counter/iter)])
     % plot the results / all results so far
-    % plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
+    %plotResults(hFigResults, iter, variance, varianceLog(:,1:iter-1), Return(:,1:iter));
     
     % save iteration number
     dlmwrite([getDataPath() 'iter.txt'], iter);

@@ -18,7 +18,7 @@ from Robot import RobotFailure
 def savePosition(wiiTrack, posAgeList):
     position,age = wiiTrack.getPosAge()
     #print 'savePosition:', position, age
-
+#    pdb.set_trace()
     if position is None:
         return '-1 -1 %f' % age
     else:
@@ -75,8 +75,8 @@ def main():
                     relTimeBucket.append((relTime, line[1], line[2]))
         #pdb.set_trace()
     print relTimeBucket[0]
-    if list(relTimeBucket[-1])[0]-list(relTimeBucket[0])[0] < 13.7:
-        exit(2)
+#    if list(relTimeBucket[-1])[0]-list(relTimeBucket[0])[0] < 13.7:
+ #       exit(2)
         ##############
 
     ff = open (posFile, 'w')
@@ -90,7 +90,9 @@ def main():
         ff.write(line + '\n')
     ff.close()
     print 'Wrote position file:', posFile
-
+    lines = open(posFile, 'r').readlines()
+    speed = ((float(lines[1].split()[19])-float(lines[-1].split()[19]))**2+(float(lines[1].split()[20])-float(lines[-1].split()[20]))**2)**0.5/(6.25*12)
+    print 'SPEED: ', speed
 
 
 if __name__ == '__main__':

@@ -1,39 +1,49 @@
-#! /usr/bin/env python
+#! /usr/bin/env python-32
 
 from os import listdir
+import matplotlib as mpl 
+mpl.use('cocoaagg') 
 import matplotlib.pyplot as plt
 import re
 
 def main():
-    path = '/home/team/results/20120523_snd250Run/'
-    trials = sorted(listdir (path))[4:]
-    speeds = []
-    pattern = re.compile("[0-9]{3}")
-    for trial in trials:
-        if pattern.match(trial):
-            output = open(path + trial + '/output.txt' )
-            print path, trial
-            print ("processing " + trial)
-            lines = output.readlines()
-            length =len(lines)
-            ss = []
-            for ii, line in enumerate(lines):
-                if ii == 1 or ii == length-1 :
-                    t = line.split()
-                    xy = [float(t[19]),float(t[20])]
-                    ss.append(xy)
-            speed = ((( (ss[1][0]-ss[0][0])/5.6)**2+( (ss[1][1]-ss[0][1])/5.6 )**2)**0.5)/12
-            print speed
-            if len(speeds) > 0 and speeds[len(speeds)-1]-speed > speed*5:
-                speeds.append(speeds[len(speeds)-1]*0.85)
-            else:
-                speeds.append(speed)
-            print("processing complete: "+trial)
-
-    print len(speeds)
-    plt.plot(range(1,len(speeds)+1), speeds)
-    plt.ylabel('SPEED')
+    path = '/Users/hs454/Desktop/tmp/'
+    runs = sorted(listdir (path))
+    total = []
+    avg = []
+    avg_all=[]
+    pattern = re.compile("return_[0-9]*")
+    bucket = []
+    for run in runs:
+        if pattern.match(run):
+            speeds=[]
+            f = open(run)
+            lines = f.readlines()
+            for line in lines:
+                spd_tr= line.split()
+                ts= (int(spd_tr[1]),float(spd_tr[0])*(14.0/12))
+                speeds.append(ts)
+            speeds=sorted(list(set(sorted(speeds))))
+            total.append(speeds)
+            print speeds[0]
+            max_p = speeds[-1]
+            print max_p
+    for i in range(0,300):
+        mean = (list(total[0][i])[1]+list(total[1][i])[1]+list(total[2][i])[1])/3
+        avg.append(mean)
+        avg_all.append((mean,i))
+        
+    best = 0
+    best_index=0
+    for x,ii in avg_all:
+        if best < x:
+            best = x
+            best_index = ii
+    
+    plt.plot(range(1,len(avg)+1), avg)
+    plt.ylabel('AVERAGE SPEED')
     plt.xlabel('Trial')
+    plt.annotate('global max: '+str(best), xy=(best_index,best), xytext=(best_index+15, best+0.25),arrowprops=dict(facecolor='black', shrink=0.05))
     plt.show()
 
 if __name__ == '__main__':
