@@ -1,0 +1,20 @@
+Speed conversions from old body lengths/min to new cm/s (times 0.21167)
+
+
+
+                BL/m    cm/s
+Hand Coded      5.16    1.0922
+PGD             6.32    1.3378
+HC              7.83    1.6574
+RS              9.4     1.9897
+                10.03   2.1231
+                12.32   2.6078
+                14.01   2.9655
+HN avg          29.26   5.5585
+HN best         45.72   9.6776
+SIM GA Glette   -       17.8 (12.951*)   (see Sean presentation)
+Sim HN          -       14.5             (see Sean presentation)
+
+
+
+octave> [5.16 6.32 7.83 9.4 10.03 12.32 14.01 26.26 45.72] * 0.21167
