@@ -8,6 +8,9 @@ all: ${TARGETS}
 	pdflatex $<
 	pdflatex $<
 
+quick :
+	pdflatex main
+
 skim: ${TARGETS}
 	skimreload ${TARGETS}
 

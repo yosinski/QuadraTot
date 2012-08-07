@@ -1,0 +1,48 @@
+\section{Introduction and Previous Work}
+
+\figgp{robot_whitebg}{.44}{simulator_screenshot_crop}{.55}{The
+  open-source, 3D printed QuadraTot robot used for this study. Left:
+  physical robot \citep{yosinski2011evolving-robot-gaits}. Right:
+  simulator \citep{Glette2012Evolution}.}
+
+There has been much previous work in the Artificial Life and
+Evolutionary Robotics community on automatically generating behaviors
+for robots~\citep{nolfi2000evolutionary,
+  sims1994evolving, hornby2005autonomous, lipson2000automatic}. Much
+of this work has focused on learning gaits for legged
+robots~\citep{clune2009evolving, clune2011performance,
+  hornby2005autonomous, hornby2003generative,
+  Koos2012, bongard2006resilient,
+  yosinski2011evolving-robot-gaits}.  Some previous work
+has focused both on evolution directly on a physical
+system~\citep{yosinski2011evolving-robot-gaits, zykov2004evolving}, but more
+frequently gaits have been evolved in simulation and then transferred
+to the physical robot~\citep{lipson2006evolutionary, Koos2012,
+  hornby2005autonomous, bongard2006resilient}.  Whether simulation or
+reality is used gait evaluation, a common thread in these
+studies is that learning algorithms are able to produce gaits that
+outperform those designed by a human
+engineer~\citep{yosinski2011evolving-robot-gaits, hornby2005autonomous}.
+
+
+
+%\subsection{Problem Definition}
+%\seclabel{problemDefinition}
+%
+%Before proceeding, we briefly pause to more concretely formulate the
+%gait learning problem to avoid any ambiguity. The gait learning
+%problem aims to find a \emph{gait} that maximizes some performance
+%metric. Mathematically, we define a gait as a function that specifies
+%a vector of commanded motor positions for a robot over time.  We can
+%write gaits without feedback --- also called open-loop gaits --- as
+%
+%\be
+%\vec{x} = g(t)
+%\ee
+%
+%\noindent for commanded position vector $\vec{x}$.  The function
+%depends only on time, and thus it follows that open-loop gaits are
+%deterministic, producing the same command pattern each time they are
+%run.  While the commanded positions will be the same from trial to
+%trial, the actual robot motion and measured fitness will vary due to
+%the noisiness of trials in the real world.

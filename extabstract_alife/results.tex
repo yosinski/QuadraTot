@@ -1,0 +1,87 @@
+\section{Summary of Results and Discussion}
+\seclabel{results}
+
+In the interest of space, we present only a brief summary of gait
+learning results in \tabref{results}.  All results were obtained using
+the QuadraTot robot, with learning performed using either physical or
+simulated trials.  These promising results suggest that evolutionary and
+learning algorithms may enable more rapid
+exploration of the space of robotic gaits and other behaviors than
+would be possible manually.
+
+
+
+%%%%%%% NEW TABLE in cm/s
+\begin{table*}
+\begin{center}
+\begin{tabular}{|r|c|c|c|c|c|}
+\hline
+Learning Algorithm                       &   & Type of  &         &           & Single \\
+(number of trials)                       & Paper  & Trials   & Average & Std. Dev. & Best Gait \\
+\hline                                        
+\hline                                        
+Hand-coded gait                          & \cite{yosinski2011evolving-robot-gaits}  & --       & 1.09   &   --   &       \\
+\hline                                        
+Policy Gradient Descent (174)            & \textquotedbl  & physical & 1.34   &   1.56 &       \\
+\hline                                                         
+Uniform Random Hill Climbing (234)       & \textquotedbl  & physical & 1.66   &   0.97 &       \\
+\hline                                                          
+Random search (200)                      & \textquotedbl  & physical & 1.99   &   1.45 &       \\
+\hline                                                          
+Gaussian Random Hill Climbing (284)      & \textquotedbl  & physical & 2.12   &   1.27 &       \\
+\hline                                                          
+Nelder-Mead simplex (172)                & \textquotedbl  & physical & 2.61   &   0.71 &       \\
+\hline                                                          
+Linear Regression (153)                  & \textquotedbl  & physical & 2.97   &  2.73  &       \\
+\hline                                                          
+HyperNEAT (540)                          & \textquotedbl  & physical & 5.56   &   1.35 &  9.68 \\
+\hline                                                      
+RL PoWER (900) & \cite{shen2012learning-fast-quadruped}        & physical   & 7.62   & 2.1   &  11.05 \\
+\hline                                                      
+Alternate Genetic Algorithm (60,000) & \cite{Glette2012Evolution} & simulated & (14.2)   &  (5.2) &  (17.8) 13.0$^*$ \\
+\hline                                                      
+HyperNEAT (800,000) & \cite{lee2012INPREP-evolving-quadruped-gaits} & simulated &    &    &  14.5 \\
+\hline
+\end{tabular}
+\caption{The average and standard deviation of the best gait speeds,
+  in cm/sec, found using various encodings and learning
+  algorithms. The single best observed gait is also included where
+  available. All reported speeds are those observed in the physical
+  world; i.e. for simulated trials we report only the speed of the
+  gait when transferred to reality, not the speed observed in
+  simulation.  Speeds in parentheses are reported in
+  \cite{Glette2012Evolution} and were observed on a QuadraTot
+  configured similarly, though not identically, to
+  that in \cite{yosinski2011evolving-robot-gaits}. The speed with an asterisk
+  is the measurement of the same gait on the QuadraTot from
+  \cite{yosinski2011evolving-robot-gaits}.}  \tablabel{results}
+\end{center}
+\end{table*}
+
+
+
+
+\subsection{Open Robotics}
+
+Despite this promise, the field remains small, partly because robots
+are expensive and difficult to modify. Access to cheap, customizable
+robots could increase the number of researchers able to participate in
+the field. Moreover, in nearly all of the papers mentioned previously,
+the robots were custom-made, preventing teams at other universities
+from reproducing the results of other groups and or testing new
+algorithms on a robotic platform used in a previous study. That, in
+turn, slows the progress of science because it is difficult to
+interpret whether the variance in results between different studies
+was due to the algorithms used or the robotic platform those
+algorithms were tested on.
+
+Some robot platforms are emerging, but they tend to be wheeled robots
+without complex kinematics, such as the ePuck~\citep{mondada2009puck}.
+For this reason we have introduced several low-cost, open-source, and
+easily customizable robotic platforms, such as the QuadraTot
+\citep{yosinski2011evolving-robot-gaits} and Aracna
+\citep{lohmann2012aracna-an-open-source-quadruped}. These robots can
+be 3D printed from design files available online, allowing other
+researchers to customize the body's design.  These robots will enable
+multiple users to compare data across a small number of lightweight,
+low-cost evolutionary robotic platforms.

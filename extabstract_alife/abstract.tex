@@ -1,0 +1,19 @@
+Legged robots are uniquely privileged over their wheeled counterparts
+in their ability to access rugged terrain, yet manually designing gaits for
+such robots can be a tedious process. Thus, we
+investigate methods by which gaits may be learned autonomously by a
+robot, either using physical real world trials or virtual trials in a
+simulator. Each of these two methods has its advantages and
+disadvantages. Physical trials are slow and often require expensive
+human supervision. Simulated trials can be run quickly, in parallel,
+and without supervision, which in practice allows orders of magnitude
+increases in the number of trials per experiment. However, the
+unavoidable shortcoming of simulated trials is that the simulation
+inevitably fails to match reality exactly, resulting in what is often
+called the simulation-reality gap. This gap frequently results in
+learning methods overfitting to the idiosyncrasies of the simulated
+world and producing gaits that do not transfer well to the physical
+robot.  Thus, the chief benefit of learning gaits directly on a
+physical system is the ability to avoid this gap. Herein we summarize
+recent gait learning results using both types of fitness evaluation
+--- physical and simulated --- on the open-source QuadraTot robot.
