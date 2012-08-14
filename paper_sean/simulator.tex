@@ -1,0 +1,22 @@
+The simulations were done using a simulator\footnote{Simulator available for Linux and Windows in headless and visual versions at http://quadratot.yosinski.com} designed and written by Kyrre Glette and Jim Torresen in the University of Oslo, Norway\footnote{{kyrrehg, jimtoer}@ifi.uio.no} \cite{glette}. 
+It was written in C++ using the NVIDIA PhysX physics software library to provide an accurate physical representation of the behaviors of the robot. 
+A physical representation of the QuadraTot was built in simulation to capture the most important parts of the robot like the number and type of joints, mass, and rough shapes and lengths of the robot. 
+The simulator was visualized by OpenGL library to allow the user to have a more intuitive grasp of what is going on. 
+The simulator visualization included a recording feature which allows the user to create videos of the robot in simulation.
+The simulator also features a command line function which allows the users to input a gait file and run it on the simulator. 
+The simulator then outputs a file containing the X, Y, Z coordinates of the center of mass of the robot over time. 
+In simulation, the robot traverses in the XY plane with the Z axis representing the height off the ground. 
+In an attempt to more accurately model the robot behavior, we implemented the same cropping function in the simulator as in the actual robot. 
+Although the simulator was originally written in Windows for the Windows operating platform we ported and ran it on Linux (Ubuntu 11.04) to seamlessly link the simulator and the already exising libraries together. 
+The friction values used for this study was the same as that used in Glette et al. \cite{glette}. 
+%
+% and uses OpenGL and GLFW libraries for visualization. The simula- tor was originally written for the Windows operating system but was ported and run on Linux (Ubuntu 11.04) for this ex- periment. It features a commandline function which allows the user to specify a gait input file and extract an output file with the X, Y, Z coordinate information over time. The Eu- clidean distance travelled by the robot in the XY plane was used to calculate the speed of the robot in simulation and was used as the fitness value used for evolution.
+%
+
+\begin{figure}
+\begin{center}
+\vspace{1cm}
+\epsfig{file=simulator.eps, width=8cm}
+\caption[ ]{Physical representation of the QuadraTot in simulation. It captures the important parts of the robot, such as the number and types of the joints, mass, and the rough shape and lengths. The simulator was written by Kyrre Glette in C++ using NVIDIA PhysX software library and visualized using OpenGL. Figure taken from Glette et al. \cite{glette}.}
+\end{center}
+\end{figure}

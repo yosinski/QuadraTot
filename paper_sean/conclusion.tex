@@ -1,0 +1,21 @@
+HyperNEAT has proven to be an effective encoding in gait evolution and is able to find gait regularities without human intervention \cite{clune1}, \cite{clune2}, \cite{yos:clune}. 
+Glette et al. \cite{glette} has shown that evolving gaits in simulation using a simple algorithm with a large number of evaluations could outperform gait evolution using a more sophisticated algorithm in hardware.  
+This was possible because the simulator afford a much larger number of evaluations to be performed during the evolution process. 
+In this study, we took the two -- a sophisticated algorithm (HyperNEAT) and a physical simulator -- to see how HyperNEAT would perform with a many evaluations in the evolution process. 
+We showed that HyperNEAT, when used with a simulator, could evolve very impressive gaits. 
+In simulation, HyperNEAT gaits outperformed Genetic Algorithm gaits \cite{glette} by 54.3\%. 
+In the real life trials, HyperNEAT's best gait performed 5.4\% better than the GA gait. 
+This study also showed that HyperNEAT will exploit the characteristics of the problem in order to maximize its fitness.
+Without frequency limiters, it would make the legs move really fast in order to increase fitness. 
+When that was no longer allowed, it pushed the servo positions to their boundaries by increasing the stride lengths as wide as possible. 
+However, because of the physical limitations of the robot, these exploitations could not be transferred well to reality. 
+Moreover, the inevitable faults with the simulator (it cannot model the robot or the real world perfectly) added to the difficulty in the transfer from simulation to reality. 
+Thus, many of the gaits performed much worse than it did in simulation and had difficulty in achieving consistent results. 
+
+
+Next steps for this research heads towards improving the transferabilities of the gaits from simulation to reality. 
+The performance gap between simulation and reality is called the \emph{reality gap} \cite{jakobi}. 
+Many different approaches to reduce the reality gap has been proposed \cite{koos1}, \cite{bongard}, \cite{zagal}.
+To improve upon the results from this study, one or more of these approaches could be used to aid in the transfer to reality. 
+The one easiest and most promising to implement is the Transferability Approach \cite{koos2} which has shown to be successful in quadrapedal gait evolution. 
+HyperNEAT, used with a simulator and a transfer approach, shows much hope in producing yet a better, more coordinated, and higher performing gait on the QuadraTot platform. 

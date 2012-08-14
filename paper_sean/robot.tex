@@ -1,0 +1,75 @@
+The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal.
+It has 9 degrees-of-freedom (DOF), with 2 DOF for the inner joint and the outer joint of each leg and 1 DOF for the hip joint of the robot. 
+The QuadraTot is an open-sourced and 3-D printable robot, which allows it to be used in other labs for research, providing a ground on which people could compare the results of different gait learning algorithms. 
+Currently, there are published data and results from 9 different learning algorithms on the platform. 
+
+
+The body of the robot was printed using an Objet Connex 500 3-D Printing System. 
+It was actuated using 9 Robotis Dynamixel servos: 5 AX-18A servos and 4 AX-12A servos. 
+The stronger AX-18A servos were used to actuate the inner joints of the robot and the hip joint while the AX-12A servos were used to actuate the outer joints. 
+The servos were attached to the robot using off-the-shelf components and parts.
+The servos have a range of motion of [0, 1023], roughly equivalent to a physical range of [-12\degree, +120\degree]. 
+The Dynamixel AX-12A and AX-18A servos have a safety feature called \emph{Alarm Shutdown} which would turn off the servo if the servo's current, range, temperature, or torque was too high \cite{robotis}. 
+The ones most relevant to this study were shutdowns due to high torque and range. 
+Often, many of the gaits that were tested on the QuadraTot forced the servos to exert too much torque or would command positions which was out of range for the robot \cite{yos:clune} and cause the servos to shutdown. 
+
+
+In order to address this problem and avoid collisions with its own body, a motion cropping system was implemented on the QuadraTot. 
+In addition to placing limits on the range of motions for the inner joints, outer joints, and the hip joint by [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] respectively, an extra cropping system named the smart cropping system was adopted from Shen et al. \cite{haocheng} to further prevent servo shutdowns from fierce gaits -- gaits that commanded servo positions to either extremes. 
+A leg position is defined by the sum of servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) as represented in Haocheng et al. \cite{haocheng}.
+Smart cropping works by modifying the servo positions from fierce gaits, which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$.
+Through experimentation, we found that a \emph{\textbf{g}} of 730 provides a good balance between performance and safety. 
+
+
+The robot was controlled by CompuLab Fit-PC2, a compact computer running Ubuntu Linux 10.10. 
+In previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns. 
+The servos were commanded positions using the Pydynamixel library at 40Hz from the computer. 
+
+
+We tracked the motion of the robot using infrared (IR) LEDs and a Wiimote (from the Nintendo Wii gaming system).
+Three IR LEDs were placed at the center of the QuadraTot for the Wiimote to detect. 
+A Wiimote contains an IR camera which could track positions of IR light. 
+For this study, the Wiimote was velcroed onto the ceiling pointing down to maximize its viewable window. 
+The Wiimote communicated with the computer tethered to the robot via bluetooth using the CWiid library and a separate Python script recorded the position of the robot reported by the Wiimote during the duration of the run. 
+
+% figures
+% figure of the quadratot in its natural stance
+\begin{figure}
+\begin{center}
+\vspace{1cm}
+% just using a photo from Haocheng's paper! Should replace if needed be           
+\epsfig{file=quadratot_fig.eps, width=8cm}
+\caption[ ]{The QuadraTot robotic platform. It is open-sourced and 3-D printable, which has allowed for other researchers to use the robot for their research around the world. The robot has 9 DOF, 2 per leg and a hip joint which connects the two symmetrical halves of the robot. The robot uses Dynamixel AX-18 and AX-12 servos for actuation. Figure taken from Shen et al. \cite{haocheng}.}
+\label{fig:quadratot}
+\end{center}
+\end{figure}
+%
+
+
+\begin{figure}
+\begin{center}
+\vspace{1cm}
+\epsfig{file=legpos.eps, width=8cm}
+\caption[ ]{The figure shows an example of leg positions allowed and not allowed on the robot. The twoleft positions are allowed. The middle two positions are on the borderline. The right two positions are considered as ``fierce'' and are disallowed. Instead, these gaits are cropped to the middle two positions during gait performance by the cropping mechanism placed to prevent servo shutdowns. Figure taken from Shen et al. \cite{haocheng}}
+\end{center}
+\end{figure}
+%
+
+
+\begin{figure}
+\begin{center}
+\vspace{1cm}
+\epsfig{file=gaitspace.eps, width=8cm}
+\caption[ ]{A map of possible leg positions. Manually placed position cropping systems limited possible leg positions to avoid servo shutdowns and the robot hitting itself. The sum of the inner and outer servo positions cannot drop below 730, the smart cropping border, marked by the red line. Figure taken from Shen et al. \cite{haocheng}.}
+\end{center}
+\end{figure}
+%
+
+
+\begin{figure}
+\begin{center}
+\vspace{1cm}
+\epsfig{file=wiimote.eps, width=8cm}
+\caption[ ]{The Wiimote used to track the motion of ther robot. The Wiimote was used to track the IR LED placed on top of the robot and send the location data to a nearby computer which recorded the position of ther robot with respect to time. Figure taken from Yosinski et al. \cite{yos:clune}.}
+\end{center}
+\end{figure}

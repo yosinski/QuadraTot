@@ -1,0 +1,34 @@
+Legged locomotion provides several benefits over wheeled locomotion. 
+A few examples of this are in flexibility in the type of terrain a robot could travel and in adapability to changes in a robot's physiology \cite{bongard:lipson}.
+But designing a gait for a robot is often difficult and time consuming because the engineer must take into consideration many factors which must all fall into place for a successful gait pattern. 
+Because of setbacks present in hand-designing gaits, evolving gaits using machine learning algorithms is an attractive and flexible approach that could be used for many different robot platforms with only a few tweaks. 
+
+Much research has been done in this subject, and previous work has shown that learned gaits can outperform designed gaits \cite{valsalam:mii}, \cite{kohl:stone}. 
+It has also been shown that gaits with regularity (coordination in leg movement, such as left-right symmetry or front-back symmetry) perform better than gaits without regularities \cite{valsalam:mii}, \cite{clune1}, \cite{clune3}.
+However, in most previous works, the experimenter has had to manually decide the regularities of the gaits. 
+Such manual intervention is time consuming, requires expert knowledge, and adds constraints that may hurt performance. 
+Previous work has shown that the Hypercube-based NeuroEvolution of Augmenting Topologies (HyperNEAT) generative encoding \cite{stanley1} can automatically generate a variety of regular gaits and that it outperforms direct encoding controls on this task \cite{clune1}, \cite{clune2}. 
+However, that work only verified these claims in simulation. 
+A follow-up paper evolved gaits with HyperNEAT directly in hardware on the QuadraTot robot platform and found that HyperNEAT's gaits outperformed manually designed parameterized learning algorithms \cite{yos:clune}. % insert (figure 1 -- pic of quadratot) 
+A further follow-up study \cite{glette} built a simulator for the QuadraTot robot platform to test whether the inclusion of a simulator would improve results and found that it did:  an evolutionary algorithm with direct encoding in simulation produced gaits that outperformed those gaits evolved by HyperNEAT in hardware. 
+The simulator reduced the time required to evaluate gaits and afforded much larger population sizes and generations than was possible when evolving in hardware, ultimately performing 333 times as many evaluations as HyperNEAT had in hardware per run (60000 vs. 180) \cite{yos:clune}, \cite{glette}. 
+The evolutionary algorithm used in Glette et al. \cite{glette} was manually constrained to evolve specific, hand-chosen regularities. 
+Another study evolved gaits in hardware on the QuadraTot platform using RL PoWER, a spline-based algorithm, and was successful in evolving faster and more repeatable gaits than HyperNEAT evolved in hardware \cite{haocheng}. 
+
+In this paper we test whether the benefits of HyperNEAT -- higher performance and the automatic discovery of effective regularities \cite{clune2} -- will outperform the manually designed, regularity-constrained, direct encoding once HyperNEAT is combined with a simulator. 
+We test this by evolving gaits using HyperNEAT using a physical simulator and then comparing the performance of these gaits in the real-world to those that were evaluated on the QuadraTot robotic platform in previous publications.  
+%Our experiments confirm the hypothesis: gaits evolved with HyperNEAT and then transferred to reality were the highest performing observed to date on the QuadraTot platform. 
+%That said, gaits still transferred poorly, revealing that substantial further performance gains are likely via future work that combines a simulator, HyperNEAT, and techniques that reduce the simulator-to-reality gap. 
+%More broadly, this work supports previous work that evolving with a simulator and then transferring to reality is a more powerful means of achieving results than evolving directly in hardware. 
+%Our work also confirms that generative encodings such as HyperNEAT are a powerful way to evolve gaits and, more generally, automatically exploit regularities in challenging engineering domains.
+
+% figure of the quadratot in its natural stance
+%\begin{figure}
+%\begin{center}
+%\vspace{1.5cm}
+% just using a photo from Haocheng's paper! Should replace if needed be
+%\epsfig{file=quadratot_fig.eps, width=11cm}
+%\caption[ ]{The QuadraTot robotic platform on which experiments on this study was performed. It is open-sourced and 3-D printable, which has allowed for other researchers to use the robot for their research around the world. The robot has 9 DOF, 2 per leg and a hip joint which connects the two symmetrical halves of the robot. The robot uses Dynamixel AX-18 and AX-12 servos for actuation.}
+%\label{fig:quadratot}
+%\end{center}
+%\end{figure} 
