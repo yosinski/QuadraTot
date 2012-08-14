@@ -53,28 +53,30 @@ Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
 %
 %
 
-\begin{figure}
-\begin{center}
-\vspace{1cm}
-\epsfig{file=fit_gen.eps, width=8cm}
-\caption[ ]{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%.}
-\end{center}
-\end{figure}
+% \begin{figure}
+% \begin{center}
+% \vspace{1cm}
+% \epsfig{file=fit_gen.eps, width=8cm}
+% \caption[ ]{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%.}
+% \end{center}
+% \end{figure}
+\figp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%. \edit{wrong fig, regenerate as pdf and add.}}
 
 
-\begin{figure}
-\begin{center}
-\vspace{1cm}
-\epsfig{file=freq_fitness.eps, width=8cm}
-\caption[ ]{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot.}
-\end{center}
-\end{figure}
+% \begin{figure}
+% \begin{center}
+% \vspace{1cm}
+% \epsfig{file=freq_fitness.eps, width=8cm}
+% \caption[ ]{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot.}
+% \end{center}
+% \end{figure}
+\figp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot. \edit{wrong fig, regenerate as pdf and add.}}
 
-
-\begin{figure}
-\begin{center}
-\vspace{1cm}
-\epsfig{file=servo_pos.eps, width=8cm}
-\caption[ ]{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem.}
-\end{center}
-\end{figure}
+% \begin{figure}
+% \begin{center}
+% \vspace{1cm}
+% \epsfig{file=servo_pos.eps, width=8cm}
+% \caption[ ]{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem.}
+% \end{center}
+% \end{figure}
+\figgp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{neat_110115_211410_00000_002_filt_zoom}{.6}{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem. \edit{wrong fig on top, regenerate top fig as pdf and add.}}
