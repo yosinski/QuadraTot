@@ -13,5 +13,11 @@ all: ${TARGETS}
 	pdflatex $<
 	pdflatex $<
 
+quick :
+	pdflatex main
+
+skimreload :
+	skimreload main.pdf
+
 clean:
 	rm -f *.aux *.log *~ *.dvi *.out *.bbl *.blg *.lot *.lof *.toc ${TARGETS}
