@@ -1,7 +1,8 @@
-The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal.
+% !TEX root =main.tex
+The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot plans and part files for 3D printing are freely available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal~\cite{yos:clune}.
 It has 9 degrees-of-freedom (DOF), with 2 DOF for the inner joint and the outer joint of each leg and 1 DOF for the hip joint of the robot. 
-The QuadraTot is an open-sourced and 3-D printable robot, which allows it to be used in other labs for research, providing a ground on which people could compare the results of different gait learning algorithms. 
-Currently, there are published data and results from 9 different learning algorithms on the platform. 
+The QuadraTot is an open-sourced and 3-D printable robot, which allows it to be used in other labs for research, providing a platform with which people could compare the results of different gait learning algorithms. 
+Currently, there are published data and results from 9 different learning algorithms on the platform from INSERT different publications. %JMC fill in INSERT, and dump all cites here. This is a good place to cite haochengs paper, which is fun for him and Jason, but does not distract from our story.
 
 
 The body of the robot was printed using an Objet Connex 500 3-D Printing System. 
@@ -9,20 +10,17 @@ It was actuated using 9 Robotis Dynamixel servos: 5 AX-18A servos and 4 AX-12A s
 The stronger AX-18A servos were used to actuate the inner joints of the robot and the hip joint while the AX-12A servos were used to actuate the outer joints. 
 The servos were attached to the robot using off-the-shelf components and parts.
 The servos have a range of motion of [0, 1023], roughly equivalent to a physical range of [-12\degree, +120\degree]. 
-The Dynamixel AX-12A and AX-18A servos have a safety feature called \emph{Alarm Shutdown} which would turn off the servo if the servo's current, range, temperature, or torque was too high \cite{robotis}. 
+
+The Dynamixel AX-12A and AX-18A servos have a safety feature called \emph{Alarm Shutdown} that would turn off the servo if the servo's current, range, temperature, or torque was too high \cite{robotis}. 
 The ones most relevant to this study were shutdowns due to high torque and range. 
-Often, many of the gaits that were tested on the QuadraTot forced the servos to exert too much torque or would command positions which was out of range for the robot \cite{yos:clune} and cause the servos to shutdown. 
-
-
-In order to address this problem and avoid collisions with its own body, a motion cropping system was implemented on the QuadraTot. 
-In addition to placing limits on the range of motions for the inner joints, outer joints, and the hip joint by [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] respectively, an extra cropping system named the smart cropping system was adopted from Shen et al. \cite{haocheng} to further prevent servo shutdowns from fierce gaits -- gaits that commanded servo positions to either extremes. 
-A leg position is defined by the sum of servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) as represented in Haocheng et al. \cite{haocheng}.
-Smart cropping works by modifying the servo positions from fierce gaits, which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$.
-Through experimentation, we found that a \emph{\textbf{g}} of 730 provides a good balance between performance and safety. 
+As has been reported previously with QuadraTot\cite{yos:clune}, many of the gaits that were tested on the QuadraTot forced the servos to exert too much torque or would command out of range positions and cause the servos to shutdown. In order to address this problem and avoid collisions with its own body, a motion cropping system was implemented on the QuadraTot. 
+In addition to placing limits on the range of motions for the inner joints, outer joints, and the hip joint of [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] respectively, an extra cropping system named the smart cropping system was adopted from Shen et al. \cite{haocheng} to further prevent servo shutdowns from leg positions where the combination of the two angles interact to produce an extreme amount of torque. This smart cropping algorithm calculates a leg position by summing the servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) %JMC - do they sum the position values, or the joint angles? Since all the previous extremes are expressed in angles, the writing makes me expect angles...
+and modifying the servo positions from fierce gaits, which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$. %the term fierce sounds silly and non-professional (sorry!) I took out the place where you defined it, and we only use it in two other places. No need to invent a definition only to use it 2-3 times...can you swap in different, more descriptive words?
+Through experimentation, we found that a \emph{\textbf{g}} of 730 provides a good balance between performance and safety. %JMC - This description is not great. The last sentence's use of g doesn't make sense with the equation...is g a threshold or the sum? Please try to clean up this description. 
 
 
 The robot was controlled by CompuLab Fit-PC2, a compact computer running Ubuntu Linux 10.10. 
-In previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns. 
+In previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered, but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns.
 The servos were commanded positions using the Pydynamixel library at 40Hz from the computer. 
 
 
@@ -30,7 +28,7 @@ We tracked the motion of the robot using infrared (IR) LEDs and a Wiimote (from 
 Three IR LEDs were placed at the center of the QuadraTot for the Wiimote to detect. 
 A Wiimote contains an IR camera which could track positions of IR light. 
 For this study, the Wiimote was velcroed onto the ceiling pointing down to maximize its viewable window. 
-The Wiimote communicated with the computer tethered to the robot via bluetooth using the CWiid library and a separate Python script recorded the position of the robot reported by the Wiimote during the duration of the run. 
+The Wiimote communicated with the computer tethered to the robot via bluetooth using the CWiid library and a separate Python script recorded the position of the robot reported by the Wiimote during the duration of the run\~cite{yos:clune}. 
 
 
 % % figures
