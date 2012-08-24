@@ -20,16 +20,14 @@ Through experimentation, we found that a \emph{\textbf{g}} of 730 provides a goo
 
 
 The robot was controlled by CompuLab Fit-PC2, a compact computer running Ubuntu Linux 10.10. 
-In previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered, but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns.
-The servos were commanded positions using the Pydynamixel library at 40Hz from the computer. 
+In a previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered, but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns.
+The servos were sent positions from the computer at 40Hz via the Pydynamixel library. 
 
 
-We tracked the motion of the robot using infrared (IR) LEDs and a Wiimote (from the Nintendo Wii gaming system).
-Three IR LEDs were placed at the center of the QuadraTot for the Wiimote to detect. 
-A Wiimote contains an IR camera which could track positions of IR light. 
-For this study, the Wiimote was velcroed onto the ceiling pointing down to maximize its viewable window. 
-The Wiimote communicated with the computer tethered to the robot via bluetooth using the CWiid library and a separate Python script recorded the position of the robot reported by the Wiimote during the duration of the run\~cite{yos:clune}. 
-
+We identified the robot's position via infrared LEDs on the robot that could be tracked by a Nintendo Wii remote.
+%JMC you sure there was more than one IR LED? I thought it was just one IR and one visible for us to tell if there is power to the LEDs. If it is just one, switch to singular instead of plural in the previous sentence
+To maximize its viewable window, the Wii remote was fixed to the ceiling pointing down. It communicated with the robot computer via bluetooth using the CWiid library~\cite{yos:clune}. 
+%JMC The paragraph about the Wii mote was very wordy. I think I trimmed it by half. You should try to be similarly compact the rest of the paper. Compare your version to mine and try to see how I condensed things. 
 
 % % figures
 % % figure of the quadratot in its natural stance
@@ -43,8 +41,15 @@ The Wiimote communicated with the computer tethered to the robot via bluetooth u
 % \end{center}
 % \end{figure}
 % %
-\figp{robot_whitebg}{.6}{The QuadraTot robotic platform. It is open-sourced and 3-D printable, which has allowed for other  researchers to use the robot for their research around the  world. The robot has 9 DOF, 2 per leg and a hip joint which connects  the two symmetrical halves of the robot. The robot uses Dynamixel  AX-18 and AX-12 servos for actuation. Figure taken from Shen et  al. \cite{haocheng}.}
-
+\figp{robot_whitebg}{.6}{The QuadraTot robotic platform, on which numerous gait evolution papers are based. Our method of evolving gaits in simulation with the HyperNEAT generative encoding and transferring them to the robot produced faster gaits than all previously published techniques. 
+%It is open-sourced and 3-D printable, which has allowed for other  researchers to use the robot for their research around the  world. 
+%JMC The previous sentence (which I commented out) is alright for the main text, but figures are very expensive real estate. The goal of our paper is not to sell this robot, but to sell the work we did. 
+There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot.
+%JMC: If you use which instead of that, you need a comma before which. For example, this is wrong: There are 9 degrees of freedom: 2 per leg, and a single `hip joint' which connects  the two symmetrical halves of the robot. This is right. There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot. This is also right: There are 9 degrees of freedom: 2 per leg, and a single `hip joint,' which connects  the two symmetrical halves of the robot.
+% The robot uses Dynamixel  AX-18 and AX-12 servos for actuation. %JMC We said this already in methods
+% Figure taken from Shen et  al. \cite{haocheng}.%JMC Actually it's from yos:clune, but I think it is ok to leave this out, since this is just a stock photo of the QuadraTot.
+ }
+%JMC Let's put this figure on the first page (before the introduction), unless you can get a series of pictures that show a gait. (This might be hard to do). A new trend in papers is to have a sexy image on the first page, and Hod will want to see this. I also think it makes people want to read the paper more. 
 
 % \begin{figure}
 % \begin{center}
