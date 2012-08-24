@@ -1,13 +1,12 @@
 % !TEX root =main.tex
-The simulations were done using a simulator\footnote{Available for Linux and Windows at http://quadratot.yosinski.com} designed and written by Kyrre Glette and Jim Torresen in the University of Oslo, Norway\footnote{{kyrrehg, jimtoer}@ifi.uio.no} \cite{glette}. 
-It was written in C++ using the NVIDIA PhysX physics software library to provide an accurate physical representation of the behaviors of the robot. 
-A physical representation of the QuadraTot was built in simulation to capture the most important parts of the robot like the number and type of joints, mass, and rough shapes and lengths of the robot. 
-The simulator was visualized by OpenGL library to allow the user to have a more intuitive grasp of what is going on. 
-The simulator visualization included a recording feature which allows the user to create videos of the robot in simulation.
-The simulator also features a command line function which allows the users to input a gait file and run it on the simulator. 
-The simulator then outputs a file containing the X, Y, Z coordinates of the center of mass of the robot over time. 
-In simulation, the robot traverses in the XY plane with the Z axis representing the height off the ground. 
-In an attempt to more accurately model the robot behavior, we implemented the same cropping function in the simulator as in the actual robot. 
+Simulations occurred in C++ software customized for the QuadraTot \footnote{Available for Linux and Windows at http://quadratot.yosinski.com} in the NVIDIA PhysX physics simulator, as described previously~\cite{glette}. 
+Specifically, the simulation captured the number and type of joints, mass, and rough shapes and lengths of the QuadraTot components. 
+%The simulator was visualized by OpenGL library to allow the user to have a more intuitive grasp of what is going on. %JMC Unnecessary detail since this paper is not about the simulator. 
+%The simulator visualization included a recording feature which allows the user to create videos of the robot in simulation.%JMC: Assumed
+%The simulator also features a command line function which allows the users to input a gait file and run it on the simulator. %JMC: Assumed
+%The simulator then outputs a file containing the X, Y, Z coordinates of the center of mass of the robot over time. %JMC: Assumed
+%In simulation, the robot traverses in the XY plane with the Z axis representing the height off the ground. %JMC Unnecessary detail
+In an attempt to more accurately model the robot behavior, we implemented the same cropping function in the simulator as in the actual robot. %Do all results in this paper reflect this?
 Although the simulator was originally written in Windows for the Windows operating platform we ported and ran it on Linux (Ubuntu 11.04) to seamlessly link the simulator and the already exising libraries together. 
 The friction values used for this study was the same as that used in Glette et al. \cite{glette}. 
 %
