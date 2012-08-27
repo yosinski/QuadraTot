@@ -1,22 +1,21 @@
 % !TEX root =main.tex
-The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot plans and part files for 3D printing are freely available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal~\cite{yos:clune}.
+The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot plans and part files for 3D printing are freely available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal \cite{yos:clune}.
 It has 9 degrees-of-freedom (DOF), with 2 DOF for the inner joint and the outer joint of each leg and 1 DOF for the hip joint of the robot. 
 The QuadraTot is an open-sourced and 3-D printable robot, which allows it to be used in other labs for research, providing a platform with which people could compare the results of different gait learning algorithms. 
-Currently, there are published data and results from 9 different learning algorithms on the platform from INSERT different publications. %JMC fill in INSERT, and dump all cites here. This is a good place to cite haochengs paper, which is fun for him and Jason, but does not distract from our story.
+Currently, there are published data and results from 9 different learning algorithms on the platform from three different publications \cite{yos:clune,glette,haocheng}. %JMC/SL fill in INSERT, and dump all cites here. This is a good place to cite haochengs paper, which is fun for him and Jason, but does not distract from our story./ DONE
 
 
-The body of the robot was printed using an Objet Connex 500 3-D Printing System. 
-It was actuated using 9 Robotis Dynamixel servos: 5 AX-18A servos and 4 AX-12A servos. 
+The body of the robot was printed using an Objet Connex 500 3-D Printing System and actuated using 9 Robotis Dynamixel servos: 5 AX-18A servos and 4 AX-12A servos. 
 The stronger AX-18A servos were used to actuate the inner joints of the robot and the hip joint while the AX-12A servos were used to actuate the outer joints. 
 The servos were attached to the robot using off-the-shelf components and parts.
 The servos have a range of motion of [0, 1023], roughly equivalent to a physical range of [-12\degree, +120\degree]. 
 
 The Dynamixel AX-12A and AX-18A servos have a safety feature called \emph{Alarm Shutdown} that would turn off the servo if the servo's current, range, temperature, or torque was too high \cite{robotis}. 
 The ones most relevant to this study were shutdowns due to high torque and range. 
-As has been reported previously with QuadraTot\cite{yos:clune}, many of the gaits that were tested on the QuadraTot forced the servos to exert too much torque or would command out of range positions and cause the servos to shutdown. In order to address this problem and avoid collisions with its own body, a motion cropping system was implemented on the QuadraTot. 
-In addition to placing limits on the range of motions for the inner joints, outer joints, and the hip joint of [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] respectively, an extra cropping system named the smart cropping system was adopted from Shen et al. \cite{haocheng} to further prevent servo shutdowns from leg positions where the combination of the two angles interact to produce an extreme amount of torque. This smart cropping algorithm calculates a leg position by summing the servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) %JMC - do they sum the position values, or the joint angles? Since all the previous extremes are expressed in angles, the writing makes me expect angles...
-and modifying the servo positions from fierce gaits, which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$. %the term fierce sounds silly and non-professional (sorry!) I took out the place where you defined it, and we only use it in two other places. No need to invent a definition only to use it 2-3 times...can you swap in different, more descriptive words?
-Through experimentation, we found that a \emph{\textbf{g}} of 730 provides a good balance between performance and safety. %JMC - This description is not great. The last sentence's use of g doesn't make sense with the equation...is g a threshold or the sum? Please try to clean up this description. 
+As has been reported previously with QuadraTot \cite{yos:clune}, many of the gaits that were tested on the QuadraTot forced the servos to exert too much torque or would command out of range positions and cause the servos to shutdown. In order to address this problem and avoid collisions with its own body, a motion cropping system was implemented on the QuadraTot. 
+In addition to placing limits on the range of motions for the inner joints, outer joints, and the hip joint of [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] respectively, an extra cropping system named the smart cropping system was adopted from Shen et al. \cite{haocheng} to further prevent servo shutdowns from leg positions where the combination of the two angles interact to produce an extreme amount of torque. This smart cropping algorithm calculates a leg position by summing the servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) %JMC/SL - do they sum the position values, or the joint angles? Since all the previous extremes are expressed in angles, the writing makes me expect angles... / They do use the position values and I think that it would be best to be consistent with what Jason/Haocheng did. This is also the way g is calculated in the simulator and the python drivers as well and more accurately reflects what we actually did. 
+and modifying the servo positions from ``fierce gaits'', which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$. %JMC/SL - the term fierce sounds silly and non-professional (sorry!) I took out the place where you defined it, and we only use it in two other places. No need to invent a definition only to use it 2-3 times...can you swap in different, more descriptive words? / Again, I am trying to be consistent with what Jason and Haocheng used. I agree that 'fierce' is not the best word but if it is different from what J/H did, then there are inconsistencies between the publications...
+We set the minimum threshold \emph{\textbf{g}} to be 730, found through experimentation to provide a good balance between performance and safety. %JMC/SL - This description is not great. The last sentence's use of g doesn't make sense with the equation...is g a threshold or the sum? Please try to clean up this description. / Think this clarified things
 
 
 The robot was controlled by CompuLab Fit-PC2, a compact computer running Ubuntu Linux 10.10. 
@@ -25,9 +24,9 @@ The servos were sent positions from the computer at 40Hz via the Pydynamixel lib
 
 
 We identified the robot's position via infrared LEDs on the robot that could be tracked by a Nintendo Wii remote.
-%JMC you sure there was more than one IR LED? I thought it was just one IR and one visible for us to tell if there is power to the LEDs. If it is just one, switch to singular instead of plural in the previous sentence
-To maximize its viewable window, the Wii remote was fixed to the ceiling pointing down. It communicated with the robot computer via bluetooth using the CWiid library~\cite{yos:clune}. 
-%JMC The paragraph about the Wii mote was very wordy. I think I trimmed it by half. You should try to be similarly compact the rest of the paper. Compare your version to mine and try to see how I condensed things. 
+%JMC/SL you sure there was more than one IR LED? I thought it was just one IR and one visible for us to tell if there is power to the LEDs. If it is just one, switch to singular instead of plural in the previous sentence / Yep there are like 3 IR LEDs being used.
+To maximize its viewable window, the Wii remote was fixed to the ceiling pointing down. It communicated with the robot computer via bluetooth using the CWiid library \cite{yos:clune}. 
+%JMC/SL The paragraph about the Wii mote was very wordy. I think I trimmed it by half. You should try to be similarly compact the rest of the paper. Compare your version to mine and try to see how I condensed things. / Will do boss.
 
 % % figures
 % % figure of the quadratot in its natural stance
@@ -41,15 +40,14 @@ To maximize its viewable window, the Wii remote was fixed to the ceiling pointin
 % \end{center}
 % \end{figure}
 % %
-\figp{robot_whitebg}{.6}{The QuadraTot robotic platform, on which numerous gait evolution papers are based. Our method of evolving gaits in simulation with the HyperNEAT generative encoding and transferring them to the robot produced faster gaits than all previously published techniques. 
+
 %It is open-sourced and 3-D printable, which has allowed for other  researchers to use the robot for their research around the  world. 
-%JMC The previous sentence (which I commented out) is alright for the main text, but figures are very expensive real estate. The goal of our paper is not to sell this robot, but to sell the work we did. 
-There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot.
-%JMC: If you use which instead of that, you need a comma before which. For example, this is wrong: There are 9 degrees of freedom: 2 per leg, and a single `hip joint' which connects  the two symmetrical halves of the robot. This is right. There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot. This is also right: There are 9 degrees of freedom: 2 per leg, and a single `hip joint,' which connects  the two symmetrical halves of the robot.
+%JMC/SL The previous sentence (which I commented out) is alright for the main text, but figures are very expensive real estate. The goal of our paper is not to sell this robot, but to sell the work we did. / Okay I understand
+
+%JMC/SL: If you use which instead of that, you need a comma before which. For example, this is wrong: There are 9 degrees of freedom: 2 per leg, and a single `hip joint' which connects  the two symmetrical halves of the robot. This is right. There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot. This is also right: There are 9 degrees of freedom: 2 per leg, and a single `hip joint,' which connects  the two symmetrical halves of the robot. / Ok
 % The robot uses Dynamixel  AX-18 and AX-12 servos for actuation. %JMC We said this already in methods
 % Figure taken from Shen et  al. \cite{haocheng}.%JMC Actually it's from yos:clune, but I think it is ok to leave this out, since this is just a stock photo of the QuadraTot.
- }
-%JMC Let's put this figure on the first page (before the introduction), unless you can get a series of pictures that show a gait. (This might be hard to do). A new trend in papers is to have a sexy image on the first page, and Hod will want to see this. I also think it makes people want to read the paper more. 
+ %JMC Let's put this figure on the first page (before the introduction), unless you can get a series of pictures that show a gait. (This might be hard to do). A new trend in papers is to have a sexy image on the first page, and Hod will want to see this. I also think it makes people want to read the paper more. 
 
 % \begin{figure}
 % \begin{center}
@@ -79,3 +77,20 @@ There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connect
 % \end{center}
 % \end{figure}
 \figgp{wiiMote_crop.jpg}{.6}{robot_led_crop.jpg}{.6}{The Wiimote used to track the motion of ther robot. The Wiimote was used to track the IR LED placed on top of the robot and send the location data to a nearby computer which recorded the position of ther robot with respect to time. Figure taken from Yosinski et al. \cite{yos:clune}.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
