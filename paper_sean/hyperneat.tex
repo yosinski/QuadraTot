@@ -1,18 +1,17 @@
 % !TEX root =main.tex
 HyperNEAT is a neuroevolution method which evolves artificial neuron networks (ANNs) using evolutionary algorithms.
-It indirectly encodes ANNs using compositional pattern producing networks (CPPNs) which represent genomes encoding ANN phenotypes \cite{stanley1}, \cite{stanley2}. 
-HyperNEAT has shown that it could evolve large neural networks that represent the networks and features present in brains such as repetitions and regularities \cite{stanley3}. 
-This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson}. 
-It has been shown that objects evolved using HyperNEAT look complex, natural and feature characteristics such as symmetries and repetition of themes which are often found in nature. % figure from jeff paper
+HyperNEAT has shown to evolve large neural networks that represent many features present in brains such as repetitions and regularities \cite{stanley3}. 
+This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson} and has been successful in displaying complex, natural characteristics such as symmetries and repetition of themes often found in nature.
 
 
+HyperNEAT indirectly encodes ANNs using compositional pattern producing networks (CPPNs) which represent genomes encoding ANN phenotypes \cite{stanley1}, \cite{stanley2}. 
 The motivation for CPPNs is that complex patterns can be produced by determining attributes of their phenotypic components as a function of their geometric location. 
 This is based on the belief that in nature, cells in a body differentiates and specializes in different things with respect to their location. 
 A cell in natural organisms cannot determine its location in space by itself and requires chemical gradients are used to signal its location \cite{carroll}. 
 In contrast, \emph{in silico}, cells can be given their geometric coordinates and CPPNs use this to their advantage. 
 
 
-Each CPPN is a directed graph in which every node is a mathematical function, such as sine or Gaussian. % figure!
+Each CPPN is a directed graph in which every node is a mathematical function, such as sine or Gaussian. 
 Moreover, a CPPN genome allows functions to be made of other functions, allowing coordinate frames to be combined and hierarchies to develop.
 For example, a sine function could develop a repeating theme which is passed onto a Gaussian function to create a repeating series of symmetrical motifs. 
 These functions allow evolution to exploit various properties such as symmetry (e.g. Gaussian) and repetition (e.g. sine function) \cite{stanley1}. 
@@ -61,3 +60,5 @@ As in Yosinski et al. \cite{yos:clune}, we requested four times as many commande
 % \end{center}
 % \end{figure}
 \figp{hyperneatExplanation}{.6}{Producing ANNs from CPPNs. In HyperNEAT, weights are specified as a function of the Cartesian coordinates for source and input nodes and a constant bias for each connection between the source and input. All pairwise combinations of source and target node coordinates are iteratively passed into CPPNs to determine the weight of each ANN link. Figure taken from Clune et al. \cite{clune2}}
+
+
