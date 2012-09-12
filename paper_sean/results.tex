@@ -1,12 +1,13 @@
 % !TEX root =main.tex
 HyperNEAT, used with a physical simulator, produced gaits that outperformed all previous gaits tried and recorded on the QuadraTot.\footnote{Videos of the gaits in simulation and on robot available at http://quadratot.yosinski.com}
-The speed of the fastest gait recorded in this study was 14.5 cm/s, faster than the previously fastest gait published in Glette et al. \cite{glette}. 
-Kyrre et al. \cite{glette} recorded 17.8 cm/s on their robot, but to make sure that there were no differences in robots, the same gait was also tested on the robot used for this study (which was the one used by Yosinski et al. \cite{yos:clune} and Shen et al. \cite{haocheng}. 
-The same gait recorded an average speed of 12.951 cm/s and a maximum of 13.76 cm/s on our robot. We used these numbers in comparing results. 
-The gait from this study outperformed the previous Kyrre et al's \cite{glette} gait by 5.4\% with much fewer evaluations performed per run, at 40000 evaluations per run as opposed to Kyrre et al's \cite{glette} 60000 evaluations per run.
+The fastest gait published was from Kyrre et al. \cite{glette}, which recorded 17.8 cm/s on their robot. 
+For consistency, we took that gait and ran it ten times on our robot, and found that on our robot, the gait had an average speed of 12.95 cm/s and a maximum speed of 13.76 cm/s.
+The speed of the fastest gait recorded in this study was 14.5 cm/s, which is 5.4\% faster than Kyrre et al.'s \cite{glette} gait with 20000 less evaluations performed per run.
+%Kyrre et al. \cite{glette} published 17.8 cm/s on their robot, but to make sure that there were no differences in robots, the same gait was also tested on our robot which then recorded an average speed of 12.951 cm/s and a maximum speed of 13.76 cm/s. 
+%The gait from this study outperformed the previous Kyrre et al's \cite{glette} gait by 5.4\% with much fewer evaluations performed per run, at 40000 evaluations per run as opposed to Kyrre et al's \cite{glette} 60000 evaluations per run.
 It also outperformed the best gait evolved using HyperNEAT in hardware \cite{yos:clune} by 49.5\%, most likely due to the difference in the number of evaluations between the two studies -- 40000 vs 180. 
-Another minor reason for superior performance may be that frequency limiter policy that we placed may have helped in producing gaits that were less susceptible to shutdown while Yosinski et al. \cite{yos:clune} did not have such things.
-Although most gaits started off its evolution process by producing fast and high frequency gaits, with more generations, the gaits dramatically reduced its frequencies while continually increasing their fitness. The average frequency of the final gaits was 1.29 Hz per servo. 
+Another minor reason for superior performance may be that frequency limiter policy that we placed may have helped in producing gaits less susceptible to shutdown while Yosinski et al. \cite{yos:clune} had no such implementation.
+Although most gaits started its evolution process by producing fast and high frequency gaits, with more generations, the gaits dramatically reduced its frequencies while continually increasing their fitness. The average frequency of the final gaits was 1.29 Hz per servo. 
 
 %Gaits produced in this study confirmed that with the use of a physical simulator, HyperNEAT is able to fully exploit the geometry of the problem without human intervention, which was not evident in gait evolution using HyperNEAT in hardware \cite{yos:clune}. 
 HyperNEAT took advantage of the regularity of the problem and produced gaits more regular, coordinated, and effective than all other gaits evolved for the QuadraTot platform in the past.
@@ -60,7 +61,7 @@ Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
 % \caption[ ]{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%.}
 % \end{center}
 % \end{figure}
-\figp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%. \edit{wrong fig, regenerate as pdf and add.}}
+\figp{avg_fit_vs_gen}{.6}{Fitnesses of the champion gaits averaged over 20 runs, measured in distance travelled over 12 seconds [cm/s]. These gaits outperformed gaits evolved in simulation using Genetic Algorithm by 54.3\% in simulation and 5.4\% better in reality while outperforming gaits evolved using HyperNEAT in hardware by 49.5\%.}% \edit{wrong fig, regenerate as pdf and add.}}
 
 
 % \begin{figure}
@@ -70,7 +71,7 @@ Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
 % \caption[ ]{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot.}
 % \end{center}
 % \end{figure}
-\figp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot. \edit{wrong fig, regenerate as pdf and add.}}
+\figp{avg_freq_vs_gen}{.6}{Average frequencies of the gaits averaged over 20 runs. After implementing a policy which punished gaits with high frequencies, HyperNEAT was able to find high-performing, low frequency gaits. This policy was implemented to reduce servo shutdowns which heavily affected the reality performance of the robot.} %\edit{wrong fig, regenerate as pdf and add.}}
 
 % \begin{figure}
 % \begin{center}
@@ -79,5 +80,10 @@ Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
 % \caption[ ]{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem.}
 % \end{center}
 % \end{figure}
-\figgp{aracna_notYetCleanedMultiPieceRobot_edit}{.6}{neat_110115_211410_00000_002_filt_zoom}{.6}{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem. \edit{wrong fig on top, regenerate top fig as pdf and add.}}
+%\figgp{servo_plot_111}{.6}{neat_110115_211410_00000_002_filt_zoom}{.6}{Top: A plot of servo positions for a gait produced in this study. Bottom: A plot of servo positions for a gait produced by HyperNEAT in hardware. Figure taken from Yosinski et al. \cite{yos:clune}. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem.}%\edit{wrong fig on top, regenerate top fig as pdf and add.}}
+\figp{servo_plot_111}{.6}{A plot of servo positions for a gait produced in this study. The smoothness, symmetry, and regularities of the top plot shows that by using a simulator, HyperNEAT was able to fully exploit the geometry of the problem.}%\edit{wrong fig on top, regenerate top fig as pdf and add.}}
+
+
+
+
 

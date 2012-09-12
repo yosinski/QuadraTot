@@ -6,7 +6,7 @@ Specifically, the simulation captured the number and type of joints, mass, and r
 %The simulator also features a command line function which allows the users to input a gait file and run it on the simulator. %JMC: Assumed
 %The simulator then outputs a file containing the X, Y, Z coordinates of the center of mass of the robot over time. %JMC: Assumed
 %In simulation, the robot traverses in the XY plane with the Z axis representing the height off the ground. %JMC Unnecessary detail
-In an attempt to more accurately model the robot behavior, we implemented the same cropping function in the simulator as in the actual robot. %JMC/SL - Do all results in this paper reflect this? / They will soon.
+We implemented the initial cropping function in the simulator as in the actual robot but not the smart cropping function because with the smart cropping function implemented in simulation, there was too much limitations in the movements which drastically limited the possible gaitspace HyperNEAT could explore. %JMC/SL - Do all results in this paper reflect this? / They will soon.
 Although the simulator was originally written in Windows for the Windows operating platform we ported and ran it on Linux (Ubuntu 11.04) to seamlessly link the simulator and the already exising libraries together. 
 The friction values used for this study was the same as that used in Glette et al. \cite{glette}. 
 %

@@ -1,11 +1,8 @@
 % !TEX root =main.tex
-HyperNEAT has proven to be an effective encoding in gait evolution which is able to find gait regularities without human intervention \cite{clune1,clune2,yos:clune}. 
-Glette et al. \cite{glette} has shown that evolving gaits in simulation using a simple algorithm with a large number of evaluations could outperform gait evolution using a more sophisticated algorithm in hardware.  
-This was possible because the simulator afford a much larger number of evaluations to be performed during the evolution process. 
-In this study, we took the two -- a sophisticated algorithm (HyperNEAT) and a physical simulator -- to see how HyperNEAT would perform with a many evaluations in the evolution process. 
-We showed that HyperNEAT, when used with a simulator, could evolve very impressive gaits. 
-In simulation, HyperNEAT gaits outperformed Genetic Algorithm gaits \cite{glette} by 54.3\%. 
-In the real life trials, HyperNEAT's best gait performed 5.4\% better than the GA gait. 
+HyperNEAT has proven to be an effective encoding in gait evolution with an ability to find gait regularities without human intervention \cite{clune1,clune2,yos:clune}. 
+Glette et al. \cite{glette} has shown that evolving gaits in simulation using a simple algorithm with a large number of evaluations could outperform gait evolution using a more sophisticated algorithm in hardware thanks to the simulator affording a larger number of evaluations to be performed for evolution. 
+In this study, we took the two -- HyperNEAT and a physical simulator -- and showed that HyperNEAT, when it could afford many evaluations, could evolve impressive gaits. 
+In simulation, HyperNEAT gaits outperformed Genetic Algorithm gaits \cite{glette} by 54.3\% and by 5.4\% in the real life trials. 
 This study also showed that HyperNEAT will exploit the characteristics of the problem, such as ferquency and regularity, in order to maximize its fitness.
 %Without frequency limiters, it would make the legs move really fast in order to increase fitness. 
 %When that was no longer allowed, it pushed the servo positions to their boundaries by increasing the stride lengths as wide as possible. 
