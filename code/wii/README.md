@@ -1,14 +1,14 @@
 Wii Tracking Server and Example Client
 ===============
 
-...
+Brief documentation (more needed!):
 
-QuadraTot is a project for Cornell's Artificial Intelligence class,
-[CS 4700](http://www.cs.cornell.edu/courses/cs4700/2010fa/), by
-Diana Hidalgo, Sarah Nguyen, and [Jason
-Yosinski](http://yosinski.com/).
+1. Have the WiiMote handy and navigate to the WiiTrackServer (quadratot/code/wii/).
 
-Code includes several learning algorithms, motion models, and robot
-abstraction using
-[pydynamixel](http://code.google.com/p/pydynamixel/).  The project's
-[Trac site](http://quadratot.yosinski.com/) is also a good resource.
+2. Run
+        ./WiiTrackServer 8080
+    to use port 8080. You will then be prompted to push buttons 1 and 2 and the WiiMote.
+
+3. After a moment, the WiiMote should be discovered and a menu will be displayed. Type "s" to check battery level if desired, then type "t" and push enter to start tracking.
+
+4. If desired, run ./WiiTrackClient.py or ./WiiTrackFastClient.py in a separate tab to check that data is being received.
