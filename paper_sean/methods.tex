@@ -2,16 +2,14 @@
 Gaits were first evolved in simulation and then transferred onto the real robot, as previous done in Glette et al. \cite{glette}. 
 During the evolution process, we evolved 200 organisms for 200 generations in 20 runs with different initial conditions specified by randomly seeding the run. 
 Each gait was 12 seconds long, both in simulation and in reality. 
-All the HyperNEAT settings used for gait generation was kept the same as in Yosinski et al. \cite{yos:clune} except for the frequency of the sine wave function used, which was changed in order to address the servo shutdown problem mentioned previously. 
-We found that gaits that require servos to change their directions often were more prone to servo shutdowns than low frequency gaits. %(at around 1.5Hz per servo). 
-But with the sine wave frequency used for Yosinski et al. \cite{yos:clune}, HyperNEAT often evolved high frequency gaits (over 8Hz per servo) which performed poorly in reality due to servo constraints. 
-This led to gaits performing dramatically different in real-life compared to simulations. 
-%To address this issue, two changes were made:
-To address thsi, we reduced by a factor of 6.63 by changing the sine function to
+All the HyperNEAT settings used for gait generation was kept the same as in Yosinski et al. \cite{yos:clune} except for the frequency of the sine wave function used, which was changed in order to address the servo shutdown problem mentioned previously after discovering that gaits that require servos to change their directions often were more prone to servo shutdowns than low frequency gaits. %(at around 1.5Hz per servo). 
+With the sine wave frequency used for Yosinski et al. \cite{yos:clune} (0.0265Hz), HyperNEAT often evolved high frequency gaits (over 8Hz per servo) that performed poorly in reality due to servo constraints. 
+This led to dramatically different gait performance in real-life compared to simulations. 
+To address this, we changed the frequency of sine function to 0.004Hz so that HyperNEAT would lean towards evolving low frequency gaits.
 
-\begin{equation}
-sin(2\pi t/250)\pi
-\end{equation}
+%\begin{equation}
+%sin(2\pi t/250)\pi
+%\end{equation}
 
 %from
 %
@@ -20,16 +18,15 @@ sin(2\pi t/250)\pi
 %\end{equation}
 %
 
-so that HyperNEAT would lean towards evolving low frequency gaits. %Sine frequency of 0.004 was used because we experimentally found that HyperNEAT was able to produce natural and high-performing gaits with low frequencies with this frequency. 
-We further added a policy that punished high frequency gaits while evolving in simulation. 
+ %Sine frequency of 0.004 was used because we experimentally found that HyperNEAT was able to produce natural and high-performing gaits with low frequencies with this frequency. 
+We also added a policy that punished high frequency gaits while evolving in simulation. 
 If the average frequency of each leg for the gait was higher than the threshold frequency, the fitness was punished by exponentially reducing the distance travelled by the robot:
 
 \begin{equation}
 distance = distance*e^{(freq_{thr}-freq)} \\
 \end{equation}
 
-We chose the threshold frequency for punishment to be 1.67 Hz/servo. 
-After implementing the frequency punishment policy, the servos shutdown much less frequently. 
+We chose the threshold frequency for punishment to be 1.67 Hz/servo. After implementing the frequency punishment policy, the servos shutdown much less frequently. 
 
 
 The fitness was evaluated using the following equation:
@@ -49,7 +46,7 @@ The runs were performed on three separate machines all running Ubuntu 11.04 usin
 
 
 After evolving the gaits in simulation, the champion gait of the last generation of each of the 20 runs was transferred onto the real robot and evaluated for its performance on the real robot.
-In real-life trials, the motion of the robot was interpolated linearly between a stationary pose and the commanded gait for two seconds at the beginning and the end. % figure!! 
-The position of the robot was measured at the beginning and end of each run, starting from the stationary pose and ending with the stationary pose. 
-If a gait performed extremely poorly due to servo shutdowns, the gait was tried again until we could conclude that poor performance is because of the gait and not because of the condition of the robot.
+In real-life trials, the motion of the robot was interpolated linearly between a stationary pose and the commanded gait for two seconds at the beginning and the end. 
+The position of the robot was measured at the beginning and the end of each run, starting from the stationary pose and ending with the stationary pose. 
+If a gait performed extremely poorly due to servo shutdowns, the gait was tried again until we could conclude that poor performance is because of the gait and not due to the condition of the robot such as overheated servos.
 

@@ -1,24 +1,25 @@
 % !TEX root =main.tex
-HyperNEAT is a neuroevolution method which evolves artificial neuron networks (ANNs) using evolutionary algorithms.
+HyperNEAT is a neuroevolution method that evolves artificial neuron networks (ANNs) using evolutionary algorithms.
 HyperNEAT has shown to evolve large neural networks that represent many features present in brains such as repetitions and regularities \cite{stanley3}. 
 This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson} and has been successful in displaying complex, natural characteristics such as symmetries and repetition of themes often found in nature.
 
 
 HyperNEAT indirectly encodes ANNs using compositional pattern producing networks (CPPNs) which represent genomes encoding ANN phenotypes \cite{stanley1}, \cite{stanley2}. 
-The motivation for CPPNs is that complex patterns can be produced by determining attributes of their phenotypic components as a function of their geometric location. 
+The motivation for CPPNs is that complex patterns can be produced by determining the attributes of their phenotypic components as a function of their geometric location. 
 This is based on the belief that in nature, cells in a body differentiates and specializes in different things with respect to their location. 
-A cell in natural organisms cannot determine its location in space by itself and requires chemical gradients are used to signal its location \cite{carroll}. 
-In contrast, \emph{in silico}, cells can be given their geometric coordinates and CPPNs use this to their advantage. 
+In real life, a cell in natural organisms cannot determine its location in space without the help of chemical gradients but \emph{in silico}, cells can be given their geometric coordinates, which CPPNs exploit. 
+%A cell in natural organisms cannot determine its location in space by itself and requires chemical gradients are used to signal its location \cite{carroll}. 
+%In contrast, \emph{in silico}, cells can be given their geometric coordinates and CPPNs use this to their advantage. 
 
 
 Each CPPN is a directed graph in which every node is a mathematical function, such as sine or Gaussian. 
-Moreover, a CPPN genome allows functions to be made of other functions, allowing coordinate frames to be combined and hierarchies to develop.
-For example, a sine function could develop a repeating theme which is passed onto a Gaussian function to create a repeating series of symmetrical motifs. 
-These functions allow evolution to exploit various properties such as symmetry (e.g. Gaussian) and repetition (e.g. sine function) \cite{stanley1}. 
-Because of evolution is able to exploit such properties, things like gaits are able to feature repetition and symmetry on its own without human intervention \cite{clune1}. 
+Moreover, a CPPN genome allows functions to be made of other functions, allowing coordinate frames to be combined and hierarchies to develop, allowing for several different themes to appear such as a repeating theme (sine) with symmetry (Gaussian). 
+%For example, a sine function could develop a repeating theme which is passed onto a Gaussian function to create a repeating series of symmetrical motifs. 
+These functions allow evolution to exploit various properties that allow HyperNEAT to find regularities without further human intervention \cite{stanley1,clune1}. %such as symmetry (e.g. Gaussian) and repetition (e.g. sine function) \cite{stanley1}. 
+%Because evolution is able to exploit such properties, things like gaits are able to feature repetition and symmetry on its own without human intervention \cite{clune1}. 
 
 
-There are links between nodes in CPPNs each of which has a weight used to multiply the signal in each link to determine the magnitude of effect from each node. 
+There are weighted links between nodes in CPPNs that are used to multiply the signal in each link and determine the magnitude of effect from each node. 
 In HyperNEAT, a CPPN genome takes in Cartesian coordinates (X,Y) of the source and the target nodes, and a constant bias value and outputs the weight between the input and hidden layer and a weight between the hidden layer and output (assuming that there is a hidden layer, as in the case for this study). 
 All pairwise combinations of source and target nodes are passed into a CPPN to determine the weight of each ANN link. 
 
