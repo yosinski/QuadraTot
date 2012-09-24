@@ -1,33 +1,18 @@
 % !TEX root =main.tex
-The robot platform used for this project was a quadrupedal robot named the QuadraTot\footnote{Robot plans and part files for 3D printing are freely available at http://quadratot.yosinski.com} designed in the Cornell Creative Machines Lab by Juan Zagal \cite{yos:clune}.
-It has 9 degrees-of-freedom (DOF), with 2 DOF for the inner joint and the outer joint of each leg and 1 DOF for the hip joint of the robot. 
-The QuadraTot is an open-sourced and 3-D printable robot, which allows it to be used in other labs for research, providing a platform with which people could compare the results of different gait learning algorithms. 
-Currently, there are published data and results from 9 different learning algorithms on the platform from three different publications \cite{yos:clune,glette,haocheng}. %JMC/SL fill in INSERT, and dump all cites here. This is a good place to cite haochengs paper, which is fun for him and Jason, but does not distract from our story./ DONE
+We performed the experiments on the QuadraTot quadrupedal robot platform~\cite{yos:clune}.
+It has 9 degrees-of-freedom (DOF): two joints per leg and one joint that allowed rotation along the robot's midline~(Fig.\ref{pictureOfRobot}). %we def want a picture of the cool robot. I propose putting the picture of the robot on the left and the picture of the simulated robot on the right of the same figure. That also does a nice job of highlighting the theme of the paper (robot+sim) in one figure. Try to get this figure to show up as early as possible in the paper (e.g top of the 2nd page). 
+QuadraTot has open source software and hardware\footnote{A list of all of the parts and all software, including the simulator, is available for free at http://quadratot.yosinski.com.} %JMC: This should really be a Creative Machines/Cornell web address. Can you ask Jason if he agrees and, if so, take the lead on making sure it gets made?
+, including many parts that can be 3D printed. These traits enable other labs to perform research with it, providing a platform for comparing different gait-learning algorithms. 
+To date there are results on the platform from nine different learning algorithms from three previous publications \cite{yos:clune,glette,haocheng}. We identified the robot's position using infrared LEDs on the robot which was tracked using a Wiimote~\cite{yos:clune}.
+
+Both in this work and that of Glette et al.~\cite{glette}, the joints are powered by Robotis Dynamixel servos; five AX-18A servos for the inner joint of each leg and the single midline joint, and four AX-12A servos for the the outer joint of each leg, which requires less power and can thus have less expensive motors. The servos were sent new positions at 40Hz via the Pydynamixel library. 
+
+Each servo has a built-in safety mechanism that shuts itself off to prevent damage if the servo's current, range, temperature, or torque was too high \cite{robotis}. During evolution, this safety mechanism frequently activated, and did so inconsistently, adding significant noise to the evaluation process. As pointed out in Yosinski et al. \cite{yos:clune}, gaits generated during evolution are highly variable and generate many shutdowns because they forced the servos to exert too much torque or command positions that are out of range. %JMC: Does requesting a value out of range really cause the servo to shut down? That seems like something we could easily fix (by never allowing an out-of-range value). Now that we do not allow values out of range, we still see lots of shutdowns...making me think that the problem was really torque. What do you think?
+To minimize shutdowns, we limited the allowable range of movement for the inner, outer, and hip joints to [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree], respectively. We also implemented the Smart Cropping System from Shen et al. \cite{haocheng}, which prevents combinations of joint positions for the inner and outer joint of each leg that generate extreme amounts of torque. A final method of reducing torque was to reduce the weight of the robot. Yosinski et al.~\cite{yos:clune} had the small Linux computer that performed all computation on the robot, but we removed it and sent commands to the robot via a cable. 
 
 
-The body of the robot was printed using an Objet Connex 500 3-D Printing System and is actuated using 9 Robotis Dynamixel servos: 5 AX-18A servos and 4 AX-12A servos. 
-The stronger AX-18A servos were used to actuate the inner joints of the robot and the hip joint while the AX-12A servos were used to actuate the outer joints. 
-The servos have a range of motion of [0, 1023], roughly equivalent to a physical range of [-12\degree, +120\degree]. 
-
-The Dynamixel AX-12A and AX-18A servos have a safety feature called \emph{Alarm Shutdown} that would turn off the servo if the servo's current, range, temperature, or torque was too high \cite{robotis}. 
-The ones most relevant to this study were shutdowns due to high torque and range. 
-It has been reported previously Yosinski et al. \cite{yos:clune}, that many gait tested on the QuadraTot forced the servos to exert too much torque or command positions that are out of range and cause the servos to shutdown. In order to address this problem and avoid collisions with its own body, we implemented a motion cropping system by limiting the possible range of movement of the QuadraTot by [-85\degree, +60\degree], [-113\degree, +39\degree], and [-28\degree, +28\degree] for the inner, outer, and hip joints respectively.
-In addition to this, we implemented an extra cropping system named the Smart Cropping System from Shen et al. \cite{haocheng} to further prevent servo shutdowns from leg positions where the combination of the two angles interact to produce an extreme amount of torque. %This smart cropping algorithm calculates a leg position by summing the servo position values from the inner and outer joints of a leg, \emph{\textbf{g}} (\emph{\textbf{g}} = $j_{inner}$ + $j_{outer}$) %JMC/SL - do they sum the position values, or the joint angles? Since all the previous extremes are expressed in angles, the writing makes me expect angles... / They do use the position values and I think that it would be best to be consistent with what Jason/Haocheng did. This is also the way g is calculated in the simulator and the python drivers as well and more accurately reflects what we actually did. 
-%and modifying the servo positions from ``fierce gaits'', which usually have relatively low \emph{\textbf{g}}s, to remap them onto the boundary of a quasi-trangular area in a 2-D space defined by $j_{inner}$ and $j_{outer}$. %JMC/SL - the term fierce sounds silly and non-professional (sorry!) I took out the place where you defined it, and we only use it in two other places. No need to invent a definition only to use it 2-3 times...can you swap in different, more descriptive words? / Again, I am trying to be consistent with what Jason and Haocheng used. I agree that 'fierce' is not the best word but if it is different from what J/H did, then there are inconsistencies between the publications...
-%We set the minimum threshold \emph{\textbf{g}} to be 730, found through experimentation to provide a good balance between performance and safety. %JMC/SL - This description is not great. The last sentence's use of g doesn't make sense with the equation...is g a threshold or the sum? Please try to clean up this description. / Think this clarified things
 
 
-We controlled the robot using a CompuLab Fit-PC2, a compact computer running Ubuntu Linux 10.10 and commanded the servos at 40Hz via the Pydynamixel library. 
-
-%In a previous study \cite{yos:clune}, this computer was placed on the robot to keep the robot untethered, but for this study the computer was taken off the robot to reduce weight, because the weight of the robot seemed to be one of the factors contributing to servo shutdowns.
-
-
-We identified the robot's position using infrared LEDs on the robot which was tracked using a Wiimote as in Yosinski et al. \cite{yos:clune}.
-%JMC/SL you sure there was more than one IR LED? I thought it was just one IR and one visible for us to tell if there is power to the LEDs. If it is just one, switch to singular instead of plural in the previous sentence / Yep there are like 3 IR LEDs being used.
-%To maximize its viewable window, the Wii remote was fixed to the ceiling pointing down. It communicated with the robot computer via bluetooth using the CWiid library \cite{yos:clune}. 
-%JMC/SL The paragraph about the Wii mote was very wordy. I think I trimmed it by half. You should try to be similarly compact the rest of the paper. Compare your version to mine and try to see how I condensed things. / Will do boss.
-
-% % figures
 % % figure of the quadratot in its natural stance
 % \begin{figure}
 % \begin{center}
@@ -40,22 +25,9 @@ We identified the robot's position using infrared LEDs on the robot which was tr
 % \end{figure}
 % %
 
-%It is open-sourced and 3-D printable, which has allowed for other  researchers to use the robot for their research around the  world. 
-%JMC/SL The previous sentence (which I commented out) is alright for the main text, but figures are very expensive real estate. The goal of our paper is not to sell this robot, but to sell the work we did. / Okay I understand
-
-%JMC/SL: If you use which instead of that, you need a comma before which. For example, this is wrong: There are 9 degrees of freedom: 2 per leg, and a single `hip joint' which connects  the two symmetrical halves of the robot. This is right. There are 9 degrees of freedom: 2 per leg, and a single `hip joint' that connects  the two symmetrical halves of the robot. This is also right: There are 9 degrees of freedom: 2 per leg, and a single `hip joint,' which connects  the two symmetrical halves of the robot. / Ok
-% The robot uses Dynamixel  AX-18 and AX-12 servos for actuation. %JMC We said this already in methods
-% Figure taken from Shen et  al. \cite{haocheng}.%JMC Actually it's from yos:clune, but I think it is ok to leave this out, since this is just a stock photo of the QuadraTot.
- %JMC Let's put this figure on the first page (before the introduction), unless you can get a series of pictures that show a gait. (This might be hard to do). A new trend in papers is to have a sexy image on the first page, and Hod will want to see this. I also think it makes people want to read the paper more. 
-
-% \begin{figure}
-% \begin{center}
-% \vspace{1cm}
-% \epsfig{file=legpos.eps, width=8cm}
-% \caption[ ]{The figure shows an example of leg positions allowed and not allowed on the robot. The twoleft positions are allowed. The middle two positions are on the borderline. The right two positions are considered as ``fierce'' and are disallowed. Instead, these gaits are cropped to the middle two positions during gait performance by the cropping mechanism placed to prevent servo shutdowns. Figure taken from Shen et al. \cite{haocheng}}
-% \end{center}
-% \end{figure}
-\figp{sixLegPositions}{.6}{The figure shows an example of leg positions allowed and not allowed on the robot. The twoleft positions are allowed. The middle two positions are on the borderline. The right two positions are considered as ``fierce'' and are disallowed. Instead, these gaits are cropped to the middle two positions during gait performance by the cropping mechanism placed to prevent servo shutdowns. Figure taken from Shen et al. \cite{haocheng}}
+\figp{sixLegPositions}{.6}{Allowed and disallowed leg position angles. %JMC: Isn't this described in Haocheng's paper? I don't think we need to show this here, because it is not a new thing in our paper and is not central to our story. If we do keep it, instead of 3 sentences of text saying what the columns are, just put the headings ``Allowed'', ``End of Allowable Range'', and ``Disallowed''
+%The figure shows an example of leg positions allowed and not allowed on the robot. The two left positions are allowed. The middle two positions are on the borderline. The right two positions are considered as ``fierce'' and are disallowed. Instead, these 
+Disallowed gaits are cropped to the middle two positions to prevent servo shutdowns. Figure taken from Shen et al. \cite{haocheng}}
 
 
 % \begin{figure}

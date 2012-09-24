@@ -1,8 +1,5 @@
 % !TEX root =main.tex
-HyperNEAT is a neuroevolution method that evolves artificial neuron networks (ANNs) using evolutionary algorithms.
-HyperNEAT has shown to evolve large neural networks that represent many features present in brains such as repetitions and regularities \cite{stanley3}. 
-This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson} and has been successful in displaying complex, natural characteristics such as symmetries and repetition of themes often found in nature.
-
+HyperNEAT is an algorithm for evolving artificial neural networks (ANNs)~\cite{stanley3}. 
 
 HyperNEAT indirectly encodes ANNs using compositional pattern producing networks (CPPNs) which represent genomes encoding ANN phenotypes \cite{stanley1}, \cite{stanley2}. 
 The motivation for CPPNs is that complex patterns can be produced by determining the attributes of their phenotypic components as a function of their geometric location. 
@@ -27,6 +24,10 @@ All pairwise combinations of source and target nodes are passed into a CPPN to d
 HyperNEAT is first neuroevolutionary algorithm that has shown capabilities in exploiting the geometry of the problem \cite{stanley1}, \cite{clune3}.
 This is possible because the connection weights are a function of geometric positions of these nodes. 
 If positions inputed to CPPNs represent aspects of the problem relevant to the solution, HyperNEAT could use that information to its advantage.  
+
+Previous work has shown that Hyper
+HyperNEAT has shown to evolve large neural networks that represent many features present in brains such as repetitions and regularities . 
+This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson} and has been successful in displaying complex, natural characteristics such as symmetries and repetition of themes often found in nature.
 
 
 HyperNEAT evolves the CPPNs according to the principles of the Neuroevolution of Augmenting Topologies (NEAT) algorithm \cite{stanley4}. 
