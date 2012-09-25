@@ -1,6 +1,6 @@
 % !TEX root =main.tex
 We performed the experiments on the QuadraTot quadrupedal robot platform~\cite{yos:clune}.
-It has 9 degrees-of-freedom (DOF): two joints per leg and one joint that allowed rotation along the robot's midline~(Fig.\ref{pictureOfRobot}). %we def want a picture of the cool robot. I propose putting the picture of the robot on the left and the picture of the simulated robot on the right of the same figure. That also does a nice job of highlighting the theme of the paper (robot+sim) in one figure. Try to get this figure to show up as early as possible in the paper (e.g top of the 2nd page). 
+It has 9 degrees-of-freedom (DOF): two joints per leg and one joint that allowed rotation along the robot's midline~(Fig.\ref{pictureOfRobot}) \edit{fix this}. %we def want a picture of the cool robot. I propose putting the picture of the robot on the left and the picture of the simulated robot on the right of the same figure. That also does a nice job of highlighting the theme of the paper (robot+sim) in one figure. Try to get this figure to show up as early as possible in the paper (e.g top of the 2nd page). 
 QuadraTot has open source software and hardware\footnote{A list of all of the parts and all software, including the simulator, is available for free at http://quadratot.yosinski.com.} %JMC: This should really be a Creative Machines/Cornell web address. Can you ask Jason if he agrees and, if so, take the lead on making sure it gets made?
 , including many parts that can be 3D printed. These traits enable other labs to perform research with it, providing a platform for comparing different gait-learning algorithms. 
 To date there are results on the platform from nine different learning algorithms from three previous publications \cite{yos:clune,glette,haocheng}. We identified the robot's position using infrared LEDs on the robot which was tracked using a Wiimote~\cite{yos:clune}.
@@ -25,7 +25,7 @@ To minimize shutdowns, we limited the allowable range of movement for the inner,
 % \end{figure}
 % %
 
-\figp{sixLegPositions}{.6}{Allowed and disallowed leg position angles. %JMC: Isn't this described in Haocheng's paper? I don't think we need to show this here, because it is not a new thing in our paper and is not central to our story. If we do keep it, instead of 3 sentences of text saying what the columns are, just put the headings ``Allowed'', ``End of Allowable Range'', and ``Disallowed''
+\figp{sixLegPositions}{.6}{Allowed and disallowed leg position angles. \edit{which are which? see JMC comment too} %JMC: Isn't this described in Haocheng's paper? I don't think we need to show this here, because it is not a new thing in our paper and is not central to our story. If we do keep it, instead of 3 sentences of text saying what the columns are, just put the headings ``Allowed'', ``End of Allowable Range'', and ``Disallowed''
 %The figure shows an example of leg positions allowed and not allowed on the robot. The two left positions are allowed. The middle two positions are on the borderline. The right two positions are considered as ``fierce'' and are disallowed. Instead, these 
 Disallowed gaits are cropped to the middle two positions to prevent servo shutdowns. Figure taken from Shen et al. \cite{haocheng}}
 
@@ -44,7 +44,7 @@ Disallowed gaits are cropped to the middle two positions to prevent servo shutdo
 % \begin{center}
 % \vspace{1cm}
 % \epsfig{file=wiimote.eps, width=8cm}
-% \caption[ ]{The Wiimote used to track the motion of ther robot. The Wiimote was used to track the IR LED placed on top of the robot and send the location data to a nearby computer which recorded the position of ther robot with respect to time. Figure taken from Yosinski et al. \cite{yos:clune}.}
+% \caption[ ]{The Wiimote used to track the motion of the robot. The Wiimote tracked an IR LED placed on top of the robot and sent the location data to a nearby computer which recorded the position of the robot with respect to time. Figure taken from Yosinski et al. \cite{yos:clune}.}
 % \end{center}
 % \end{figure}
 \figgp{wiiMote_crop.jpg}{.6}{robot_led_crop.jpg}{.6}{The Wiimote used to track the motion of ther robot. The Wiimote was used to track the IR LED placed on top of the robot and send the location data to a nearby computer which recorded the position of ther robot with respect to time. Figure taken from Yosinski et al. \cite{yos:clune}.}
