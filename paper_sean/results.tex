@@ -1,31 +1,14 @@
 % !TEX root =main.tex
-HyperNEAT, used with a physical simulator, produced gaits that outperformed all previous gaits tried and recorded on the QuadraTot.\footnote{Videos of the gaits in simulation and on robot available at http://quadratot.yosinski.com}
-The fastest gait published was from Kyrre et al. \cite{glette}, which recorded 17.8 cm/s on their robot. 
-For consistency, we took that gait and ran it ten times on our robot, and found that on our robot, the gait had an average speed of 12.95 cm/s and a maximum speed of 13.76 cm/s.
-The speed of the fastest gait recorded in this study was 14.5 cm/s, which is 5.4\% faster than Kyrre et al.'s \cite{glette} gait with 20000 less evaluations performed per run.
-%Kyrre et al. \cite{glette} published 17.8 cm/s on their robot, but to make sure that there were no differences in robots, the same gait was also tested on our robot which then recorded an average speed of 12.951 cm/s and a maximum speed of 13.76 cm/s. 
-%The gait from this study outperformed the previous Kyrre et al's \cite{glette} gait by 5.4\% with much fewer evaluations performed per run, at 40000 evaluations per run as opposed to Kyrre et al's \cite{glette} 60000 evaluations per run.
-It also outperformed the best gait evolved using HyperNEAT in hardware \cite{yos:clune} by 49.5\%, most likely due to the difference in the number of evaluations between the two studies -- 40000 vs 180. 
-Another minor reason for superior performance may be that frequency limiter policy that we placed may have helped in producing gaits less susceptible to shutdown while Yosinski et al. \cite{yos:clune} had no such implementation.
-Although most gaits started its evolution process by producing fast and high frequency gaits, with more generations, the gaits dramatically reduced its frequencies while continually increasing their fitness. The average frequency of the final gaits was 1.29 Hz per servo. 
+Because of the noise inherent in all physical robots, especially different copies of robots, the best way to compare two algorithms is in simulation. The gaits evolved with HyperNEAT in simulation significantly outperformed the gaits evolved with a GA by Glette et al. 2012~(Table~\ref{resultsTable}). INSERT-RES-OF-SIM-PARAGRAPH. 
 
-%Gaits produced in this study confirmed that with the use of a physical simulator, HyperNEAT is able to fully exploit the geometry of the problem without human intervention, which was not evident in gait evolution using HyperNEAT in hardware \cite{yos:clune}. 
-HyperNEAT took advantage of the regularity of the problem and produced gaits more regular, coordinated, and effective than all other gaits evolved for the QuadraTot platform in the past.
-This is evident in the servo position plots where the gaits produced in this study are smooth and are similar between the servos. 
-%The difference in regularity between the two studies is most likely due to the number of evaluations that were done in gait evolution. Additionally, the noise in the real world was extremely high, making learning in hardware difficult, which may have further impeded the search for higher-performing, regular gaits.
+Gaits evolved in the simulator with HyperNEAT and then transferred to reality (HyperNEAT+Simulator) outperformed all previous gaits reported for the QuadraTot robot platform~(Table~\ref{resultsTable}). Videos of the gaits in simulation and on robot can be viewed at http://MAKEMEACREATIVEMACHINESLINK.
+The fastest previously reported gait moved 17.8 cm/s, but was evaluated on a copy of the robot in Norway~\cite{glette}. To control for the possibility that the robot itself may be different, we ran that gait 10 times on our copy of the robot. We found that our robot is inherently slower, and the average speed of the Glette et al. 2012 gait was 12.95 cm/s on our copy of the robot, with a maximum speed of 13.76 cm/s.
+The speed of the fastest gait produced in this paper was 14.5 cm/s on our copy of the robot, which is 5.4\% faster than the best gait from Glette et al. 2012, once robot itself is controlled for. This result is even more significant when one considers that the gait produced by HyperNEAT with a simulator evolved with 20000 (33\%) fewer evaluations per run than Glette et al. 2010, a decision mandated by the available computational resources.   
 
-While this study was able to produce the highest fitness gait that has ever been tried on the QuadraTot, it is worth noting that most of the gaits in simulation did not transfer well to reality. 
-Many gaits that performed very well in simulation performed poorly on the real robot because of the physical limitations and differences between simulation and real-world, such as limited servo power, frictional differences, and other minor differences in the robot physique, all of which accumulates to have a large impact in performance.
-The most oft-seen problem with real trials, regardless of the actions taken to reduce it, was the servo shutdowns. 
-Because we limited gait frequencies, HyperNEAT was forced to turn to other means for maximizing distance. 
-So it pushed the servo positions to their limits by extending and retracting from one extreme to the other at a pace which was difficult for the servos to handle. 
-Another reason for the shutdowns was that the servos could not easily support the robot's weight well, which often led to the servos shutting down after a few seconds of walking off-ground. 
+Glette et al. 2012 did not report the average speed of all transferred gaits. Further hindering a comparison of averages is the fact that servo shutdowns were so frequent that we were unable to reliably gather data on all 20 HyperNEAT+Simulator gaits. 
 
-These problems led to difficulties in repeatability. 
-The robot is weak and the power of the motors changes between and even within trials. 
-And since the gaits evolved in this study stressed the servos a lot, after one successful run, there was no guarantee that the robot would be able to perform that same gait succesfully next time. 
-In that sense, the gaits produced in this study is perhaps worse than the gaits produced by RL PoWER Spline \cite{haocheng} or by genetic algorithm with a physical simulator \cite{glette} whose gaits were repeatable and less taxing on the robot. 
 
+HyperNEAT+Simulator gaits also outperformed the best gait evolved with HyperNEAT directly in hardware~\cite{yos:clune} by 49.5\%, most likely due to the difference in the population size (200 vs. 9) and the number of generations (200 vs. 20), leading to a total difference in the number of evaluations between the two studies of 40000 vs 180~\cite{yos:clune}. Another potential cause of improved performance is that with a simulator HyperNEAT had much less noise in the evaluation process during early generations: it could thus find coordinated, regular, gaits, which are both higher-performing and more likely to transfer. On the physical robot, the noise in the evaluation was substantial, preventing effective learning and the discovery of effective gaits~\cite{yos:clune}. Additionally, we cannot rule out that the addition in this study of a punishment for high-frequency gaits aided performance, especially since in simulation the gaits were high-frequency in a few early generations before rapidly settling at a lower frequency due to the penalty. It is possible that quickly leaving the high-frequency area of the search space caused a significant performance boost. 
 
 % table!
 \begin{table}
@@ -34,7 +17,7 @@ In that sense, the gaits produced in this study is perhaps worse than the gaits 
 \begin{center}
 \begin{tabular}{|l|c|c|c|c|}
 \hline
-                                         & Num. Evaluations  & Sim. Velocity  & Real. Velocity \\
+                                         & Evaluations  & Simulated Velocity  & Real Velocity \\
 \hline
 Best parameter optimization learning    &153    & --    & 4.64 \\
 \hline
@@ -48,8 +31,16 @@ Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
 \hline
 \end{tabular}
 \end{center}
+\label{resultsTable}
 \end{table}
 %JMC All numbers in the same column should be to the same precision (e.g. for the real velocity column, one decimal place). Also, can you right-justify the numbers (while still keeping them roughly centered)? Comparing numbers that are not right-justified is hard...so if you can't center and right-justify, then I let's see if just having it be right justified is better. 
+
+
+Qualitatively, the HyperNEAT gaits are regular and coordinated, as has been found in simulation~\cite{clune2009evolving, clune2011performance}. This is evident in the servo position plots where the gaits produced in this study are smooth and are similar between the servos~\figref{servo_plot_111}. This result is important because it confirms that HyperNEAT can produce the important property of regularity in physically realizable applications, instead of just producing those behaviors in simulation. This conclusion was not obvious after HyperNEAT failed to produce substantially coordinated, regular, effective gaits on this robot platform when evolving directly on the hardware~\cite{yos:clune}. 
+
+While this study was able to produce the fastest QuadraTot gait to date, most of the gaits in simulation did not transfer well to reality. Many gaits that performed very well in simulation performed poorly on the real robot, largely due to servos that were too weak and timed out, or because of frictional differences between simulation and reality. Repeated attempts to minimize these problems were unsuccessful. 
+A major, unavoidable cause of the servo shutdowns was the design of the robot: the force required to lift the robot in many poses was too much for the servos. In the future we will switch to a robot that has more mechanical advantage, requiring less torque out of each servo, such as the Aracna platform~\cite{lohmann2012aracna}, which was designed in response to the challenges experienced with the QuadraTot platform.  
+
 
 %
 %
