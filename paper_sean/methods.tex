@@ -1,8 +1,8 @@
 % !TEX root =main.tex
-Gaits were first evolved in simulation and then transferred onto the real robot, as previous done in Glette et al. \cite{glette}. 
-During the evolution process, we evolved 200 organisms for 200 generations in 20 runs with different initial conditions specified by randomly seeding the run. 
-Each gait was 12 seconds long, both in simulation and in reality. 
-All the HyperNEAT settings used for gait generation was kept the same as in Yosinski et al. \cite{yos:clune} except for the frequency of the sine wave function used, which was changed in order to address the servo shutdown problem mentioned previously after discovering that gaits that require servos to change their directions often were more prone to servo shutdowns than low frequency gaits. %(at around 1.5Hz per servo). 
+We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. \cite{glette}. 
+Each run had a population size of 200 and lasted 200 generations. 20 runs were performed, each of which was identical except for the seed provided to the random number generator, which affected stochastic events such as mutation. 
+Each gait was evaluated for 12 seconds, both in simulation and in reality. 
+All HyperNEAT parameters were identical to those in Yosinski et al. \cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered to decrease the number of servo shutdowns do to high-frequency gaits. 
 With the sine wave frequency used for Yosinski et al. \cite{yos:clune} (0.0265Hz), HyperNEAT often evolved high frequency gaits (over 8Hz per servo) that performed poorly in reality due to servo constraints. 
 This led to dramatically different gait performance in real-life compared to simulations. 
 To address this, we changed the frequency of sine function to 0.004Hz so that HyperNEAT would lean towards evolving low frequency gaits.

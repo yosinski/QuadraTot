@@ -1,58 +1,26 @@
 % !TEX root =main.tex
-HyperNEAT is an algorithm for evolving artificial neural networks (ANNs)~\cite{stanley2002evolving}.
+HyperNEAT is an algorithm for evolving artificial neural networks (ANNs)~\cite{stanley2009hypercube}. It has been repeatedly described in detail~\cite{stanley2009hypercube, gauci2007generating, clune2011performance},  so here we provide only a summary. Instead of directly encoding the weights of the ANN individually on the genome, in HyperNEAT the genome is a compositional pattern producing network (CPPN)~\cite{stanley2007compositional}. The CPPN genome specifies the weights in a similar way to how natural organisms develop. In nature, phenotypic attributes are specified as a function of their geometric location, and such positional information is conveyed through chemical morphogen gradients~\cite{carroll2005endless}. For example, the concentration of one chemical could indicate the position along the anterior-posterior (head-to-tail) axis, and another chemical in bands could indicate if a cell is in an odd-numbered or even-numbered segment. Based on the relative concentrations of these chemicals, a cell can know where it is geometrically and, thus, what type of cell to become~\cite{carroll2005endless}. 
 
-HyperNEAT indirectly encodes ANNs using compositional pattern producing networks (CPPNs) which represent genomes encoding ANN phenotypes \cite{stanley2009hypercube}, \cite{stanley2007CPPN}. 
-The motivation for CPPNs is that complex patterns can be produced by determining the attributes of their phenotypic components as a function of their geometric location. 
-This is based on the belief that in nature, cells in a body differentiates and specializes in different things with respect to their location. 
-In real life, a cell in natural organisms cannot determine its location in space without the help of chemical gradients but \emph{in silico}, cells can be given their geometric coordinates, which CPPNs exploit. 
-%A cell in natural organisms cannot determine its location in space by itself and requires chemical gradients are used to signal its location \cite{carroll}. 
-%In contrast, \emph{in silico}, cells can be given their geometric coordinates and CPPNs use this to their advantage. 
+With CPPNs this process is abstracted as a network of math functions that operate in a Cartesian geometric space. The coordinates of phenotypic elements are provided as inputs to the CPPN and the output specifies a phenotypic trait. For example, when CPPNs encode 2D pictures, the coordinates of each pixel are iteratively input into the genome and the output is the grayscale value at that coordinate~\cite{secretan2011picbreeder}. Because a CPPN network is composed of math functions, those functions can create geometric regularities in the phenotype. For example, a Gaussian function of the x-axis can provide left-right symmetry, and a repeating function (e.g. sine) of the y-axis could provide a related motif such as segmentation~(Fig.~\figref{hyperneat_bug_example}). Both 2D pictures and 3D objects evolved with CPPNs look like natural and engineered objects, and contain complex, regularities like symmetries and repeated motifs, with and without variation~\cite{secretan2011picbreeder, clune2011objects}. 
+
+\figp{hyperneat_bug_example}{.8}{Compositional Pattern Producing Networks (CPPNs). CPPN  genomes use mathematical functions to generate regularities such as symmetry and repetitions. CPPN genomes allow functions to be made of other functions, allowing multiple regularity motifs to be present. Figure taken from Stanley \cite{stanley2007CPPN}.}
 
 
-Each CPPN is a directed graph in which every node is a mathematical function, such as sine or Gaussian. 
-Moreover, a CPPN genome allows functions to be made of other functions, allowing coordinate frames to be combined and hierarchies to develop, allowing for several different themes to appear such as a repeating theme (sine) with symmetry (Gaussian). 
-%For example, a sine function could develop a repeating theme which is passed onto a Gaussian function to create a repeating series of symmetrical motifs. 
-These functions allow evolution to exploit various properties that allow HyperNEAT to find regularities without further human intervention \cite{stanley2009hypercube,clune2009evolving}. %such as symmetry (e.g. Gaussian) and repetition (e.g. sine function) \cite{stanley1}. 
-%Because evolution is able to exploit such properties, things like gaits are able to feature repetition and symmetry on its own without human intervention \cite{clune1}. 
+In HyperNEAT, CPPNs encode the weights of the connections between neurons as a function of the geometric locations of those neurons~(\figref{hyperneatExplanation}). The Cartesian coordinates of the two neurons at the end of each connection are input into the CPPN, and the output is the weight of that connection. If the output is smaller than a threshold, the weight is set to zero, functionally removing the connection. The process is repeated for each possible connection. Just as in 2D pictures and 3D objects, the CPPN can create complex, regular, geometric patterns (e.g. left-right symmetry or repeated modules), but in this case the patterns are in the weights of the neural network~\cite{clune2011performance, }. The neural regularities produced by HyperNEAT enable significantly improved performance on problems that are regular~\cite{clune2011performance, stanley2009hypercube}, including evolving quadruped gaits~\cite{clune2011performance, clune2009evolving, clune2009sensitivity}. 
 
-
-There are weighted links between nodes in CPPNs that are used to multiply the signal in each link and determine the magnitude of effect from each node. 
-In HyperNEAT, a CPPN genome takes in Cartesian coordinates (X,Y) of the source and the target nodes, and a constant bias value and outputs the weight between the input and hidden layer and a weight between the hidden layer and output (assuming that there is a hidden layer, as in the case for this study). 
-All pairwise combinations of source and target nodes are passed into a CPPN to determine the weight of each ANN link. 
-
-
-HyperNEAT is first neuroevolutionary algorithm that has shown capabilities in exploiting the geometry of the problem \cite{stanley2009hypercube}, \cite{clune2009sensitivity}.
-This is possible because the connection weights are a function of geometric positions of these nodes. 
-If positions inputed to CPPNs represent aspects of the problem relevant to the solution, HyperNEAT could use that information to its advantage.  
-
-%Previous work has shown that Hyper
-HyperNEAT has shown to evolve large neural networks that represent many features present in brains such as repetitions and regularities. 
-This encoding has previously been applied for gait-learning \cite{yos:clune} and for evolving 2-D and 3-D objects \cite{clune:lipson20113d} and has been successful in displaying complex, natural characteristics such as symmetries and repetition of themes often found in nature.
-
-
-HyperNEAT evolves the CPPNs according to the principles of the Neuroevolution of Augmenting Topologies (NEAT) algorithm \cite{stanley2006exploiting}. 
+In HyperNEAT, the CPPN genomes evolve via the Neuroevolution of Augmenting Topologies (NEAT) algorithm \cite{stanley2006exploiting}. 
 The NEAT algorithm has three major components \cite{stanley2006exploiting}. 
-First, it starts with small genomes that encode simple networks and complexifies them via mutations and add nodes and links to the network which allows the alogithm to evolve the network topology and weight. 
-Second, NEAT has a fitness-sharing system that preserves diversity in the system and allows for new innovations to be tuned by evolution before competing them against more adapted rivals. 
-Third, the historical information stored in genes helps to perform crossover in a way that is effective, yet avoids the need for expensive topological analysis. A full explanation of NEAT can be found in Stanley and Miikkulainen \cite{stanley2006exploiting}. 
+First, it starts with small genomes that encode simple networks and complexifies them by mutations that add nodes and links to the network. Second, NEAT has a fitness-sharing system that preserves diversity and allows for new innovations to be tuned by evolution before competing them against more adapted rivals. 
+Third, historical information is recorded that facilitates crossover in a way that is effective, yet avoids the need for expensive topological analysis. A full explanation of NEAT can be found in Stanley and Miikkulainen \cite{stanley2006exploiting}. 
 
-
-In this study, the ANN configuration from evolving gaits with HyperNEAT in hardware \cite{yos:clune} was used. 
-In this ANN configuration, the ANN has a fixed topology that consists of three 3 X 4 Cartesian grids of nodes for the input, hidden, and output layers. 
+In this study, the ANN inputs, outputs, and the size of the hidden layer are the same as in Yosinski et al. 2011 \cite{yos:clune}. 
+The ANN has a fixed topology of three \begin{math}3\times4\end{math} Cartesian grids of nodes for the input, hidden, and output layers. 
 The inputs to the substrate were the angles requested in the prevous time step for each of the 9 joints of the robot and a sine and cosine wave to facilitate periodic motion. 
 The outputs of the substrate at each time step were nine numbers (for each joint) in the range [-1, 1] which were scaled to the range [0, 1023], the allowable ranges for the servos. 
-As in Yosinski et al. \cite{yos:clune}, we requested four times as many commanded positions from HyperNEAT ANNs and averaged over four commands at a time in order to reduce the possibility of switching from extreme negative to extreme positive numbers at a very high frequency. 
+As in Yosinski et al. \cite{yos:clune}, to obtain each commanded position we averaged over four outputs of the network to reduce the possibility of switching from extreme negative to extreme positive numbers at a very high frequency. 
 
 %%% FIGURES %%%
 
-% \begin{figure}
-% \begin{center}
-% \vspace{1cm}
-% \epsfig{file=CPPN.eps, width=8cm}
-% \caption [ ]{Compositional Pattern Producing Networks (CPPNs). CPPN  genomes use mathematical functions to generate regularities such as symmetry and repetitions. CPPN genomes allow functions to be made of other functions, allowing multiple regularity motifs to be present. Figure taken from Stanley \cite{stanley2}.}
-% \end{center}
-% \end{figure}
-\figp{hyperneat_bug_example}{.6}{Compositional Pattern Producing Networks (CPPNs). CPPN  genomes use mathematical functions to generate regularities such as symmetry and repetitions. CPPN genomes allow functions to be made of other functions, allowing multiple regularity motifs to be present. Figure taken from Stanley \cite{stanley2007CPPN}.}
 
 % \begin{figure}
 % \begin{center}
@@ -61,6 +29,6 @@ As in Yosinski et al. \cite{yos:clune}, we requested four times as many commande
 % \caption [ ]{Producing ANNs from CPPNs. In HyperNEAT, weights are specified as a function of the Cartesian coordinates for source and input nodes and a constant bias for each connection between the source and input. All pairwise combinations of source and target node coordinates are iteratively passed into CPPNs to determine the weight of each ANN link. Figure taken from Clune et al. \cite{clune2}}.
 % \end{center}
 % \end{figure}
-\figp{hyperneatExplanation}{.6}{Producing ANNs from CPPNs. In HyperNEAT, weights are specified as a function of the Cartesian coordinates for source and input nodes and a constant bias for each connection between the source and input. All pairwise combinations of source and target node coordinates are iteratively passed into CPPNs to determine the weight of each ANN link. Figure taken from Clune et al. \cite{clune2011performance}.}
+\figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al. \cite{clune2011performance}.}
 
 
