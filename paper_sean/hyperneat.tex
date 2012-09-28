@@ -3,21 +3,21 @@ HyperNEAT is an algorithm for evolving artificial neural networks (ANNs)~\cite{s
 
 With CPPNs this process is abstracted as a network of math functions that operate in a Cartesian geometric space. The coordinates of phenotypic elements are provided as inputs to the CPPN and the output specifies a phenotypic trait. For example, when CPPNs encode 2D pictures, the coordinates of each pixel are iteratively input into the genome and the output is the grayscale value at that coordinate~\cite{secretan2011picbreeder}. Because a CPPN network is composed of math functions, those functions can create geometric regularities in the phenotype. For example, a Gaussian function of the x-axis can provide left-right symmetry, and a repeating function (e.g. sine) of the y-axis could provide a related motif such as segmentation~(Fig.~\figref{hyperneat_bug_example}). Both 2D pictures and 3D objects evolved with CPPNs look like natural and engineered objects, and contain complex, regularities like symmetries and repeated motifs, with and without variation~\cite{secretan2011picbreeder, clune2011objects}. 
 
-\figp{hyperneat_bug_example}{.8}{Compositional Pattern Producing Networks (CPPNs). CPPN  genomes use mathematical functions to generate regularities such as symmetry and repetitions. CPPN genomes allow functions to be made of other functions, allowing multiple regularity motifs to be present. Figure taken from Stanley \cite{stanley2007CPPN}.}
+\figp{hyperneat_bug_example}{.8}{Compositional Pattern Producing Networks (CPPNs). CPPN  genomes use mathematical functions to generate regularities such as symmetry and repetitions. CPPN genomes allow functions to be made of other functions, allowing multiple regularity motifs to be present. Figure taken from Stanley 2007~\cite{stanley2007CPPN}.}
 
 
 In HyperNEAT, CPPNs encode the weights of the connections between neurons as a function of the geometric locations of those neurons~(\figref{hyperneatExplanation}). The Cartesian coordinates of the two neurons at the end of each connection are input into the CPPN, and the output is the weight of that connection. If the output is smaller than a threshold, the weight is set to zero, functionally removing the connection. The process is repeated for each possible connection. Just as in 2D pictures and 3D objects, the CPPN can create complex, regular, geometric patterns (e.g. left-right symmetry or repeated modules), but in this case the patterns are in the weights of the neural network~\cite{clune2011performance, }. The neural regularities produced by HyperNEAT enable significantly improved performance on problems that are regular~\cite{clune2011performance, stanley2009hypercube}, including evolving quadruped gaits~\cite{clune2011performance, clune2009evolving, clune2009sensitivity}. 
 
-In HyperNEAT, the CPPN genomes evolve via the Neuroevolution of Augmenting Topologies (NEAT) algorithm \cite{stanley2006exploiting}. 
-The NEAT algorithm has three major components \cite{stanley2006exploiting}. 
+In HyperNEAT, the CPPN genomes evolve via the Neuroevolution of Augmenting Topologies (NEAT) algorithm~\cite{stanley2006exploiting}. 
+The NEAT algorithm has three major components~\cite{stanley2006exploiting}. 
 First, it starts with small genomes that encode simple networks and complexifies them by mutations that add nodes and links to the network. Second, NEAT has a fitness-sharing system that preserves diversity and allows for new innovations to be tuned by evolution before competing them against more adapted rivals. 
-Third, historical information is recorded that facilitates crossover in a way that is effective, yet avoids the need for expensive topological analysis. A full explanation of NEAT can be found in Stanley and Miikkulainen \cite{stanley2006exploiting}. 
+Third, historical information is recorded that facilitates crossover in a way that is effective, yet avoids the need for expensive topological analysis. A full explanation of NEAT can be found in Stanley and Miikkulainen 2006~\cite{stanley2006exploiting}. 
 
-In this study, the ANN inputs, outputs, and the size of the hidden layer are the same as in Yosinski et al. 2011 \cite{yos:clune}. 
+In this study, the ANN inputs, outputs, and the size of the hidden layer are the same as in Yosinski et al. 2011~\cite{yos:clune}. 
 The ANN has a fixed topology of three \begin{math}3\times4\end{math} Cartesian grids of nodes for the input, hidden, and output layers. 
 The inputs to the substrate were the angles requested in the prevous time step for each of the 9 joints of the robot and a sine and cosine wave to facilitate periodic motion. 
 The outputs of the substrate at each time step were nine numbers (for each joint) in the range [-1, 1] which were scaled to the range [0, 1023], the allowable ranges for the servos. 
-As in Yosinski et al. \cite{yos:clune}, to obtain each commanded position we averaged over four outputs of the network to reduce the possibility of switching from extreme negative to extreme positive numbers at a very high frequency. 
+As in Yosinski et al. 2011~\cite{yos:clune}, to obtain each commanded position we averaged over four outputs of the network to reduce the possibility of switching from extreme negative to extreme positive numbers at a very high frequency. 
 
 %%% FIGURES %%%
 
@@ -26,9 +26,9 @@ As in Yosinski et al. \cite{yos:clune}, to obtain each commanded position we ave
 % \begin{center}
 % \vspace{1cm}
 % \epsfig{file=hyperneat.eps, width=8cm}
-% \caption [ ]{Producing ANNs from CPPNs. In HyperNEAT, weights are specified as a function of the Cartesian coordinates for source and input nodes and a constant bias for each connection between the source and input. All pairwise combinations of source and target node coordinates are iteratively passed into CPPNs to determine the weight of each ANN link. Figure taken from Clune et al. \cite{clune2}}.
+% \caption [ ]{Producing ANNs from CPPNs. In HyperNEAT, weights are specified as a function of the Cartesian coordinates for source and input nodes and a constant bias for each connection between the source and input. All pairwise combinations of source and target node coordinates are iteratively passed into CPPNs to determine the weight of each ANN link. Figure taken from Clune et al.~\cite{clune2}}.
 % \end{center}
 % \end{figure}
-\figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al. \cite{clune2011performance}.}
+\figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al. 2011~\cite{clune2011performance}.}
 
 

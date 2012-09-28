@@ -1,5 +1,5 @@
 % !TEX root =main.tex
-We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. \cite{glette}. 
+We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. 2012~\cite{glette}. 
 Each run had a population size of 200 and lasted 200 generations. 20 runs were performed, each of which was identical except for the seed provided to the random number generator, which affected stochastic events such as mutation. 
 Each gait was evaluated for 12 seconds, both in simulation and in reality. 
 All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 0.0265Hz to 0.004Hz to decrease the number of servo shutdowns do to high-frequency gaits. 
