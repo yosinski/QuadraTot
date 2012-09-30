@@ -19,22 +19,20 @@ HyperNEAT+Simulator gaits also outperformed the best gait evolved with HyperNEAT
 \hline
                                          & Evaluations  & Simulated Velocity  & Real Velocity \\
 \hline
-Best parameter optimization learning    &153    & --    & 4.6 \\
+Parameterized gaits + optimization    &153    & --    & 4.6 \\
 \hline
-Hardware HyperNEAT                  & 180         & --         &   9.7     \\
-\hline
-Simulated GA              & 60000       & 16.4       &   13.0*     \\
+HyperNEAT in hardware                  & 180         & --         &   9.7     \\
 \hline
 RL PoWER Spline                          & 300         & --         &   11.1 \\
 \hline
-Simulated HyperNEAT                      & 40000       & 25.4       &   14.5 \\
+GA + simulator              & 60000       & 16.4       &   *13.0     \\
+\hline
+HyperNEAT + simulator                      & 40000       & 25.4       &   14.5 \\
 \hline
 \end{tabular}
 \end{center}
 \label{resultsTable}
 \end{table}
-%JMC All numbers in the same column should be to the same precision (e.g. for the real velocity column, one decimal place). Also, can you right-justify the numbers (while still keeping them roughly centered)? Comparing numbers that are not right-justified is hard...so if you can't center and right-justify, then I let's see if just having it be right justified is better. 
-
 
 Qualitatively, the HyperNEAT gaits are regular and coordinated, as has been found in simulation~\cite{clune2009evolving, clune2011performance}. This is evident in the servo position plots where the gaits produced in this study are smooth and are similar between the servos~\figref{servo_plot_111}. This result is important because it confirms that HyperNEAT can produce the important property of regularity in physically realizable applications, instead of just producing those behaviors in simulation. This conclusion was not obvious after HyperNEAT failed to produce substantially coordinated, regular, effective gaits on this robot platform when evolving directly on the hardware~\cite{yos:clune}. 
 
