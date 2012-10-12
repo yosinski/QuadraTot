@@ -31,7 +31,7 @@ class RobotFailure(Exception):
 
 
 class Robot():
-    ''''''
+
 
     def __init__(self, silentNetFail = False, expectedIds = None, commandRate = 40,
                  loud = False, skipInit = False, cropMethod = 'smart'):
