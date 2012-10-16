@@ -1,5 +1,8 @@
 % !TEX root =main.tex
-The simulator was the same as Glette et al. 2012 \cite{glette}. C++ code for the the Nvidia PhysX physics engine approximately describes the QuadraTot, including the mass and size of the robot components and its degrees of freedom~(\figref{quadratotWhiteBooties}). In the simulator, each individual joint range was limit as described above, but Smart Cropping was not included because it hindered performance by limiting the types of gaits evolution could explore in early generations. 
+
+\subsubsection{Simulator.}
+The simulator was the same as Glette et al. 2012 \cite{glette}. C++ code for the the Nvidia PhysX physics engine\footnotemark[\value{footnote}]
+ approximately describes the QuadraTot, including the mass and size of the robot components and its degrees of freedom~(\figref{quadratotWhiteBooties}, right). In the simulator, each individual joint range was limit as described above, but Smart Cropping was not included because it hindered performance by limiting the types of gaits evolution could explore in early generations. 
 
 %\figp{simulator_outline}{.6}{Physical representation of the QuadraTot in simulation. It captures the important parts of the robot, such as the number and types of the joints, mass, and the rough shape and lengths. The simulator was written by Kyrre Glette in C++ using NVIDIA PhysX software library and visualized using OpenGL. Figure taken from Glette et al. \cite{glette}.}
 

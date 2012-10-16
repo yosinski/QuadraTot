@@ -1,8 +1,11 @@
 % !TEX root =main.tex
+
+\subsection{Methods}
+
 We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. 2012~\cite{glette}. 
 Each run had a population size of 200 and lasted 200 generations. 20 runs were performed, each of which was identical except for the seed provided to the random number generator, which affected stochastic events such as mutation. 
-Each gait was evaluated for 12 seconds, both in simulation and in reality. 
-All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 0.0265Hz to 0.004Hz to decrease the number of servo shutdowns do to high-frequency gaits. 
+Each gait was evaluated for 12 seconds \edit{JBY: how? As in fig 4 of \cite{yos:clune}, or another way?}, both in simulation and in reality. 
+All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 0.0265Hz to 0.004Hz to decrease the number of servo shutdowns due to high-frequency gaits \edit{JBY: what? why?}. 
 
 %\begin{equation}
 %sin(2\pi t/250)\pi
@@ -17,16 +20,16 @@ All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{y
 
  %Sine frequency of 0.004 was used because we experimentally found that HyperNEAT was able to produce natural and high-performing gaits with low frequencies with this frequency. 
 We also punished high-frequency gaits during evolving in simulation, which was effective at reducing the number of servo shutdowns observed when evolved gaits were transferred to the robot. 
-If the average frequency of each leg for the gait was higher than the threshold frequency (1.67 Hz), the fitness was punished by exponentially reducing the distance travelled by the robot:
+If the average frequency of each leg \edit{JBY: any leg or all legs?} for the gait was higher than a threshold frequency (1.67 Hz), the fitness was punished by exponentially reducing the distance travelled by the robot:
 
 \begin{equation}
-distance = distance*e^{(freq_{thr}-freq)} \\
+\mathrm{distance} = \mathrm{distance} \cdot e^{(\mathrm{freq}_{\mathrm{thr}}-\mathrm{freq})} \\
 \end{equation}
 
-\noindent where \emph{d} is the Euclidean distance the center of mass of the robot travelled during the gait duration. Following Clune et al. 2009~\cite{clune2009evolving}, the fitness equation was 
+\noindent where \emph{$\mathrm{distance}$} is the Euclidean distance the center of mass of the robot travelled during the gait duration. Following Clune et al. 2009~\cite{clune2009evolving}, the fitness equation was 
 
 \begin{equation}
-fitness = 2^{distance^{2}}
+\mathrm{fitness} = 2^{\mathrm{distance}^{2}}
 \end{equation}
 
 After evolving the gaits in simulation, the champion gait of the last generation of each of the 20 runs was transferred onto the real robot and evaluated.
