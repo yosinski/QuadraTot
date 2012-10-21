@@ -4,8 +4,8 @@
 
 We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. 2012~\cite{glette}. 
 Each run had a population size of 200 and lasted 200 generations. 20 runs were performed, each of which was identical except for the seed provided to the random number generator, which affected stochastic events such as mutation. 
-Each gait was evaluated for 12 seconds \edit{JBY: how? As in fig 4 of \cite{yos:clune}, or another way?}, both in simulation and in reality. 
-All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 0.0265Hz to 0.004Hz to decrease the number of servo shutdowns due to high-frequency gaits \edit{JBY: what? why?}. 
+Each gait was evaluated for 12 seconds \edit{JBY: how? As in fig 4 of \cite{yos:clune}, or another way? SSL: reality: fig 4 of \cite{yos:clune}. simulation: not the same, with interpolation in start but not in end}, both in simulation and in reality. 
+All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 0.0265Hz to 0.004Hz. It was necessary to lower the sine wave frequency because after experimentation, we found that the previous settings for the sine wave resulted in high-frequency gaits that the servos could not run without shutting down. \edit{JBY: what? why? SSL: It was necessary to lower the sine wave frequency because after experimentation, we found that the previous settings for the sine wave resulted in high-frequency gaits that the servos could not run without shutting down}. 
 
 %\begin{equation}
 %sin(2\pi t/250)\pi
@@ -19,8 +19,7 @@ All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{y
 %
 
  %Sine frequency of 0.004 was used because we experimentally found that HyperNEAT was able to produce natural and high-performing gaits with low frequencies with this frequency. 
-We also punished high-frequency gaits during evolving in simulation, which was effective at reducing the number of servo shutdowns observed when evolved gaits were transferred to the robot. 
-If the average frequency of each leg \edit{JBY: any leg or all legs?} for the gait was higher than a threshold frequency (1.67 Hz), the fitness was punished by exponentially reducing the distance travelled by the robot:
+We also punished high-frequency gaits during evolving in simulation, which was effective at reducing the number of servo shutdowns observed when evolved gaits were transferred to the robot. We calculated for the average frequency of the gait per leg by summing up the number of servo direction changes in all the legs throughout a gait and dividing that number by the length of the run and the number of legs. If the average frequency per leg \edit{JBY: any leg or all legs? SSL: see change -- too lengthy?} for the gait was higher than a threshold frequency (1.67 Hz), the fitness was punished by exponentially reducing the distance travelled by the robot:
 
 \begin{equation}
 \mathrm{distance} = \mathrm{distance} \cdot e^{(\mathrm{freq}_{\mathrm{thr}}-\mathrm{freq})} \\
