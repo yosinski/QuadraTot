@@ -11,7 +11,7 @@ Specifically, HyperNEAT gaits were 55\% faster on average in simulation (25.4
 cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD, \tabref{results}).
 Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2009evolving,clune2011performance}.
 
-\figOneOnTwo[h!]{threeplots}{FINAL_kyrre_sean_fitness}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
+\figOneOnTwo[h!]{threeplots}{FINAL_sean_kyrre_fitness}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
 {HyperNEAT outperforms a genetic algorithm with a simpler encoding, when both algorithms are combined with a simulator. Plotted are means over 20 runs in simulation (solid lines) $\pm$ STD (dashed lines). HyperNEAT gaits are 54.3\% faster in
 simulation and 5.4\% faster in reality~(\tabref{results}).
 \textbf{Left: }
@@ -58,6 +58,7 @@ GA + simulator \cite{glette}             & 60000       & *16.7       &   13.8   
 HyperNEAT + simulator [this paper]                     & 40000       & \textbf{25.4}       &   \textbf{14.5} & --\\
 \hline
 \end{tabular}
+\vspace{.35cm}
 \caption{Velocities of learned gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the fastest gait produced on two different copies of the QuadraTot robot (CCML and ROBIN, see text). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance.}  
 \tablabel{results}
 \end{center}
