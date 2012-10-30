@@ -453,8 +453,9 @@ FUNCTION {format.vol}
 { volume bold
 }
 
+
 FUNCTION {format.vol.num}
-{ volume bold
+{ volume %bold %jmc dont want it bolded
 number empty$
 { }
 { number "(" swap$ * * ")" * }
