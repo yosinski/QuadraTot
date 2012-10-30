@@ -1,43 +1,10 @@
 % !TEX root =main.tex
 
-\subsection{Methods}
+\subsubsection{Evolutionary Process and Parameters:}
 
-We evolved gaits first in simulation and then transferred them to the physical QuadraTot robot, as in Glette et al. 2012~\cite{glette}. 
-Each run had a population size of 200 and lasted 200 generations. 20 runs were performed, each of which was identical except for the seed provided to the random number generator, which affected stochastic events such as mutation. 
-Each gait was evaluated for 14 seconds in reality, with the first two
-seconds being interpolated from a stationary position into the gait
-and the last two seconds from the gait back into a stationary
-position, respectively. This process was similar to that used in
-\cite{yos:clune} and resulted in effectively 12 seconds of full speed
-motion. In simulation gaits were simply evaluated for 12 seconds of
-full speed motion. 
-All HyperNEAT parameters were identical to those in Yosinski et al. 2011~\cite{yos:clune} except for the frequency of the sine wave input to the ANN, which was lowered from 4.24Hz to 0.640Hz. We lowered the sine wave frequency because after experimentation, we found that the previous settings for the sine wave resulted in high-frequency gaits that the servos could not run without shutting down.
-
-%\begin{equation}
-%sin(2\pi t/250)\pi
-%\end{equation}
-
-%from
-%
-%\begin{equation}
-%sin(t/6)\pi
-%\end{equation}
-%
-
- %Sine frequency of 0.004 was used because we experimentally found that HyperNEAT was able to produce natural and high-performing gaits with low frequencies with this frequency. 
-We also punished high-frequency gaits during evolving in simulation, which was effective at reducing the number of servo shutdowns observed when evolved gaits were transferred to the robot. We calculated the average frequency of the gait per leg by summing up the number of servo direction changes in all the legs throughout a gait and dividing by the length of the run and the number of legs. If the average frequency per leg for the gait was higher than a threshold frequency (1.67 Hz), the fitness was punished by exponentially reducing the distance travelled by the robot:
-
-\begin{equation}
-\mathrm{distance} = \mathrm{distance} \cdot e^{(\mathrm{freq}_{\mathrm{thr}}-\mathrm{freq})} \\
-\end{equation}
-
-\noindent where \emph{$\mathrm{distance}$} is the Euclidean distance the center of mass of the robot travelled during the gait duration. Following Clune et al. 2009~\cite{clune2009evolving}, the fitness equation was 
-
-\begin{equation}
-\mathrm{fitness} = 2^{\mathrm{distance}^{2}}
-\end{equation}
-
-After evolving the gaits in simulation, the champion gait of the last generation of each of the 20 runs was transferred onto the real robot and evaluated.
-The robot's position was measured at the beginning and the end of each run, starting from the stationary pose and ending with the stationary pose. 
-If a gait was obviously affected by servo shutdowns, the gait was tried again after letting the servos cool down. 
+Each run had a population size of 200 and lasted 200 generations. We performed twenty HyperNEAT runs that differed only in the seed provided to the random number generator, which affected stochastic events such as mutation. To make a statistical comparison to the encoding from Glette et al., we conducted 19 runs using the original code to supplement the one run performed for that paper. 
+Each gait was evaluated for fourteen seconds in reality, with interpolation from and to a stationary position in the first and last two seconds, respectively, as done in Yosinski et al. The result was effectively 12 seconds of full-speed
+motion. In simulation gaits were evaluated for 12 seconds. 
+All HyperNEAT parameters were identical to those in Yosinski et al. except for the frequency of the sine wave input to the ANN, which was lowered from 4.2Hz to 0.64Hz to reduce servo shutdowns. 
+To further reduce servo shutdowns, we punished high-frequency gaits during evolution. We calculated a gait frequency as the average number of servo direction changes per leg per second. If this frequency was higher than an experimentally-selected threshold of 1.67 Hz, the measure of distance traveled by the center of mass during the gait was reduced exponentially by multiplying it by a discount factor, which was $e^{(1.67-\mathrm{freq})}$. Following Clune et al. 2009~\cite{clune2009evolving}, fitness equation was $2^{\mathrm{distance}^{2}}$. After evolving the gaits in simulation, the champion gait of the last generation of each of the 20 runs was transferred onto the real robot and the distance traveled was measured. 
 
