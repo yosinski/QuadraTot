@@ -100,6 +100,21 @@
   \end{figure}
 }
 
+% figOneOnTwo - Standard figure, 2 wide
+\newcommand{\figOneOnTwo}[9][thp]{
+  \begin{figure}[#1]
+  \begin{center}
+
+  \includegraphics[width=#4\linewidth]{#3}
+  \includegraphics[width=#6\linewidth]{#5}
+  \includegraphics[width=#8\linewidth]{#7}
+
+  \caption{#9}
+  \label{fig:#2}
+  \end{center}
+  \end{figure}
+}
+
 % fiGGp - Standard figure, 2 row
 \newcommand{\fiGGp}[6][thp]{
   \begin{figure}[#1]

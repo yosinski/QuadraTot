@@ -6,20 +6,19 @@
 %\subsubsection{Simulation:}
 
 The simulator enabled HyperNEAT to evolve
-fast gaits that look like those of natural animals. In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{FINAL_kyrre_sean_fitness}, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
+fast gaits that look like those of natural animals. In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{threeplots}-Top, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
 Specifically, HyperNEAT gaits were 55\% faster on average in simulation (25.4
 cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD, \tabref{results}).\edit{Table 1, not 3} 
-Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{servo_plot_111}), confirming previous results with HyperNEAT in simulation~\cite{clune2009evolving,clune2011performance}.
+Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2009evolving,clune2011performance}.
 
-\figp{FINAL_kyrre_sean_fitness}{0.62}
+\figOneOnTwo[h!]{threeplots}{FINAL_kyrre_sean_fitness}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
 {HyperNEAT outperforms a genetic algorithm with a simpler encoding, when both algorithms are combined with a simulator. Plotted are means over 20 runs in simulation (solid lines) $\pm$ STD (dashed lines). HyperNEAT gaits are 54.3\% faster in
-simulation and 5.4\% faster in reality~(\tabref{results}).}
-
-\figgp{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
-{\textbf{Left: }
+simulation and 5.4\% faster in reality~(\tabref{results}).
+\textbf{Left: }
 Servo positions over time (for nine servos) for a simulated HyperNEAT gait. HyperNEAT produces gaits that are smooth, symmetrical, and contain other regularities. 
 \textbf{Right: }Mean gait frequency averaged over 20 runs. 
-Gaits with frequencies above a threshold (horizontal line) receive a fitness penalty. HyperNEAT quickly learns to produce gaits with frequencies low enough to avoid this penalty. }
+Gaits with frequencies above a threshold (horizontal line) receive a fitness penalty. HyperNEAT quickly learns to produce gaits with frequencies low enough to avoid this penalty.
+}
 
 
 On the physical robot, HyperNEAT gaits from this study outperformed gaits from all previous Quadratot studies~(\tabref{results})~\cite{yos:clune,haocheng,glette}, including those of Glette et al. 
@@ -38,7 +37,7 @@ the differences in the gaits themselves or dissimilarities between
 hardware. To control for this possibility, we ran the fastest gait
 from Glette et al. 10 times on CCML and measured an average speed of
 only 12.95 cm/s (vs. 17.8 cm/s measured on ROBIN) and a maximum of
-13.76 cm/s (\tabref{results}). It thus appears that the CCML version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the CCML QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
+13.8 cm/s (\tabref{results}). It thus appears that the CCML version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the CCML QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
 conclude that HyperNEAT produces faster gaits for the QuadraTot robot. This conclusion is supported by the fact that HyperNEAT outperformed the encoding from Glette et al. in simulation. 
 
 \begin{table}
@@ -54,18 +53,18 @@ HyperNEAT in hardware \cite{yos:clune}                 & 180         & --       
 \hline
 RL PoWER Spline \cite{haocheng}                         & 300         & --         &   11.1 & --\\
 \hline
-GA + simulator \cite{glette}             & 60000       & *16.7       &   13.0   & \textbf{17.8}  \\
+GA + simulator \cite{glette}             & 60000       & *16.7       &   13.8   & \textbf{17.8}  \\
 \hline
 HyperNEAT + simulator [this paper]                     & 40000       & \textbf{25.4}       &   \textbf{14.5} & --\\
 \hline
 \end{tabular}
 \end{center}
 \tablabel{results}
-\caption{Velocities of learned gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the fastest gait produced on a physical robot, either the QuadraTot in the Cornell Creative Machines Lab (CCML) or the QuadraTot in the Robotics and Intelligent Systems (ROBIN) lab at the University of Oslo. *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance.}  
+\caption{Velocities of learned gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the fastest gait produced on two different copies of the QuadraTot robot (CCML and ROBIN, see text). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance.}  
 \end{table}
 
 We now discuss the differences between the gaits evolved by HyperNEAT directly on the physical robot, and those first evolved in a simulator and then transferred to the robot. 
-On the physical robot, the gaits produced by HyperNEAT with a simulator were faster, more natural, and more repeatable than those evolved directly on the Quadratot robot~\cite{yos:clune}. The gaits were also more regular, as they were in simulation~(\figref{servo_plot_111}). This result is important because it confirms that HyperNEAT can produce the important property of
+On the physical robot, the gaits produced by HyperNEAT with a simulator were faster, more natural, and more repeatable than those evolved directly on the Quadratot robot~\cite{yos:clune}. The gaits were also more regular, as they were in simulation~(\figref{threeplots}-Left). This result is important because it confirms that HyperNEAT can produce the important property of
 regularity in a challenging, real-world domain, which was not previously observed when
 evolving directly on the hardware~\cite{yos:clune}. Producing regular solutions is a key to exploiting regularity in difficult engineering problems~\cite{clune2011performance}. 
 
@@ -81,8 +80,7 @@ effective gaits~\cite{yos:clune}. It could also be the case that
 the addition in this study of a punishment for high-frequency gaits
 aided performance, especially since in simulation the gaits were
 high-frequency in a few early generations before rapidly settling to a
-frequency range below the penalized threshold~(\figref{servo_plot_111},
-right).
+frequency range below the penalized threshold~(\figref{threeplots}-Right).
 
 
 
@@ -98,7 +96,7 @@ poses was too much for the servos. Future studies will use a
 robot that has more mechanical advantage and requires less torque from
 each servo, such as the Aracna platform~\cite{lohmann2012aracna},
 which was designed in response to the challenges experienced with the
-QuadraTot platform.
+QuadraTot platform. Future studies will also incorporate techniques to minimize the gap between the simulator and reality~\cite{koos2010crossing,bongard,zagal}.
 
 
 
