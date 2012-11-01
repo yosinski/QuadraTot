@@ -16,12 +16,12 @@ The NEAT algorithm has three major components~\cite{stanley2006exploiting}.
 First, it starts with small genomes that encode simple networks and complexifies them by mutations that add nodes and links to the network. Second, NEAT has a fitness-sharing system that preserves diversity and allows for new innovations to be tuned by evolution before competing them against more adapted rivals. 
 Third, historical information is recorded that facilitates crossover in a way that is effective, yet avoids the need for expensive topological analysis. A full explanation of NEAT can be found in Stanley and Miikkulainen 2006~\cite{stanley2006exploiting}. 
 
-In this study, the ANN inputs, outputs, and the size of the hidden layer are the same as in Yosinski et al. 2011~\cite{yos:clune}. 
+In this study, the ANN inputs, outputs, and the size of the hidden layer are the same as in Yosinski et al.~\cite{yos:clune}. 
 The ANN has a fixed topology of three \begin{math}3\times4\end{math} Cartesian grids of nodes for the input, hidden, and output layers. 
 The inputs to the substrate were the angles requested in the prevous time step for each of the 9 joints of the robot and a sine and cosine wave to facilitate periodic motion. 
 The outputs of the substrate at each time step were nine numbers (for each joint) in the range [-1, 1] which were scaled to the range [0, 1023], the allowable ranges for the servos. 
-As in Yosinski et al. 2011~\cite{yos:clune}, we generated pseudo-positions at 160Hz and then downsampled over consecutive blocks of 4 to obtain the actual commanded positions at 40Hz; this reduced the number of gaits which commanded switches from extreme negative to extreme positive numbers at 40Hz, an undesirable artifact which only served to tax the servos.
+As in Yosinski et al.~\cite{yos:clune}, we generated pseudo-positions at 160Hz and then downsampled over consecutive blocks of 4 to obtain the actual commanded positions at 40Hz; this reduced the number of gaits which commanded switches from extreme negative to extreme positive numbers at 40Hz, an undesirable artifact which only served to tax the servos.
 
-\figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al. 2011~\cite{clune2011performance}.}
+\figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al.~\cite{clune2011performance}.}
 
 
