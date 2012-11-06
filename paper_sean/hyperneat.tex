@@ -17,8 +17,8 @@ Third, historical information is recorded that facilitates crossover in a way th
 
 In this study, the ANN inputs, outputs, activation functions, and the size of the hidden layer are the same as in Yosinski et al.~\cite{yos:clune}. 
 The ANN had a fixed topology of three \begin{math}3\times4\end{math} Cartesian grids of nodes for the input, hidden, and output layers. 
-The inputs to the substrate were the angles requested in the prevous time step for each of the 9 joints of the robot and a sine and cosine wave to facilitate periodic motion. 
-The outputs of the substrate at each time step were nine numbers (for each joint) in the range [-1, 1] which were scaled to the range [0, 1023], the allowable ranges for the servos. 
+The inputs to the substrate were the angles requested in the previous time step for each of the 9 joints of the robot and a sine and cosine wave to facilitate periodic motion. 
+The outputs of the substrate at each time step were nine numbers (for each joint) in the range [-1, 1] which were scaled to the allowable ranges for the servos. 
 As in Yosinski et al.~\cite{yos:clune}, we generated pseudo-positions at 160Hz and then downsampled over consecutive blocks of four time steps to obtain the actual commanded positions at 40Hz; this reduced the number of gaits which commanded switches from extreme negative to extreme positive numbers at 40Hz, which overly taxed the servos.
 
 \figp{hyperneatExplanation}{1}{A CPPN specifying a neural network. In HyperNEAT, weights are a function of the Cartesian coordinates of the source and target node for each connection. All pairwise combinations of source and target node coordinates are iteratively passed into a CPPN to determine the weight of each ANN link. Figure from Clune et al.~\cite{clune2011performance}.}

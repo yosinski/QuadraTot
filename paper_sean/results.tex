@@ -38,7 +38,7 @@ cm/s on the CCML QuadraTot. It was unclear whether this difference in performanc
 the differences in the gaits themselves or dissimilarities between
 hardware. To control for this possibility, we ran the fastest gait
 from Glette et al. 10 times on CCML and measured an average speed of
-only 12.95 cm/s (vs. 17.8 cm/s measured on ROBIN) and a maximum of
+only 12.95 cm/s $\pm0.93$ SD (vs. 17.8 cm/s measured on ROBIN) and a maximum of
 13.8 cm/s (\tabref{results}). It thus appears that the CCML version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the CCML QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
 conclude that HyperNEAT produces faster gaits for the QuadraTot robot. This conclusion is supported by the fact that HyperNEAT also outperformed the encoding from Glette et al. in simulation. 
 
@@ -61,7 +61,7 @@ HyperNEAT + simulator [this paper]                     & 40000       & \textbf{2
 \hline
 \end{tabular}
 \vspace{.35cm}
-\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance.}  
+\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. }  
 \tablabel{results}
 \end{center}
 \end{table}
