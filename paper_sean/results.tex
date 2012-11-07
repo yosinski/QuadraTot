@@ -6,7 +6,7 @@
 %\subsubsection{Simulation:}
 
 The simulator enabled HyperNEAT to evolve
-fast gaits that look like those of natural animals. In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{threeplots}-Top, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
+fast gaits that look like those of natural animals.\footnote{Videos of the evolved gaits in simulation and on hardware are available at http://youtu.be/bg90l2aCiz8} In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{threeplots}-Top, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
 Specifically, HyperNEAT gaits were 55\% faster on average in simulation (25.4
 cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD, \tabref{results}).
 Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
@@ -28,18 +28,18 @@ On the physical robot, HyperNEAT gaits from this study outperformed gaits from a
 different laboratories is difficult, not only because reality is
 inherently noisy, but because even two copies of the same robot are
 not identical and may produce different speeds for the same input
-gait. Gaits for this study and two previous studies~\cite{yos:clune,haocheng} were evaluated on a copy of the QuadraTot robot in the (Name removed for double-blind review) Lab (---L), while the gaits in Glette et al. were evaluated on a different copy of the same robot in the Robotics and
+gait. Gaits for this study and two previous studies~\cite{yos:clune,haocheng} were evaluated on a copy of the QuadraTot robot in the (Name removed for double-blind review) Lab (ANON), while the gaits in Glette et al. were evaluated on a different copy of the same robot in the Robotics and
 Intelligent Systems (ROBIN) lab at the University of Oslo. The two robots were evaluated on two different surfaces, and had different material enveloping their feet to increase friction (compare \figref{quadratotWhiteBooties}-Left to Figure 2 of Glette et al). 
 
 The previous fastest gait on any copy of a QuadraTot was from Glette
 et al., and traveled 17.8 cm/s on the ROBIN QuadraTot. The
 fastest gait produced by HyperNEAT with a simulator in the experiments for this paper traveled 14.5
-cm/s on the ---L QuadraTot. It was unclear whether this difference in performance was due to
+cm/s on the ANON QuadraTot. It was unclear whether this difference in performance was due to
 the differences in the gaits themselves or dissimilarities between
 hardware. To control for this possibility, we ran the fastest gait
-from Glette et al. 10 times on ---L and measured an average speed of
+from Glette et al. 10 times on ANON and measured an average speed of
 only 12.95 cm/s $\pm0.93$ SD (vs. 17.8 cm/s measured on ROBIN) and a maximum of
-13.8 cm/s (\tabref{results}). It thus appears that the ---L version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the ---L QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
+13.8 cm/s (\tabref{results}). It thus appears that the ANON version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the ANON QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
 conclude that HyperNEAT produces faster gaits for the QuadraTot robot. This conclusion is supported by the fact that HyperNEAT also outperformed the encoding from Glette et al. in simulation. 
 
 \begin{table}
@@ -47,7 +47,7 @@ conclude that HyperNEAT produces faster gaits for the QuadraTot robot. This conc
 \begin{tabular}{|l|r|r|r|r|}
 \hline
                                          &              & Simulated  & Real Vel. & Real Vel.  \\
-                                         & Evaluations  & Velocity &    (---L)     & (ROBIN) \\
+                                         & Evaluations  & Velocity &    (ANON)     & (ROBIN) \\
 \hline
 Parameterized gaits + optimization \cite{yos:clune}   &153    & --    & 5.8 & --\\
 \hline
@@ -61,7 +61,7 @@ HyperNEAT + simulator [this paper]                     & 40000       & \textbf{2
 \hline
 \end{tabular}
 \vspace{.35cm}
-\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the ---L and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. }  
+\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the ANON and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. }  
 \tablabel{results}
 \end{center}
 \end{table}
