@@ -17,7 +17,7 @@ Plots of servo positions over time reveal that the evolved HyperNEAT gaits are r
 HyperNEAT outperforms a genetic algorithm with a simple encoding when both algorithms are combined with a simulator. Plotted are means over 20 runs in simulation (solid lines) $\pm$ SD (dashed lines). HyperNEAT gaits are 54.3\% faster in
 simulation and 5.1\% faster in reality~(\tabref{results}).
 \textbf{Left: }
-Servo positions over time (for nine servos) for a representative simulated HyperNEAT gait. HyperNEAT produced gaits that are smooth, symmetrical, and contained complex regularities. 
+Servo positions over time (for nine servos) for a representative simulated HyperNEAT gait. HyperNEAT produced smooth and symmetrical gaits that contained complex regularities. 
 \textbf{Right: }Mean gait frequency averaged over 20 runs. 
 Gaits with frequencies above a threshold (horizontal line) receive a fitness penalty. HyperNEAT quickly learned to produce gaits with frequencies low enough to avoid this penalty.
 }
@@ -73,7 +73,7 @@ evolving directly on the hardware~\cite{yos:clune}. Producing regular solutions 
 
 
 The simulator likely improved performance because of the number of evaluations it enabled, both in terms of the population size (200 vs. 9) and the number of generations (200 vs. 20), leading
-to a total difference of 40000 vs 180 per evolutionary run~\cite{yos:clune}. Another
+to a total difference of 40000 vs 180 per evolutionary run compared to Yosinski et al.~\cite{yos:clune}. Another
 potential cause of improved performance is that with a simulator
 HyperNEAT had much less noise in the evaluation process and could thus find coordinated, regular, gaits, which perform better. On the physical robot, the noise in the evaluation was
 substantial, preventing effective learning~\cite{yos:clune}. It could also be the case that 
