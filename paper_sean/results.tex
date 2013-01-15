@@ -7,7 +7,7 @@
 
 The simulator enabled HyperNEAT to evolve
 fast, organic gaits. In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{threeplots}-Top, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
-Specifically, HyperNEAT gaits were 55\% faster in simulation (26.9
+Specifically, HyperNEAT gaits were 61.1\% faster in simulation (26.9
 cm/s, 95\% CIs 23.8 cm/s and 26.750 cm/s versus 16.7 cm/s $\pm$ 1.9 SD, \tabref{results}).
 Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
 
@@ -58,7 +58,7 @@ RL PoWER Spline \cite{haocheng}                         & 300         & --      
 \hline
 GA + simulator \cite{glette}             & 60000       & *16.7       &   13.8   & \textbf{17.8}  \\
 \hline
-HyperNEAT + simulator [this paper]                     & 40000       & \textbf{25.4}       &   \textbf{14.5} & --\\
+HyperNEAT + simulator [this paper]                     & 40000       & \textbf{26.9}       &   \textbf{14.5} & --\\
 \hline
 \end{tabular}
 \vspace{.35cm}
@@ -67,7 +67,7 @@ HyperNEAT + simulator [this paper]                     & 40000       & \textbf{2
 \end{center}
 \end{table}
 
-We now discuss the differences between the gaits evolved by HyperNEAT directly on the physical robot (Yosinski et al.), and those first evolved in a simulator and then transferred to the robot (this study). 
+We now discuss the differences between the gaits evolved by HyperNEAT directly on the physical robot~\cite{yos:clune}, and those first evolved in a simulator and then transferred to the robot (this study). 
 On the physical robot, the gaits produced by HyperNEAT with a simulator were faster, more natural, and more repeatable than those evolved directly on the QuadraTot robot~\cite{yos:clune}. The gaits were also more regular, as they were in simulation~(\figref{threeplots}-Left). This result is important because it confirms that HyperNEAT can produce the important property of
 regularity in a challenging, real-world domain, which was not previously observed when
 evolving directly on the hardware~\cite{yos:clune}. Producing regular solutions is a key to exploiting regularity in difficult engineering problems~\cite{clune2011performance}. 
@@ -81,11 +81,10 @@ substantial, preventing effective learning~\cite{yos:clune}.
 However, we can likely rule out the noise hypothesis because we performed 20 
 runs in simulation with the same evaluation samples as 
 in Yosinski et al.~\cite{yos:clune} and saw that the results were not 
-significantly different (mean fitness of 7.9 cm/s), making the likely explanation 
+significantly different ($p < 0.855$, mean fitness 7.9 cm/s), making the likely explanation 
 the number of evaluations performed.
-Another factor for high-perfoming gaits may be due to
-the encouragement of low-frequency gaits in this study
-aided performance, especially since in simulation the gaits were
+The encouragement of low-frequency gaits in this study
+also may have aided performance, especially since in simulation the gaits were
 high-frequency in a few early generations before rapidly settling to a
  range below the penalized threshold~(\figref{threeplots}-Right).
 
@@ -104,14 +103,4 @@ robot that has more mechanical advantage and requires less torque from
 each servo, such as the Aracna platform~\cite{lohmann2012aracna},
 which was designed in response to the challenges experienced with the
 QuadraTot platform. That we did not model the servos in simulation, especially with their frequent failures, suggests that even better results could be obtained via a simulator that contained or learned servo models. In future work we will also incorporate techniques to minimize the gap between the simulator and reality~\cite{koos2010crossing,bongard,zagal}.
-
-
-
-
-
-
-
-
-
-
 
