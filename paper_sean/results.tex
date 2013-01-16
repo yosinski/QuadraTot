@@ -4,10 +4,14 @@
 %to available data from previous studies.
 %\subsubsection{Simulation:}
 
-The simulator enabled HyperNEAT to evolve
-fast, organic gaits. In simulation, HyperNEAT gaits were significantly faster than those from Glette et al. (\figref{threeplots}-Top, $\emph{p} < 6.8\times10^{-8}$, comparing the best gaits in the final generation of each run via MATLAB's Wilcoxon rank sum test).  
+The simulator enabled HyperNEAT to evolve fast, organic gaits. In
+simulation, HyperNEAT gaits (\figref{threeplots}-Top) were
+significantly faster than those from Glette et al, $\emph{p-value} <
+6.8\times10^{-8}$ when comparing the best gaits in the final
+generation of each run via Matlab's Wilcoxon rank sum test.
 Specifically, HyperNEAT gaits were 52.1\% faster in simulation (25.4
-cm/s, $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD, \tabref{results} -- qualitative conclusions remain the same even if the analysis is conducted using medians, but to make it easier for comparisons with earlier works~\cite{glette}, we use means $\pm$ SD).
+cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD). Note that \tabref{results} reports 
+mean $\pm$ SD to make comparison with earlier work~\cite{glette} easier, but qualitative conclusions remain the same even when the analysis is conducted using medians.
 Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
 
 %\figOneOnTwo[h!]{threeplots}{med_fit_gen}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
@@ -16,8 +20,8 @@ Plots of servo positions over time reveal that the evolved HyperNEAT gaits are r
 {
 \textbf{Top: }
 %HyperNEAT outperforms a genetic algorithm with a simple encoding when both algorithms are combined with a simulator. Plotted are medians over 20 runs in simulation (solid lines) $\pm$ CIs (dashed lines). HyperNEAT gaits are 52.1\% faster in
-HyperNEAT outperforms a genetic algorithm with a simple encoding when both algorithms are combined with a simulator. Plotted are means over 20 runs in simulation (solid lines) $\pm$ SD (dashed lines). HyperNEAT gaits are 52.1\% faster in
-simulation and 5.1\% faster in reality~(\tabref{results}).
+HyperNEAT outperforms a genetic algorithm with a simple encoding \cite{glette} when both algorithms are combined with a simulator. Plotted are means over 20 runs in simulation (solid lines) $\pm$ SD (dashed lines). HyperNEAT gaits are 52.1\% faster in
+simulation and 5.1\% faster in reality than those from a previous study \cite{glette}~(details in \tabref{results}).
 \textbf{Left: }
 Servo positions over time (for nine servos) for a representative simulated HyperNEAT gait. HyperNEAT produced smooth and symmetrical gaits that contained complex regularities. 
 \textbf{Right: }Mean gait frequency averaged over 20 runs. 
@@ -63,7 +67,7 @@ HyperNEAT + simulator [this paper]                     & 40000       & \textbf{*
 \hline
 \end{tabular}
 \vspace{.35cm}
-\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. **Median fitnesses of this paper: 26.9 cm/s with 95\% confidence intervals 23.8 cm/s and 26.75 cm/s.}  
+\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. **Fitness median 26.9 cm/s, 95\% confidence interval [23.8 cm/s, 26.75 cm/s].}  
 \tablabel{results}
 \end{center}
 \end{table}
