@@ -83,7 +83,7 @@ to a total difference of 40000 vs. 180 per evolutionary run compared to Yosinski
 potential cause of improved performance is the lower noise in the simulator, which could have helped HyperNEAT find coordinated, regular, gaits, which perform better. On the physical robot, the noise in the evaluation was
 substantial, preventing effective learning~\cite{yos:clune}. 
 To investigate this hypothesis, we performed 20 runs in simulation with only 180 fitness evaluations, which was the number used in Yosinski et al.~\cite{yos:clune}. The simulated gaits performed
-slightly, but not significantly, better than those evolved in hardware ($p = 0.1571$, mean fitness 7.9 cm/s).
+slightly, but not significantly, better than those evolved in hardware ($p = 0.1571$, mean fitness $7.9 \pm 2.14$ cm/s).
 Reduced noise thus may have had a small affect on performance, but the substantial performance gains that resulted from using a simulator likely came from the additional evaluations the simulator afforded.
 The encouragement of low-frequency gaits in this study
 also may have aided performance, especially since in simulation the gaits were
