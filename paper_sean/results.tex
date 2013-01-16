@@ -4,14 +4,14 @@
 %to available data from previous studies.
 %\subsubsection{Simulation:}
 
-The simulator enabled HyperNEAT to evolve fast, organic gaits. In
-simulation, HyperNEAT gaits (\figref{threeplots}-Top) were
-significantly faster than those from Glette et al, $\emph{p-value} <
+The simulator enabled HyperNEAT to evolve fast, natural gaits. In
+simulation, HyperNEAT gaits were
+significantly faster than those from Glette et al. (\figref{threeplots}-Top, $p <
 6.8\times10^{-8}$ when comparing the best gaits in the final
-generation of each run via Matlab's Wilcoxon rank sum test.
+generation of each run via Matlab's Wilcoxon rank sum test).
 Specifically, HyperNEAT gaits were 52.1\% faster in simulation (25.4
-cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD). Note that \tabref{results} reports 
-mean $\pm$ SD to make comparison with earlier work~\cite{glette} easier, but qualitative conclusions remain the same even when the analysis is conducted using medians.
+cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD). To facilitate comparisons to earlier works~\cite{yos:clune,glette} we report 
+mean $\pm$ SD, but our qualitative conclusions are the same when using medians.
 Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
 
 %\figOneOnTwo[h!]{threeplots}{med_fit_gen}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
@@ -43,7 +43,7 @@ fastest gait produced by HyperNEAT with a simulator in the experiments for this 
 cm/s on the CCML QuadraTot. It was unclear whether this difference in performance was due to
 the differences in the gaits themselves or dissimilarities between
 hardware. To control for this possibility, we ran the fastest gait
-from Glette et al. 10 times on CCML and measured an average speed of
+from Glette et al. 10 times on CCML and measured a mean speed of
 only 12.95 cm/s $\pm0.93$ SD (vs. 17.8 cm/s measured on ROBIN) and a maximum of
 13.8 cm/s (\tabref{results}). It thus appears that the CCML version of the robot is slower. Moreover, the HyperNEAT gait (14.5 cm/s) is faster than the best gait of Glette et al. on the CCML QuadraTot. Unfortunately, it was not possible to test the best HyperNEAT gait on the ROBIN QuadraTot. Because HyperNEAT outperformed the simple encoding from Glette et al. on the same robotic hardware, we tentatively
 conclude that HyperNEAT produces faster gaits for the QuadraTot robot. This conclusion is supported by the fact that HyperNEAT also outperformed the encoding from Glette et al. in simulation. 
@@ -67,7 +67,7 @@ HyperNEAT + simulator [this paper]                     & 40000       & \textbf{*
 \hline
 \end{tabular}
 \vspace{.35cm}
-\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the average of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the average fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. **Fitness median 26.9 cm/s, 95\% confidence interval [23.8 cm/s, 26.75 cm/s].}  
+\caption{Velocities of evolved gaits in simulation and on two different copies of the QuadraTot robot. Subject to availability, data are reported from the experiments for this paper and three previous studies. Reported are the total number of evaluations per run, the mean of the fastest gaits produced in each run in simulation, and the single fastest gait produced on the CCML and ROBIN copies of the QuadraTot robot (see text for their differences). *Instead of using the single fitness value reported in~\cite{glette}, we ran 19 additional runs and used the mean fitness of those 20 runs. Velocities are in cm/s, and bold indicates the best performance. **The median fitness that corresponds with this mean is 26.9 cm/s, 95\% confidence interval [23.8 cm/s, 26.75 cm/s].}  
 \tablabel{results}
 \end{center}
 \end{table}
@@ -80,13 +80,11 @@ evolving directly on the hardware~\cite{yos:clune}. Producing regular solutions 
 
 The simulator likely improved performance because of the number of evaluations it enabled, both in terms of the population size (200 vs. 9) and the number of generations (200 vs. 20), leading
 to a total difference of 40000 vs 180 per evolutionary run compared to Yosinski et al.~\cite{yos:clune}. Another
-potential cause of improved performance is that with a simulator
-HyperNEAT had much less noise in the evaluation process and could thus find coordinated, regular, gaits, which perform better. On the physical robot, the noise in the evaluation was
+potential cause of improved performance is the lower noise in the simulator, which could have helped HyperNEAT find coordinated, regular, gaits, which perform better. On the physical robot, the noise in the evaluation was
 substantial, preventing effective learning~\cite{yos:clune}. 
-We performed 20 runs in simulation with the same evaluation samples as 
-in Yosinski et al.~\cite{yos:clune} and saw that simulated gaits performed
-slightly better than the hardwared learned gaits ($p < 0.1571$, mean fitness 7.9 cm/s).
-This supports the noise hypothesis, but suggests that the number of evaluations performed is a more likely explanation.
+To investigate this hypothesis, we performed 20 runs in simulation with only 180 fitness evaluations, which was the number used in Yosinski et al.~\cite{yos:clune}. The simulated gaits performed
+slightly, but not significantly, better than those evolved in hardware ($p = 0.1571$, mean fitness 7.9 cm/s).
+Reduced noise thus may have had a small affect on performance, but the substantial performance gains that resulted from using a simulator likely came from the additional evaluations it afforded.
 The encouragement of low-frequency gaits in this study
 also may have aided performance, especially since in simulation the gaits were
 high-frequency in a few early generations before rapidly settling to a
