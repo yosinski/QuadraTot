@@ -5,17 +5,16 @@
 %\subsubsection{Simulation:}
 
 The simulator enabled HyperNEAT to evolve fast, natural gaits. In
-simulation, HyperNEAT gaits were
-significantly faster than those from Glette et al. (\figref{threeplots}-Top, $p <
+simulation, HyperNEAT gaits were faster than those from Glette et al. (\figref{threeplots}-Top, $p <
 6.8\times10^{-8}$ when comparing the best gaits in the final
 generation of each run via Matlab's Wilcoxon rank sum test).
 Specifically, HyperNEAT gaits were 52.1\% faster in simulation (25.4
 cm/s $\pm$ 3.4 SD versus 16.7 cm/s $\pm$ 1.9 SD). To facilitate comparisons to earlier works~\cite{yos:clune,glette} we report 
 mean $\pm$ SD, but our qualitative conclusions are the same when using medians.
-Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular, smooth and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
+Plots of servo positions over time reveal that the evolved HyperNEAT gaits are regular and coordinated~(\figref{threeplots}-Left), confirming previous results with HyperNEAT in simulation~\cite{clune2011performance,clune2009evolving}.
 
 %\figOneOnTwo[h!]{threeplots}{med_fit_gen}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
-\figOneOnTwo[h!]{threeplots}{avg_fit_vs_gen}{0.62}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
+\figOneOnTwo[h!]{threeplots}{avg_fit_vs_gen}{0.605}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
 %\figOneOnTwo[h!]{threeplots}{med_fit_gen}{0.00}{servo_plot_111}{.48}{frequencyPlotThreshFinal}{.48}
 {
 \textbf{Top: }
@@ -78,6 +77,7 @@ regularity in a challenging, real-world domain, which was not previously observe
 evolving directly on the hardware~\cite{yos:clune}. Producing regular solutions is a key to exploiting regularity in difficult engineering problems~\cite{clune2011performance}. 
 
 
+
 The simulator likely improved performance because of the number of evaluations it enabled, both in terms of the population size (200 vs. 9) and the number of generations (200 vs. 20), leading
 to a total difference of 40000 vs. 180 per evolutionary run compared to Yosinski et al.~\cite{yos:clune}. Another
 potential cause of improved performance is the lower noise in the simulator, which could have helped HyperNEAT find coordinated, regular, gaits, which perform better. On the physical robot, the noise in the evaluation was
@@ -107,4 +107,4 @@ robot that has more mechanical advantage and requires less torque from
 each servo, such as the Aracna platform~\cite{lohmann2012aracna}.
 %which was designed in response to the challenges experienced with the
 %QuadraTot platform. 
-That we did not model the servos in simulation, especially with their frequent failures, suggests that even better results could be obtained via a simulator that contained or learned servo models. In future work we will also incorporate techniques to minimize the gap between the simulator and reality~\cite{koos2010crossing,bongard,zagal,koos2011transferability}.
+That we did not model the servos in simulation, especially with their frequent failures, suggests that even better results could be obtained via a simulator that contained or learned servo models. In future work we will also incorporate techniques to minimize the gap between the simulator and reality~\cite{bongard,zagal,koos2011transferability}.
